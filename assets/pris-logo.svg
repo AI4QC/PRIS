@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1740 498" width="1740" height="498">
+  <!-- ============ 左：配位八面体 + 轨道 ============ -->
+  <g transform="translate(60,20)">
+    <!-- 完整轨道椭圆，置于底层，由多面体自然遮挡形成穿插 -->
+    <ellipse cx="200" cy="229" rx="226" ry="98" fill="none" stroke="#14A6A8"
+             stroke-width="11" transform="rotate(-28 200 229)"/>
+
+    <!-- 八面体 顶T(200,32) 底B(200,426) 左L(24,229) 右R(376,229) 前F(150,282) 后K(250,176) -->
+    <path d="M200,32 L24,229 L150,282 Z"   fill="#153E60"/>
+    <path d="M200,426 L24,229 L150,282 Z"  fill="#0E2C46"/>
+    <path d="M200,32 L376,229 L250,176 Z"  fill="#153E60"/>
+    <path d="M200,426 L376,229 L250,176 Z" fill="#0E2C46"/>
+    <path d="M200,32 L150,282 L200,426 L250,176 Z" fill="#14A6A8"/>
+
+    <!-- 棱 -->
+    <g stroke="#FFFFFF" stroke-width="7" fill="none" stroke-linejoin="round">
+      <path d="M200,32 L24,229 L200,426 L376,229 Z"/>
+      <path d="M200,32 L150,282 L200,426"/>
+      <path d="M200,32 L250,176 L200,426"/>
+      <path d="M24,229 L150,282 L376,229 L250,176 Z"/>
+    </g>
+
+    <!-- 配位顶点球 -->
+    <circle cx="200" cy="32"  r="34" fill="#123A5A" stroke="#FFFFFF" stroke-width="7"/>
+    <circle cx="200" cy="426" r="34" fill="#123A5A" stroke="#FFFFFF" stroke-width="7"/>
+    <circle cx="24"  cy="229" r="34" fill="#123A5A" stroke="#FFFFFF" stroke-width="7"/>
+    <circle cx="376" cy="229" r="34" fill="#123A5A" stroke="#FFFFFF" stroke-width="7"/>
+    <!-- 中心阳离子：青环 -->
+    <circle cx="200" cy="229" r="21" fill="#FFFFFF" stroke="#14A6A8" stroke-width="11"/>
+    <!-- 轨道上的橙球（置于最上，标示轨道在前） -->
+    <circle cx="408" cy="84" r="30" fill="#F0A020"/>
+  </g>
+
+  <!-- ============ 右：PRIS + 全称 ============ -->
+  <text x="600" y="298"
+        font-family="Avenir Next, Avenir, Helvetica Neue, Helvetica, Arial, sans-serif"
+        font-size="250" font-weight="600" letter-spacing="6" fill="#123A5A">PRIS</text>
+  <text x="606" y="386"
+        font-family="Avenir Next, Avenir, Helvetica Neue, Helvetica, Arial, sans-serif"
+        font-size="52" font-weight="500" fill="#14A6A8">Plausibility Rules for Inorganic Structures</text>
+</svg>
