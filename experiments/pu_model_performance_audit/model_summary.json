@@ -1,0 +1,44 @@
+{
+  "independent_test_available": false,
+  "models": {
+    "CGCNN-PU OOB": {
+      "architecture": "CGCNN trained from scratch; 50 PU bags; OOB full-pool score",
+      "log_source": "/data1/home/hzxy10/csllm/logs/train_200535_1.out \u2026 train_200537_50.out",
+      "metric_status": "validation-only; no independent test split",
+      "n_bags": 50,
+      "roc_auc_max": 0.9781,
+      "roc_auc_mean": 0.976538,
+      "roc_auc_median": 0.97655,
+      "roc_auc_min": 0.9749,
+      "roc_auc_range": [
+        0.9749,
+        0.9781
+      ],
+      "roc_auc_sd": 0.0007631540353248838
+    },
+    "MatterSim-1M-MLP-PU OOB": {
+      "architecture": "Frozen MatterSim-v1.0.0-1M embedding + 50 MLP PU heads; OOB full-pool score",
+      "log_source": "/data1/home/hzxy10/csllm/logs/headB_200736.out",
+      "metric_status": "validation-only; no independent test split",
+      "n_bags": 50,
+      "roc_auc_max": 0.9486,
+      "roc_auc_mean": 0.946566,
+      "roc_auc_median": 0.94655,
+      "roc_auc_min": 0.9443,
+      "roc_auc_range": [
+        0.9443,
+        0.9486
+      ],
+      "roc_auc_sd": 0.0009423396848444087
+    }
+  },
+  "raw_score_re_evaluation": {
+    "pr_auc_available": false,
+    "reason": "The remote job stalled after the CGCNN pass; no raw prediction curve tables were produced.",
+    "slurm_job": 209577,
+    "status": "stopped_before_matterSim_pass"
+  },
+  "validation_positive_per_bag": 19798,
+  "validation_pseudo_negative_per_bag": 19798,
+  "validation_rows_per_bag": 39596
+}

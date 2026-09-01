@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "Tb9Y3(OsRh)2",
+ "kind": "gnome",
+ "kmesh": [
+  5,
+  4,
+  4
+ ],
+ "n_atoms": 16,
+ "n_kpoints": 80,
+ "parent": "2190cc44da",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "Os",
+  "Rh",
+  "Tb",
+  "Y"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-2190cc44da",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-2190cc44da",
+ "variant": "P0"
+}

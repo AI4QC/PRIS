@@ -1,0 +1,131 @@
+\section{Methods}
+
+\subsection{Autonomous-agent workflow, model and human oversight}
+
+The autonomous programme ran under one continuous analysis protocol from 27 July to
+14 August 2026. The multi-agent loop coordinated task assignment, parallel execution and
+result exchange but did not itself call a large language model (LLM). Instead, our agents did all their reasoning by calling Codex directly through our own
+\texttt{codex-api} client, which we built on the official OpenAI Python SDK
+(\url{https://github.com/szl666/codex-api}). Codex used GPT-5.6-sol as its base model.
+Across multiple sessions, our agents proposed hypotheses, designed and ran analyses, wrote
+code, constructed checks and diagnosed failed claims in a shell with data access.
+
+Humans set the initial goal, redirected the study scope and authorised access to data
+reserved for later tests, but supplied no detailed scientific hypothesis. Confirmation
+analyses followed written procedures fixed before evaluation. Human authors verified the
+final outputs and retain responsibility for the reported conclusions. Agent records,
+eleven refuted conclusions and reproduction commands are reported in Supplementary
+Sections~\ref{si-note:s1}, \ref{si-note:s6}, \ref{si-note:s9}, \ref{si-note:s14}
+and~\ref{si-note:s19}. Archived scripts and feature tables reproduce the reported values.
+
+\subsection{First-principles verification}
+
+Four quantities on which the analysis depends were initially learned rather than computed:
+the contact thresholds of Law~1 and Law~2, the ordering behind GNoME's low-symmetry
+excess, the damage-severity scale assigned by a machine-learned potential and the property
+target used to select the design queue. Each was re-derived with plane-wave DFT under a protocol frozen
+before any job was submitted. Calculations used VASP 6.3.0 with PBE PAW potentials, a
+plane-wave cutoff of \(\max(520\,\mathrm{eV},1.3\max\mathrm{ENMAX})\), explicit
+\(\Gamma\)-centred meshes at \(0.22\,\text{\AA}^{-1}\),
+\(\mathrm{EDIFF}=10^{-6}\)\,eV and tetrahedron smearing.
+
+The four tests measured the energy landscape along \rhoc{}, ordering energies over every
+symmetry-distinct merge-group configuration, relaxation-energy release for matched cells,
+and bulk moduli from third-order Birch--Murnaghan fits to five-point energy--volume curves.
+Cells were fully relaxed before the corresponding static or constant-volume calculations,
+and machine-learning and DFT relaxation energies used the same per-cell definition. The
+campaign comprised 1{,}917 tasks. Supplementary Section~\ref{si-note:dft} gives the complete
+protocol, per-quantity settings, convergence and fit-sensitivity analyses. Relaxed cells
+for the 260 design candidates are provided as Supplementary Data.
+
+\subsection{Data sets and study design}
+
+Before evaluation, written protocols fixed the allowed structural quantities, data splits
+and success criteria. We analysed 99{,}162 experimental structures from the Inorganic
+Crystal Structure Database (ICSD) and the Crystallography Open Database (COD)
+\cite{zagorac2019recent,grazulis2009crystallography}. For law discovery, a seeded hash of
+each structure identifier assigned eligible ionic structures to discovery, held-out or
+reserve partitions. Every damaged structure inherited its experimental parent's assignment.
+The split therefore separated structures rather than chemistries: two structures with the
+same reduced composition could fall in different partitions.
+
+Thresholds were fitted on 12{,}632 experimental and 8{,}590 damaged discovery structures,
+then assessed on 5{,}297 experimental and 3{,}612 damaged held-out structures without
+refitting. We additionally evaluated the frozen law sets on held-out reduced compositions
+absent from discovery. Damaged structures inherited their parent's composition, and
+uncertainty was clustered by reduced composition. After law-set selection, a split-labelling error
+allowed reserve structures into one full-sample threshold fit, so the reserve no longer
+constitutes a fully independent final test. Database inventories, licences, the
+composition-unseen analysis and the reserve incident are reported in Supplementary
+Sections~\ref{si-note:s2}, \ref{si-note:s8} and~\ref{si-note:s19}.
+
+\subsection{Structural descriptors and law-set evaluation}
+
+We computed every Law~1--Law~8 quantity under a fixed convention. Formal oxidation states
+were assigned from composition by integer charge balancing \cite{jablonka2021using}. Where
+noted, external analyses used a non-integer mean-valence fallback without refitting any
+law. Native CIF oxidation annotations and bond-length-based valence inference were excluded
+to prevent bond lengths from entering both charge assignment and bond-valence evaluation.
+Primary neighbours came from CrystalNN \cite{zimmermann2020local} in pymatgen
+\cite{ong2013python}, and Law~7 used spglib \cite{togo2024spglib} with
+\texttt{symprec}=0.01. Discovery used deposited cells, whereas external comparisons
+involving Law~7 used a common primitive-cell convention.
+
+Each law combines a structural quantity with a directional threshold and, where needed, an
+explicit chemical condition. For benchmark rates, an unavailable measurement counted as
+satisfying that law under the frozen convention, and only features available for more than
+90\% of experimental structures were admitted to the search. In deployment, a missing
+charge, radius or other required input instead produces a separate no-verdict outcome. Any
+violation among the evaluable laws marks the structure implausible. Full descriptor
+definitions, radius and bond-valence lookups, alternative-neighbour checks, missing-input
+rules, cell conventions and the equations for Law~1--Law~8 are in Supplementary
+Sections~\ref{si-note:s3}, \ref{si-note:s17} and~\ref{si-note:s18}.
+
+\subsection{Chemically damaged structures and law selection}
+
+The damaged structures came from five perturbations that preserved composition,
+stoichiometry and atom count: uniaxial compression, cation--cation exchange, random
+displacement, isotropic expansion and cation--anion exchange. Independent contact,
+electrostatic and MatterSim-relaxation checks measured their physical and energetic
+severity. We selected laws to maximise damage detection subject to an experimental-structure
+satisfaction floor. Fixed Set~4 was then evaluated once on held-out data and compared with
+a provably optimal decision tree within the tested depth-three class. A separate
+threshold-transfer analysis re-derived each continuous cutoff at the corresponding held-out
+percentile and measured the resulting verdict changes.
+
+For leave-one-damage-class-out evaluation, tree and single-threshold selection were repeated
+completely. For Set~4 we reselected only its additions on a Set~3 base that had already seen all five
+classes, so this variant tests transfer of the added mechanisms, not de novo discovery. The distance-cutoff benchmark compared PRIS with fixed 0.5- and 0.7-\AA{}
+cutoffs and one matched to Set~4 satisfaction, on 440 experimental structures
+and 2{,}024 composition-preserving damaged variants. Exact perturbation operators,
+search grids, physical checks, omitted-class boundaries and threshold-transfer results
+are in Supplementary Sections~\ref{si-note:s4}, \ref{si-note:s5}, \ref{si-note:s7},
+\ref{si-note:s10}, \ref{si-note:s11}, \ref{si-note:s12}, \ref{si-note:s17}
+and~\ref{si-note:s18}.
+
+\subsection{External evaluation, synthesizability screening and statistics}
+
+With PRIS thresholds fixed, external evaluation covered GNoME and seven crystal generators,
+similar-element merging, MatterSim relaxation, coordinate-based checks and historical
+falsified depositions. Following a protocol fixed before computation, we sampled 5{,}000 of the 554{,}054
+released GNoME structures. Separate analyses relaxed 500 raw MatterGen outputs and compared
+thermodynamic stability, dynamical stability and experimental record across 26{,}600
+Materials Project structures. Same-composition ranking covered 18{,}920 pairs spanning
+1{,}508 compositions, weighted compositions equally, excluded ties from binary accuracy and
+used composition-cluster bootstrap intervals.
+
+PSS was fitted on development compositions as an antisymmetric, zero-intercept logistic
+score of the six standardised descriptors in equation~\ref{eq:pss}. Unavailable descriptors
+took frozen development-set medians. The score was evaluated once on held-out compositions
+before transfer. To test synthesizability trends, we trained a 50-bag CGCNN-PU model on
+99{,}162 experimental and 8{,}125{,}976 unlabelled structures. We independently trained 50 MLP PU
+heads on frozen 128-dimensional MatterSim-v1.0.0-1M representations
+\cite{jang2020structure,song2025llm,yang2024mattersim}. Consensus between the two models defined the
+hard-to-synthesize cohort. For inverse design, 13 independently seeded MatterGen runs
+conditioned at 400\,GPa yielded 1{,}081 unique candidates. Independent UMA bulk-modulus
+predictions defined the high-property subset, and 541 experimental high-property structures
+fixed the screening threshold, using the two PSS descriptors available for the candidates. Supplementary
+Sections~\ref{si-note:s13}, \ref{si-note:s15}, \ref{si-note:pu-transfer},
+\ref{si-note:s17} and~\ref{si-note:s19} give the data sets, descriptors, imputation,
+coefficients, model validation, phase-hull construction, inverse-design checks and
+statistical procedures.

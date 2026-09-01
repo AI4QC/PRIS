@@ -1,0 +1,30 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "La3TbNi2(AsSe)2",
+ "kind": "gnome",
+ "kmesh": [
+  8,
+  8,
+  2
+ ],
+ "n_atoms": 10,
+ "n_kpoints": 128,
+ "parent": "25c316ed15",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "As",
+  "La",
+  "Ni",
+  "Se",
+  "Tb"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-25c316ed15",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-25c316ed15",
+ "variant": "P0"
+}

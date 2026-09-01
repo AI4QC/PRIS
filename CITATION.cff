@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+message: "If you use PRIS, PSS, or the code in this repository, please cite the manuscript below."
+title: "PRIS: Plausibility Rules for Inorganic Structures"
+abstract: >-
+  Eight one-line laws over quantities computable from a structure file and a radius
+  table, discovered by autonomous agents through proposal, test and active refutation.
+  They encode five complementary physicochemical mechanisms and are scored on two axes
+  at once: satisfaction on experimental crystals and detection of chemically damaged
+  ones. PSS, a PRIS-derived synthesis score, extends them to synthesizability screening.
+type: software
+license: MIT
+repository-code: "https://github.com/AI4QC/PRIS"
+authors:
+  - family-names: Song
+    given-names: Zhilong
+    affiliation: "Hong Kong University of Science and Technology"
+  - family-names: Cheng
+    given-names: Lixue
+    affiliation: "Hong Kong University of Science and Technology"
+    email: lixuecheng@ust.hk
+keywords:
+  - crystal chemistry
+  - Pauling's rules
+  - structure plausibility
+  - synthesizability screening
+  - generative models for materials
+  - autonomous scientific discovery
+preferred-citation:
+  type: unpublished
+  title: >-
+    Autonomous discovery of new structure plausibility laws for explainable and rapid
+    crystal diagnosis and screening
+  authors:
+    - family-names: Song
+      given-names: Zhilong
+      affiliation: "Hong Kong University of Science and Technology"
+    - family-names: Cheng
+      given-names: Lixue
+      affiliation: "Hong Kong University of Science and Technology"
+      email: lixuecheng@ust.hk
+  year: 2026
+  notes: "Manuscript under review"

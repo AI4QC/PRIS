@@ -1,0 +1,19 @@
+{
+ "prereg_sha256": "199788c4988da1b25d1a8c960f200e92fad91ebe84c85f707d0a2be8fa0c2ba1",
+ "predicates": [
+  [
+   "wyckoff_econ_001",
+   "le",
+   0.6666666666666666,
+   null
+  ],
+  [
+   "bv_rel_mean",
+   "le",
+   0.7143040821865658,
+   null
+  ]
+ ],
+ "disc_sat": 0.8107188093730209,
+ "disc_exc": 0.9051222351571595
+}

@@ -1,0 +1,85 @@
+\documentclass[11pt,a4paper]{letter}
+\usepackage[margin=0.95in,top=1.25in]{geometry}
+\usepackage{amsmath}
+\usepackage{microtype}
+\setlength{\emergencystretch}{3em}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{eso-pic}
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{0pt}
+
+% --- HKUST logo top-left (file at hkust_logo.pdf or .png, optional) ---
+\AddToShipoutPictureBG*{%
+  \AtPageUpperLeft{%
+    \raisebox{-2.1in}{\hspace*{1in}%
+      \IfFileExists{hkust_logo.pdf}{%
+        \includegraphics[height=0.85in]{hkust_logo.pdf}%
+      }{\IfFileExists{hkust_logo.png}{%
+        \includegraphics[height=0.85in]{hkust_logo.png}%
+      }{}}%
+    }%
+  }%
+}
+
+\address{\begin{tabular}{@{}r@{}}
+Department of Chemistry\\
+IAS Center for AI for Scientific Discoveries\\
+The Hong Kong University of Science and Technology\\
+Clear Water Bay, Kowloon\\
+Hong Kong SAR, China
+\end{tabular}}
+
+\date{\hfill August 24, 2026}
+
+\begin{document}
+
+\sloppy
+
+% To retarget the letter, change the journal name here and in the scope paragraph.
+\begin{letter}{The Editors\\Nature Computational Science\\Springer Nature}
+
+\opening{Dear Editors,}
+
+Nearly a century after Pauling proposed his five rules of crystal chemistry [\emph{J. Am. Chem. Soc.}, 1929, 51, 1010], autonomous agents have discovered, through active refutation, eight falsifiable successors. We are delighted to present our manuscript, \emph{``Autonomous discovery of new structure-plausibility laws for explainable and rapid crystal diagnosis and screening''}, which reports it. Our agents proposed, implemented and tested two million candidate laws, overturned eleven conclusions that first looked successful, and retained eight: the Plausibility Rules for Inorganic Structures (PRIS). Pauling distilled the crystals of his era into rules a chemist could apply by hand. We developed and evaluated PRIS on fixed splits drawn from 99{,}162 experimental structures, for today's flood of machine-generated candidates. PRIS gives a rapid, explainable test of whether a proposed structure is physicochemically plausible and, when it is not, which physical assumption fails.
+
+\textbf{Distance cutoffs pass nearly everything; Pauling's rules reject nearly every real crystal.}
+A recent Comment argues that data alone will struggle to deliver materials discovery, and that AI must learn the chemical rules governing atomic arrangements [\emph{Nat. Mater.}, 2026, 25, 1290]. Generative models and scientific agents now propose crystal structures far faster than density functional theory, phonon calculations or experiments can assess them [\emph{Nature}, 2023, 624, 80; \emph{Nature}, 2025, 639, 624]. The first screening decision therefore determines where expensive computation and laboratory effort are spent. The criteria available for that decision fail in opposite directions. Fixed interatomic-distance cutoffs, the standard validity check in generative benchmarks, detect only 1.6--3.2\% of chemically damaged structures; Pauling's classical rules, applied jointly, are satisfied by only 6.5\% of experimental ionic structures [\emph{Angew. Chem. Int. Ed.}, 2020, 59, 7569]. PRIS supplies the missing chemical layer, and our agents derived it rather than receiving it by hand.
+
+\textbf{Eight one-line laws form that layer, and each rejection names the chemistry that fails.}
+Each law is one line a chemist can read, calculate and try to disprove, and encodes one of five complementary mechanisms: short-range repulsion, ionic contact and packing, electrostatic balance, bond-valence conservation and crystallographic site complexity. Nested law sets, from a hard-sphere contact floor to full crystal chemistry, satisfy 82--99\% of experimental structures, and the fullest detects 87.9\% of chemically damaged structures. Every rejection carries its own explanation: the violated law identifies the measured quantity and physicochemical mechanism at fault, turning screening from a pass-or-fail check into a chemical diagnosis. On a single laptop CPU, evaluating all eight laws on a 10{,}000-structure queue takes about ten minutes, less than $10^{-6}$ of the estimated cost of density functional theory (DFT) relaxation.
+
+\textbf{Laws discovered without a single synthesis label predict synthesizability.}
+The more synthesizable a structure appears to two independent machine-learning models of synthesis likelihood [\emph{J. Am. Chem. Soc.}, 2020, 142, 18836], the fewer PRIS laws it violates. Our agents turned this connection into a PRIS-derived synthesis score (PSS) that retains 80.7\% of experimental structures while screening 83.7\% of hard-to-synthesize structures in advance. The standard energy-based alternative screens only 72.0\% of such structures and requires costly structure relaxation based on DFT or machine-learning potentials. In a real design task, generating candidate crystals for a target bulk modulus with MatterGen, the same explainable screen reduces the DFT validation by up to 67.3\%. DFT bulk-modulus calculations on 260 candidates confirmed that PSS retained 99.2\% of the DFT-defined high-property subset after rescaling the 400\,GPa target.
+
+\textbf{The same laws explain GNoME's low-symmetry excess and expose falsified structures.} PRIS explains why GNoME's stable structures remain enriched in rare low-symmetry structures that pass geometric screens. We trace this excess to the artificial ordering of chemically similar elements such as rare-earth pairs or Zr and Hf [\emph{Chem. Mater.}, 2024, 36, 3490; \emph{Nat. Mater.}, 2026, 25, 1290]. We merged chemically similar labels, which turned that explanation into a measured mechanism. PRIS also explains why a falsified crystal can hide the wrong element behind plausible coordinates [\emph{Acta Cryst. E}, 2010, 66, e1]. On exchanges that leave every coordinate fixed, PRIS detects 89.9--98.8\% of wrong elements, against 27.5--48.2\% for coordinate-only checks. Structural plausibility therefore comes first, ahead of thermodynamic stability, dynamical stability and synthesizability.
+
+\textbf{Fit with the scope of \emph{Nature Computational Science}.}
+This work develops and validates a computational methodology of broad reach: an auditable propose--implement--test--refute loop in which refutation, not proposal volume, measures progress. Its products are compact, falsifiable laws rather than model weights, a century-old scientific form produced by a modern process. For computational materials discovery, it delivers an interpretable, near-zero-cost screen that protects expensive calculation queues, diagnoses generated and database structures by physical mechanism, and connects structural plausibility to synthesizability. We believe this combination of new methodology and immediate practical value across the discovery pipeline will interest your broad readership.
+
+The manuscript reports unpublished work, is not under consideration elsewhere, and has been approved by all authors. We declare no competing interests.
+
+\textbf{Suggested reviewers}:
+
+\begin{enumerate}\itemsep0pt\parsep0pt\topsep2pt
+\item \textbf{Prof. Geoffroy Hautier}, \texttt{gh55@rice.edu}, Department of Materials Science and NanoEngineering, Rice University. Senior author of the statistical audit of Pauling's rules that motivates our two-sided evaluation.
+\item \textbf{Prof. Jinlan Wang}, \texttt{jlwang@seu.edu.cn}, School of Physics, Southeast University, China. Early contributor to machine-learning-driven materials design; currently focused on LLM agents and generative models for autonomous materials discovery.
+\item \textbf{Prof. Heather J. Kulik}, \texttt{hjkulik@mit.edu},
+Department of Chemical Engineering, MIT, USA. Pioneer in ML-driven discovery of materials.
+\item \textbf{Prof. Wanjian Yin}, \texttt{wjyin@suda.edu.cn},
+School of Energy, Soochow University, China. First-principles and machine-learning methods for materials and catalyst discovery, including machine-learning interatomic potentials.
+\item \textbf{Prof. Philippe Schwaller}, \texttt{philippe.schwaller@epfl.ch}, Laboratory of Artificial Chemical Intelligence, EPFL, Switzerland. Expert in machine learning and large-language-model agents for chemistry and materials; co-developer of ChemCrow.
+\end{enumerate}
+
+
+\vspace{0.2em}
+\noindent\hfill\begin{tabular}{@{}r@{}}
+With sincere thanks for your time and consideration,\\[2.0em]
+Zhilong Song and Lixue Cheng\\
+{\footnotesize Corresponding author: Lixue Cheng, \texttt{lixuecheng@ust.hk}}
+\end{tabular}
+
+\end{letter}
+\end{document}

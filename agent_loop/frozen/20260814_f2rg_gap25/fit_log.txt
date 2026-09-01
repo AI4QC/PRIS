@@ -1,0 +1,8 @@
+step 1: +econ_max               cv 0.6727 (+1.6727)
+step 2: +bv_frac_bad            cv 0.7384 (+0.0657)
+step 3: +p2_mean_dev            cv 0.7496 (+0.0112)
+step 4: +cn_cat_max             cv 0.7558 (+0.0062)
+step 5: +bv_rel_max             cv 0.7635 (+0.0077)
+step 6: +ecc_max                cv 0.7682 (+0.0048)
+step 7: +p3_frac_face           cv 0.7688 (+0.0006)
+F2RG frozen: 6 terms cv 0.7682 disc 0.7631

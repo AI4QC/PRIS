@@ -1,0 +1,27 @@
+{
+ "order": [
+  {
+   "element": "Ge",
+   "symbol": "Ge_d",
+   "title": "PAW_PBE Ge_d 03Jul2007",
+   "enmax_ev": 310.294,
+   "rcore_a": 1.2171,
+   "sha256": "944b26c40d2d7c4f4eb1ff3a2e8dbfdd7129146276cd341854bfd5c0e57780ed",
+   "library_relative": "Ge_d/POTCAR"
+  },
+  {
+   "element": "S",
+   "symbol": "S",
+   "title": "PAW_PBE S 06Sep2000",
+   "enmax_ev": 258.689,
+   "rcore_a": 1.0054,
+   "sha256": "0fc7481fb0695f01bdc6462160264c5c84044ae9ec85a907d398b887a2bc3132",
+   "library_relative": "S/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "Ge",
+  "S"
+ ]
+}

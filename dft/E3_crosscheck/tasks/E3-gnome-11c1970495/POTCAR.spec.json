@@ -1,0 +1,57 @@
+{
+ "order": [
+  {
+   "element": "Th",
+   "symbol": "Th",
+   "title": "PAW_PBE Th 07Sep2000",
+   "enmax_ev": 247.306,
+   "rcore_a": 1.4817,
+   "sha256": "d41e9f824f712d7814b19b6bc43381cc9a373f2ab99e53c63e55d3471ac6bd23",
+   "library_relative": "Th/POTCAR"
+  },
+  {
+   "element": "Cd",
+   "symbol": "Cd",
+   "title": "PAW_PBE Cd 06Sep2000",
+   "enmax_ev": 274.336,
+   "rcore_a": 1.2171,
+   "sha256": "8b7ca71966beae5276c8bb910adb3ecc013a3354c27473914c94cd54c83be4f7",
+   "library_relative": "Cd/POTCAR"
+  },
+  {
+   "element": "P",
+   "symbol": "P",
+   "title": "PAW_PBE P 06Sep2000",
+   "enmax_ev": 255.04,
+   "rcore_a": 1.0054,
+   "sha256": "df60c54a93efe35c9e85ae94c010c75e9f6960a95d5595d7cdba4096d109af88",
+   "library_relative": "P/POTCAR"
+  },
+  {
+   "element": "Ru",
+   "symbol": "Ru_pv",
+   "title": "PAW_PBE Ru_pv 28Jan2005",
+   "enmax_ev": 240.049,
+   "rcore_a": 1.3229,
+   "sha256": "539bee49bb4e63d8933d8244c4f66bec34c4e5cbe2759ec5d366ad1017752494",
+   "library_relative": "Ru_pv/POTCAR"
+  },
+  {
+   "element": "Pt",
+   "symbol": "Pt",
+   "title": "PAW_PBE Pt 04Feb2005",
+   "enmax_ev": 230.283,
+   "rcore_a": 1.3759,
+   "sha256": "3ed90460adef76debcff1cfb73ee1349b515b1a3db03439735b44de3a8db7dc8",
+   "library_relative": "Pt/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "Th",
+  "Cd",
+  "P",
+  "Ru",
+  "Pt"
+ ]
+}

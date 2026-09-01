@@ -1,0 +1,13 @@
+440 parent structures
+real 440  perturbed 2,024
+
+                criterion     kind                used_by  real_satisfaction  exclusion_total  S1_uniaxial_compression  S2_cation_cation_swap  S3_random_displacement  S4_isotropic_expansion  S5_cation_anion_swap
+min pair distance > 0.5 A absolute CDVAE; DiffCSP; FlowMM             1.0000           0.0158                   0.0000                 0.0000                  0.0727                  0.0000                0.0000
+min pair distance > 0.7 A absolute         LeMat-GenBench             1.0000           0.0321                   0.0023                 0.0000                  0.1455                  0.0000                0.0000
+min pair distance > 1.0 A absolute     (stricter variant)             0.9955           0.0781                   0.0045                 0.0000                  0.3500                  0.0000                0.0045
+       L1 (D1, tau=0.735) relative              this work             0.9909           0.2678                   0.1886                 0.2992                  0.8409                  0.0000                0.0227
+      D1 alone, tau=0.804 relative              this work             0.9773           0.3859                   0.5295                 0.4924                  0.9114                  0.0000                0.0386
+              L1' (D1+D2) relative              this work             0.9864           0.3582                   0.1886                 0.2992                  0.8409                  0.4068                0.0318
+            L2 (D1,D3-D5) relative              this work             0.9659           0.5879                   0.5432                 0.5076                  0.9455                  0.6455                0.2659
+            L3 (D1,D3-D6) relative              this work             0.9182           0.6690                   0.6045                 0.5303                  0.9477                  0.6500                0.5568
+            L4 (D1,D3-D8) relative              this work             0.8273           0.8794                   0.7295                 0.8674                  1.0000                  0.8045                0.9909

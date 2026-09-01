@@ -1,0 +1,74 @@
+[
+ {
+  "source_id": "cod-1001469",
+  "formula": "Ba2CePtO6",
+  "standard_ev_per_atom": 7.087237992858623,
+  "hard_ev_per_atom": 8.24366398032171,
+  "relative_shift": 0.16317019248236714,
+  "rho_star_standard": 0.9139319659829914,
+  "rho_star_hard": 1.3991995997998998
+ },
+ {
+  "source_id": "cod-1008795",
+  "formula": "ZrCoF6",
+  "standard_ev_per_atom": 7.521923493399239,
+  "hard_ev_per_atom": 7.467893275365855,
+  "relative_shift": 0.0071830321168246045,
+  "rho_star_standard": 0.9397698849424712,
+  "rho_star_hard": 0.9393696848424212
+ },
+ {
+  "source_id": "cod-1010285",
+  "formula": "Cs2SiF6",
+  "standard_ev_per_atom": 7.669354712066825,
+  "hard_ev_per_atom": 7.640724135343909,
+  "relative_shift": 0.0037331141664199478,
+  "rho_star_standard": 0.9601800900450226,
+  "rho_star_hard": 0.9593796898449225
+ },
+ {
+  "source_id": "cod-1010286",
+  "formula": "Cs2GeF6",
+  "standard_ev_per_atom": 5.720317484363146,
+  "hard_ev_per_atom": 5.984602284871632,
+  "relative_shift": 0.04620107209624738,
+  "rho_star_standard": 0.935967983991996,
+  "rho_star_hard": 0.936168084042021
+ },
+ {
+  "source_id": "cod-1507759",
+  "formula": "MnNbF6",
+  "standard_ev_per_atom": 8.006209998253004,
+  "hard_ev_per_atom": 7.946879264998182,
+  "relative_shift": 0.00741058918861341,
+  "rho_star_standard": 0.9479739869934968,
+  "rho_star_hard": 0.9475737868934467
+ },
+ {
+  "source_id": "cod-1510743",
+  "formula": "La3Ni2B2N3",
+  "standard_ev_per_atom": 16.024066787484937,
+  "hard_ev_per_atom": 15.942480841423444,
+  "relative_shift": 0.0050914631811952195,
+  "rho_star_standard": 1.0198349174587293,
+  "rho_star_hard": 1.0198349174587293
+ },
+ {
+  "source_id": "cod-1511018",
+  "formula": "Ca3BN3",
+  "standard_ev_per_atom": 0.1608291283657295,
+  "hard_ev_per_atom": 0.1607859286666709,
+  "relative_shift": 0.0002686061878066351,
+  "rho_star_standard": 0.7427713856928464,
+  "rho_star_hard": 0.7426713356678339
+ },
+ {
+  "source_id": "cod-1511203",
+  "formula": "LaNiBN",
+  "standard_ev_per_atom": 17.280363211721262,
+  "hard_ev_per_atom": 17.17275055100844,
+  "relative_shift": 0.006227453635918215,
+  "rho_star_standard": 1.023886943471736,
+  "rho_star_hard": 1.023886943471736
+ }
+]

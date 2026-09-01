@@ -1,0 +1,30 @@
+{
+ "encut_ev": 526.0,
+ "experiment": "E3",
+ "formula": "Ho3Mg2ZnGa2Hg",
+ "kind": "gnome",
+ "kmesh": [
+  5,
+  5,
+  7
+ ],
+ "n_atoms": 9,
+ "n_kpoints": 175,
+ "parent": "2ce4cf96b0",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "Ga",
+  "Hg",
+  "Ho",
+  "Mg",
+  "Zn"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-2ce4cf96b0",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-2ce4cf96b0",
+ "variant": "P0"
+}

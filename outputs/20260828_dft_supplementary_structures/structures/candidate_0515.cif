@@ -1,0 +1,37 @@
+# generated using pymatgen
+data_Re5Ir6
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   3.88748807
+_cell_length_b   3.86592213
+_cell_length_c   11.65261450
+_cell_angle_alpha   99.53435174
+_cell_angle_beta   99.58094843
+_cell_angle_gamma   89.99656458
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Re5Ir6
+_chemical_formula_sum   'Re5 Ir6'
+_cell_volume   170.22773268
+_cell_formula_units_Z   1
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Re  Re0  1  0.55862427  0.09806181  0.70164505  1
+  Re  Re1  1  0.87886442  0.41838874  0.34198828  1
+  Re  Re2  1  0.21872519  0.75917489  0.02364058  1
+  Re  Re3  1  0.96840934  0.00831892  0.52175435  1
+  Re  Re4  1  0.05168229  0.59188913  0.68892126  1
+  Ir  Ir5  1  0.14003118  0.18007832  0.86541662  1
+  Ir  Ir6  1  0.79564340  0.83567736  0.17601062  1
+  Ir  Ir7  1  0.46788160  0.50801285  0.52081748  1
+  Ir  Ir8  1  0.38602041  0.92595429  0.35676711  1
+  Ir  Ir9  1  0.63968428  0.67935749  0.86457235  1
+  Ir  Ir10  1  0.29718043  0.33647347  0.17813269  1

@@ -1,0 +1,124 @@
+% ======================================================================
+% Title, abstract, introduction.
+% Narrative spine: an autonomous agent discovered new plausibility rules
+% for inorganic crystal structures. Everything else in the paper is
+% either what the rules are, or what the agent learned about how such
+% rules can and cannot be discovered.
+% ======================================================================
+
+% ---------------------------------------------------------------- TITLE
+% Candidates considered:
+%   1. Autonomous discovery of calibrated plausibility rules for
+%      inorganic crystal structures                            [CHOSEN]
+%   2. An autonomous agent discovers crystal-structure plausibility
+%      rules that never abstain
+%   3. Machine discovery of contact-ratio rules for inorganic crystal
+%      plausibility
+%   4. Autonomous discovery, and self-refutation, of plausibility rules
+%      for inorganic crystals
+%   5. Agent-discovered plausibility rules for inorganic crystals, and
+%      the counterexample bound on discovering them
+% Chosen 1: names the object (inorganic crystal structures), the
+% capability (autonomous discovery) and the differentiator (calibrated),
+% is searchable, and every word is supported by the data.
+
+\title[Autonomous discovery of crystal plausibility rules]{Autonomous discovery of
+calibrated plausibility rules for inorganic crystal structures}
+
+% ------------------------------------------------------------- ABSTRACT
+\abstract{Rules that judge whether a proposed crystal structure is chemically plausible
+are used to teach solid-state chemistry, to curate structural databases, and now to
+filter the output of generative models for materials. The canonical set, formulated by
+Pauling in 1929 from a few hundred structures, is violated by most oxides when its rules
+are applied jointly, yet nothing has displaced it. Here we report plausibility rules
+discovered autonomously by a machine agent from 99{,}162 experimental structures under a
+pre-registered protocol with a sealed evaluation split. The leading rule bounds the
+shortest cation--anion contact by the sum of the two ionic radii. It is satisfied by
+99.2\% of held-out experimental crystals, is element- and valence-aware, costs one
+distance computation and one table lookup, and, unlike Pauling's rules, never declines to
+distinguish two candidate structures. An ionicity-conditioned upper bound repairs the one
+corruption a lower bound cannot detect, and transfers to a corruption class the search
+never saw. Enumerating provably optimal decision trees shows that the constraint on such
+rules is not the space of expressible hypotheses but the counterexamples used to test
+them. The agent also overturned eleven of its own conclusions; we publish that ledger
+with the rules, because each entry leaves a diagnostic that outlives the claim it
+killed.}
+
+% --------------------------------------------------------- INTRODUCTION
+\section{Introduction}
+
+Deciding whether a proposed arrangement of atoms could be a real crystal is a judgement
+that solid-state chemistry has to make thousands of times before it makes a single
+measurement. It is made when a crystallographer assesses a refinement, when a database
+curator screens a deposition, and, increasingly, when a generative model proposes a
+structure that no one has yet attempted to make. The judgement is old enough to have a
+canonical answer. Pauling's five rules, set down in 1929 from the few hundred structures
+then available, ask whether cation--anion distances match a radius ratio, whether bond
+strengths sum correctly at each anion, whether coordination polyhedra share too many
+edges and faces, whether highly charged cations avoid one another, and whether a
+structure uses as few distinct environments as it can \cite{pauling1929principles}. Each
+reduces a crystal to arithmetic on a radius table and a set of formal charges, and each
+returns a verdict in a minute with a pencil. Their tenure rests on that economy.
+
+Economy is not accuracy, and the gap between them has now been measured. A 2020 audit of
+inorganic structures found that only a small minority satisfy Pauling's second to fifth
+rules simultaneously, that individual rules fare little better than chance in places, and
+that the verdicts move substantially with the algorithm chosen to assign neighbours; its
+authors closed by calling for machine-learned replacements \cite{george2020limited}. Six
+years later the call is open. The obstacle is not a shortage of structural data or of
+learning algorithms, both of which have grown by orders of magnitude
+\cite{jain2013commentary,shannon1976revised}. It is that nobody has agreed what a
+replacement should be measured against.
+
+That difficulty is sharper than it first appears, because the metric the audit itself
+uses cannot rank rules. A rule satisfied by almost every real crystal is trivially
+obtainable: the statement that every interatomic distance is positive scores a perfect
+satisfaction rate and excludes nothing. The consequences are not hypothetical. Generative
+models for crystal structures are routinely validated by asking whether any pair of atoms
+lies closer than a fixed absolute distance, a criterion that on our test set accepts every
+real crystal while rejecting only a small percentage of deliberately corrupted ones. A
+field-wide quality filter can therefore be very close to vacuous while reporting a
+satisfaction rate near unity. Any rule, learned or hand-made, must be scored on how often
+it accepts real crystals and on how often it rejects implausible ones, jointly.
+
+Here we report plausibility rules discovered by an autonomous agent rather than proposed
+by hand. Given 99{,}162 experimental structures, a corpus of derived structural
+quantities, and a pre-registered protocol that sealed part of the data before any search
+began, the agent proposed candidate predicates, evaluated them against both real and
+deliberately corrupted structures, and kept those that survived. The rule it returns
+first is a single inequality on a single dimensionless quantity, the ratio of the
+shortest cation--anion distance in a structure to the sum of the two ionic radii
+\cite{shannon1976revised}. Using a radius sum rather than the radius ratio of Pauling's
+first rule is the substantive change: a ratio compares two lengths that never meet,
+whereas a sum is the length that a contact is attempting to reach. The resulting
+criterion is satisfied by 99.2\% of held-out experimental crystals, is stable to within a
+fifth of a percentage point across three independent neighbour-assignment algorithms, and
+commits on every structure pair we present to it. Extending it with an upper bound that
+applies only where the ionic model itself applies repairs the single corruption mode a
+lower bound cannot detect, and does so on a corruption class the selection procedure was
+never shown.
+
+What the agent learned about discovering such rules is the second result, and it is the
+more transferable one. Enumerating the provably optimal decision tree at each point of a
+cost trade-off, over the same features, yields rule sets that dominate the hand-built
+ones in distribution, accepting more real crystals and rejecting more corrupted ones at
+once. Withholding a single class of corruption removes that advantage entirely. The
+binding constraint on a learned structural rule is therefore not the space of hypotheses
+the search can express, which certified optimality lets us bound, but the counterexamples
+used to test it: a rule trained against a synthetic corruption process learns the
+corruption process, and the reward is indistinguishable from chemistry until a class is
+withheld.
+
+Autonomy here means a specific and checkable thing. The agent held its own evaluation
+split sealed throughout, wrote its hypotheses down before testing them, and was required
+to pair every claim with a control designed to kill it. That discipline is what separates
+the present work from an automated parameter sweep, and it is also what produced the
+paper's least comfortable result: the loop generates candidate conclusions far faster
+than it generates the controls that refute them, so the scarce resource in autonomous
+discovery is not search but the arithmetic of what a number is allowed to mean.
+
+The same protocol that produced the rules also produced eleven conclusions that did not
+survive, each overturned by the agent after it had been stated. We report them as a
+ledger beside the surviving results. They are not a confession; each entry cost one cheap
+diagnostic to expose, and those diagnostics apply well beyond the claims that motivated
+them.

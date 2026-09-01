@@ -1,0 +1,37 @@
+{
+ "candidate_id": "candidate_0484",
+ "cif_sha256": "dc28ff95102c9ed56d697e6099e0b23e710393cefd02f6f7d7091be92fe42bad",
+ "encut_ev": 520.0,
+ "ev_volume_factors": [
+  0.94,
+  0.97,
+  1.0,
+  1.03,
+  1.06
+ ],
+ "experiment": "E4",
+ "formula": "Re8Ir4W",
+ "kmesh": [
+  11,
+  7,
+  2
+ ],
+ "n_atoms": 13,
+ "n_kpoints": 154,
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "pss": -0.6497395950235363,
+ "role": "screened",
+ "rung_L4_verdict": "reject",
+ "species": [
+  "Ir",
+  "Re",
+  "W"
+ ],
+ "stages": [
+  "relax_cell",
+  "static"
+ ],
+ "task": "E4-candidate_0484",
+ "task_dir": "<repo>/dft/E4_design/tasks/E4-candidate_0484",
+ "uma_bulk_modulus_gpa": 344.06021127312863
+}

@@ -1,0 +1,19 @@
+{
+  "ladder_source": "$PRIS_ARCHIVE/external_sources/lematgenbench_ladder/ladder_per_structure.parquet",
+  "relaxation_source": "$PRIS_ARCHIVE/external_sources/mlip_groundtruth/exp2_mattergen_per_structure.parquet",
+  "join": "inner one-to-one on material_id",
+  "n_joined": 500,
+  "verdict_semantics": "failure dominates; otherwise any missing required input gives not evaluated; otherwise satisfies",
+  "strict_reconstruction": {
+    "L1": "archived L1 with the charge-assignment gate",
+    "L2": "archived L2 with the charge-assignment gate",
+    "L3": "L2 and D6; missing fi makes D6 not evaluated",
+    "L4": "strict L3 and D7 and D8; missing primitive-cell symmetry or bond-valence input makes the respective law not evaluated"
+  },
+  "counts": {
+    "L1": {"satisfies": 162, "fails": 0, "not_evaluated": 338},
+    "L2": {"satisfies": 154, "fails": 8, "not_evaluated": 338},
+    "L3": {"satisfies": 134, "fails": 11, "not_evaluated": 355},
+    "L4": {"satisfies": 4, "fails": 155, "not_evaluated": 341}
+  }
+}

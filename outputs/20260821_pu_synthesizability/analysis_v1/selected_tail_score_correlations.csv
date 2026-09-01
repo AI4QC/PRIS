@@ -1,0 +1,58 @@
+subgroup,score,outcome,n,score_unique_values,spearman_rho,pvalue,strata,min_group_rows,complete_n,rows_after_min_group,excluded_constant_rows,n_groups,pvalue_note
+all,CLscore_A,violation_fraction_evaluable,364413,9.0,-0.07034514374725981,0.0,,,,,,,
+all,CLscore_A,evaluable_mechanism_count,364413,9.0,0.04220981090456848,2.4233711315243417e-143,,,,,,,
+all,CLscore_A,L4_explicit_known,189259,9.0,-0.01350414549655939,4.226900333533723e-09,,,,,,,
+all,CLscore_A,L4_no_verdict,364413,9.0,0.061884687549604446,4.999527224313329e-306,,,,,,,
+all,CLscore_A,D7_explicit_known,364413,9.0,-0.06840329959157848,0.0,,,,,,,
+all,CLscore_A,D7_no_verdict,364413,9.0,,,,,,,,,
+all,CLscore_A,n_sites,364413,9.0,0.07161906185154525,0.0,,,,,,,
+provenance=elementa,CLscore_A,violation_fraction_evaluable,102627,8.0,0.03844467877913737,7.040576108238659e-35,,,,,,,
+provenance=elementa,CLscore_A,L4_explicit_known,19537,8.0,0.00010328087763169204,0.9884828227722042,,,,,,,
+provenance=elementa,CLscore_A,D7_explicit_known,102627,8.0,0.036367372375522775,2.185142556408691e-31,,,,,,,
+provenance=lemat,CLscore_A,violation_fraction_evaluable,261786,9.0,-0.15572189874507603,0.0,,,,,,,
+provenance=lemat,CLscore_A,L4_explicit_known,169722,9.0,-0.01627744263442247,1.9966676714098105e-11,,,,,,,
+provenance=lemat,CLscore_A,D7_explicit_known,261786,9.0,-0.152992380236032,0.0,,,,,,,
+within_strata,CLscore_A,violation_fraction_evaluable,364339,,-0.0335478841977666,,provenance+n_elements+site_bin,20.0,364413.0,364401.0,62.0,21.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_A,violation_fraction_evaluable,33362,,0.0006210749923258078,,chemical_system+site_bin,20.0,364413.0,60360.0,26998.0,757.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_A,L4_explicit_known,58139,,0.032686362020750176,,provenance+n_elements+site_bin,20.0,189259.0,189229.0,131090.0,6.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_A,L4_explicit_known,0,,,,chemical_system+site_bin,20.0,189259.0,28145.0,28145.0,0.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_A,D7_explicit_known,236698,,-0.0320106769290743,,provenance+n_elements+site_bin,20.0,364413.0,364401.0,127703.0,17.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_A,D7_explicit_known,31526,,-0.004802962109196323,,chemical_system+site_bin,20.0,364413.0,60360.0,28834.0,686.0,not reported for pooled within-stratum residual ranks
+all,CLscore_B,violation_fraction_evaluable,364413,4896.0,0.007615416630691231,4.281628747258983e-06,,,,,,,
+all,CLscore_B,evaluable_mechanism_count,364413,4896.0,0.03794528466294711,3.3338041501800087e-116,,,,,,,
+all,CLscore_B,L4_explicit_known,189259,4894.0,-0.025827986105755135,2.6537452574053294e-29,,,,,,,
+all,CLscore_B,L4_no_verdict,364413,4896.0,-0.01612846504095226,2.100432028313942e-22,,,,,,,
+all,CLscore_B,D7_explicit_known,364413,4896.0,0.015336011265794001,2.076237532789878e-20,,,,,,,
+all,CLscore_B,D7_no_verdict,364413,4896.0,,,,,,,,,
+all,CLscore_B,n_sites,364413,4896.0,0.003313012515424471,0.045505379249747305,,,,,,,
+provenance=elementa,CLscore_B,violation_fraction_evaluable,102627,4887.0,0.020220244593930632,9.280511208295569e-11,,,,,,,
+provenance=elementa,CLscore_B,L4_explicit_known,19537,4790.0,-0.02728071866475681,0.000136944181039067,,,,,,,
+provenance=elementa,CLscore_B,D7_explicit_known,102627,4887.0,0.01870947514691438,2.0459530678035577e-09,,,,,,,
+provenance=lemat,CLscore_B,violation_fraction_evaluable,261786,4896.0,0.08590617055457105,0.0,,,,,,,
+provenance=lemat,CLscore_B,L4_explicit_known,169722,4894.0,-0.02430938080282376,1.2935322362749344e-23,,,,,,,
+provenance=lemat,CLscore_B,D7_explicit_known,261786,4896.0,0.1036253724732614,0.0,,,,,,,
+within_strata,CLscore_B,violation_fraction_evaluable,364339,,-0.005502637168794127,,provenance+n_elements+site_bin,20.0,364413.0,364401.0,62.0,21.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_B,violation_fraction_evaluable,33382,,0.049484531028508506,,chemical_system+site_bin,20.0,364413.0,60360.0,26978.0,758.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_B,L4_explicit_known,58139,,-0.007608172020306846,,provenance+n_elements+site_bin,20.0,189259.0,189229.0,131090.0,6.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_B,L4_explicit_known,0,,,,chemical_system+site_bin,20.0,189259.0,28145.0,28145.0,0.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_B,D7_explicit_known,236698,,0.02358939044145267,,provenance+n_elements+site_bin,20.0,364413.0,364401.0,127703.0,17.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_B,D7_explicit_known,31546,,0.05427475449785811,,chemical_system+site_bin,20.0,364413.0,60360.0,28814.0,687.0,not reported for pooled within-stratum residual ranks
+all,CLscore_jang,violation_fraction_evaluable,364413,199652.0,-0.012762279778595103,1.3141264704485704e-14,,,,,,,
+all,CLscore_jang,evaluable_mechanism_count,364413,199652.0,0.2188262837252293,0.0,,,,,,,
+all,CLscore_jang,L4_explicit_known,189259,122781.0,-0.04418983042350791,1.9381157048659112e-82,,,,,,,
+all,CLscore_jang,L4_no_verdict,364413,199652.0,-0.027899126151769326,1.1420167632537019e-63,,,,,,,
+all,CLscore_jang,D7_explicit_known,364413,199652.0,0.009829655122810683,2.9572379510789775e-09,,,,,,,
+all,CLscore_jang,D7_no_verdict,364413,199652.0,,,,,,,,,
+all,CLscore_jang,n_sites,364413,199652.0,-0.03056181515930239,4.897912136974418e-76,,,,,,,
+provenance=elementa,CLscore_jang,violation_fraction_evaluable,102627,80143.0,0.013304916356273948,2.0221907685994612e-05,,,,,,,
+provenance=elementa,CLscore_jang,L4_explicit_known,19537,17872.0,-0.07759163732770485,1.767266527762333e-27,,,,,,,
+provenance=elementa,CLscore_jang,D7_explicit_known,102627,80143.0,0.009705619120885307,0.0018754768529729063,,,,,,,
+provenance=lemat,CLscore_jang,violation_fraction_evaluable,261786,151017.0,0.012293231623180809,3.1737822093560303e-10,,,,,,,
+provenance=lemat,CLscore_jang,L4_explicit_known,169722,111258.0,-0.038263370419040085,5.07317410470496e-56,,,,,,,
+provenance=lemat,CLscore_jang,D7_explicit_known,261786,151017.0,0.05880854505749671,3.052607403948584e-199,,,,,,,
+within_strata,CLscore_jang,violation_fraction_evaluable,364339,,-0.01695651839113608,,provenance+n_elements+site_bin,20.0,364413.0,364401.0,62.0,21.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_jang,violation_fraction_evaluable,33382,,-0.05979070188876064,,chemical_system+site_bin,20.0,364413.0,60360.0,26978.0,758.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_jang,L4_explicit_known,58139,,-0.00976536155370376,,provenance+n_elements+site_bin,20.0,189259.0,189229.0,131090.0,6.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_jang,L4_explicit_known,0,,,,chemical_system+site_bin,20.0,189259.0,28145.0,28145.0,0.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_jang,D7_explicit_known,236698,,0.031247369761197897,,provenance+n_elements+site_bin,20.0,364413.0,364401.0,127703.0,17.0,not reported for pooled within-stratum residual ranks
+within_strata,CLscore_jang,D7_explicit_known,31546,,-0.07724992805793535,,chemical_system+site_bin,20.0,364413.0,60360.0,28814.0,687.0,not reported for pooled within-stratum residual ranks

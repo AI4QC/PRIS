@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "CaPmCdIn",
+ "kind": "gnome",
+ "kmesh": [
+  7,
+  7,
+  7
+ ],
+ "n_atoms": 4,
+ "n_kpoints": 343,
+ "parent": "195425d136",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "Ca",
+  "Cd",
+  "In",
+  "Pm"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-195425d136",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-195425d136",
+ "variant": "P0"
+}

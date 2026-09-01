@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "Rb2SnI6",
+ "kind": "experimental",
+ "kmesh": [
+  4,
+  4,
+  4
+ ],
+ "n_atoms": 9,
+ "n_kpoints": 64,
+ "parent": "cod-1010052",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "rng_seed_source": "E3|cod-1010052",
+ "species": [
+  "I",
+  "Rb",
+  "Sn"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-cod-1010052-S4",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-cod-1010052-S4",
+ "variant": "S4"
+}

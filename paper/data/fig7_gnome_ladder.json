@@ -1,0 +1,108 @@
+{
+ "protocol": "protocol.md plus canonical_d8_correction.md (post-audit implementation correction)",
+ "timestamp": "2026-08-20 13:20:16",
+ "runtime_s": 11.9,
+ "n_sampled": 5000,
+ "n_parse_failures": 0,
+ "charge_assignment": {
+  "n_parsed": 5000,
+  "modes": {
+   "none": 4624,
+   "integer": 222,
+   "fractional": 154
+  },
+  "assignable_fraction": 0.0752,
+  "integer_fraction": 0.0444,
+  "fractional_fraction": 0.0308
+ },
+ "per_predicate_reject_on_assignable": {
+  "D1_804": {
+   "reject_rate": 0.02666666666666667,
+   "n_reject": 10,
+   "n_pass": 365,
+   "n_undetermined": 1
+  },
+  "D1_735": {
+   "reject_rate": 0.008,
+   "n_reject": 3,
+   "n_pass": 372,
+   "n_undetermined": 1
+  },
+  "D2": {
+   "reject_rate": 0.003105590062111801,
+   "n_reject": 1,
+   "n_pass": 321,
+   "n_undetermined": 54
+  },
+  "D3": {
+   "reject_rate": 0.05333333333333334,
+   "n_reject": 20,
+   "n_pass": 355,
+   "n_undetermined": 1
+  },
+  "D4": {
+   "reject_rate": 0.0398936170212766,
+   "n_reject": 15,
+   "n_pass": 361,
+   "n_undetermined": 0
+  },
+  "D5": {
+   "reject_rate": 0.031914893617021274,
+   "n_reject": 12,
+   "n_pass": 364,
+   "n_undetermined": 0
+  },
+  "D6": {
+   "reject_rate": 0.030959752321981424,
+   "n_reject": 10,
+   "n_pass": 313,
+   "n_undetermined": 53
+  },
+  "D7": {
+   "reject_rate": 0.26063829787234044,
+   "n_reject": 98,
+   "n_pass": 278,
+   "n_undetermined": 0
+  },
+  "D8": {
+   "reject_rate": 0.14173228346456693,
+   "n_reject": 36,
+   "n_pass": 218,
+   "n_undetermined": 122
+  }
+ },
+ "L3": {
+  "reject_rate": 0.16119402985074627,
+  "n_reject": 54,
+  "n_pass": 281,
+  "n_undetermined": 41
+ },
+ "L4": {
+  "reject_rate": 0.49363057324840764,
+  "n_reject": 155,
+  "n_pass": 159,
+  "n_undetermined": 62
+ },
+ "L4_overlap": {
+  "n_L4_reject": 155,
+  "n_pass_L3_fail_D7_or_D8": 88,
+  "frac_attributable_to_D7_D8_alone": 0.567741935483871,
+  "of_those_D7_only": 41,
+  "of_those_D8_only": 17,
+  "of_those_both": 14,
+  "of_those_D7_with_D8_unknown": 16
+ },
+ "any_contact_electrostatic_D1_D3_D6": {
+  "reject_rate": 0.16119402985074627,
+  "n_reject": 54,
+  "n_pass": 281,
+  "n_undetermined": 41
+ },
+ "d8_param_coverage": {
+  "mean": 0.5518264684236759,
+  "median": 0.6666666666666666,
+  "frac_below_0.5": 0.42021276595744683,
+  "frac_no_verdict": 0.324468085106383
+ },
+ "n_ewald_errors": 0
+}

@@ -1,0 +1,212 @@
+[
+ {
+  "id": "Fig. 1",
+  "file": "fig1_agentic_law_learning.pdf",
+  "generator": "src/paper_figs.py",
+  "panels": "a-e",
+  "inputs": "paper/data/fig1_*.csv, fig1_rulespace_*"
+ },
+ {
+  "id": "Fig. 2",
+  "file": "fig2_rules.pdf",
+  "generator": "src/paper_figs.py",
+  "panels": "a-d",
+  "inputs": "paper/data/fig2_*.csv, band_*.csv"
+ },
+ {
+  "id": "Fig. 3",
+  "file": "fig3_anatomy.pdf",
+  "generator": "src/fig3_anatomy.py",
+  "panels": "a-c",
+  "inputs": "structure built in the script; dft/E1_rho_curve/curves.json"
+ },
+ {
+  "id": "Fig. 4",
+  "file": "fig4_validation_synthesis.pdf",
+  "generator": "experiments/pu_synthesizability_20260821/plot_merged_fig45_nature.py",
+  "panels": "a-f",
+  "inputs": "see figures/README.md -- needs PU score shards not redistributed here"
+ },
+ {
+  "id": "Fig. 5",
+  "file": "fig5_deployment.pdf",
+  "generator": "src/fig6_deployment.py",
+  "panels": "a-f",
+  "inputs": "paper/data/fig6_*.csv, dft/E2_ordering, dft/E3_crosscheck"
+ },
+ {
+  "id": "Fig. S1",
+  "file": "figS1_refutation_ledger.pdf",
+  "generator": "src/paper_figs.py",
+  "panels": "-",
+  "inputs": "agent_loop/refutation_ledger.csv"
+ },
+ {
+  "id": "Fig. S2",
+  "file": "figS2_failure_modes.pdf",
+  "generator": "src/si_figs.py",
+  "panels": "-",
+  "inputs": "agent_loop/refutation_ledger.csv"
+ },
+ {
+  "id": "Fig. S3",
+  "file": "figS3_ranking_data.pdf",
+  "generator": "src/si_figs.py",
+  "panels": "-",
+  "inputs": "paper/si_data/"
+ },
+ {
+  "id": "Fig. S4",
+  "file": "figS4_perclass.pdf",
+  "generator": "src/si_figs.py",
+  "panels": "-",
+  "inputs": "paper/si_data/s4_ruleset_perclass.csv"
+ },
+ {
+  "id": "Fig. S5",
+  "file": "figS5_amplitude_response.pdf",
+  "generator": "src/figS7_amplitude_response.py",
+  "panels": "-",
+  "inputs": "paper/si_data/s7_amplitude_response.csv"
+ },
+ {
+  "id": "Fig. S6",
+  "file": "figS6_split_consistency.pdf",
+  "generator": "src/si_figs.py",
+  "panels": "-",
+  "inputs": "paper/si_data/s5_split_consistency.csv"
+ },
+ {
+  "id": "Fig. S7",
+  "file": "figS7_pris_composition_holdout.pdf",
+  "generator": "experiments/pris_composition_holdout_20260829/plot_figures.py",
+  "panels": "a-b",
+  "inputs": "experiments/pris_composition_holdout_20260829/results/"
+ },
+ {
+  "id": "Fig. S8",
+  "file": "figS8_threshold.pdf",
+  "generator": "src/si_figs.py",
+  "panels": "-",
+  "inputs": "paper/si_data/s2_threshold.csv"
+ },
+ {
+  "id": "Fig. S9",
+  "file": "figS9_band_grid.pdf",
+  "generator": "src/si_figs.py",
+  "panels": "-",
+  "inputs": "paper/si_data/s3_band_grid.npz"
+ },
+ {
+  "id": "Fig. S10",
+  "file": "figS10_unguarded_band.pdf",
+  "generator": "src/si_figs.py",
+  "panels": "-",
+  "inputs": "paper/data/band_scan.csv"
+ },
+ {
+  "id": "Fig. S11",
+  "file": "figS11_chemistry.pdf",
+  "generator": "src/si_figs.py",
+  "panels": "-",
+  "inputs": "paper/si_data/s1_chemistry.csv"
+ },
+ {
+  "id": "Fig. S12",
+  "file": "figS12_dft_e1_landscape.pdf",
+  "generator": "src/si_dft_figs.py",
+  "panels": "-",
+  "inputs": "dft/E1_rho_curve/curves.json, dft/E1b_paw_control/paw_shift.json"
+ },
+ {
+  "id": "Fig. S13",
+  "file": "figS13_loko.pdf",
+  "generator": "src/si_figs.py",
+  "panels": "-",
+  "inputs": "paper/data/fig3_loko.csv"
+ },
+ {
+  "id": "Fig. S14",
+  "file": "figS14_validation_boundary_omission.pdf",
+  "generator": "experiments/pu_synthesizability_20260821/render_moved_si_panels.py",
+  "panels": "a-b",
+  "inputs": "paper/data/fig4_rho_hist.csv, fig3_loko.csv"
+ },
+ {
+  "id": "Fig. S15",
+  "file": "figS15_pss_coefficient_stability.pdf",
+  "generator": "src/pss_stability_figs.py",
+  "panels": "-",
+  "inputs": "paper/si_data/s8_pss_coefficient_stability.csv"
+ },
+ {
+  "id": "Fig. S16",
+  "file": "figS16_pss_term_correlation.pdf",
+  "generator": "src/pss_stability_figs.py",
+  "panels": "-",
+  "inputs": "paper/si_data/s9_pss_term_correlation.json"
+ },
+ {
+  "id": "Fig. S17",
+  "file": "figS17_l4_contributions.pdf",
+  "generator": "experiments/pu_synthesizability_20260821/plot_si_l4_contribution.py",
+  "panels": "a-b",
+  "inputs": "see figures/README.md"
+ },
+ {
+  "id": "Fig. S18",
+  "file": "figS18_pu_model_performance.pdf",
+  "generator": "experiments/pu_model_performance_audit/plot_roc_confusion.py",
+  "panels": "a-d",
+  "inputs": "experiments/pu_model_performance_audit/raw_A, raw_B_opt"
+ },
+ {
+  "id": "Fig. S19",
+  "file": "figS19_polymorph_ranking.pdf",
+  "generator": "experiments/pu_synthesizability_20260821/render_moved_si_panels.py",
+  "panels": "a-c",
+  "inputs": "paper/data/fig3_coverage_accuracy.csv, fig7_top1.csv"
+ },
+ {
+  "id": "Fig. S20",
+  "file": "figS20_dft_e4_bulk.pdf",
+  "generator": "src/si_dft_figs.py",
+  "panels": "-",
+  "inputs": "dft/E4_design/bulk_moduli.json, queue_sweep.json"
+ },
+ {
+  "id": "Fig. S21",
+  "file": "figS21_dft_e4_composition.pdf",
+  "generator": "src/si_dft_figs.py",
+  "panels": "-",
+  "inputs": "outputs/20260828_dft_supplementary_structures/index.csv"
+ },
+ {
+  "id": "Fig. S22",
+  "file": "figS22_energy_phonon_record.pdf",
+  "generator": "experiments/pu_synthesizability_20260821/render_moved_si_panels.py",
+  "panels": "-",
+  "inputs": "paper/data/"
+ },
+ {
+  "id": "Fig. S23",
+  "file": "figS23_charge_coverage.pdf",
+  "generator": "src/figS17_charge_coverage.py",
+  "panels": "-",
+  "inputs": "paper/data/"
+ },
+ {
+  "id": "Fig. S24",
+  "file": "figS24_dft_e3_paired.pdf",
+  "generator": "src/si_dft_figs.py",
+  "panels": "a-b",
+  "inputs": "dft/E3_crosscheck/paired_energies.json"
+ },
+ {
+  "id": "Fig. S25",
+  "file": "figS25_dft_e2_ordering.pdf",
+  "generator": "src/si_dft_figs.py",
+  "panels": "-",
+  "inputs": "dft/E2_ordering/ordering_energies.json"
+ }
+]

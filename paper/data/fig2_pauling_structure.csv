@@ -1,0 +1,6 @@
+rule,passed,total,satisfaction,unit,source
+Pauling 2,2312,5297,0.43647347555219934,structure,held-out law_real table
+Pauling 3,598,5297,0.11289409099490277,structure,held-out law_real table
+Pauling 4,2279,5297,0.430243534075892,structure,held-out law_real table
+Pauling 5,4325,5297,0.8164999056069473,structure,held-out law_real table
+Pauling 2-5 jointly,345,5297,0.06513120634321314,structure,held-out law_real table

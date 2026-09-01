@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "AgAsSe2",
+ "kind": "experimental",
+ "kmesh": [
+  9,
+  9,
+  5
+ ],
+ "n_atoms": 4,
+ "n_kpoints": 405,
+ "parent": "cod-1509200",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "rng_seed_source": "E3|cod-1509200",
+ "species": [
+  "Ag",
+  "As",
+  "Se"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-cod-1509200-S2",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-cod-1509200-S2",
+ "variant": "S2"
+}

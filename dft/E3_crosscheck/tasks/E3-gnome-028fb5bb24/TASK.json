@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "DyY3(CdGa2)2",
+ "kind": "gnome",
+ "kmesh": [
+  4,
+  4,
+  7
+ ],
+ "n_atoms": 10,
+ "n_kpoints": 112,
+ "parent": "028fb5bb24",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "Cd",
+  "Dy",
+  "Ga",
+  "Y"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-028fb5bb24",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-028fb5bb24",
+ "variant": "P0"
+}

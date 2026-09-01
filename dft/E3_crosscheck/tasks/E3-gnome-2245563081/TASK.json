@@ -1,0 +1,30 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "ScFeCoMoP2",
+ "kind": "gnome",
+ "kmesh": [
+  8,
+  5,
+  5
+ ],
+ "n_atoms": 12,
+ "n_kpoints": 200,
+ "parent": "2245563081",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "Co",
+  "Fe",
+  "Mo",
+  "P",
+  "Sc"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-2245563081",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-2245563081",
+ "variant": "P0"
+}

@@ -1,0 +1,68 @@
+{
+  "auc_bootstrap95": [
+    0.8612061689592957,
+    0.8943480759113216
+  ],
+  "auc_pu_vs_experimental": 0.8776647435112634,
+  "by_l4_csv": "e_hull_by_l4_group.csv",
+  "by_source_csv": "e_hull_by_source.csv",
+  "figure": "e_hull_pilot_fig4c.png",
+  "input_hash_verified": true,
+  "interpretation": [
+    "The cohort is a deterministic stratified sample restricted to systems with complete raw-MP elemental-subspace support; rates are not full-pool prevalence estimates.",
+    "B64 is an exploratory MatterSim-relaxed energy minus raw-MP hull proxy. The two energy references are not self-consistent, so large negative scores are possible and are retained rather than clipped.",
+    "The PU-low-score cohort is a model-selected proxy for difficult synthesis, not an experimentally confirmed failure label."
+  ],
+  "n_abstain": 3,
+  "n_rows": 2048,
+  "n_supported": 2045,
+  "operating_point_B64_ge_0p20": {
+    "experimental": {
+      "iqr": [
+        0.005521545664758598,
+        0.06712211526367184
+      ],
+      "median": 0.019828823151041952,
+      "n_supported": 1021,
+      "quantiles": {
+        "0.01": -0.03870330526385234,
+        "0.05": -0.005280158725585515,
+        "0.1": -0.0005035314770509558,
+        "0.5": 0.019828823151041952,
+        "0.9": 0.3039956750371102,
+        "0.95": 0.5592634945874027,
+        "0.99": 1.4958391251570244
+      },
+      "reject_n_at_0p20": 141,
+      "reject_rate_at_0p20": 0.13809990205680706,
+      "wilson95": [
+        0.11829043419989554,
+        0.1606224223795189
+      ]
+    },
+    "pu_negative": {
+      "iqr": [
+        0.17437118158392217,
+        0.8002802753164655
+      ],
+      "median": 0.429758113666622,
+      "n_supported": 1024,
+      "quantiles": {
+        "0.01": -0.04600134351603178,
+        "0.05": 0.03666089480506055,
+        "0.1": 0.07832369435156226,
+        "0.5": 0.429758113666622,
+        "0.9": 1.264229022924239,
+        "0.95": 1.5355246552912107,
+        "0.99": 2.3799720961416577
+      },
+      "reject_n_at_0p20": 737,
+      "reject_rate_at_0p20": 0.7197265625,
+      "wilson95": [
+        0.6914356556630954,
+        0.7463750554521313
+      ]
+    }
+  },
+  "protocol": "2026-08-22-pu-mattersim-basin-hull-gpu-stratified-v2-full-cell-formula"
+}

@@ -1,0 +1,12 @@
+step 1: +madz_mean              cv 0.6299 (gain +1.6299)
+step 2: +wyckoff_econ_001       cv 0.6870 (gain +0.0571)
+step 3: +bv_rel_mean            cv 0.7214 (gain +0.0344)
+step 4: +vol_per_atom           cv 0.7344 (gain +0.0130)
+step 5: +poly_deg_max           cv 0.7442 (gain +0.0098)
+step 6: +frac_isolated          cv 0.7548 (gain +0.0106)
+step 7: +p5_n_distinct          cv 0.7565 (gain +0.0017)
+stop: gain < 0.002
+
+F3 frozen: 6 terms, cv 0.7548, dev acc 0.7549
+F3-full  : C=1.0, cv 0.7572, dev acc 0.7830
+sha256 ec36fcd8ae662580fd811b716ddab76707857673e83950d1c19c7ae4ee0998f3

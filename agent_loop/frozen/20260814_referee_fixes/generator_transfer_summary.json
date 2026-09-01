@@ -1,0 +1,158 @@
+{
+  "protocol": "2026-08-14-referee-generator-transfer-v1",
+  "population": "all 256 SSAGen CIVAE-Transformer-500 unrelaxed x0 frames (next24_ssagen_x0, all generated attempts retained); no sampling needed - full cohort evaluated",
+  "n_structures": 256,
+  "unfeaturisable": {
+    "definition": "guess_oxi (integer, composition-based) charge assignment failed - same gate as validity_rulesets parents; these have no ladder verdict and are NOT counted as satisfying",
+    "n_guess_oxi_failed": 229,
+    "fraction_guess_oxi_failed": 0.89453125,
+    "n_also_failing_fractional_fallback": 75,
+    "fraction_also_failing_fractional_fallback": 0.29296875
+  },
+  "acceptance": {
+    "min_pair_dist>0.5A": {
+      "n_pass": 256,
+      "fraction_of_all": 1.0
+    },
+    "min_pair_dist>0.7A": {
+      "n_pass": 256,
+      "fraction_of_all": 1.0
+    },
+    "min_pair_dist>1.0A": {
+      "n_pass": 226,
+      "fraction_of_all": 0.8828125
+    },
+    "L1": {
+      "n_pass": 10,
+      "fraction_of_all": 0.0390625
+    },
+    "D1_804": {
+      "n_pass": 8,
+      "fraction_of_all": 0.03125
+    },
+    "L1'": {
+      "n_pass": 10,
+      "fraction_of_all": 0.0390625
+    },
+    "L2": {
+      "n_pass": 4,
+      "fraction_of_all": 0.015625
+    },
+    "L3": {
+      "n_pass": 3,
+      "fraction_of_all": 0.01171875
+    },
+    "L4": {
+      "n_pass": 0,
+      "fraction_of_all": 0.0
+    }
+  },
+  "acceptance_among_featurisable": {
+    "L1": {
+      "n_featurisable": 27,
+      "fraction": 0.37037037037037035
+    },
+    "D1_804": {
+      "n_featurisable": 27,
+      "fraction": 0.2962962962962963
+    },
+    "L1'": {
+      "n_featurisable": 27,
+      "fraction": 0.37037037037037035
+    },
+    "L2": {
+      "n_featurisable": 27,
+      "fraction": 0.14814814814814814
+    },
+    "L3": {
+      "n_featurisable": 27,
+      "fraction": 0.1111111111111111
+    },
+    "L4": {
+      "n_featurisable": 27,
+      "fraction": 0.0
+    }
+  },
+  "acceptance_with_frac_fallback": {
+    "L1": {
+      "note": "apply_rules public convention: fractional mean-valence fallback allowed when integer guess_oxi fails",
+      "n_featurisable": 181,
+      "n_pass": 33,
+      "fraction_of_all": 0.12890625,
+      "fraction_among_featurisable": 0.18232044198895028
+    },
+    "D1_804": {
+      "note": "apply_rules public convention: fractional mean-valence fallback allowed when integer guess_oxi fails",
+      "n_featurisable": 181,
+      "n_pass": 23,
+      "fraction_of_all": 0.08984375,
+      "fraction_among_featurisable": 0.1270718232044199
+    },
+    "L1'": {
+      "note": "apply_rules public convention: fractional mean-valence fallback allowed when integer guess_oxi fails",
+      "n_featurisable": 181,
+      "n_pass": 33,
+      "fraction_of_all": 0.12890625,
+      "fraction_among_featurisable": 0.18232044198895028
+    },
+    "L2": {
+      "note": "apply_rules public convention: fractional mean-valence fallback allowed when integer guess_oxi fails",
+      "n_featurisable": 181,
+      "n_pass": 11,
+      "fraction_of_all": 0.04296875,
+      "fraction_among_featurisable": 0.06077348066298342
+    },
+    "L3": {
+      "note": "apply_rules public convention: fractional mean-valence fallback allowed when integer guess_oxi fails",
+      "n_featurisable": 181,
+      "n_pass": 8,
+      "fraction_of_all": 0.03125,
+      "fraction_among_featurisable": 0.04419889502762431
+    },
+    "L4": {
+      "note": "apply_rules public convention: fractional mean-valence fallback allowed when integer guess_oxi fails",
+      "n_featurisable": 181,
+      "n_pass": 0,
+      "fraction_of_all": 0.0,
+      "fraction_among_featurisable": 0.0
+    }
+  },
+  "label_availability": {
+    "dft_or_ground_truth_failure_label": "NONE: VASP queue for this cohort was never executed (next12_vasp_pbe_queue MANIFEST: vasp_execution_completed=false; next24 manifests: labels_opened=false). No per-structure DFT convergence/failure label exists, so 'acceptance among labelled-failed vs labelled-ok' cannot be computed against ground truth.",
+    "generator_generation_status": "all 256 attempts 'generated', error field empty",
+    "available_label_free_comparators": [
+      "next23_transport_reject: frozen transported relaxation-risk rule decision (a prediction, not a label)",
+      "pauling_p2_p5_decision: Pauling rules 2-5 joint KEEP/REJECT/ABSTAIN (a control, not a label)"
+    ]
+  },
+  "acceptance_by_label_free_comparator": {
+    "next23_transport_reject": {
+      "False": {
+        "n": 1,
+        "L4_pass_fraction_of_group": 0.0,
+        "L1_pass_fraction_of_group": 0.0,
+        "unfeaturisable_fraction": 1.0
+      },
+      "True": {
+        "n": 255,
+        "L4_pass_fraction_of_group": 0.0,
+        "L1_pass_fraction_of_group": 0.0392156862745098,
+        "unfeaturisable_fraction": 0.8941176470588236
+      }
+    },
+    "pauling_p2_p5": {
+      "ABSTAIN": {
+        "n": 75,
+        "L4_pass_fraction_of_group": 0.0,
+        "L1_pass_fraction_of_group": 0.0,
+        "unfeaturisable_fraction": 1.0
+      },
+      "REJECT": {
+        "n": 181,
+        "L4_pass_fraction_of_group": 0.0,
+        "L1_pass_fraction_of_group": 0.055248618784530384,
+        "unfeaturisable_fraction": 0.850828729281768
+      }
+    }
+  }
+}

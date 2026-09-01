@@ -1,0 +1,17 @@
+{
+  "job_id": "209577",
+  "purpose": "recompute raw validation predictions and ROC/PR curves for A and B",
+  "submitted_script": "/data1/home/hzxy10/csllm/pu_model_performance_audit/evaluate_remote.sbatch",
+  "last_observed_state": "CANCELLED",
+  "elapsed_before_cancel_s": 1159,
+  "observed_progress": "A bags 1-50 scored 19,798 validation pseudo-negatives each; no B embedding progress line",
+  "diagnostic": {
+    "sstat_batch_ave_cpu": "00:00.000",
+    "sstat_batch_max_rss": "6996K",
+    "log_tail": "A bag 48: validation pseudo-negatives scored=19798; A bag 49: validation pseudo-negatives scored=19798; A bag 50: validation pseudo-negatives scored=19798"
+  },
+  "reason": "batch was idle before B stage; cancelled to avoid indefinite GPU allocation",
+  "raw_curve_files_available": false,
+  "reported_metrics_source": "saved per-bag best validation AUC log lines",
+  "independent_test_available": false
+}

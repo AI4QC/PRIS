@@ -1,0 +1,192 @@
+{
+ "source_results": "$PRIS_ARCHIVE/external_sources/checkcif_comparison/results.parquet",
+ "source_protocol": "$PRIS_ARCHIVE/external_sources/checkcif_comparison/protocol.md",
+ "cohort": "A",
+ "parent_control": "parent unflagged by both coordinate checks and PRIS; damaged structure determinate for both",
+ "classes": {
+  "S2": {
+   "label": "cation-cation",
+   "n": 69,
+   "pris_only": 43,
+   "both": 19,
+   "coordinate_only": 0,
+   "neither": 7
+  },
+  "S5": {
+   "label": "cation-anion",
+   "n": 83,
+   "pris_only": 43,
+   "both": 39,
+   "coordinate_only": 1,
+   "neither": 0
+  }
+ },
+ "exemplar": {
+  "source_archive": "$PRIS_ARCHIVE/external_sources/gnome_d7/by_id.zip",
+  "zip_name": "by_id/1bac537e26.CIF",
+  "parent_id": "1bac537e26",
+  "cohort_index": 1,
+  "parent_index": 14,
+  "seed": 20260816,
+  "klass": "S2",
+  "formula": "KErBr4",
+  "space_group": "Cmmm",
+  "swapped_sites": [
+   0,
+   1
+  ],
+  "swapped_elements": [
+   "K",
+   "Er"
+  ],
+  "parent_species": [
+   "K",
+   "Er",
+   "Br",
+   "Br",
+   "Br",
+   "Br"
+  ],
+  "damaged_species": [
+   "Er",
+   "K",
+   "Br",
+   "Br",
+   "Br",
+   "Br"
+  ],
+  "lattice_matrix_angstrom": [
+   [
+    7.45804767,
+    0.0,
+    0.0
+   ],
+   [
+    0.404632925,
+    7.447062995,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    4.279313
+   ]
+  ],
+  "fractional_coordinates": [
+   [
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.5,
+    0.5,
+    0.499999
+   ],
+   [
+    0.326559,
+    0.326559,
+    0.0
+   ],
+   [
+    0.67344,
+    0.67344,
+    0.0
+   ],
+   [
+    0.765926,
+    0.234074,
+    0.499999
+   ],
+   [
+    0.234074,
+    0.765926,
+    0.499999
+   ]
+  ]
+ },
+ "exemplar_s5": {
+  "source_archive": "$PRIS_ARCHIVE/external_sources/gnome_d7/by_id.zip",
+  "zip_name": "by_id/1bac537e26.CIF",
+  "parent_id": "1bac537e26",
+  "cohort_index": 1,
+  "parent_index": 14,
+  "seed": 20260816,
+  "formula": "KErBr4",
+  "space_group": "Cmmm",
+  "lattice_matrix_angstrom": [
+   [
+    7.45804767,
+    0.0,
+    0.0
+   ],
+   [
+    0.404632925,
+    7.447062995,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    4.279313
+   ]
+  ],
+  "fractional_coordinates": [
+   [
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.5,
+    0.5,
+    0.499999
+   ],
+   [
+    0.326559,
+    0.326559,
+    0.0
+   ],
+   [
+    0.67344,
+    0.67344,
+    0.0
+   ],
+   [
+    0.765926,
+    0.234074,
+    0.499999
+   ],
+   [
+    0.234074,
+    0.765926,
+    0.499999
+   ]
+  ],
+  "klass": "S5",
+  "swapped_sites": [
+   0,
+   2
+  ],
+  "swapped_elements": [
+   "K",
+   "Br"
+  ],
+  "parent_species": [
+   "K",
+   "Er",
+   "Br",
+   "Br",
+   "Br",
+   "Br"
+  ],
+  "damaged_species": [
+   "Br",
+   "Er",
+   "K",
+   "Br",
+   "Br",
+   "Br"
+  ]
+ }
+}

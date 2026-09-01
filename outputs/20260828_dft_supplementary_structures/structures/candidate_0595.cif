@@ -1,0 +1,36 @@
+# generated using pymatgen
+data_Re3W2
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   4.37812886
+_cell_length_b   5.45124311
+_cell_length_c   7.19082904
+_cell_angle_alpha   106.44897706
+_cell_angle_beta   72.27041033
+_cell_angle_gamma   89.97016988
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Re3W2
+_chemical_formula_sum   'Re6 W4'
+_cell_volume   156.06814094
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Re  Re0  1  0.86247328  0.49314531  0.97874516  1
+  Re  Re1  1  0.06633537  0.20555758  0.57110193  1
+  Re  Re2  1  0.47557939  0.60736510  0.75318228  1
+  Re  Re3  1  0.44931607  0.14285410  0.80495673  1
+  Re  Re4  1  0.25279894  0.39741993  0.19800270  1
+  Re  Re5  1  0.66213735  0.80832579  0.37966525  1
+  W  W6  1  0.66486599  0.29539836  0.37390150  1
+  W  W7  1  0.05717855  0.72430286  0.58955135  1
+  W  W8  1  0.86263623  -0.00098915  0.97848215  1
+  W  W9  1  0.26797987  0.87302209  0.16784484  1

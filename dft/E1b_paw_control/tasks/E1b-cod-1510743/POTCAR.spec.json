@@ -1,0 +1,47 @@
+{
+ "order": [
+  {
+   "element": "La",
+   "symbol": "La",
+   "title": "PAW_PBE La 06Sep2000",
+   "enmax_ev": 219.292,
+   "rcore_a": 1.4817,
+   "sha256": "b7aad99517e50aeb53363b20a29bb0dfa896544080812fb23322f071df953199",
+   "library_relative": "La/POTCAR"
+  },
+  {
+   "element": "Ni",
+   "symbol": "Ni_pv",
+   "title": "PAW_PBE Ni_pv 06Sep2000",
+   "enmax_ev": 367.986,
+   "rcore_a": 1.0584,
+   "sha256": "368cd815a19284a5fda64519f43fef792dad8376deb9e2da41aae78b997dc50e",
+   "library_relative": "Ni_pv/POTCAR"
+  },
+  {
+   "element": "B",
+   "symbol": "B_h",
+   "title": "PAW_PBE B_h 06Feb2004",
+   "enmax_ev": 700.0,
+   "rcore_a": 0.5821,
+   "sha256": "c7540516c01448f1a1ccf1c23fa364698ef28e9a5a9a07a54abcc59a762c4464",
+   "library_relative": "B_h/POTCAR"
+  },
+  {
+   "element": "N",
+   "symbol": "N_h",
+   "title": "PAW_PBE N_h 06Feb2004",
+   "enmax_ev": 700.0,
+   "rcore_a": 0.5821,
+   "sha256": "dc52e333fc0a72b86c7e275c90b0fe5a206954848a962e0247ec210b4cd728f3",
+   "library_relative": "N_h/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "La",
+  "Ni",
+  "B",
+  "N"
+ ]
+}

@@ -1,0 +1,6 @@
+L3 reproduction: discovery 0.9071/0.7052 (pub 0.9071/0.7052)  calibration 0.9171/0.7004 (pub 0.9171/0.7004)
+8466 candidate predicates
+step 1: ('wyckoff_econ_001', 'le', 0.6666666666666666, None)  -> disc sat 0.8309 exc 0.8665
+step 2: ('bv_rel_mean', 'le', 0.7143040821865658, None)  -> disc sat 0.8107 exc 0.9051
+stop at step 3: best gain +0.0035
+L4 frozen: 2 new predicates, discovery 0.8107/0.9051

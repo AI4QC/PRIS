@@ -1,0 +1,22 @@
+{
+  "common_support_duplicate_cif_groups": 2629,
+  "common_support_duplicate_extra_rows": 2629,
+  "common_support_maximum_cif_multiplicity": 2,
+  "common_support_unique_cifs": 8106047,
+  "full_pool_duplicate_cif_groups": 2645,
+  "full_pool_duplicate_extra_rows": 2645,
+  "full_pool_maximum_cif_multiplicity": 2,
+  "full_pool_unique_cifs": 8123331,
+  "input_fingerprint": "b89deaea4a1cc75ce26e8d014244790f3cba676ec9eef3de538198a087a9953b",
+  "input_manifest": "/data1/home/hzxy10/csllm/pris_fullpool_20260821/input_manifest.json",
+  "input_manifest_sha256": "bcb051b644a12a75c0ee3e80fdd051ec9cef51e460f4d2a7f8093a76359168a7",
+  "parse_failures_full_pool": 2,
+  "pool_rows": 8125976,
+  "pool_rows_without_all_three_scores": 17300,
+  "pool_unique_orig_index": 8125976,
+  "score_common_rows": 8108676,
+  "score_parquet": "/data1/home/hzxy10/csllm/analysis/pris_fullpool_20260821/full_clscores_common.parquet",
+  "score_parquet_sha256": "23f9916d2198271f0b766993f4154548bb3bff32f89b6a02493df775b5c6e6e3",
+  "shards": 163,
+  "tolerant_parses_full_pool": 0
+}

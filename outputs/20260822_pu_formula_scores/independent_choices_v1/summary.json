@@ -1,0 +1,17 @@
+{
+  "analysis": "independent_l4_vs_s_syn_screening",
+  "experimental_unique_cif": 99162,
+  "pu_negative_unique_cif": 364592,
+  "l4_experimental_retention": 0.8068514148564975,
+  "l4_pu_screened_rate": 0.5188237811032607,
+  "s_syn_pu_screened_at_l4_retention": 0.8367572519418967,
+  "s_syn_cutoff_at_l4_retention": -0.7293854648224881,
+  "inputs": {
+    "experimental_input_rows": 99162,
+    "experimental_unique_cif": 99162,
+    "experimental_duplicate_extra_rows": 0,
+    "pu_negative_input_rows": 364771,
+    "pu_negative_unique_cif": 364592,
+    "pu_negative_duplicate_extra_rows": 179
+  }
+}

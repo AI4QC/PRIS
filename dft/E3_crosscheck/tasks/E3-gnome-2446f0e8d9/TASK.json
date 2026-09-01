@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "DyHo3(TmSn)6",
+ "kind": "gnome",
+ "kmesh": [
+  5,
+  4,
+  4
+ ],
+ "n_atoms": 16,
+ "n_kpoints": 80,
+ "parent": "2446f0e8d9",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "Dy",
+  "Ho",
+  "Sn",
+  "Tm"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-2446f0e8d9",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-2446f0e8d9",
+ "variant": "P0"
+}

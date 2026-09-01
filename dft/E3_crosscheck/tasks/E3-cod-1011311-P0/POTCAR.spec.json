@@ -1,0 +1,37 @@
+{
+ "order": [
+  {
+   "element": "K",
+   "symbol": "K_sv",
+   "title": "PAW_PBE K_sv 06Sep2000",
+   "enmax_ev": 259.264,
+   "rcore_a": 1.2171,
+   "sha256": "bf8373ef592e31d27efa2dcc68371be6d6a25ce4db6c2ffaf9e92c44050ba21a",
+   "library_relative": "K_sv/POTCAR"
+  },
+  {
+   "element": "Os",
+   "symbol": "Os_pv",
+   "title": "PAW_PBE Os_pv 20Jan2003",
+   "enmax_ev": 228.022,
+   "rcore_a": 1.3229,
+   "sha256": "df2e3ef880fc2502babe687ce20ec2e4b82fab5eb8dd3b5c0a23d3b7861e7a8b",
+   "library_relative": "Os_pv/POTCAR"
+  },
+  {
+   "element": "Cl",
+   "symbol": "Cl",
+   "title": "PAW_PBE Cl 06Sep2000",
+   "enmax_ev": 262.472,
+   "rcore_a": 1.0054,
+   "sha256": "9f1b6e6ed4247ac726a768b330d26d7667cc3c95a39ff49c1d064c2d9dcce931",
+   "library_relative": "Cl/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "K",
+  "Os",
+  "Cl"
+ ]
+}

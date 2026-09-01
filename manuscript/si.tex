@@ -1,0 +1,108 @@
+\documentclass[pdflatex,sn-nature]{sn-jnl}
+
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{url}
+\usepackage{longtable,array}
+\usepackage{calc}
+\providecommand{\real}[1]{#1}
+\providecommand{\tightlist}{}
+\setlength{\LTcapwidth}{\textwidth}
+
+%% --- pandoc compatibility block
+\usepackage[normalem]{ulem}
+\providecommand{\st}[1]{\sout{#1}}
+\usepackage{textcomp}
+
+\input{layout_tune.tex}
+
+%% the class loads hyperref itself with link colouring off. Re-assert at
+%% egin{document} so that cross-references and citations are visibly clickable
+\AtBeginDocument{\hypersetup{colorlinks=true,
+  linkcolor={blue!55!black}, citecolor={blue!55!black},
+  urlcolor={blue!55!black}, filecolor={blue!55!black},
+  breaklinks=true, bookmarksnumbered=true, pdfstartview={FitH}}}
+
+\newcommand{\rhoc}{\ensuremath{\rho}}
+\newcommand{\fion}{\ensuremath{f_{\mathrm{i}}}}
+\newcommand{\VM}{\ensuremath{E_{\mathrm{M}}}}
+
+% --- Supplementary numbering: Section S1, Fig. S1, Table S1
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\theequation}{S\arabic{equation}}
+
+% --- 目录里 section 号框继承自基类的 1.5em,装不下 S15 这类两位编号,
+%     结果编号和标题挤在一起。只加宽这个盒子,其余排版保持基类原样。
+\makeatletter
+\renewcommand*\l@section[2]{%
+  \ifnum \c@tocdepth >\z@
+    \addpenalty\@secpenalty
+    \addvspace{1.0em \@plus\p@}%
+    \setlength\@tempdima{2.8em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+    \endgroup
+  \fi}
+\makeatother
+
+% --- labels prefixed si-* so gen-si-xr.py can export them to the main text
+\raggedbottom
+
+\begin{document}
+
+% \centering:类里 Titlefont 用的是"有限拉伸"的 titraggedcenter,短行(第一行)
+% 拉伸量不够,会比其余各行左偏约 49 pt;\centering 换成完全拉伸,逐行精确居中。
+\title[Supplementary Information]{\centering Supplementary Information for\\
+Autonomous discovery of new structure-plausibility laws for explainable and rapid
+crystal diagnosis and screening}
+
+\author[1,2]{\fnm{Zhilong}\sur{Song}}
+
+\author*[1,2,3]{\fnm{Lixue}\sur{Cheng}}\email{lixuecheng@ust.hk}
+
+\affil[1]{\orgdiv{Department of Chemistry}, \orgname{Hong Kong University of Science
+and Technology}, \orgaddress{\city{Kowloon}, \state{Hong Kong 999077},
+\country{China}}}
+
+\affil[2]{\orgdiv{IAS Center for AI for Scientific Discoveries}, \orgname{Hong Kong
+University of Science and Technology}, \orgaddress{\city{Kowloon},
+\state{Hong Kong 999077}, \country{China}}}
+
+\affil[3]{\orgdiv{Department of Chemical and Biological Engineering}, \orgname{Hong
+Kong University of Science and Technology}, \orgaddress{\city{Kowloon},
+\state{Hong Kong 999077}, \country{China}}}
+
+\abstract{This document provides the data sources and licences, definitions of all
+measured quantities and laws, exact procedures used to damage structures, search and
+testing procedures, and the full record of eleven refuted claims. It also documents
+the data-split incident, reproduction instructions, additional tests of law accuracy
+and physical meaning, the PRIS-derived synthesis score, and applications to generated
+structures and database records.}
+
+\maketitle
+
+\makeatletter
+\renewcommand*\l@subsection{\@dottedtocline{2}{1.5em}{3.4em}}
+\makeatother
+\tableofcontents
+\clearpage
+
+\input{si_body.tex}
+
+\begingroup
+\linespread{1.25}\selectfont
+\bibliography{refs}
+\endgroup
+
+\end{document}

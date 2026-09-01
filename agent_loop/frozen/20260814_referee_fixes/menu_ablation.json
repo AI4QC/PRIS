@@ -1,0 +1,195 @@
+{
+ "note": "Menu ablation of L4 greedy search, discovery split only; same rule as src/l4_search.py (sat floor 0.81, min gain 0.005, <=4 steps). Calibration never evaluated.",
+ "l3_baseline": {
+  "disc_sat": 0.9071405953134896,
+  "disc_exc": 0.7052386495925494,
+  "per_class_disc_exc": {
+   "S1": 0.6108193277310925,
+   "S2": 0.5656814449917897,
+   "S3": 0.9653543307086614,
+   "S4": 0.7620481927710844,
+   "S5": 0.5790856542301629
+  }
+ },
+ "archived_pauling_menu": {
+  "predicates": [
+   [
+    "wyckoff_econ_001",
+    "le",
+    0.6666666666666666,
+    null
+   ],
+   [
+    "bv_rel_mean",
+    "le",
+    0.7143040821865658,
+    null
+   ]
+  ],
+  "disc_sat": 0.8107188093730209,
+  "disc_exc": 0.9051222351571595
+ },
+ "variants": {
+  "no_pauling_menu": {
+   "banned_features": [
+    "bv_frac_bad",
+    "bv_max_abs",
+    "bv_mean_abs",
+    "bv_param_cov",
+    "bv_rel_max",
+    "bv_rel_mean",
+    "csys_rank_001",
+    "gii",
+    "p2_frac_ok_010",
+    "p2_max_dev",
+    "p2_mean_dev",
+    "p2_n_bad_per_an",
+    "p4_n_viol_per_cat",
+    "p4_violate",
+    "p5_max_distinct",
+    "p5_n_distinct",
+    "p5_ok",
+    "sg_num_001",
+    "sg_num_01",
+    "wyckoff_econ_001",
+    "wyckoff_econ_01"
+   ],
+   "n_candidates": 7044,
+   "predicates": [
+    [
+     "bl_cat_max",
+     "le",
+     1.0618936270953268,
+     null
+    ],
+    [
+     "min_opp_frac",
+     "ge",
+     0.25,
+     null
+    ]
+   ],
+   "steps": [
+    {
+     "step": 1,
+     "predicate": [
+      "bl_cat_max",
+      "le",
+      1.0618936270953268,
+      null
+     ],
+     "disc_sat": 0.8275015832805573,
+     "disc_exc": 0.8121071012805587
+    },
+    {
+     "step": 2,
+     "predicate": [
+      "min_opp_frac",
+      "ge",
+      0.25,
+      null
+     ],
+     "disc_sat": 0.8101646611779607,
+     "disc_exc": 0.8655413271245634
+    }
+   ],
+   "disc_sat": 0.8101646611779607,
+   "disc_exc": 0.8655413271245634,
+   "per_class_disc_exc": {
+    "S1": 0.6643907563025211,
+    "S2": 0.8177339901477833,
+    "S3": 0.9821522309711286,
+    "S4": 0.9897590361445783,
+    "S5": 0.8723068838675775
+   }
+  },
+  "no_symmetry_only": {
+   "banned_features": [
+    "csys_rank_001",
+    "sg_num_001",
+    "sg_num_01",
+    "wyckoff_econ_001",
+    "wyckoff_econ_01"
+   ],
+   "n_candidates": 8082,
+   "predicates": [
+    [
+     "p2_max_dev",
+     "le",
+     0.6666666666666667,
+     null
+    ],
+    [
+     "bv_rel_mean",
+     "le",
+     0.7143040821865658,
+     null
+    ],
+    [
+     "bl_min",
+     "ge",
+     0.8305969530123134,
+     0.5
+    ]
+   ],
+   "steps": [
+    {
+     "step": 1,
+     "predicate": [
+      "p2_max_dev",
+      "le",
+      0.6666666666666667,
+      null
+     ],
+     "disc_sat": 0.833043065231159,
+     "disc_exc": 0.8223515715948777
+    },
+    {
+     "step": 2,
+     "predicate": [
+      "bv_rel_mean",
+      "le",
+      0.7143040821865658,
+      null
+     ],
+     "disc_sat": 0.8144395186827106,
+     "disc_exc": 0.8653084982537835
+    },
+    {
+     "step": 3,
+     "predicate": [
+      "bl_min",
+      "ge",
+      0.8305969530123134,
+      0.5
+     ],
+     "disc_sat": 0.8102438252058265,
+     "disc_exc": 0.8810244470314319
+    }
+   ],
+   "disc_sat": 0.8102438252058265,
+   "disc_exc": 0.8810244470314319,
+   "per_class_disc_exc": {
+    "S1": 0.7762605042016807,
+    "S2": 0.7274220032840722,
+    "S3": 0.9847769028871391,
+    "S4": 0.927710843373494,
+    "S5": 0.9395691014188124
+   }
+  }
+ },
+ "log": [
+  "L3 reproduction on discovery: 0.9071/0.7052 (pub 0.9071/0.7052)",
+  "=== variant no_pauling_menu ===",
+  "7044 candidate predicates; banned features: ['bv_frac_bad', 'bv_max_abs', 'bv_mean_abs', 'bv_param_cov', 'bv_rel_max', 'bv_rel_mean', 'csys_rank_001', 'gii', 'p2_frac_ok_010', 'p2_max_dev', 'p2_mean_dev', 'p2_n_bad_per_an', 'p4_n_viol_per_cat', 'p4_violate', 'p5_max_distinct', 'p5_n_distinct', 'p5_ok', 'sg_num_001', 'sg_num_01', 'wyckoff_econ_001', 'wyckoff_econ_01']",
+  "step 1: ('bl_cat_max', 'le', 1.0618936270953268, None) -> disc sat 0.8275 exc 0.8121",
+  "step 2: ('min_opp_frac', 'ge', 0.25, None) -> disc sat 0.8102 exc 0.8655",
+  "stop at step 3: best gain +0.0009",
+  "=== variant no_symmetry_only ===",
+  "8082 candidate predicates; banned features: ['csys_rank_001', 'sg_num_001', 'sg_num_01', 'wyckoff_econ_001', 'wyckoff_econ_01']",
+  "step 1: ('p2_max_dev', 'le', 0.6666666666666667, None) -> disc sat 0.8330 exc 0.8224",
+  "step 2: ('bv_rel_mean', 'le', 0.7143040821865658, None) -> disc sat 0.8144 exc 0.8653",
+  "step 3: ('bl_min', 'ge', 0.8305969530123134, 0.5) -> disc sat 0.8102 exc 0.8810",
+  "stop at step 4: best gain +0.0036"
+ ]
+}

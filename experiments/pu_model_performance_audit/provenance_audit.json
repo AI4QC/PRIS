@@ -1,0 +1,76 @@
+{
+  "scope": "CSAgent PU scorer provenance and validation protocol",
+  "independent_test_available": false,
+  "reader_labels": {
+    "clscore_all.csv": "CGCNN-PU OOB",
+    "clscore_b_all.csv": "MatterSim-1M-MLP-PU OOB"
+  },
+  "models": {
+    "CGCNN-PU OOB": {
+      "output": "/data1/home/hzxy10/csllm/pu_pool/clscore_all.csv",
+      "model_architecture": "CrystalGraphConvNet: atom_fea_len=64, n_conv=3, h_fea_len=128, n_h=1, classification=True",
+      "architecture_evidence": [
+        {"file": "<other-repo>/script/pu_screening_v2/03_train_bags.py", "lines": "2-13"},
+        {"file": "<other-repo>/script/pu_screening_v2/pu_common.py", "lines": "244-258"},
+        {"file": "<other-repo>/script/cgcnn/model_PU_learning.py", "lines": "39-84"}
+      ],
+      "training_and_selection_evidence": [
+        {"file": "<other-repo>/script/pu_screening_v2/03_train_bags.py", "lines": "50-62,71-118", "meaning": "validation ROC-AUC is evaluated every epoch and best checkpoint is saved"}
+      ],
+      "scoring_evidence": [
+        {"file": "<other-repo>/script/pu_screening_v2/04_predict_clscore.py", "lines": "2-13,51-69,90-107", "meaning": "OOB-masked mean over bag probabilities"}
+      ],
+      "log_evidence": {
+        "files": [
+          "/data1/home/hzxy10/csllm/logs/train_200535_1.out",
+          "/data1/home/hzxy10/csllm/logs/train_200536_*.out",
+          "/data1/home/hzxy10/csllm/logs/train_200537_*.out"
+        ],
+        "pattern": "DONE best vAUC",
+        "line_index": "remote/log_line_provenance.tsv"
+      }
+    },
+    "MatterSim-1M-MLP-PU OOB": {
+      "output": "/data1/home/hzxy10/csllm/pu_pool/clscore_b_all.csv",
+      "model_architecture": "Frozen MatterSim-v1.0.0-1M embedding (128 dimensions) + MLP head 128-256-256-2 with SiLU, Dropout and LogSoftmax",
+      "architecture_evidence": [
+        {"file": "<other-repo>/script/pu_screening_v2/07_embed_pu_head.py", "lines": "2-23,282-287"}
+      ],
+      "training_and_selection_evidence": [
+        {"file": "<other-repo>/script/pu_screening_v2/07_embed_pu_head.py", "lines": "290-326", "meaning": "same bag train/valid rows; best head selected by validation ROC-AUC"}
+      ],
+      "scoring_evidence": [
+        {"file": "<other-repo>/script/pu_screening_v2/07_embed_pu_head.py", "lines": "329-357", "meaning": "same bag-membership OOB mask writes clscore_b_all.csv"}
+      ],
+      "log_evidence": {
+        "file": "/data1/home/hzxy10/csllm/logs/headB_200736.out",
+        "pattern": "best vAUC",
+        "line_index": "remote/log_line_provenance.tsv"
+      }
+    }
+  },
+  "shared_protocol": {
+    "split_evidence": [
+      {"file": "<other-repo>/script/pu_screening_v2/02_split_bagging.py", "lines": "2-13,38-56"}
+    ],
+    "semantics": {
+      "positive_label": "experimental positive structure",
+      "zero_label": "unlabeled candidate sampled as pseudo-negative for that bag",
+      "independent_test": false
+    },
+    "counts": "remote/protocol_audit.json"
+  },
+  "full_pool_output_coverage": {
+    "clscore_all_unlabeled_rows": 8109897,
+    "clscore_b_all_rows": 8108676,
+    "b_missing_vs_a": 1221,
+    "reason": "MatterSim preprocessing filters malformed/unsupported geometries; missing IDs are not negative labels",
+    "comparison_rule": "intersect IDs before paired A/B analysis"
+  },
+  "aggregation_guidance": {
+    "raw_mean_A_B": "not scientifically justified as a calibrated probability without paired calibration",
+    "rank_aggregator": "documented engineering heuristic in 08_consensus_negatives.py:9,105-115,133-138",
+    "statistical_note": "A and B share the same PU labels and bag splits; architectural diversity does not make the validation observations statistically independent",
+    "recommended": "report A and B separately; use low-tail intersection or calibrated/rank-normalized aggregation"
+  }
+}

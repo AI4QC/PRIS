@@ -1,0 +1,287 @@
+{
+  "integrity": {
+    "cross_cohort_cif_overlap": 0,
+    "evaluated_segments": {
+      "experimental": {
+        "evaluation_identity": {
+          "newpauling_commit": "fb1b1eb885214cf7d6685d5701610d87a8a7d590",
+          "pris_implementation": [
+            {
+              "bytes": 9304,
+              "path": "<repo>/experiments/pu_synthesizability_20260821/data.py",
+              "sha256": "b109d92d93597dd763f12584f148356ca1f01793407a53b4b07f4fc37eb0b517"
+            },
+            {
+              "bytes": 9688,
+              "path": "<repo>/experiments/pu_synthesizability_20260821/runner.py",
+              "sha256": "5857f1211907ca80cd8789fac5c7b932212b8d5507eea532a8352199316871ab"
+            },
+            {
+              "bytes": 10846,
+              "path": "<repo>/experiments/pu_synthesizability_20260821/run_binary.py",
+              "sha256": "e61abc1dd6e5e98faa62d275865981e37d1de8976bff7181bed3caced155215f"
+            },
+            {
+              "bytes": 27859,
+              "path": "<repo>/experiments/property_design_20260821/evaluate_generated.py",
+              "sha256": "a9267983d628a01e8cd11ed86186e3cae0fbe2c0e3bb195fcc4c6277d6155583"
+            },
+            {
+              "bytes": 12187,
+              "path": "<repo>/src/apply_rules.py",
+              "sha256": "8ccc0a76eb6da0163a855767d7b6f748afaf7e5cff8b2eb44c158380fd37536b"
+            },
+            {
+              "bytes": 15943,
+              "path": "<repo>/src/discriminate.py",
+              "sha256": "3f82b82e4c3212dde72c9f3179d50cf26780072f0c1b598f551b16279aeaa595"
+            },
+            {
+              "bytes": 9195,
+              "path": "<repo>/src/phys_law.py",
+              "sha256": "dbc7d4da5a43403036ca8eb7630ad9920c68fc6f506ef34443354f9aad749757"
+            },
+            {
+              "bytes": 10254,
+              "path": "<repo>/src/elec_feat.py",
+              "sha256": "e70b3d15e2eba7f4b5d843737684f6096b350bffec29316d88ba01870fa7554f"
+            },
+            {
+              "bytes": 9332,
+              "path": "<repo>/src/geom_feat.py",
+              "sha256": "cba65d253677086379663615df661ffcd7e71a126cdf41ab070e91f9bdf082c3"
+            },
+            {
+              "bytes": 3658,
+              "path": "<repo>/src/t0_guard.py",
+              "sha256": "11b1e8802f878528db7cc38b684b3eced59676b571f67dc336443c2c80f08e73"
+            },
+            {
+              "bytes": 96339,
+              "path": "<repo>/data/bvparm2020.cif",
+              "sha256": "6f921b6fd20b00fdbe4705a38f02e5c45ae91f1c39be55eb6b0620a454875b89"
+            }
+          ],
+          "python": "python3.11",
+          "verdict_policy": {
+            "explicit_violation": "remove",
+            "no_verdict": "retain_and_report_separately",
+            "pass": "retain"
+          }
+        },
+        "segments": [
+          {
+            "directory": "<repo>/outputs/20260821_pu_synthesizability/binary_v1/experimental",
+            "input_fingerprint": "8808fd1b1f4114d716d98e1b3a939945f20270943464e8df55303060f32456f5",
+            "rows": 60000,
+            "shards": 12
+          },
+          {
+            "directory": "<repo>/outputs/20260821_pu_synthesizability/binary_v1_tail/experimental",
+            "input_fingerprint": "a5018b41fbc847c432d9985e4c65943ad70a37d84fe8a1af37ae86c2f49da125",
+            "rows": 39162,
+            "shards": 8
+          }
+        ]
+      },
+      "pu_negative": {
+        "evaluation_identity": {
+          "newpauling_commit": "fb1b1eb885214cf7d6685d5701610d87a8a7d590",
+          "pris_implementation": [
+            {
+              "bytes": 9304,
+              "path": "<repo>/experiments/pu_synthesizability_20260821/data.py",
+              "sha256": "b109d92d93597dd763f12584f148356ca1f01793407a53b4b07f4fc37eb0b517"
+            },
+            {
+              "bytes": 9688,
+              "path": "<repo>/experiments/pu_synthesizability_20260821/runner.py",
+              "sha256": "5857f1211907ca80cd8789fac5c7b932212b8d5507eea532a8352199316871ab"
+            },
+            {
+              "bytes": 10846,
+              "path": "<repo>/experiments/pu_synthesizability_20260821/run_binary.py",
+              "sha256": "e61abc1dd6e5e98faa62d275865981e37d1de8976bff7181bed3caced155215f"
+            },
+            {
+              "bytes": 27859,
+              "path": "<repo>/experiments/property_design_20260821/evaluate_generated.py",
+              "sha256": "a9267983d628a01e8cd11ed86186e3cae0fbe2c0e3bb195fcc4c6277d6155583"
+            },
+            {
+              "bytes": 12187,
+              "path": "<repo>/src/apply_rules.py",
+              "sha256": "8ccc0a76eb6da0163a855767d7b6f748afaf7e5cff8b2eb44c158380fd37536b"
+            },
+            {
+              "bytes": 15943,
+              "path": "<repo>/src/discriminate.py",
+              "sha256": "3f82b82e4c3212dde72c9f3179d50cf26780072f0c1b598f551b16279aeaa595"
+            },
+            {
+              "bytes": 9195,
+              "path": "<repo>/src/phys_law.py",
+              "sha256": "dbc7d4da5a43403036ca8eb7630ad9920c68fc6f506ef34443354f9aad749757"
+            },
+            {
+              "bytes": 10254,
+              "path": "<repo>/src/elec_feat.py",
+              "sha256": "e70b3d15e2eba7f4b5d843737684f6096b350bffec29316d88ba01870fa7554f"
+            },
+            {
+              "bytes": 9332,
+              "path": "<repo>/src/geom_feat.py",
+              "sha256": "cba65d253677086379663615df661ffcd7e71a126cdf41ab070e91f9bdf082c3"
+            },
+            {
+              "bytes": 3658,
+              "path": "<repo>/src/t0_guard.py",
+              "sha256": "11b1e8802f878528db7cc38b684b3eced59676b571f67dc336443c2c80f08e73"
+            },
+            {
+              "bytes": 96339,
+              "path": "<repo>/data/bvparm2020.cif",
+              "sha256": "6f921b6fd20b00fdbe4705a38f02e5c45ae91f1c39be55eb6b0620a454875b89"
+            }
+          ],
+          "python": "python3.11",
+          "verdict_policy": {
+            "explicit_violation": "remove",
+            "no_verdict": "retain_and_report_separately",
+            "pass": "retain"
+          }
+        },
+        "segments": [
+          {
+            "directory": "<repo>/outputs/20260821_pu_synthesizability/binary_v1/pu_negative",
+            "input_fingerprint": "1616945bdf668ec6b55d61855698beb370e2843c282a4f5674f06cdeeb8b3849",
+            "rows": 364771,
+            "shards": 73
+          }
+        ]
+      }
+    },
+    "experimental": {
+      "duplicate_extra_rows": 0,
+      "duplicate_groups": 0,
+      "parse_failures": 0,
+      "rows": 99162,
+      "tolerant_parse_rows": 172,
+      "unique_cif_sha256": 99162
+    },
+    "pu_negative": {
+      "duplicate_extra_rows": 179,
+      "duplicate_groups": 179,
+      "parse_failures": 0,
+      "rows": 364771,
+      "tolerant_parse_rows": 0,
+      "unique_cif_sha256": 364592
+    }
+  },
+  "outputs": {
+    "common_support_diagnostics": "common_support_diagnostics.csv",
+    "common_support_summary": "common_support_summary.csv",
+    "distance_cutoff_summary": "distance_cutoff_summary.csv",
+    "duplicate_cif_score_audit": "duplicate_cif_score_audit.csv",
+    "exact_formula_control": "exact_formula_control.csv",
+    "examples": "examples.csv",
+    "mechanism_summary": "mechanism_summary.csv",
+    "rung_summary": "rung_summary.csv",
+    "selected_tail_score_bands": "selected_tail_score_bands.csv",
+    "selected_tail_score_correlations": "selected_tail_score_correlations.csv",
+    "shared_formula_counts": "shared_formula_counts.csv",
+    "subgroup_summary": "subgroup_summary.csv",
+    "symmetry_tolerance_summary": "symmetry_tolerance_summary.csv"
+  },
+  "primary": {
+    "experimental": {
+      "L2": {
+        "explicit_violation_rate": 0.11722232306730401,
+        "known_fraction": 0.5359109336237672,
+        "queue_retained": 0.882777676932696,
+        "satisfaction": 0.7812652892250951,
+        "total_weight": 99162.0
+      },
+      "L4": {
+        "explicit_violation_rate": 0.19314858514350255,
+        "known_fraction": 0.4951997741070168,
+        "queue_retained": 0.8068514148564975,
+        "satisfaction": 0.6099582527237553,
+        "total_weight": 99162.0
+      }
+    },
+    "pu_negative": {
+      "L2": {
+        "explicit_violation_rate": 0.017833633211919078,
+        "known_fraction": 0.041654781234914645,
+        "queue_retained": 0.9821663667880809,
+        "satisfaction": 0.5718706788700862,
+        "total_weight": 364592.0
+      },
+      "L4": {
+        "explicit_violation_rate": 0.5188237811032607,
+        "known_fraction": 0.5195890200552947,
+        "queue_retained": 0.4811762188967394,
+        "satisfaction": 0.0014727773730719286,
+        "total_weight": 364592.0
+      }
+    }
+  },
+  "scope": {
+    "binary": "full frozen CSAgent experimental cohort versus released A/B PU-low-score tail",
+    "continuous": "selected-tail sensitivity only; full 8.1M CLscore files remain remote"
+  },
+  "score_ranges": {
+    "released_records": {
+      "CLscore_A": {
+        "max": 8e-06,
+        "median": 0.0,
+        "min": 0.0,
+        "unique_values": 9
+      },
+      "CLscore_B": {
+        "max": 0.004899,
+        "median": 0.001854,
+        "min": 4e-06,
+        "unique_values": 4896
+      },
+      "CLscore_jang": {
+        "max": 0.983603,
+        "median": 0.058339,
+        "min": 0.0,
+        "unique_values": 199718
+      }
+    },
+    "singleton_cifs_continuous_analysis": {
+      "CLscore_A": {
+        "max": 8e-06,
+        "median": 0.0,
+        "min": 0.0,
+        "unique_values": 9
+      },
+      "CLscore_B": {
+        "max": 0.004899,
+        "median": 0.001855,
+        "min": 4e-06,
+        "unique_values": 4896
+      },
+      "CLscore_jang": {
+        "max": 0.983603,
+        "median": 0.058349,
+        "min": 0.0,
+        "unique_values": 199652
+      }
+    }
+  },
+  "selected_tail_continuous_support": {
+    "duplicate_cif_groups": 179,
+    "records_excluded_in_duplicate_cif_groups": 358,
+    "released_records": 364771,
+    "singleton_cifs_analyzed": 364413
+  },
+  "shared_formula_rows": {
+    "experimental": 92,
+    "pu_negative": 110
+  },
+  "shared_reduced_formulas": 69
+}

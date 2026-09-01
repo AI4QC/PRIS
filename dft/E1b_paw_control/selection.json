@@ -1,0 +1,132 @@
+{
+ "experiment": "E1b",
+ "n_selected": 8,
+ "paw_ratio_at_floor": [
+  {
+   "ratio": 0.4973,
+   "source_id": "cod-1510743"
+  },
+  {
+   "ratio": 0.5248,
+   "source_id": "cod-1511203"
+  },
+  {
+   "ratio": 0.5382,
+   "source_id": "cod-1010286"
+  },
+  {
+   "ratio": 0.5559,
+   "source_id": "cod-1507759"
+  },
+  {
+   "ratio": 0.5589,
+   "source_id": "cod-1010285"
+  },
+  {
+   "ratio": 0.5642,
+   "source_id": "cod-1001469"
+  },
+  {
+   "ratio": 0.5932,
+   "source_id": "cod-1008795"
+  },
+  {
+   "ratio": 0.6007,
+   "source_id": "cod-1511018"
+  }
+ ],
+ "rho_grid": [
+  0.6,
+  0.65,
+  0.7,
+  0.75,
+  0.8,
+  0.85,
+  0.9,
+  0.95,
+  1.0,
+  1.05,
+  1.1,
+  1.15,
+  1.2,
+  1.25,
+  1.3,
+  1.35,
+  1.4
+ ],
+ "rule": "The 8 E1 compounds whose shortest contact at the D1 floor sits furthest inside the sum of the PAW cutoff radii, ranked on geometry alone and recomputed with the hard small-core potentials (B->B_h, C->C_h, Cl->Cl_h, F->F_h, Ga->Ga_h, Ge->Ge_h, H->H_h, N->N_h, O->O_h, P->P_h, S->S_h) at the cutoff those potentials require. Same grid, same cells, same k-mesh rule.",
+ "structures": [
+  {
+   "anion": "N",
+   "encut_ev": 910.0,
+   "formula": "La3Ni2B2N3",
+   "n_atoms": 10,
+   "radius_sum_a": 1.7186,
+   "rho_c_parent": 1.05839,
+   "source_id": "cod-1510743"
+  },
+  {
+   "anion": "N",
+   "encut_ev": 910.0,
+   "formula": "LaNiBN",
+   "n_atoms": 8,
+   "radius_sum_a": 1.8138,
+   "rho_c_parent": 1.058834,
+   "source_id": "cod-1511203"
+  },
+  {
+   "anion": "F",
+   "encut_ev": 1005.0,
+   "formula": "Cs2GeF6",
+   "n_atoms": 9,
+   "radius_sum_a": 1.86,
+   "rho_c_parent": 0.966667,
+   "source_id": "cod-1010286"
+  },
+  {
+   "anion": "F",
+   "encut_ev": 1005.0,
+   "formula": "MnNbF6",
+   "n_atoms": 8,
+   "radius_sum_a": 2.0212,
+   "rho_c_parent": 0.975252,
+   "source_id": "cod-1507759"
+  },
+  {
+   "anion": "F",
+   "encut_ev": 1005.0,
+   "formula": "Cs2SiF6",
+   "n_atoms": 9,
+   "radius_sum_a": 1.7706,
+   "rho_c_parent": 1.05438,
+   "source_id": "cod-1010285"
+  },
+  {
+   "anion": "O",
+   "encut_ev": 910.0,
+   "formula": "Ba2CePtO6",
+   "n_atoms": 10,
+   "radius_sum_a": 2.234,
+   "rho_c_parent": 0.933488,
+   "source_id": "cod-1001469"
+  },
+  {
+   "anion": "F",
+   "encut_ev": 1005.0,
+   "formula": "ZrCoF6",
+   "n_atoms": 8,
+   "radius_sum_a": 2.05,
+   "rho_c_parent": 0.966474,
+   "source_id": "cod-1008795"
+  },
+  {
+   "anion": "N",
+   "encut_ev": 910.0,
+   "formula": "Ca3BN3",
+   "n_atoms": 7,
+   "radius_sum_a": 1.73,
+   "rho_c_parent": 0.781479,
+   "source_id": "cod-1511018"
+  }
+ ]
+}

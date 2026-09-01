@@ -1,0 +1,95 @@
+\documentclass[pdflatex,sn-nature]{sn-jnl}% Springer Nature, Nature Portfolio reference style
+
+\usepackage{graphicx}%
+\usepackage{amsmath,amssymb,amsfonts}%
+\usepackage{booktabs}%
+\usepackage{xcolor}%
+\usepackage{float}%      [H] figure placement
+\usepackage{placeins}%   \FloatBarrier
+\usepackage{url}%
+\usepackage{siunitx}%
+
+\input{layout_tune.tex}
+
+% --- clickable cross-references and citations
+%% the class loads hyperref itself with link colouring off. Re-assert at
+%% egin{document} so that cross-references and citations are visibly clickable
+\AtBeginDocument{\hypersetup{colorlinks=true,
+  linkcolor={blue!55!black}, citecolor={blue!55!black},
+  urlcolor={blue!55!black}, filecolor={blue!55!black},
+  breaklinks=true, bookmarksnumbered=true, pdfstartview={FitH}}}
+
+\input{si-xr}% SI cross-refs, generated from si.aux by gen-si-xr.py
+
+\newcommand{\rhoc}{\ensuremath{\rho}}          % reduced contact ratio
+\newcommand{\fion}{\ensuremath{f_{\mathrm{i}}}}% Pauling ionicity
+\newcommand{\VM}{\ensuremath{E_{\mathrm{M}}}}  % site Madelung energy from Ewald sum
+
+\raggedbottom
+
+\begin{document}
+
+\input{front_meta.tex}
+
+\author[1,2]{\fnm{Zhilong}\sur{Song}}
+
+\author*[1,2,3]{\fnm{Lixue}\sur{Cheng}}\email{lixuecheng@ust.hk}
+
+\affil[1]{\orgdiv{Department of Chemistry}, \orgname{Hong Kong University of Science
+and Technology}, \orgaddress{\city{Kowloon}, \state{Hong Kong 999077},
+\country{China}}}
+
+\affil[2]{\orgdiv{IAS Center for AI for Scientific Discoveries}, \orgname{Hong Kong
+University of Science and Technology}, \orgaddress{\city{Kowloon},
+\state{Hong Kong 999077}, \country{China}}}
+
+\affil[3]{\orgdiv{Department of Chemical and Biological Engineering}, \orgname{Hong
+Kong University of Science and Technology}, \orgaddress{\city{Kowloon},
+\state{Hong Kong 999077}, \country{China}}}
+
+\keywords{crystal chemistry, Pauling's rules, ionic radii, interpretable machine learning,
+generative models for materials, autonomous scientific discovery}
+
+\maketitle
+
+\input{front_body.tex}
+
+\input{body.tex}
+
+\input{methods.tex}
+
+\backmatter
+
+\bmhead{Acknowledgements}
+We gratefully acknowledge financial support from the HKUST Start-up Fund. We thank HKUST
+Fok Ying Tung Research Institute and National Supercomputing Center in Guangzhou Nansha
+Sub-center for computational resources and the maintainers of the open structural
+databases used here.
+
+\section*{Declarations}
+
+\bmhead{Competing interests} The authors declare no competing interests.
+
+\bmhead{Data availability}
+Entries from the Inorganic Crystal Structure Database are not redistributable under
+the terms of the FIZ Karlsruhe licence and the European Union \emph{sui generis}
+database right, and ELEMENTA is distributed under CC-BY-NC-4.0. The public benchmark
+released with this work is therefore built exclusively on the Crystallography Open
+Database (CC0). Derived scalar features, split assignments and all numerical results
+underlying the figures are provided as source data. The 260 design candidates
+relaxed with density functional theory in this work are provided as Supplementary
+Data: one CIF per candidate, with an index giving its composition, its space
+group and distinct-site fraction both as generated and after relaxation, its
+synthesizability score, and its computed bulk modulus.
+
+\bmhead{Code availability}
+All analysis code, the pre-registration document and the figure-generation scripts
+are available at \url{https://github.com/AI4QC/PRIS}.
+
+% Keep the reference list compact without changing its font or content.
+\begingroup
+\linespread{1.60}\selectfont
+\bibliography{refs}
+\endgroup
+
+\end{document}

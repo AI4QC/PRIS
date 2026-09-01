@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "KTcO4",
+ "kind": "experimental",
+ "kmesh": [
+  6,
+  6,
+  5
+ ],
+ "n_atoms": 12,
+ "n_kpoints": 180,
+ "parent": "cod-1501467",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "rng_seed_source": "E3|cod-1501467",
+ "species": [
+  "K",
+  "O",
+  "Tc"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-cod-1501467-P0",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-cod-1501467-P0",
+ "variant": "P0"
+}

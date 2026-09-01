@@ -1,0 +1,326 @@
+{
+  "convergence_qa": {
+    "by_cohort": {
+      "experimental": {
+        "capped_at_64_steps": 178,
+        "fmax_le_threshold": 903,
+        "n_supported": 1021
+      },
+      "pu_negative": {
+        "capped_at_64_steps": 24,
+        "fmax_le_threshold": 984,
+        "n_supported": 1024
+      }
+    },
+    "capped_at_64_steps": 202,
+    "fmax_gt_threshold": 158,
+    "fmax_le_threshold": 1887,
+    "fmax_threshold_ev_per_a": 0.05,
+    "interpretation": "NEXT15 counts finite snapshots as supported and records cap/convergence diagnostics; strict sensitivities are reported below."
+  },
+  "formula_scaling_qa": {
+    "formula_mismatches": 0,
+    "formula_source": "full CIF cell composition; no reduced display formula used",
+    "max_abs_b64_recomputation_error": 7.549516567451064e-14,
+    "max_abs_energy_per_atom_identity_error": 0.0,
+    "supported_cifs_parsed": 2045
+  },
+  "manifest_hashes_verified": true,
+  "output_hashes": {
+    "e_hull_threshold_curve.csv": {
+      "actual": "704036b9fcda5b7378e07b3b55cd63a3a0f0d2823173ac86531704149b57912b",
+      "expected": "704036b9fcda5b7378e07b3b55cd63a3a0f0d2823173ac86531704149b57912b",
+      "match": true
+    },
+    "gpu_basin_hull.parquet": {
+      "actual": "946e6aaf3b65ef90de339ade2be768c4a4fd508b373b3e3d0abe4c6c72d5e2d9",
+      "expected": "946e6aaf3b65ef90de339ade2be768c4a4fd508b373b3e3d0abe4c6c72d5e2d9",
+      "match": true
+    }
+  },
+  "protocol": "2026-08-22-pu-mattersim-basin-hull-gpu-stratified-v2-full-cell-formula",
+  "recommendation": {
+    "fig4c": "exploratory_proxy_only",
+    "old_outputs": "All reduced-formula v1/v2 outputs are invalid and must not be cited.",
+    "reason": "The corrected full-cell run gives clear cohort separation, but raw-MP/MatterSim references are not self-consistent and 202 finite snapshots hit the 64-step cap."
+  },
+  "row_counts": {
+    "abstain": 3,
+    "abstain_errors": {
+      "CIF parse failed: ValueError: Invalid CIF file with no structures!": 3
+    },
+    "experimental": 1024,
+    "pu_negative": 1024,
+    "rows": 2048,
+    "supported": 2045
+  },
+  "score_and_reference_zero_qa": {
+    "b64_max": 6.284470574722595,
+    "b64_min": -0.16123042186496273,
+    "b64_quantiles": {
+      "0.01": -0.04445987710636525,
+      "0.05": -0.002273164492743973,
+      "0.1": 0.002398516668386997,
+      "0.25": 0.017428723300785265,
+      "0.5": 0.12813470055664133,
+      "0.75": 0.5177372315450617,
+      "0.9": 0.9744549129282186,
+      "0.95": 1.3169297395178399,
+      "0.99": 2.206876129589511
+    },
+    "candidate_energy_per_atom_quantiles": {
+      "0.01": -10.22848331451416,
+      "0.05": -8.896829768589564,
+      "0.1": -8.02606216430664,
+      "0.25": -6.780451880560981,
+      "0.5": -5.333833694458008,
+      "0.75": -4.164064407348633,
+      "0.9": -3.2541419474283853,
+      "0.95": -2.749601968129476,
+      "0.99": -1.9002499643961588
+    },
+    "definition": "B64 = E_MatterSim_relaxed/N - E_raw_MP_hull(composition)",
+    "negative_b64_n": 142,
+    "note": "MatterSim and raw-MP DFT energies are different references; negative B64 is retained and is not clipped.",
+    "raw_mp_hull_energy_per_atom_quantiles": {
+      "0.01": -10.88542453321,
+      "0.05": -9.214433329333334,
+      "0.1": -8.397553926099746,
+      "0.25": -7.115990425,
+      "0.5": -5.725750702638889,
+      "0.75": -4.4469819925,
+      "0.9": -3.5510689139499982,
+      "0.95": -3.0400432835,
+      "0.99": -2.3895631438750007
+    }
+  },
+  "sensitivity_metrics": {
+    "finite_snapshot_policy": {
+      "auc_bootstrap95": [
+        0.8612061689592957,
+        0.8943480759113216
+      ],
+      "auc_pu_vs_experimental": 0.8776647435112634,
+      "by_cohort": {
+        "experimental": {
+          "mean": 0.11436044003178114,
+          "median": 0.019828823151041952,
+          "n": 1021,
+          "quantiles": {
+            "0.01": -0.03870330526385234,
+            "0.05": -0.005280158725585515,
+            "0.1": -0.0005035314770509558,
+            "0.25": 0.005521545664758598,
+            "0.5": 0.019828823151041952,
+            "0.75": 0.06712211526367184,
+            "0.9": 0.3039956750371102,
+            "0.95": 0.5592634945874027,
+            "0.99": 1.4958391251570244
+          },
+          "reject_n": 141,
+          "reject_rate": 0.13809990205680706,
+          "wilson95": [
+            0.11829043419989554,
+            0.1606224223795189
+          ]
+        },
+        "pu_negative": {
+          "mean": 0.572062960347214,
+          "median": 0.429758113666622,
+          "n": 1024,
+          "quantiles": {
+            "0.01": -0.04600134351603178,
+            "0.05": 0.03666089480506055,
+            "0.1": 0.07832369435156226,
+            "0.25": 0.17437118158392217,
+            "0.5": 0.429758113666622,
+            "0.75": 0.8002802753164655,
+            "0.9": 1.264229022924239,
+            "0.95": 1.5355246552912107,
+            "0.99": 2.3799720961416577
+          },
+          "reject_n": 737,
+          "reject_rate": 0.7197265625,
+          "wilson95": [
+            0.6914356556630954,
+            0.7463750554521313
+          ]
+        }
+      },
+      "n": 2045
+    },
+    "fmax_le_0p05": {
+      "auc_bootstrap95": [
+        0.8921330532679357,
+        0.9207004484812176
+      ],
+      "auc_pu_vs_experimental": 0.9065288244244568,
+      "by_cohort": {
+        "experimental": {
+          "mean": 0.07747739052313005,
+          "median": 0.01724994993164053,
+          "n": 903,
+          "quantiles": {
+            "0.01": -0.052362606927633615,
+            "0.05": -0.006045907467912492,
+            "0.1": -0.0006207259774924978,
+            "0.25": 0.004883517543873506,
+            "0.5": 0.01724994993164053,
+            "0.75": 0.0473416699114666,
+            "0.9": 0.17480139707568304,
+            "0.95": 0.37104741069217895,
+            "0.99": 0.900937047821286
+          },
+          "reject_n": 79,
+          "reject_rate": 0.08748615725359911,
+          "wilson95": [
+            0.07076118397006903,
+            0.10770601914078293
+          ]
+        },
+        "pu_negative": {
+          "mean": 0.5783135743079623,
+          "median": 0.43684764096374584,
+          "n": 984,
+          "quantiles": {
+            "0.01": -0.040435682261149644,
+            "0.05": 0.03824286093442182,
+            "0.1": 0.07832369435156226,
+            "0.25": 0.17522616099886035,
+            "0.5": 0.43684764096374584,
+            "0.75": 0.8082547545209162,
+            "0.9": 1.2837769368885985,
+            "0.95": 1.5444298604644648,
+            "0.99": 2.395081267082451
+          },
+          "reject_n": 711,
+          "reject_rate": 0.7225609756097561,
+          "wilson95": [
+            0.6937614350459835,
+            0.7496295525350536
+          ]
+        }
+      },
+      "n": 1887
+    },
+    "fmax_le_0p05_and_not_capped": {
+      "auc_bootstrap95": [
+        0.8924159509238814,
+        0.9230042450045286
+      ],
+      "auc_pu_vs_experimental": 0.9084390144316066,
+      "by_cohort": {
+        "experimental": {
+          "mean": 0.07665657012459208,
+          "median": 0.016446004817993076,
+          "n": 838,
+          "quantiles": {
+            "0.01": -0.05788821586664079,
+            "0.05": -0.006273008271240466,
+            "0.1": -0.000951700003808753,
+            "0.25": 0.004468507371607089,
+            "0.5": 0.016446004817993076,
+            "0.75": 0.04586561178288462,
+            "0.9": 0.16295515086191492,
+            "0.95": 0.3564204626677239,
+            "0.99": 0.9500040646756336
+          },
+          "reject_n": 69,
+          "reject_rate": 0.08233890214797136,
+          "wilson95": [
+            0.06557871394768755,
+            0.10291080071626685
+          ]
+        },
+        "pu_negative": {
+          "mean": 0.5782171716219053,
+          "median": 0.43684764096374584,
+          "n": 982,
+          "quantiles": {
+            "0.01": -0.040621204302979046,
+            "0.05": 0.03820788924850018,
+            "0.1": 0.07814396724153623,
+            "0.25": 0.17522544647878613,
+            "0.5": 0.43684764096374584,
+            "0.75": 0.8065434134619158,
+            "0.9": 1.2847943012807368,
+            "0.95": 1.5453847825937863,
+            "0.99": 2.3965827710785472
+          },
+          "reject_n": 709,
+          "reject_rate": 0.7219959266802444,
+          "wilson95": [
+            0.6931510551806084,
+            0.7491107264668808
+          ]
+        }
+      },
+      "n": 1820
+    },
+    "not_capped_at_64_steps": {
+      "auc_bootstrap95": [
+        0.8910976318408426,
+        0.9210881621394037
+      ],
+      "auc_pu_vs_experimental": 0.9063641755634638,
+      "by_cohort": {
+        "experimental": {
+          "mean": 0.07960678304791767,
+          "median": 0.01661202004393747,
+          "n": 843,
+          "quantiles": {
+            "0.01": -0.0574700511860711,
+            "0.05": -0.006254776892974689,
+            "0.1": -0.0009393532222656375,
+            "0.25": 0.004521259127604704,
+            "0.5": 0.01661202004393747,
+            "0.75": 0.04674348064773315,
+            "0.9": 0.17142136123948984,
+            "0.95": 0.37016776167529236,
+            "0.99": 1.1038485557955169
+          },
+          "reject_n": 72,
+          "reject_rate": 0.08540925266903915,
+          "wilson95": [
+            0.06837217064673447,
+            0.10620768403654614
+          ]
+        },
+        "pu_negative": {
+          "mean": 0.5730678016662516,
+          "median": 0.42857082301031313,
+          "n": 1000,
+          "quantiles": {
+            "0.01": -0.038951505926514404,
+            "0.05": 0.03622049918561952,
+            "0.1": 0.07785527053030614,
+            "0.25": 0.17437118158392217,
+            "0.5": 0.42857082301031313,
+            "0.75": 0.7978759348334163,
+            "0.9": 1.2807248437121823,
+            "0.95": 1.5462055664123537,
+            "0.99": 2.383069235113673
+          },
+          "reject_n": 719,
+          "reject_rate": 0.719,
+          "wilson95": [
+            0.6903436580897934,
+            0.7459802216935335
+          ]
+        }
+      },
+      "n": 1843
+    }
+  },
+  "support_coverage": {
+    "full_MP_supported_pu_rows_before_selection": 12239,
+    "full_matched_MP_subspaces": 34559,
+    "full_required_element_subspaces": 174296,
+    "full_union_unique_systems": 120613,
+    "pilot_is_MP_supported_stratified_subset": true,
+    "selected_required_subspaces": 3481,
+    "selected_rows": 2048,
+    "selected_unique_systems": 1660,
+    "warning": "Pilot rates are not full-pool prevalence estimates."
+  }
+}

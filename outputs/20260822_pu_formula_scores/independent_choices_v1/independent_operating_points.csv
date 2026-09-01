@@ -1,0 +1,3 @@
+method,target_experimental_retention,experimental_total_n,experimental_screened_n,experimental_retained_n,experimental_retention,pu_total_n,pu_screened_n,pu_retained_n,pu_screened_rate,cutoff_score,combined
+L4,0.8068514148564975,99162,19153,80009,0.8068514148564975,364592,189159,175433,0.5188237811032607,,False
+S_syn,0.8068514148564975,99162,19152,80010,0.806861499364676,364592,305075,59517,0.8367572519418967,-0.7293854648224881,False

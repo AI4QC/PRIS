@@ -1,0 +1,2002 @@
+[
+ {
+  "task": "E3-cod-1001469-P0",
+  "parent": "cod-1001469",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Ba2CePtO6",
+  "dft_release_ions_ev_per_atom": 0.04992151499999977,
+  "dft_release_full_ev_per_atom": 0.059365936000000376,
+  "mattersim_release_ev_per_atom": 0.042627716064453126
+ },
+ {
+  "task": "E3-cod-1001469-S1",
+  "parent": "cod-1001469",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Ba2CePtO6",
+  "dft_release_ions_ev_per_atom": 0.17794173500000027,
+  "dft_release_full_ev_per_atom": 1.385646792,
+  "mattersim_release_ev_per_atom": 0.16395263671875
+ },
+ {
+  "task": "E3-cod-1001469-S2",
+  "parent": "cod-1001469",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Ba2CePtO6",
+  "dft_release_ions_ev_per_atom": 0.12088861499999978,
+  "dft_release_full_ev_per_atom": 0.42681232400000013,
+  "mattersim_release_ev_per_atom": 0.12288398742675781
+ },
+ {
+  "task": "E3-cod-1001469-S3",
+  "parent": "cod-1001469",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Ba2CePtO6",
+  "dft_release_ions_ev_per_atom": 16.520278769,
+  "dft_release_full_ev_per_atom": 22.058646975,
+  "mattersim_release_ev_per_atom": 23.102771759033203
+ },
+ {
+  "task": "E3-cod-1001469-S4",
+  "parent": "cod-1001469",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Ba2CePtO6",
+  "dft_release_ions_ev_per_atom": 0.19765992000000027,
+  "dft_release_full_ev_per_atom": 1.8918020139999996,
+  "mattersim_release_ev_per_atom": 0.23651695251464844
+ },
+ {
+  "task": "E3-cod-1001469-S5",
+  "parent": "cod-1001469",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Ba2CePtO6",
+  "dft_release_ions_ev_per_atom": 2.522888736000001,
+  "dft_release_full_ev_per_atom": 2.5322611790000003,
+  "mattersim_release_ev_per_atom": 2.5002826690673827
+ },
+ {
+  "task": "E3-cod-1010052-P0",
+  "parent": "cod-1010052",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Rb2SnI6",
+  "dft_release_ions_ev_per_atom": 0.005477715555555405,
+  "dft_release_full_ev_per_atom": 0.011832990000000067,
+  "mattersim_release_ev_per_atom": 0.006131490071614583
+ },
+ {
+  "task": "E3-cod-1010052-S1",
+  "parent": "cod-1010052",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Rb2SnI6",
+  "dft_release_ions_ev_per_atom": 0.1021202044444445,
+  "dft_release_full_ev_per_atom": 0.2868587155555555,
+  "mattersim_release_ev_per_atom": 0.09249899122450086
+ },
+ {
+  "task": "E3-cod-1010052-S2",
+  "parent": "cod-1010052",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Rb2SnI6",
+  "dft_release_ions_ev_per_atom": 0.2783088844444445,
+  "dft_release_full_ev_per_atom": 0.28778784888888886,
+  "mattersim_release_ev_per_atom": 0.2556198967827691
+ },
+ {
+  "task": "E3-cod-1010052-S3",
+  "parent": "cod-1010052",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Rb2SnI6",
+  "dft_release_ions_ev_per_atom": 1.428419081111111,
+  "dft_release_full_ev_per_atom": 1.4375090255555556,
+  "mattersim_release_ev_per_atom": 1.4458004633585613
+ },
+ {
+  "task": "E3-cod-1010052-S4",
+  "parent": "cod-1010052",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Rb2SnI6",
+  "dft_release_ions_ev_per_atom": 0.3983909344444443,
+  "dft_release_full_ev_per_atom": 0.6352442188888889,
+  "mattersim_release_ev_per_atom": 0.044898668924967446
+ },
+ {
+  "task": "E3-cod-1010052-S5",
+  "parent": "cod-1010052",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Rb2SnI6",
+  "dft_release_ions_ev_per_atom": 0.16235684000000028,
+  "dft_release_full_ev_per_atom": 0.23226382,
+  "mattersim_release_ev_per_atom": 0.13552941216362846
+ },
+ {
+  "task": "E3-cod-1010053-P0",
+  "parent": "cod-1010053",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Cs2SnI6",
+  "dft_release_ions_ev_per_atom": 0.00446410555555548,
+  "dft_release_full_ev_per_atom": 0.018179314444444747,
+  "mattersim_release_ev_per_atom": 0.004600948757595486
+ },
+ {
+  "task": "E3-cod-1010053-S1",
+  "parent": "cod-1010053",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Cs2SnI6",
+  "dft_release_ions_ev_per_atom": 0.4481151711111109,
+  "dft_release_full_ev_per_atom": 1.1062379122222221,
+  "mattersim_release_ev_per_atom": 0.2789847056070964
+ },
+ {
+  "task": "E3-cod-1010053-S2",
+  "parent": "cod-1010053",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Cs2SnI6",
+  "dft_release_ions_ev_per_atom": 0.4048862466666667,
+  "dft_release_full_ev_per_atom": 0.4395620577777779,
+  "mattersim_release_ev_per_atom": 0.3061747021145291
+ },
+ {
+  "task": "E3-cod-1010053-S3",
+  "parent": "cod-1010053",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Cs2SnI6",
+  "dft_release_ions_ev_per_atom": 1.4797965988888886,
+  "dft_release_full_ev_per_atom": 1.4936577266666664,
+  "mattersim_release_ev_per_atom": 1.4975420633951824
+ },
+ {
+  "task": "E3-cod-1010053-S4",
+  "parent": "cod-1010053",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Cs2SnI6",
+  "dft_release_ions_ev_per_atom": 0.24468410888888867,
+  "dft_release_full_ev_per_atom": 0.3651107255555554,
+  "mattersim_release_ev_per_atom": 0.0038503011067708335
+ },
+ {
+  "task": "E3-cod-1010053-S5",
+  "parent": "cod-1010053",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Cs2SnI6",
+  "dft_release_ions_ev_per_atom": 0.18132590444444455,
+  "dft_release_full_ev_per_atom": 0.2588758400000002,
+  "mattersim_release_ev_per_atom": 0.1586880154079861
+ },
+ {
+  "task": "E3-cod-1010145-P0",
+  "parent": "cod-1010145",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Cs2AgAuCl6",
+  "dft_release_ions_ev_per_atom": 0.008353463999999988,
+  "dft_release_full_ev_per_atom": 0.008576228000000085,
+  "mattersim_release_ev_per_atom": 0.007252693176269531
+ },
+ {
+  "task": "E3-cod-1010145-S1",
+  "parent": "cod-1010145",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Cs2AgAuCl6",
+  "dft_release_ions_ev_per_atom": 0.2776716799999999,
+  "dft_release_full_ev_per_atom": 0.9865642519999998,
+  "mattersim_release_ev_per_atom": 0.20736770629882811
+ },
+ {
+  "task": "E3-cod-1010145-S2",
+  "parent": "cod-1010145",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Cs2AgAuCl6",
+  "dft_release_ions_ev_per_atom": 0.03776800199999997,
+  "dft_release_full_ev_per_atom": 0.03800761500000007,
+  "mattersim_release_ev_per_atom": 0.039240264892578126
+ },
+ {
+  "task": "E3-cod-1010145-S3",
+  "parent": "cod-1010145",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Cs2AgAuCl6",
+  "dft_release_ions_ev_per_atom": 1.234375262,
+  "dft_release_full_ev_per_atom": 1.2634137890000001,
+  "mattersim_release_ev_per_atom": 1.2828113555908203
+ },
+ {
+  "task": "E3-cod-1010145-S4",
+  "parent": "cod-1010145",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Cs2AgAuCl6",
+  "dft_release_ions_ev_per_atom": 0.24905120099999997,
+  "dft_release_full_ev_per_atom": 0.772498426,
+  "mattersim_release_ev_per_atom": 0.05570507049560547
+ },
+ {
+  "task": "E3-cod-1010145-S5",
+  "parent": "cod-1010145",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Cs2AgAuCl6",
+  "dft_release_ions_ev_per_atom": 0.20876735900000015,
+  "dft_release_full_ev_per_atom": 0.236468842,
+  "mattersim_release_ev_per_atom": 0.1864238739013672
+ },
+ {
+  "task": "E3-cod-1010173-P0",
+  "parent": "cod-1010173",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "K2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.0003683722222219564,
+  "dft_release_full_ev_per_atom": 0.007465569999999626,
+  "mattersim_release_ev_per_atom": 0.0004412333170572917
+ },
+ {
+  "task": "E3-cod-1010173-S1",
+  "parent": "cod-1010173",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "K2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.7352240522222222,
+  "dft_release_full_ev_per_atom": 1.2843804155555556,
+  "mattersim_release_ev_per_atom": 0.6940695444742838
+ },
+ {
+  "task": "E3-cod-1010173-S2",
+  "parent": "cod-1010173",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "K2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.23066405111111107,
+  "dft_release_full_ev_per_atom": 0.23503023111111115,
+  "mattersim_release_ev_per_atom": 0.22059504191080728
+ },
+ {
+  "task": "E3-cod-1010173-S3",
+  "parent": "cod-1010173",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "K2SnCl6",
+  "dft_release_ions_ev_per_atom": 3.2408549922222223,
+  "dft_release_full_ev_per_atom": 3.2506032977777775,
+  "mattersim_release_ev_per_atom": 3.1913026173909507
+ },
+ {
+  "task": "E3-cod-1010173-S4",
+  "parent": "cod-1010173",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "K2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.37470580555555544,
+  "dft_release_full_ev_per_atom": 0.5183533533333333,
+  "mattersim_release_ev_per_atom": 0.397480222913954
+ },
+ {
+  "task": "E3-cod-1010173-S5",
+  "parent": "cod-1010173",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "K2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.32347930999999974,
+  "dft_release_full_ev_per_atom": 0.46394945777777763,
+  "mattersim_release_ev_per_atom": 0.3357590569390191
+ },
+ {
+  "task": "E3-cod-1010175-P0",
+  "parent": "cod-1010175",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Rb2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.005480679999999991,
+  "dft_release_full_ev_per_atom": 0.01616652888888876,
+  "mattersim_release_ev_per_atom": 0.0060346391465928816
+ },
+ {
+  "task": "E3-cod-1010175-S1",
+  "parent": "cod-1010175",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Rb2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.3007139822222224,
+  "dft_release_full_ev_per_atom": 0.7135768677777778,
+  "mattersim_release_ev_per_atom": 0.2846048143174913
+ },
+ {
+  "task": "E3-cod-1010175-S2",
+  "parent": "cod-1010175",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Rb2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.4208124511111109,
+  "dft_release_full_ev_per_atom": 0.4334440044444443,
+  "mattersim_release_ev_per_atom": 0.32642385694715714
+ },
+ {
+  "task": "E3-cod-1010175-S3",
+  "parent": "cod-1010175",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Rb2SnCl6",
+  "dft_release_ions_ev_per_atom": 7.2272135411111105,
+  "dft_release_full_ev_per_atom": 7.384373806666667,
+  "mattersim_release_ev_per_atom": 7.184040705362956
+ },
+ {
+  "task": "E3-cod-1010175-S4",
+  "parent": "cod-1010175",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Rb2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.6610878188888888,
+  "dft_release_full_ev_per_atom": 0.9310415799999999,
+  "mattersim_release_ev_per_atom": 0.03515179951985677
+ },
+ {
+  "task": "E3-cod-1010175-S5",
+  "parent": "cod-1010175",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Rb2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.3769148111111112,
+  "dft_release_full_ev_per_atom": 0.5187378411111112,
+  "mattersim_release_ev_per_atom": 0.3873343997531467
+ },
+ {
+  "task": "E3-cod-1010177-P0",
+  "parent": "cod-1010177",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Tl2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.017580189999999933,
+  "dft_release_full_ev_per_atom": 0.026953295555555614,
+  "mattersim_release_ev_per_atom": 0.0175522698296441
+ },
+ {
+  "task": "E3-cod-1010177-S1",
+  "parent": "cod-1010177",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Tl2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.9157151711111111,
+  "dft_release_full_ev_per_atom": 1.5289145266666666,
+  "mattersim_release_ev_per_atom": 0.868445184495714
+ },
+ {
+  "task": "E3-cod-1010177-S2",
+  "parent": "cod-1010177",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Tl2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.13897954888888878,
+  "dft_release_full_ev_per_atom": 0.13906937222222224,
+  "mattersim_release_ev_per_atom": 0.12758149041069877
+ },
+ {
+  "task": "E3-cod-1010177-S3",
+  "parent": "cod-1010177",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Tl2SnCl6",
+  "dft_release_ions_ev_per_atom": 3.0665695355555553,
+  "dft_release_full_ev_per_atom": 3.1603313366666668,
+  "mattersim_release_ev_per_atom": 3.4616649680667453
+ },
+ {
+  "task": "E3-cod-1010177-S4",
+  "parent": "cod-1010177",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Tl2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.5440755466666667,
+  "dft_release_full_ev_per_atom": 0.8027550355555557,
+  "mattersim_release_ev_per_atom": 0.3911050160725911
+ },
+ {
+  "task": "E3-cod-1010177-S5",
+  "parent": "cod-1010177",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Tl2SnCl6",
+  "dft_release_ions_ev_per_atom": 0.31424496666666674,
+  "dft_release_full_ev_per_atom": 0.5002185022222222,
+  "mattersim_release_ev_per_atom": 0.31606313917371964
+ },
+ {
+  "task": "E3-cod-1010179-P0",
+  "parent": "cod-1010179",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Rb2PbCl6",
+  "dft_release_ions_ev_per_atom": 0.0097940755555553,
+  "dft_release_full_ev_per_atom": 0.02180489111111091,
+  "mattersim_release_ev_per_atom": 0.010914908515082465
+ },
+ {
+  "task": "E3-cod-1010179-S1",
+  "parent": "cod-1010179",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Rb2PbCl6",
+  "dft_release_ions_ev_per_atom": 0.5751371055555556,
+  "dft_release_full_ev_per_atom": 1.1399751511111111,
+  "mattersim_release_ev_per_atom": 0.5515749189588759
+ },
+ {
+  "task": "E3-cod-1010179-S2",
+  "parent": "cod-1010179",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Rb2PbCl6",
+  "dft_release_ions_ev_per_atom": 0.28054281000000003,
+  "dft_release_full_ev_per_atom": 0.2876159777777778,
+  "mattersim_release_ev_per_atom": 0.23736699422200522
+ },
+ {
+  "task": "E3-cod-1010179-S3",
+  "parent": "cod-1010179",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Rb2PbCl6",
+  "dft_release_ions_ev_per_atom": 0.5807345566666666,
+  "dft_release_full_ev_per_atom": 0.5932859777777778,
+  "mattersim_release_ev_per_atom": 0.5818858676486545
+ },
+ {
+  "task": "E3-cod-1010179-S4",
+  "parent": "cod-1010179",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Rb2PbCl6",
+  "dft_release_ions_ev_per_atom": 0.4332771177777776,
+  "dft_release_full_ev_per_atom": 0.6604822311111112,
+  "mattersim_release_ev_per_atom": 0.008685006035698785
+ },
+ {
+  "task": "E3-cod-1010179-S5",
+  "parent": "cod-1010179",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Rb2PbCl6",
+  "dft_release_ions_ev_per_atom": 0.3456868255555554,
+  "dft_release_full_ev_per_atom": 0.45186065222222244,
+  "mattersim_release_ev_per_atom": 0.35111766391330296
+ },
+ {
+  "task": "E3-cod-1010180-P0",
+  "parent": "cod-1010180",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Cs2PbCl6",
+  "dft_release_ions_ev_per_atom": 0.01214780111111106,
+  "dft_release_full_ev_per_atom": 0.02686758555555555,
+  "mattersim_release_ev_per_atom": 0.012158499823676215
+ },
+ {
+  "task": "E3-cod-1010180-S1",
+  "parent": "cod-1010180",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Cs2PbCl6",
+  "dft_release_ions_ev_per_atom": 0.2764418944444446,
+  "dft_release_full_ev_per_atom": 0.7097715811111114,
+  "mattersim_release_ev_per_atom": 0.27737341986762154
+ },
+ {
+  "task": "E3-cod-1010180-S2",
+  "parent": "cod-1010180",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Cs2PbCl6",
+  "dft_release_ions_ev_per_atom": 0.4805606544444443,
+  "dft_release_full_ev_per_atom": 0.48853048333333304,
+  "mattersim_release_ev_per_atom": 0.25841119554307723
+ },
+ {
+  "task": "E3-cod-1010180-S3",
+  "parent": "cod-1010180",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Cs2PbCl6",
+  "dft_release_ions_ev_per_atom": 0.6504415711111109,
+  "dft_release_full_ev_per_atom": 0.6651644333333332,
+  "mattersim_release_ev_per_atom": 0.6417073143853081
+ },
+ {
+  "task": "E3-cod-1010180-S4",
+  "parent": "cod-1010180",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Cs2PbCl6",
+  "dft_release_ions_ev_per_atom": 0.4442593766666667,
+  "dft_release_full_ev_per_atom": 0.6671927311111112,
+  "mattersim_release_ev_per_atom": 0.022685580783420138
+ },
+ {
+  "task": "E3-cod-1010180-S5",
+  "parent": "cod-1010180",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Cs2PbCl6",
+  "dft_release_ions_ev_per_atom": 0.7838065911111111,
+  "dft_release_full_ev_per_atom": 0.798523872222222,
+  "mattersim_release_ev_per_atom": 0.7353127797444662
+ },
+ {
+  "task": "E3-cod-1010182-P0",
+  "parent": "cod-1010182",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Rb2PtCl6",
+  "dft_release_ions_ev_per_atom": 0.0014523611111110471,
+  "dft_release_full_ev_per_atom": 0.013245244444444637,
+  "mattersim_release_ev_per_atom": 0.0025497012668185765
+ },
+ {
+  "task": "E3-cod-1010182-S1",
+  "parent": "cod-1010182",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Rb2PtCl6",
+  "dft_release_ions_ev_per_atom": 0.13324154222222223,
+  "dft_release_full_ev_per_atom": 0.3297698699999998,
+  "mattersim_release_ev_per_atom": 0.14274575975206164
+ },
+ {
+  "task": "E3-cod-1010182-S2",
+  "parent": "cod-1010182",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Rb2PtCl6",
+  "dft_release_ions_ev_per_atom": 0.6403394411111112,
+  "dft_release_full_ev_per_atom": 0.6696203366666666,
+  "mattersim_release_ev_per_atom": 0.5457199944390191
+ },
+ {
+  "task": "E3-cod-1010182-S3",
+  "parent": "cod-1010182",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Rb2PtCl6",
+  "dft_release_ions_ev_per_atom": 7.123058181111111,
+  "dft_release_full_ev_per_atom": 7.248457765555555,
+  "mattersim_release_ev_per_atom": 7.701083077324761
+ },
+ {
+  "task": "E3-cod-1010182-S4",
+  "parent": "cod-1010182",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Rb2PtCl6",
+  "dft_release_ions_ev_per_atom": 0.5574287400000001,
+  "dft_release_full_ev_per_atom": 0.7235026844444445,
+  "mattersim_release_ev_per_atom": 0.5194350348578559
+ },
+ {
+  "task": "E3-cod-1010182-S5",
+  "parent": "cod-1010182",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Rb2PtCl6",
+  "dft_release_ions_ev_per_atom": 0.2393898088888887,
+  "dft_release_full_ev_per_atom": 0.341667298888889,
+  "mattersim_release_ev_per_atom": 0.20499441358778211
+ },
+ {
+  "task": "E3-cod-1010193-P0",
+  "parent": "cod-1010193",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Rb2TiCl6",
+  "dft_release_ions_ev_per_atom": 0.002183270000000132,
+  "dft_release_full_ev_per_atom": 0.012364132222221732,
+  "mattersim_release_ev_per_atom": 0.0018984476725260417
+ },
+ {
+  "task": "E3-cod-1010193-S1",
+  "parent": "cod-1010193",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Rb2TiCl6",
+  "dft_release_ions_ev_per_atom": 0.8531113233333332,
+  "dft_release_full_ev_per_atom": 1.4668972488888892,
+  "mattersim_release_ev_per_atom": 0.845585929022895
+ },
+ {
+  "task": "E3-cod-1010193-S2",
+  "parent": "cod-1010193",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Rb2TiCl6",
+  "dft_release_ions_ev_per_atom": 1.9895839788888887,
+  "dft_release_full_ev_per_atom": 2.0695541699999995,
+  "mattersim_release_ev_per_atom": 0.5280134412977431
+ },
+ {
+  "task": "E3-cod-1010193-S3",
+  "parent": "cod-1010193",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Rb2TiCl6",
+  "dft_release_ions_ev_per_atom": 0.375127024444444,
+  "dft_release_full_ev_per_atom": 0.38532534111111105,
+  "mattersim_release_ev_per_atom": 0.36867523193359375
+ },
+ {
+  "task": "E3-cod-1010193-S4",
+  "parent": "cod-1010193",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Rb2TiCl6",
+  "dft_release_ions_ev_per_atom": 0.6733906833333335,
+  "dft_release_full_ev_per_atom": 0.8740803677777779,
+  "mattersim_release_ev_per_atom": 0.7340164184570312
+ },
+ {
+  "task": "E3-cod-1010193-S5",
+  "parent": "cod-1010193",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Rb2TiCl6",
+  "dft_release_ions_ev_per_atom": 0.31487176555555546,
+  "dft_release_full_ev_per_atom": 0.4480779788888888,
+  "mattersim_release_ev_per_atom": 0.3223472171359592
+ },
+ {
+  "task": "E3-cod-1010194-P0",
+  "parent": "cod-1010194",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Cs2TiCl6",
+  "dft_release_ions_ev_per_atom": 0.0003302411111110675,
+  "dft_release_full_ev_per_atom": 0.011742146666666682,
+  "mattersim_release_ev_per_atom": 0.00023227267795138888
+ },
+ {
+  "task": "E3-cod-1010194-S1",
+  "parent": "cod-1010194",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Cs2TiCl6",
+  "dft_release_ions_ev_per_atom": 0.36452018333333314,
+  "dft_release_full_ev_per_atom": 0.793867266666667,
+  "mattersim_release_ev_per_atom": 0.3568130069308811
+ },
+ {
+  "task": "E3-cod-1010194-S2",
+  "parent": "cod-1010194",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Cs2TiCl6",
+  "dft_release_ions_ev_per_atom": 1.026436728888889,
+  "dft_release_full_ev_per_atom": 2.486006,
+  "mattersim_release_ev_per_atom": 0.6359490288628472
+ },
+ {
+  "task": "E3-cod-1010194-S3",
+  "parent": "cod-1010194",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Cs2TiCl6",
+  "dft_release_ions_ev_per_atom": 0.3777992177777776,
+  "dft_release_full_ev_per_atom": 0.38921306444444465,
+  "mattersim_release_ev_per_atom": 0.3872142367892795
+ },
+ {
+  "task": "E3-cod-1010194-S4",
+  "parent": "cod-1010194",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Cs2TiCl6",
+  "dft_release_ions_ev_per_atom": 0.5515007044444443,
+  "dft_release_full_ev_per_atom": 0.6977342355555558,
+  "mattersim_release_ev_per_atom": 0.589109844631619
+ },
+ {
+  "task": "E3-cod-1010194-S5",
+  "parent": "cod-1010194",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Cs2TiCl6",
+  "dft_release_ions_ev_per_atom": 0.37027767222222213,
+  "dft_release_full_ev_per_atom": 0.49366797222222225,
+  "mattersim_release_ev_per_atom": 0.3687795003255208
+ },
+ {
+  "task": "E3-cod-1010195-P0",
+  "parent": "cod-1010195",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Rb2ZrCl6",
+  "dft_release_ions_ev_per_atom": 0.004344385555555953,
+  "dft_release_full_ev_per_atom": 0.01120288111111102,
+  "mattersim_release_ev_per_atom": 0.006694793701171875
+ },
+ {
+  "task": "E3-cod-1010195-S1",
+  "parent": "cod-1010195",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Rb2ZrCl6",
+  "dft_release_ions_ev_per_atom": 0.3272465100000004,
+  "dft_release_full_ev_per_atom": 0.6838432488888889,
+  "mattersim_release_ev_per_atom": 0.34582477145724827
+ },
+ {
+  "task": "E3-cod-1010195-S2",
+  "parent": "cod-1010195",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Rb2ZrCl6",
+  "dft_release_ions_ev_per_atom": 0.4895991455555553,
+  "dft_release_full_ev_per_atom": 0.49329518666666655,
+  "mattersim_release_ev_per_atom": 0.32082366943359375
+ },
+ {
+  "task": "E3-cod-1010195-S3",
+  "parent": "cod-1010195",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Rb2ZrCl6",
+  "dft_release_ions_ev_per_atom": 0.8973591655555558,
+  "dft_release_full_ev_per_atom": 0.9044924722222218,
+  "mattersim_release_ev_per_atom": 0.9179195827907987
+ },
+ {
+  "task": "E3-cod-1010195-S4",
+  "parent": "cod-1010195",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Rb2ZrCl6",
+  "dft_release_ions_ev_per_atom": 0.6223816666666669,
+  "dft_release_full_ev_per_atom": 0.786629697777778,
+  "mattersim_release_ev_per_atom": 0.6654485066731771
+ },
+ {
+  "task": "E3-cod-1010195-S5",
+  "parent": "cod-1010195",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Rb2ZrCl6",
+  "dft_release_ions_ev_per_atom": 0.3698036288888886,
+  "dft_release_full_ev_per_atom": 0.49741791777777816,
+  "mattersim_release_ev_per_atom": 0.3894076877170139
+ },
+ {
+  "task": "E3-cod-1010285-P0",
+  "parent": "cod-1010285",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Cs2SiF6",
+  "dft_release_ions_ev_per_atom": 0.13737694111111173,
+  "dft_release_full_ev_per_atom": 0.14074335222222267,
+  "mattersim_release_ev_per_atom": 0.13660049438476562
+ },
+ {
+  "task": "E3-cod-1010285-S1",
+  "parent": "cod-1010285",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Cs2SiF6",
+  "dft_release_ions_ev_per_atom": 0.14577807222222264,
+  "dft_release_full_ev_per_atom": 0.2218318377777777,
+  "mattersim_release_ev_per_atom": 0.14231448703342015
+ },
+ {
+  "task": "E3-cod-1010285-S2",
+  "parent": "cod-1010285",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Cs2SiF6",
+  "dft_release_ions_ev_per_atom": 1.3527125577777777,
+  "dft_release_full_ev_per_atom": 1.3530263455555556,
+  "mattersim_release_ev_per_atom": 1.0015477074517145
+ },
+ {
+  "task": "E3-cod-1010285-S3",
+  "parent": "cod-1010285",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Cs2SiF6",
+  "dft_release_ions_ev_per_atom": 4.115229697777778,
+  "dft_release_full_ev_per_atom": 4.118599854444444,
+  "mattersim_release_ev_per_atom": 4.058029386732313
+ },
+ {
+  "task": "E3-cod-1010285-S4",
+  "parent": "cod-1010285",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Cs2SiF6",
+  "dft_release_ions_ev_per_atom": 0.943666686666667,
+  "dft_release_full_ev_per_atom": 1.1173885400000003,
+  "mattersim_release_ev_per_atom": 0.9674792819552951
+ },
+ {
+  "task": "E3-cod-1010285-S5",
+  "parent": "cod-1010285",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Cs2SiF6",
+  "dft_release_ions_ev_per_atom": 2.2914066188888893,
+  "dft_release_full_ev_per_atom": 2.2947766044444444,
+  "mattersim_release_ev_per_atom": 2.1788662804497614
+ },
+ {
+  "task": "E3-cod-1010286-P0",
+  "parent": "cod-1010286",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Cs2GeF6",
+  "dft_release_ions_ev_per_atom": 0.012200829999999977,
+  "dft_release_full_ev_per_atom": 0.015899184444444516,
+  "mattersim_release_ev_per_atom": 0.012079450819227431
+ },
+ {
+  "task": "E3-cod-1010286-S1",
+  "parent": "cod-1010286",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Cs2GeF6",
+  "dft_release_ions_ev_per_atom": 0.3056863511111108,
+  "dft_release_full_ev_per_atom": 0.3924358177777781,
+  "mattersim_release_ev_per_atom": 0.3016747368706597
+ },
+ {
+  "task": "E3-cod-1010286-S2",
+  "parent": "cod-1010286",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Cs2GeF6",
+  "dft_release_ions_ev_per_atom": 1.887918737777778,
+  "dft_release_full_ev_per_atom": 1.8902434955555552,
+  "mattersim_release_ev_per_atom": 1.5150157080756292
+ },
+ {
+  "task": "E3-cod-1010286-S3",
+  "parent": "cod-1010286",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Cs2GeF6",
+  "dft_release_ions_ev_per_atom": 6.306646300000001,
+  "dft_release_full_ev_per_atom": 6.310357368888889,
+  "mattersim_release_ev_per_atom": 6.4519608815511065
+ },
+ {
+  "task": "E3-cod-1010286-S4",
+  "parent": "cod-1010286",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Cs2GeF6",
+  "dft_release_ions_ev_per_atom": 0.42665393111111094,
+  "dft_release_full_ev_per_atom": 0.5982496866666662,
+  "mattersim_release_ev_per_atom": 0.4317474365234375
+ },
+ {
+  "task": "E3-cod-1010286-S5",
+  "parent": "cod-1010286",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Cs2GeF6",
+  "dft_release_ions_ev_per_atom": 1.6339540111111108,
+  "dft_release_full_ev_per_atom": 1.7219767455555552,
+  "mattersim_release_ev_per_atom": 1.6793513827853732
+ },
+ {
+  "task": "E3-cod-1010888-P0",
+  "parent": "cod-1010888",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "K2PdCl6",
+  "dft_release_ions_ev_per_atom": 0.0417439077777774,
+  "dft_release_full_ev_per_atom": 0.04726837666666642,
+  "mattersim_release_ev_per_atom": 0.04784923129611545
+ },
+ {
+  "task": "E3-cod-1010888-S1",
+  "parent": "cod-1010888",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "K2PdCl6",
+  "dft_release_ions_ev_per_atom": 1.0525892533333332,
+  "dft_release_full_ev_per_atom": 1.6473950766666667,
+  "mattersim_release_ev_per_atom": 1.0482018788655598
+ },
+ {
+  "task": "E3-cod-1010888-S2",
+  "parent": "cod-1010888",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "K2PdCl6",
+  "dft_release_ions_ev_per_atom": 0.6946672666666669,
+  "dft_release_full_ev_per_atom": 0.7209348911111112,
+  "mattersim_release_ev_per_atom": 0.696451399061415
+ },
+ {
+  "task": "E3-cod-1010888-S3",
+  "parent": "cod-1010888",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "K2PdCl6",
+  "dft_release_ions_ev_per_atom": 2.0271861555555555,
+  "dft_release_full_ev_per_atom": 2.0330009600000003,
+  "mattersim_release_ev_per_atom": 2.1562089920043945
+ },
+ {
+  "task": "E3-cod-1010888-S4",
+  "parent": "cod-1010888",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "K2PdCl6",
+  "dft_release_ions_ev_per_atom": 0.3011217333333332,
+  "dft_release_full_ev_per_atom": 0.4672115711111111,
+  "mattersim_release_ev_per_atom": 0.2559350331624349
+ },
+ {
+  "task": "E3-cod-1010888-S5",
+  "parent": "cod-1010888",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "K2PdCl6",
+  "dft_release_ions_ev_per_atom": 0.26557097,
+  "dft_release_full_ev_per_atom": 0.3462873344444443,
+  "mattersim_release_ev_per_atom": 0.2371944851345486
+ },
+ {
+  "task": "E3-cod-1011311-P0",
+  "parent": "cod-1011311",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "K2OsCl6",
+  "dft_release_ions_ev_per_atom": 0.002778053333333869,
+  "dft_release_full_ev_per_atom": 0.0060466933333332105,
+  "mattersim_release_ev_per_atom": 0.0022752549913194445
+ },
+ {
+  "task": "E3-cod-1011311-S1",
+  "parent": "cod-1011311",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "K2OsCl6",
+  "dft_release_ions_ev_per_atom": 0.6569570611111111,
+  "dft_release_full_ev_per_atom": 1.2049238444444446,
+  "mattersim_release_ev_per_atom": 0.6468101077609592
+ },
+ {
+  "task": "E3-cod-1011311-S2",
+  "parent": "cod-1011311",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "K2OsCl6",
+  "dft_release_ions_ev_per_atom": 0.3857241466666667,
+  "dft_release_full_ev_per_atom": 0.38647342111111116,
+  "mattersim_release_ev_per_atom": 0.2999839782714844
+ },
+ {
+  "task": "E3-cod-1011311-S3",
+  "parent": "cod-1011311",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "K2OsCl6",
+  "dft_release_ions_ev_per_atom": 6.381937968888888,
+  "dft_release_full_ev_per_atom": 6.3852235111111115,
+  "mattersim_release_ev_per_atom": 6.444363064236111
+ },
+ {
+  "task": "E3-cod-1011311-S4",
+  "parent": "cod-1011311",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "K2OsCl6",
+  "dft_release_ions_ev_per_atom": 0.6228958833333336,
+  "dft_release_full_ev_per_atom": 0.7910361633333333,
+  "mattersim_release_ev_per_atom": 0.5860392252604166
+ },
+ {
+  "task": "E3-cod-1011311-S5",
+  "parent": "cod-1011311",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "K2OsCl6",
+  "dft_release_ions_ev_per_atom": 1.356612245555556,
+  "dft_release_full_ev_per_atom": 1.3598834922222223,
+  "mattersim_release_ev_per_atom": 1.313617918226454
+ },
+ {
+  "task": "E3-cod-1011312-P0",
+  "parent": "cod-1011312",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "K2OsBr6",
+  "dft_release_ions_ev_per_atom": 0.0012296533333334815,
+  "dft_release_full_ev_per_atom": 0.0041242911111112335,
+  "mattersim_release_ev_per_atom": 0.0010937584771050347
+ },
+ {
+  "task": "E3-cod-1011312-S1",
+  "parent": "cod-1011312",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "K2OsBr6",
+  "dft_release_ions_ev_per_atom": 0.10005110333333336,
+  "dft_release_full_ev_per_atom": 0.2822662255555556,
+  "mattersim_release_ev_per_atom": 0.07812054951985677
+ },
+ {
+  "task": "E3-cod-1011312-S2",
+  "parent": "cod-1011312",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "K2OsBr6",
+  "dft_release_ions_ev_per_atom": 0.3402420033333333,
+  "dft_release_full_ev_per_atom": 0.3423621944444444,
+  "mattersim_release_ev_per_atom": 0.28509436713324654
+ },
+ {
+  "task": "E3-cod-1011312-S3",
+  "parent": "cod-1011312",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "K2OsBr6",
+  "dft_release_ions_ev_per_atom": 1.579073231111111,
+  "dft_release_full_ev_per_atom": 1.582036672222222,
+  "mattersim_release_ev_per_atom": 1.5662682851155598
+ },
+ {
+  "task": "E3-cod-1011312-S4",
+  "parent": "cod-1011312",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "K2OsBr6",
+  "dft_release_ions_ev_per_atom": 0.6929810355555553,
+  "dft_release_full_ev_per_atom": 0.91093176,
+  "mattersim_release_ev_per_atom": 0.8490734100341797
+ },
+ {
+  "task": "E3-cod-1011312-S5",
+  "parent": "cod-1011312",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "K2OsBr6",
+  "dft_release_ions_ev_per_atom": 0.10577238777777767,
+  "dft_release_full_ev_per_atom": 0.21360176999999997,
+  "mattersim_release_ev_per_atom": 0.14856931898328993
+ },
+ {
+  "task": "E3-cod-1100971-P0",
+  "parent": "cod-1100971",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "MnVCuO4",
+  "dft_release_ions_ev_per_atom": 0.014268820000000102,
+  "dft_release_full_ev_per_atom": 0.015837582857143064,
+  "mattersim_release_ev_per_atom": 0.015616280691964286
+ },
+ {
+  "task": "E3-cod-1100971-S1",
+  "parent": "cod-1100971",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "MnVCuO4",
+  "dft_release_ions_ev_per_atom": 1.5472896471428572,
+  "dft_release_full_ev_per_atom": 2.0252391028571424,
+  "mattersim_release_ev_per_atom": 1.4460574558803014
+ },
+ {
+  "task": "E3-cod-1100971-S2",
+  "parent": "cod-1100971",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "MnVCuO4",
+  "dft_release_ions_ev_per_atom": 0.3165429799999992,
+  "dft_release_full_ev_per_atom": 0.3233129592857133,
+  "mattersim_release_ev_per_atom": 0.22459847586495535
+ },
+ {
+  "task": "E3-cod-1100971-S3",
+  "parent": "cod-1100971",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "MnVCuO4",
+  "dft_release_ions_ev_per_atom": 5.531886425714285,
+  "dft_release_full_ev_per_atom": 5.579870359285715,
+  "mattersim_release_ev_per_atom": 5.90770639692034
+ },
+ {
+  "task": "E3-cod-1100971-S4",
+  "parent": "cod-1100971",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "MnVCuO4",
+  "dft_release_ions_ev_per_atom": 1.1870665214285714,
+  "dft_release_full_ev_per_atom": 1.6872932778571428,
+  "mattersim_release_ev_per_atom": 1.030184609549386
+ },
+ {
+  "task": "E3-cod-1100971-S5",
+  "parent": "cod-1100971",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "MnVCuO4",
+  "dft_release_ions_ev_per_atom": 0.9640732035714288,
+  "dft_release_full_ev_per_atom": 0.9745247164285716,
+  "mattersim_release_ev_per_atom": 0.6918694632393974
+ },
+ {
+  "task": "E3-cod-1501467-P0",
+  "parent": "cod-1501467",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "KTcO4",
+  "dft_release_ions_ev_per_atom": 0.0003585999999996166,
+  "dft_release_full_ev_per_atom": 0.00498390916666717,
+  "mattersim_release_ev_per_atom": 0.0049444834391276045
+ },
+ {
+  "task": "E3-cod-1501467-S1",
+  "parent": "cod-1501467",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "KTcO4",
+  "dft_release_ions_ev_per_atom": 0.3662263766666669,
+  "dft_release_full_ev_per_atom": 0.5306988591666659,
+  "mattersim_release_ev_per_atom": 0.5176041920979818
+ },
+ {
+  "task": "E3-cod-1501467-S2",
+  "parent": "cod-1501467",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "KTcO4",
+  "dft_release_ions_ev_per_atom": 2.3939679991666662,
+  "dft_release_full_ev_per_atom": 2.398584845833333,
+  "mattersim_release_ev_per_atom": 2.2723601659139
+ },
+ {
+  "task": "E3-cod-1501467-S3",
+  "parent": "cod-1501467",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "KTcO4",
+  "dft_release_ions_ev_per_atom": 4.7390640500000005,
+  "dft_release_full_ev_per_atom": 4.800902254166667,
+  "mattersim_release_ev_per_atom": 5.0629927317301435
+ },
+ {
+  "task": "E3-cod-1501467-S4",
+  "parent": "cod-1501467",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "KTcO4",
+  "dft_release_ions_ev_per_atom": 0.002403614999999822,
+  "dft_release_full_ev_per_atom": 0.14823570666666677,
+  "mattersim_release_ev_per_atom": 1.0135911305745442
+ },
+ {
+  "task": "E3-cod-1501467-S5",
+  "parent": "cod-1501467",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "KTcO4",
+  "dft_release_ions_ev_per_atom": 1.5650502625000005,
+  "dft_release_full_ev_per_atom": 1.6520814308333331,
+  "mattersim_release_ev_per_atom": 1.492953618367513
+ },
+ {
+  "task": "E3-cod-1507759-P0",
+  "parent": "cod-1507759",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "MnNbF6",
+  "dft_release_ions_ev_per_atom": 0.017816325000000077,
+  "dft_release_full_ev_per_atom": 0.022614221249999567,
+  "mattersim_release_ev_per_atom": 0.014172077178955078
+ },
+ {
+  "task": "E3-cod-1507759-S1",
+  "parent": "cod-1507759",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "MnNbF6",
+  "dft_release_ions_ev_per_atom": 0.3983837000000001,
+  "dft_release_full_ev_per_atom": 0.4983854574999995,
+  "mattersim_release_ev_per_atom": 0.41295909881591797
+ },
+ {
+  "task": "E3-cod-1507759-S2",
+  "parent": "cod-1507759",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "MnNbF6",
+  "dft_release_ions_ev_per_atom": 0.10840651375000032,
+  "dft_release_full_ev_per_atom": 0.10952557999999968,
+  "mattersim_release_ev_per_atom": 0.122528076171875
+ },
+ {
+  "task": "E3-cod-1507759-S3",
+  "parent": "cod-1507759",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "MnNbF6",
+  "dft_release_ions_ev_per_atom": 8.89805746875,
+  "dft_release_full_ev_per_atom": 8.9145602,
+  "mattersim_release_ev_per_atom": 9.15031623840332
+ },
+ {
+  "task": "E3-cod-1507759-S4",
+  "parent": "cod-1507759",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "MnNbF6",
+  "dft_release_ions_ev_per_atom": 0.6883949987499998,
+  "dft_release_full_ev_per_atom": 0.7505244149999992,
+  "mattersim_release_ev_per_atom": 0.6798796653747559
+ },
+ {
+  "task": "E3-cod-1507759-S5",
+  "parent": "cod-1507759",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "MnNbF6",
+  "dft_release_ions_ev_per_atom": 1.2535083125000002,
+  "dft_release_full_ev_per_atom": 1.25826442375,
+  "mattersim_release_ev_per_atom": 1.1584148406982422
+ },
+ {
+  "task": "E3-cod-1507767-P0",
+  "parent": "cod-1507767",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "NaAlF4",
+  "dft_release_ions_ev_per_atom": 0.02069714333333413,
+  "dft_release_full_ev_per_atom": 0.026411223333333567,
+  "mattersim_release_ev_per_atom": 0.020444234212239582
+ },
+ {
+  "task": "E3-cod-1507767-S1",
+  "parent": "cod-1507767",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "NaAlF4",
+  "dft_release_ions_ev_per_atom": 0.27799890166666624,
+  "dft_release_full_ev_per_atom": 0.49188077833333327,
+  "mattersim_release_ev_per_atom": 0.2783966064453125
+ },
+ {
+  "task": "E3-cod-1507767-S2",
+  "parent": "cod-1507767",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "NaAlF4",
+  "dft_release_ions_ev_per_atom": 0.9173884558333333,
+  "dft_release_full_ev_per_atom": 0.9316558341666662,
+  "mattersim_release_ev_per_atom": 0.5423603057861328
+ },
+ {
+  "task": "E3-cod-1507767-S3",
+  "parent": "cod-1507767",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "NaAlF4",
+  "dft_release_ions_ev_per_atom": 5.240058295833333,
+  "dft_release_full_ev_per_atom": 5.245695586666667,
+  "mattersim_release_ev_per_atom": 4.756098588307698
+ },
+ {
+  "task": "E3-cod-1507767-S4",
+  "parent": "cod-1507767",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "NaAlF4",
+  "dft_release_ions_ev_per_atom": 1.373716975,
+  "dft_release_full_ev_per_atom": 1.4449887666666665,
+  "mattersim_release_ev_per_atom": 1.3733253479003906
+ },
+ {
+  "task": "E3-cod-1507767-S5",
+  "parent": "cod-1507767",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "NaAlF4",
+  "dft_release_ions_ev_per_atom": 2.523484814166667,
+  "dft_release_full_ev_per_atom": 2.5527921516666665,
+  "mattersim_release_ev_per_atom": 2.455035845438639
+ },
+ {
+  "task": "E3-cod-1509200-P0",
+  "parent": "cod-1509200",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "AgAsSe2",
+  "dft_release_ions_ev_per_atom": 0.014035097499999871,
+  "dft_release_full_ev_per_atom": 0.02033371000000006,
+  "mattersim_release_ev_per_atom": 0.013350248336791992
+ },
+ {
+  "task": "E3-cod-1509200-S1",
+  "parent": "cod-1509200",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "AgAsSe2",
+  "dft_release_ions_ev_per_atom": 0.07737714499999981,
+  "dft_release_full_ev_per_atom": 0.52095936,
+  "mattersim_release_ev_per_atom": 0.07157301902770996
+ },
+ {
+  "task": "E3-cod-1509200-S2",
+  "parent": "cod-1509200",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "AgAsSe2",
+  "dft_release_ions_ev_per_atom": 0.14568643999999997,
+  "dft_release_full_ev_per_atom": 0.1519855849999998,
+  "mattersim_release_ev_per_atom": 0.14202451705932617
+ },
+ {
+  "task": "E3-cod-1509200-S3",
+  "parent": "cod-1509200",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "AgAsSe2",
+  "dft_release_ions_ev_per_atom": 5.805337175,
+  "dft_release_full_ev_per_atom": 5.811447230000001,
+  "mattersim_release_ev_per_atom": 5.856018781661987
+ },
+ {
+  "task": "E3-cod-1509200-S4",
+  "parent": "cod-1509200",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "AgAsSe2",
+  "dft_release_ions_ev_per_atom": 0.5579885550000001,
+  "dft_release_full_ev_per_atom": 1.8111331575,
+  "mattersim_release_ev_per_atom": 0.756285548210144
+ },
+ {
+  "task": "E3-cod-1509200-S5",
+  "parent": "cod-1509200",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "AgAsSe2",
+  "dft_release_ions_ev_per_atom": 0.05156164749999981,
+  "dft_release_full_ev_per_atom": 0.06062976250000007,
+  "mattersim_release_ev_per_atom": 0.08396053314208984
+ },
+ {
+  "task": "E3-cod-1509211-P0",
+  "parent": "cod-1509211",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "AgBF5",
+  "dft_release_ions_ev_per_atom": 0.008220862142857348,
+  "dft_release_full_ev_per_atom": 0.013275911428571874,
+  "mattersim_release_ev_per_atom": 0.007375444684709821
+ },
+ {
+  "task": "E3-cod-1509211-S1",
+  "parent": "cod-1509211",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "AgBF5",
+  "dft_release_ions_ev_per_atom": 1.175898849285714,
+  "dft_release_full_ev_per_atom": 1.3355016814285712,
+  "mattersim_release_ev_per_atom": 1.3747307913643974
+ },
+ {
+  "task": "E3-cod-1509211-S2",
+  "parent": "cod-1509211",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "AgBF5",
+  "dft_release_ions_ev_per_atom": 3.5270653785714283,
+  "dft_release_full_ev_per_atom": 3.5405371528571434,
+  "mattersim_release_ev_per_atom": 3.783066749572754
+ },
+ {
+  "task": "E3-cod-1509211-S3",
+  "parent": "cod-1509211",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "AgBF5",
+  "dft_release_ions_ev_per_atom": 3.009445932142857,
+  "dft_release_full_ev_per_atom": 3.0313075292857143,
+  "mattersim_release_ev_per_atom": 3.173439162118094
+ },
+ {
+  "task": "E3-cod-1509211-S4",
+  "parent": "cod-1509211",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "AgBF5",
+  "dft_release_ions_ev_per_atom": 0.9684489449999997,
+  "dft_release_full_ev_per_atom": 1.3509029249999998,
+  "mattersim_release_ev_per_atom": 0.9448263985770089
+ },
+ {
+  "task": "E3-cod-1509211-S5",
+  "parent": "cod-1509211",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "AgBF5",
+  "dft_release_ions_ev_per_atom": 0.879635607142857,
+  "dft_release_full_ev_per_atom": 0.9528452485714293,
+  "mattersim_release_ev_per_atom": 0.9201572963169643
+ },
+ {
+  "task": "E3-cod-1509226-P0",
+  "parent": "cod-1509226",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "BaYAgTe3",
+  "dft_release_ions_ev_per_atom": 0.0010371749999998532,
+  "dft_release_full_ev_per_atom": 0.010497279999999757,
+  "mattersim_release_ev_per_atom": 0.001868883768717448
+ },
+ {
+  "task": "E3-cod-1509226-S1",
+  "parent": "cod-1509226",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "BaYAgTe3",
+  "dft_release_ions_ev_per_atom": 0.12199237083333318,
+  "dft_release_full_ev_per_atom": 0.6912216574999999,
+  "mattersim_release_ev_per_atom": 0.11193529764811198
+ },
+ {
+  "task": "E3-cod-1509226-S2",
+  "parent": "cod-1509226",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "BaYAgTe3",
+  "dft_release_ions_ev_per_atom": 0.2826038133333337,
+  "dft_release_full_ev_per_atom": 0.43207806666666687,
+  "mattersim_release_ev_per_atom": 0.24425506591796875
+ },
+ {
+  "task": "E3-cod-1509226-S3",
+  "parent": "cod-1509226",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "BaYAgTe3",
+  "dft_release_ions_ev_per_atom": 2.165325425,
+  "dft_release_full_ev_per_atom": 2.1747846508333333,
+  "mattersim_release_ev_per_atom": 2.2211290995279946
+ },
+ {
+  "task": "E3-cod-1509226-S4",
+  "parent": "cod-1509226",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "BaYAgTe3",
+  "dft_release_ions_ev_per_atom": 0.5862784824999997,
+  "dft_release_full_ev_per_atom": 0.907230573333333,
+  "mattersim_release_ev_per_atom": 0.30685965220133465
+ },
+ {
+  "task": "E3-cod-1509226-S5",
+  "parent": "cod-1509226",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "BaYAgTe3",
+  "dft_release_ions_ev_per_atom": 0.42008403583333376,
+  "dft_release_full_ev_per_atom": 0.45283657500000035,
+  "mattersim_release_ev_per_atom": 0.37866751352945965
+ },
+ {
+  "task": "E3-cod-1509232-P0",
+  "parent": "cod-1509232",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "AlAgO2",
+  "dft_release_ions_ev_per_atom": 0.0,
+  "dft_release_full_ev_per_atom": 0.003678886250000346,
+  "mattersim_release_ev_per_atom": 0.0002903938293457031
+ },
+ {
+  "task": "E3-cod-1509232-S1",
+  "parent": "cod-1509232",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "AlAgO2",
+  "dft_release_ions_ev_per_atom": 0.09607589250000004,
+  "dft_release_full_ev_per_atom": 0.8239309712500003,
+  "mattersim_release_ev_per_atom": 0.12217378616333008
+ },
+ {
+  "task": "E3-cod-1509232-S2",
+  "parent": "cod-1509232",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "AlAgO2",
+  "dft_release_ions_ev_per_atom": 0.31301005375000024,
+  "dft_release_full_ev_per_atom": 0.37805511250000023,
+  "mattersim_release_ev_per_atom": 0.3591032028198242
+ },
+ {
+  "task": "E3-cod-1509232-S3",
+  "parent": "cod-1509232",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "AlAgO2",
+  "dft_release_ions_ev_per_atom": 3.4500904475000005,
+  "dft_release_full_ev_per_atom": 3.4537709687500002,
+  "mattersim_release_ev_per_atom": 3.532621383666992
+ },
+ {
+  "task": "E3-cod-1509232-S4",
+  "parent": "cod-1509232",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "AlAgO2",
+  "dft_release_ions_ev_per_atom": 0.1457208187500001,
+  "dft_release_full_ev_per_atom": 1.6880462187499994,
+  "mattersim_release_ev_per_atom": 0.16029596328735352
+ },
+ {
+  "task": "E3-cod-1509232-S5",
+  "parent": "cod-1509232",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "AlAgO2",
+  "dft_release_ions_ev_per_atom": 1.0557042599999997,
+  "dft_release_full_ev_per_atom": 1.3528234062499997,
+  "mattersim_release_ev_per_atom": 0.9785645008087158
+ },
+ {
+  "task": "E3-cod-1509271-P0",
+  "parent": "cod-1509271",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "CrAgSe2",
+  "dft_release_ions_ev_per_atom": 0.16491342500000084,
+  "dft_release_full_ev_per_atom": 0.379477015,
+  "mattersim_release_ev_per_atom": 0.15172386169433594
+ },
+ {
+  "task": "E3-cod-1509271-S1",
+  "parent": "cod-1509271",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "CrAgSe2",
+  "dft_release_ions_ev_per_atom": 0.8120191999999995,
+  "dft_release_full_ev_per_atom": 1.2552830699999995,
+  "mattersim_release_ev_per_atom": 0.876258134841919
+ },
+ {
+  "task": "E3-cod-1509271-S2",
+  "parent": "cod-1509271",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "CrAgSe2",
+  "dft_release_ions_ev_per_atom": 0.3326897649999996,
+  "dft_release_full_ev_per_atom": 0.41623137749999994,
+  "mattersim_release_ev_per_atom": 0.3222923278808594
+ },
+ {
+  "task": "E3-cod-1509271-S3",
+  "parent": "cod-1509271",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "CrAgSe2",
+  "dft_release_ions_ev_per_atom": 5.939590347499999,
+  "dft_release_full_ev_per_atom": 5.943663947499999,
+  "mattersim_release_ev_per_atom": 5.866080462932587
+ },
+ {
+  "task": "E3-cod-1509271-S4",
+  "parent": "cod-1509271",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "CrAgSe2",
+  "dft_release_ions_ev_per_atom": 1.1540284174999997,
+  "dft_release_full_ev_per_atom": 1.3032730725000001,
+  "mattersim_release_ev_per_atom": 0.8333451747894287
+ },
+ {
+  "task": "E3-cod-1509271-S5",
+  "parent": "cod-1509271",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "CrAgSe2",
+  "dft_release_ions_ev_per_atom": 0.5537463900000001,
+  "dft_release_full_ev_per_atom": 1.0406850874999996,
+  "mattersim_release_ev_per_atom": 0.5051636695861816
+ },
+ {
+  "task": "E3-cod-1509274-P0",
+  "parent": "cod-1509274",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Cr2AgTe4",
+  "dft_release_ions_ev_per_atom": 0.00024163214285672602,
+  "dft_release_full_ev_per_atom": 0.005138139285714415,
+  "mattersim_release_ev_per_atom": 0.0
+ },
+ {
+  "task": "E3-cod-1509274-S1",
+  "parent": "cod-1509274",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Cr2AgTe4",
+  "dft_release_ions_ev_per_atom": 0.28102422785714254,
+  "dft_release_full_ev_per_atom": 0.6502470707142857,
+  "mattersim_release_ev_per_atom": 0.3007559095110212
+ },
+ {
+  "task": "E3-cod-1509274-S2",
+  "parent": "cod-1509274",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Cr2AgTe4",
+  "dft_release_ions_ev_per_atom": 0.03146009571428517,
+  "dft_release_full_ev_per_atom": 0.044131122142856735,
+  "mattersim_release_ev_per_atom": 0.024211883544921875
+ },
+ {
+  "task": "E3-cod-1509274-S3",
+  "parent": "cod-1509274",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Cr2AgTe4",
+  "dft_release_ions_ev_per_atom": 1.1526187049999999,
+  "dft_release_full_ev_per_atom": 1.1809564428571429,
+  "mattersim_release_ev_per_atom": 1.1648783002580916
+ },
+ {
+  "task": "E3-cod-1509274-S4",
+  "parent": "cod-1509274",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Cr2AgTe4",
+  "dft_release_ions_ev_per_atom": 0.2212122742857144,
+  "dft_release_full_ev_per_atom": 1.2471435742857149,
+  "mattersim_release_ev_per_atom": 0.317577634538923
+ },
+ {
+  "task": "E3-cod-1509274-S5",
+  "parent": "cod-1509274",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Cr2AgTe4",
+  "dft_release_ions_ev_per_atom": 0.16981526785714302,
+  "dft_release_full_ev_per_atom": 0.2014619371428574,
+  "mattersim_release_ev_per_atom": 0.09269060407366071
+ },
+ {
+  "task": "E3-cod-1509284-P0",
+  "parent": "cod-1509284",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Cs2AgF4",
+  "dft_release_ions_ev_per_atom": 0.0023081871428572193,
+  "dft_release_full_ev_per_atom": 0.006388284285714109,
+  "mattersim_release_ev_per_atom": 0.0026152474539620535
+ },
+ {
+  "task": "E3-cod-1509284-S1",
+  "parent": "cod-1509284",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Cs2AgF4",
+  "dft_release_ions_ev_per_atom": 0.11972779999999972,
+  "dft_release_full_ev_per_atom": 0.7708278299999998,
+  "mattersim_release_ev_per_atom": 0.4503558022635324
+ },
+ {
+  "task": "E3-cod-1509284-S2",
+  "parent": "cod-1509284",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Cs2AgF4",
+  "dft_release_ions_ev_per_atom": 0.5830063271428573,
+  "dft_release_full_ev_per_atom": 0.6178125628571429,
+  "mattersim_release_ev_per_atom": 0.5142612457275391
+ },
+ {
+  "task": "E3-cod-1509284-S3",
+  "parent": "cod-1509284",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Cs2AgF4",
+  "dft_release_ions_ev_per_atom": 0.29498253142857117,
+  "dft_release_full_ev_per_atom": 0.2990755542857139,
+  "mattersim_release_ev_per_atom": 0.3005234854561942
+ },
+ {
+  "task": "E3-cod-1509284-S4",
+  "parent": "cod-1509284",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Cs2AgF4",
+  "dft_release_ions_ev_per_atom": 0.32841791857142866,
+  "dft_release_full_ev_per_atom": 0.7858342814285716,
+  "mattersim_release_ev_per_atom": 0.2677563258579799
+ },
+ {
+  "task": "E3-cod-1509284-S5",
+  "parent": "cod-1509284",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Cs2AgF4",
+  "dft_release_ions_ev_per_atom": 0.9220677014285715,
+  "dft_release_full_ev_per_atom": 0.9568717871428574,
+  "mattersim_release_ev_per_atom": 0.9486778804234096
+ },
+ {
+  "task": "E3-cod-1509287-P0",
+  "parent": "cod-1509287",
+  "kind": "experimental",
+  "variant": "P0",
+  "formula": "Cs2VAgS4",
+  "dft_release_ions_ev_per_atom": 0.00020272562500078806,
+  "dft_release_full_ev_per_atom": 0.005566665625000411,
+  "mattersim_release_ev_per_atom": 0.00025844573974609375
+ },
+ {
+  "task": "E3-cod-1509287-S1",
+  "parent": "cod-1509287",
+  "kind": "experimental",
+  "variant": "S1",
+  "formula": "Cs2VAgS4",
+  "dft_release_ions_ev_per_atom": 0.12163644125000062,
+  "dft_release_full_ev_per_atom": 0.23982289500000054,
+  "mattersim_release_ev_per_atom": 0.11295795440673828
+ },
+ {
+  "task": "E3-cod-1509287-S2",
+  "parent": "cod-1509287",
+  "kind": "experimental",
+  "variant": "S2",
+  "formula": "Cs2VAgS4",
+  "dft_release_ions_ev_per_atom": 1.3844979718750001,
+  "dft_release_full_ev_per_atom": 1.4108766249999998,
+  "mattersim_release_ev_per_atom": 1.2064359188079834
+ },
+ {
+  "task": "E3-cod-1509287-S3",
+  "parent": "cod-1509287",
+  "kind": "experimental",
+  "variant": "S3",
+  "formula": "Cs2VAgS4",
+  "dft_release_ions_ev_per_atom": 5.353340264374999,
+  "dft_release_full_ev_per_atom": 5.456251039374999,
+  "mattersim_release_ev_per_atom": 5.448129057884216
+ },
+ {
+  "task": "E3-cod-1509287-S4",
+  "parent": "cod-1509287",
+  "kind": "experimental",
+  "variant": "S4",
+  "formula": "Cs2VAgS4",
+  "dft_release_ions_ev_per_atom": 1.0938859481250005,
+  "dft_release_full_ev_per_atom": 1.3418708406250004,
+  "mattersim_release_ev_per_atom": 0.8595094680786133
+ },
+ {
+  "task": "E3-cod-1509287-S5",
+  "parent": "cod-1509287",
+  "kind": "experimental",
+  "variant": "S5",
+  "formula": "Cs2VAgS4",
+  "dft_release_ions_ev_per_atom": 0.6181092406250004,
+  "dft_release_full_ev_per_atom": 0.6271117825000001,
+  "mattersim_release_ev_per_atom": 0.5974698066711426
+ },
+ {
+  "task": "E3-gnome-01905f78c6",
+  "parent": "01905f78c6",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "Hf4Si4RuRhAu2",
+  "dft_release_ions_ev_per_atom": 3.164499999996906e-05,
+  "dft_release_full_ev_per_atom": 0.00047036666666618504,
+  "mattersim_release_ev_per_atom": 0.0020472208658854165
+ },
+ {
+  "task": "E3-gnome-028fb5bb24",
+  "parent": "028fb5bb24",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "DyY3(CdGa2)2",
+  "dft_release_ions_ev_per_atom": 1.5594999999990478e-05,
+  "dft_release_full_ev_per_atom": 7.982500000025539e-05,
+  "mattersim_release_ev_per_atom": 1.10626220703125e-05
+ },
+ {
+  "task": "E3-gnome-0466bbe21f",
+  "parent": "0466bbe21f",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "LaPr(Al4Co)2",
+  "dft_release_ions_ev_per_atom": 0.00016150166666702623,
+  "dft_release_full_ev_per_atom": 0.00021722833333370772,
+  "mattersim_release_ev_per_atom": 3.7829081217447914e-05
+ },
+ {
+  "task": "E3-gnome-085d6ee4f8",
+  "parent": "085d6ee4f8",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "Tb2ThPt9",
+  "dft_release_ions_ev_per_atom": 6.237833333363103e-05,
+  "dft_release_full_ev_per_atom": 0.0011595416666665415,
+  "mattersim_release_ev_per_atom": 0.0006682078043619791
+ },
+ {
+  "task": "E3-gnome-08ffff2afe",
+  "parent": "08ffff2afe",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "Th2CoSi(PIr)3",
+  "dft_release_ions_ev_per_atom": 4.8169999999458923e-05,
+  "dft_release_full_ev_per_atom": 0.0001189569999993978,
+  "mattersim_release_ev_per_atom": 0.0012908935546875
+ },
+ {
+  "task": "E3-gnome-11c1970495",
+  "parent": "11c1970495",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "ThCdPRuPt",
+  "dft_release_ions_ev_per_atom": 0.00014501299999949424,
+  "dft_release_full_ev_per_atom": 0.0003028199999988601,
+  "mattersim_release_ev_per_atom": 0.000887298583984375
+ },
+ {
+  "task": "E3-gnome-16185cb132",
+  "parent": "16185cb132",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "Ti2AlW2C3",
+  "dft_release_ions_ev_per_atom": 1.0065000001446833e-05,
+  "dft_release_full_ev_per_atom": 3.845062500040797e-05,
+  "mattersim_release_ev_per_atom": 0.0057048797607421875
+ },
+ {
+  "task": "E3-gnome-195425d136",
+  "parent": "195425d136",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "CaPmCdIn",
+  "dft_release_ions_ev_per_atom": 0.0,
+  "dft_release_full_ev_per_atom": 0.0,
+  "mattersim_release_ev_per_atom": 0.0
+ },
+ {
+  "task": "E3-gnome-1c2831771d",
+  "parent": "1c2831771d",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "Dy9Y3(TcIr)2",
+  "dft_release_ions_ev_per_atom": 0.00037821437499996335,
+  "dft_release_full_ev_per_atom": 0.0004539081250003463,
+  "mattersim_release_ev_per_atom": 0.0020895004272460938
+ },
+ {
+  "task": "E3-gnome-2190cc44da",
+  "parent": "2190cc44da",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "Tb9Y3(OsRh)2",
+  "dft_release_ions_ev_per_atom": 0.00016752062500025033,
+  "dft_release_full_ev_per_atom": 0.0008097656250001251,
+  "mattersim_release_ev_per_atom": 0.0024499893188476562
+ },
+ {
+  "task": "E3-gnome-2245563081",
+  "parent": "2245563081",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "ScFeCoMoP2",
+  "dft_release_ions_ev_per_atom": 0.00010747250000046431,
+  "dft_release_full_ev_per_atom": 0.00020855916666680704,
+  "mattersim_release_ev_per_atom": 0.0015551249186197917
+ },
+ {
+  "task": "E3-gnome-2446f0e8d9",
+  "parent": "2446f0e8d9",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "DyHo3(TmSn)6",
+  "dft_release_ions_ev_per_atom": 8.907125000057192e-05,
+  "dft_release_full_ev_per_atom": 0.00017961125000010014,
+  "mattersim_release_ev_per_atom": 0.0003933906555175781
+ },
+ {
+  "task": "E3-gnome-246bffd300",
+  "parent": "246bffd300",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "ThNp(TeAs)2",
+  "dft_release_ions_ev_per_atom": 0.00732972833333297,
+  "dft_release_full_ev_per_atom": 0.007577189999999234,
+  "mattersim_release_ev_per_atom": 0.00022379557291666666
+ },
+ {
+  "task": "E3-gnome-24dfbfa4b6",
+  "parent": "24dfbfa4b6",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "HoEr2MgCd2Au3",
+  "dft_release_ions_ev_per_atom": 0.0006928322222224084,
+  "dft_release_full_ev_per_atom": 0.005275773333333215,
+  "mattersim_release_ev_per_atom": 0.00045691596137152775
+ },
+ {
+  "task": "E3-gnome-25c316ed15",
+  "parent": "25c316ed15",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "La3TbNi2(AsSe)2",
+  "dft_release_ions_ev_per_atom": 0.0001098649999995871,
+  "dft_release_full_ev_per_atom": 0.00014681599999946115,
+  "mattersim_release_ev_per_atom": 0.0016422271728515625
+ },
+ {
+  "task": "E3-gnome-2afa0c9849",
+  "parent": "2afa0c9849",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "CoB2MoW",
+  "dft_release_ions_ev_per_atom": 9.287600000078556e-05,
+  "dft_release_full_ev_per_atom": 0.0007119060000007948,
+  "mattersim_release_ev_per_atom": 4.425048828125e-05
+ },
+ {
+  "task": "E3-gnome-2ca382138b",
+  "parent": "2ca382138b",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "Tb2ThSc2AlRh3",
+  "dft_release_ions_ev_per_atom": 0.0001413355555557574,
+  "dft_release_full_ev_per_atom": 0.00045087666666729674,
+  "mattersim_release_ev_per_atom": 0.0037133958604600695
+ },
+ {
+  "task": "E3-gnome-2ce4cf96b0",
+  "parent": "2ce4cf96b0",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "Ho3Mg2ZnGa2Hg",
+  "dft_release_ions_ev_per_atom": 3.840999999995789e-05,
+  "dft_release_full_ev_per_atom": 0.0002757866666666726,
+  "mattersim_release_ev_per_atom": 0.0005514356825086805
+ },
+ {
+  "task": "E3-gnome-2f7949e9f9",
+  "parent": "2f7949e9f9",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "Ce4Pr3Nd3Ru4",
+  "dft_release_ions_ev_per_atom": 0.0006670057142861603,
+  "dft_release_full_ev_per_atom": 0.0010042600000009624,
+  "mattersim_release_ev_per_atom": 0.0086212158203125
+ },
+ {
+  "task": "E3-gnome-312167ea8b",
+  "parent": "312167ea8b",
+  "kind": "gnome",
+  "variant": "P0",
+  "formula": "Sc6As5Se",
+  "dft_release_ions_ev_per_atom": 0.00016092000000019388,
+  "dft_release_full_ev_per_atom": 0.0004153533333332386,
+  "mattersim_release_ev_per_atom": 8.7738037109375e-05
+ }
+]

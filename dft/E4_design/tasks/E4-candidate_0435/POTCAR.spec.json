@@ -1,0 +1,37 @@
+{
+ "order": [
+  {
+   "element": "Ir",
+   "symbol": "Ir",
+   "title": "PAW_PBE Ir 06Sep2000",
+   "enmax_ev": 210.864,
+   "rcore_a": 1.3759,
+   "sha256": "7c6af8d4d487b237782eb51e6f62977b27a1da78c3c96acd1cebefd6c308f120",
+   "library_relative": "Ir/POTCAR"
+  },
+  {
+   "element": "Ru",
+   "symbol": "Ru_pv",
+   "title": "PAW_PBE Ru_pv 28Jan2005",
+   "enmax_ev": 240.049,
+   "rcore_a": 1.3229,
+   "sha256": "539bee49bb4e63d8933d8244c4f66bec34c4e5cbe2759ec5d366ad1017752494",
+   "library_relative": "Ru_pv/POTCAR"
+  },
+  {
+   "element": "Rh",
+   "symbol": "Rh_pv",
+   "title": "PAW_PBE Rh_pv 25Jan2005",
+   "enmax_ev": 247.408,
+   "rcore_a": 1.27,
+   "sha256": "25b11608b0d10a93adcc8487bc062d7eb8aeda443ca523c31dcc1b5e75119ef1",
+   "library_relative": "Rh_pv/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "Ir",
+  "Ru",
+  "Rh"
+ ]
+}

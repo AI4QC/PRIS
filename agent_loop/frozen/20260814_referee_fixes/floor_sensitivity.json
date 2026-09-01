@@ -1,0 +1,343 @@
+{
+ "note": "Discovery-only rerun of the frozen greedy of src/l4_search.py (same candidate pool from discovery real rows, same gain rule: max 4 steps, min exclusion gain 0.005) at varying satisfaction floors. The published L4 used floor 0.81. Frozen predicates: D7 = wyckoff_econ_001 <= 2/3, D8 = bv_rel_mean <= 0.714304.",
+ "frozen_D7": [
+  "wyckoff_econ_001",
+  "le",
+  0.6666666666666666,
+  null
+ ],
+ "frozen_D8": [
+  "bv_rel_mean",
+  "le",
+  0.7143040821865658,
+  null
+ ],
+ "l3_baseline_discovery": {
+  "disc_sat": 0.9071405953134896,
+  "disc_exc": 0.7052386495925494
+ },
+ "n_candidates": 8466,
+ "n_real_discovery": 12632,
+ "n_bad_discovery": 8590,
+ "floors": {
+  "0.75": {
+   "floor": 0.75,
+   "predicates": [
+    [
+     "bv_max_abs",
+     "le",
+     1.1823163504000946,
+     null
+    ],
+    [
+     "sg_num_001",
+     "ge",
+     2.0,
+     null
+    ],
+    [
+     "p2_mean_dev",
+     "le",
+     0.8,
+     null
+    ]
+   ],
+   "n_predicates": 3,
+   "contains_D7": false,
+   "contains_D8": false,
+   "disc_sat": 0.7504749841671944,
+   "disc_exc": 0.9454016298020954,
+   "per_class_exclusion_discovery": {
+    "S1": 0.8944327731092437,
+    "S2": 0.9334975369458128,
+    "S3": 0.9994750656167979,
+    "S4": 0.9518072289156626,
+    "S5": 0.9442984760903836
+   },
+   "trace": [
+    {
+     "step": 1,
+     "predicate": [
+      "bv_max_abs",
+      "le",
+      1.1823163504000946,
+      null
+     ],
+     "disc_sat": 0.7690785307156428,
+     "disc_exc": 0.9132712456344587
+    },
+    {
+     "step": 2,
+     "predicate": [
+      "sg_num_001",
+      "ge",
+      2.0,
+      null
+     ],
+     "disc_sat": 0.765991133628879,
+     "disc_exc": 0.9325960419091968
+    },
+    {
+     "step": 3,
+     "predicate": [
+      "p2_mean_dev",
+      "le",
+      0.8,
+      null
+     ],
+     "disc_sat": 0.7504749841671944,
+     "disc_exc": 0.9454016298020954
+    },
+    {
+     "step": 4,
+     "stop": "best gain +0.0010 < 0.005"
+    }
+   ]
+  },
+  "0.78": {
+   "floor": 0.78,
+   "predicates": [
+    [
+     "sg_num_001",
+     "ge",
+     14.0,
+     null
+    ],
+    [
+     "bv_rel_mean",
+     "le",
+     0.681765410538117,
+     null
+    ]
+   ],
+   "n_predicates": 2,
+   "contains_D7": false,
+   "contains_D8": false,
+   "disc_sat": 0.7822197593413552,
+   "disc_exc": 0.9140861466821886,
+   "per_class_exclusion_discovery": {
+    "S1": 0.8482142857142857,
+    "S2": 0.8793103448275862,
+    "S3": 1.0,
+    "S4": 0.936144578313253,
+    "S5": 0.8970047293746716
+   },
+   "trace": [
+    {
+     "step": 1,
+     "predicate": [
+      "sg_num_001",
+      "ge",
+      14.0,
+      null
+     ],
+     "disc_sat": 0.8099271690943636,
+     "disc_exc": 0.8672875436554133
+    },
+    {
+     "step": 2,
+     "predicate": [
+      "bv_rel_mean",
+      "le",
+      0.681765410538117,
+      null
+     ],
+     "disc_sat": 0.7822197593413552,
+     "disc_exc": 0.9140861466821886
+    },
+    {
+     "step": 3,
+     "stop": "best gain +0.0036 < 0.005"
+    }
+   ]
+  },
+  "0.81": {
+   "floor": 0.81,
+   "predicates": [
+    [
+     "wyckoff_econ_001",
+     "le",
+     0.6666666666666666,
+     null
+    ],
+    [
+     "bv_rel_mean",
+     "le",
+     0.7143040821865658,
+     null
+    ]
+   ],
+   "n_predicates": 2,
+   "contains_D7": true,
+   "contains_D8": true,
+   "disc_sat": 0.8107188093730209,
+   "disc_exc": 0.9051222351571595,
+   "per_class_exclusion_discovery": {
+    "S1": 0.7242647058823529,
+    "S2": 0.8924466338259441,
+    "S3": 1.0,
+    "S4": 0.9228915662650602,
+    "S5": 0.9837099316868103
+   },
+   "trace": [
+    {
+     "step": 1,
+     "predicate": [
+      "wyckoff_econ_001",
+      "le",
+      0.6666666666666666,
+      null
+     ],
+     "disc_sat": 0.830905636478784,
+     "disc_exc": 0.8664726426076834
+    },
+    {
+     "step": 2,
+     "predicate": [
+      "bv_rel_mean",
+      "le",
+      0.7143040821865658,
+      null
+     ],
+     "disc_sat": 0.8107188093730209,
+     "disc_exc": 0.9051222351571595
+    },
+    {
+     "step": 3,
+     "stop": "best gain +0.0035 < 0.005"
+    }
+   ]
+  },
+  "0.84": {
+   "floor": 0.84,
+   "predicates": [
+    [
+     "sg_num_001",
+     "ge",
+     12.0,
+     null
+    ],
+    [
+     "bv_rel_mean",
+     "le",
+     0.681765410538117,
+     0.5
+    ]
+   ],
+   "n_predicates": 2,
+   "contains_D7": false,
+   "contains_D8": false,
+   "disc_sat": 0.8404053198226725,
+   "disc_exc": 0.8722933643771827,
+   "per_class_exclusion_discovery": {
+    "S1": 0.7641806722689075,
+    "S2": 0.8587848932676518,
+    "S3": 1.0,
+    "S4": 0.85,
+    "S5": 0.8807146610614819
+   },
+   "trace": [
+    {
+     "step": 1,
+     "predicate": [
+      "sg_num_001",
+      "ge",
+      12.0,
+      null
+     ],
+     "disc_sat": 0.8464217859404687,
+     "disc_exc": 0.8536670547147847
+    },
+    {
+     "step": 2,
+     "predicate": [
+      "bv_rel_mean",
+      "le",
+      0.681765410538117,
+      0.5
+     ],
+     "disc_sat": 0.8404053198226725,
+     "disc_exc": 0.8722933643771827
+    },
+    {
+     "step": 3,
+     "stop": "best gain +0.0023 < 0.005"
+    }
+   ]
+  },
+  "0.87": {
+   "floor": 0.87,
+   "predicates": [
+    [
+     "sg_num_01",
+     "ge",
+     7.0,
+     null
+    ],
+    [
+     "bl_min",
+     "le",
+     1.0771289508172395,
+     0.5
+    ],
+    [
+     "strain2_ca_pa",
+     "le",
+     0.08316628688266384,
+     null
+    ]
+   ],
+   "n_predicates": 3,
+   "contains_D7": false,
+   "contains_D8": false,
+   "disc_sat": 0.8704084863837872,
+   "disc_exc": 0.8515715948777649,
+   "per_class_exclusion_discovery": {
+    "S1": 0.7169117647058824,
+    "S2": 0.8300492610837439,
+    "S3": 0.9963254593175853,
+    "S4": 0.8801204819277109,
+    "S5": 0.8302679978980557
+   },
+   "trace": [
+    {
+     "step": 1,
+     "predicate": [
+      "sg_num_01",
+      "ge",
+      7.0,
+      null
+     ],
+     "disc_sat": 0.8740500316656111,
+     "disc_exc": 0.8268917345750872
+    },
+    {
+     "step": 2,
+     "predicate": [
+      "bl_min",
+      "le",
+      1.0771289508172395,
+      0.5
+     ],
+     "disc_sat": 0.8734167194426853,
+     "disc_exc": 0.8435389988358557
+    },
+    {
+     "step": 3,
+     "predicate": [
+      "strain2_ca_pa",
+      "le",
+      0.08316628688266384,
+      null
+     ],
+     "disc_sat": 0.8704084863837872,
+     "disc_exc": 0.8515715948777649
+    },
+    {
+     "step": 4,
+     "stop": "best gain +0.0010 < 0.005"
+    }
+   ]
+  }
+ }
+}

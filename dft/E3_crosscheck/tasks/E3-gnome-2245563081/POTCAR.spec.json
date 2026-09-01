@@ -1,0 +1,57 @@
+{
+ "order": [
+  {
+   "element": "Sc",
+   "symbol": "Sc_sv",
+   "title": "PAW_PBE Sc_sv 07Sep2000",
+   "enmax_ev": 222.66,
+   "rcore_a": 1.3229,
+   "sha256": "9aad5a0618293b7e22b0823afd8bf80ef5c5e525eb8618ba91672918e18a06fa",
+   "library_relative": "Sc_sv/POTCAR"
+  },
+  {
+   "element": "Fe",
+   "symbol": "Fe_pv",
+   "title": "PAW_PBE Fe_pv 02Aug2007",
+   "enmax_ev": 293.238,
+   "rcore_a": 1.1642,
+   "sha256": "5d22e414b1f82158bf2c7ecb8b97b28fd0923e48cadc1c3bf74d524558f5dd32",
+   "library_relative": "Fe_pv/POTCAR"
+  },
+  {
+   "element": "Co",
+   "symbol": "Co",
+   "title": "PAW_PBE Co 02Aug2007",
+   "enmax_ev": 267.968,
+   "rcore_a": 1.2171,
+   "sha256": "0e690c60710354995174544f52f9f2c30879afabeffe3b3fbd4001cb294e56d4",
+   "library_relative": "Co/POTCAR"
+  },
+  {
+   "element": "Mo",
+   "symbol": "Mo_pv",
+   "title": "PAW_PBE Mo_pv 04Feb2005",
+   "enmax_ev": 224.584,
+   "rcore_a": 1.4288,
+   "sha256": "6ae1433eb25a8c9ce9b558610a2d5a3c8775e861c8272ad13d852ff7f9633ae0",
+   "library_relative": "Mo_pv/POTCAR"
+  },
+  {
+   "element": "P",
+   "symbol": "P",
+   "title": "PAW_PBE P 06Sep2000",
+   "enmax_ev": 255.04,
+   "rcore_a": 1.0054,
+   "sha256": "df60c54a93efe35c9e85ae94c010c75e9f6960a95d5595d7cdba4096d109af88",
+   "library_relative": "P/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "Sc",
+  "Fe",
+  "Co",
+  "Mo",
+  "P"
+ ]
+}

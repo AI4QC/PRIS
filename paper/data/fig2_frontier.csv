@@ -1,0 +1,8 @@
+setting,n_rules,satisfaction,exclusion,worst_chem
+Pauling rules 2-5 (joint),4,0.0651,,
+floor 0.99,5,0.9917,0.304,0.986
+floor 0.98,3,0.9813,0.4161,0.973
+floor 0.95 (recommended),5,0.9539,0.6224,0.928
+floor 0.95 + geometric,6,0.9536,0.6254,0.928
+trusted core (no CN rules),4,0.9511,0.6173,
+core + ionicity-guarded charge rule,5,0.9071,0.7052,

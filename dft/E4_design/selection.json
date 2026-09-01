@@ -1,0 +1,2109 @@
+{
+ "counts": {
+  "control": 60,
+  "priority": 140,
+  "screened": 61
+ },
+ "ev_volume_factors": [
+  0.94,
+  0.97,
+  1.0,
+  1.03,
+  1.06
+ ],
+ "experiment": "E4",
+ "n_selected": 261,
+ "priority_bulk_gpa": 400.0,
+ "pss_cutoff": -0.6368790173149083,
+ "rule": "All 61 PSS-screened candidates (synthesis_score < -0.6368790173149083), all 140 UMA-priority candidates (proxy bulk modulus >= 400 GPa), and 60 controls drawn without replacement from the remaining 880 with seed sha256('E4|control'). Stage A relaxes each cell; stage B builds the five-point energy-volume curve from the relaxed cell.",
+ "structures": [
+  {
+   "candidate_id": "candidate_0000",
+   "formula": "Ir5Os7",
+   "n_atoms": 12,
+   "pss": -0.569329827009457,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 375.547605320632
+  },
+  {
+   "candidate_id": "candidate_0004",
+   "formula": "ReIrOs2",
+   "n_atoms": 4,
+   "pss": 0.24151701209006252,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 390.44888326733593
+  },
+  {
+   "candidate_id": "candidate_0006",
+   "formula": "Re3Ir2Os11",
+   "n_atoms": 16,
+   "pss": 0.24404412141388646,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 411.0616768457807
+  },
+  {
+   "candidate_id": "candidate_0009",
+   "formula": "Ir2Os7",
+   "n_atoms": 18,
+   "pss": -0.6378596707391505,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 381.5342990134223
+  },
+  {
+   "candidate_id": "candidate_0011",
+   "formula": "Re5Os2",
+   "n_atoms": 14,
+   "pss": -0.6514096948257566,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 387.24363800617584
+  },
+  {
+   "candidate_id": "candidate_0013",
+   "formula": "ReOs5",
+   "n_atoms": 6,
+   "pss": -0.5196694573966908,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 404.20840259059185
+  },
+  {
+   "candidate_id": "candidate_0015",
+   "formula": "IrOs8",
+   "n_atoms": 9,
+   "pss": 1.5830192982804112,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 401.2719932257208
+  },
+  {
+   "candidate_id": "candidate_0017",
+   "formula": "Os",
+   "n_atoms": 4,
+   "pss": 1.8690700158446896,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 436.6152921537611
+  },
+  {
+   "candidate_id": "candidate_0023",
+   "formula": "Re8B2Os5C3",
+   "n_atoms": 18,
+   "pss": -0.14773976048900972,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 365.052323059289
+  },
+  {
+   "candidate_id": "candidate_0025",
+   "formula": "Ir2Os",
+   "n_atoms": 18,
+   "pss": -0.5230669565525191,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 381.80651775087904
+  },
+  {
+   "candidate_id": "candidate_0034",
+   "formula": "IrOs3",
+   "n_atoms": 8,
+   "pss": 1.4556668217011017,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 415.8020857682442
+  },
+  {
+   "candidate_id": "candidate_0037",
+   "formula": "IrOs7",
+   "n_atoms": 8,
+   "pss": -0.49218722904662915,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 427.7870944757225
+  },
+  {
+   "candidate_id": "candidate_0051",
+   "formula": "ReOs5",
+   "n_atoms": 6,
+   "pss": -0.5128631503878358,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 410.1097100996811
+  },
+  {
+   "candidate_id": "candidate_0052",
+   "formula": "IrOs3",
+   "n_atoms": 4,
+   "pss": -0.5015528270889535,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 422.8281626582972
+  },
+  {
+   "candidate_id": "candidate_0063",
+   "formula": "Os7W",
+   "n_atoms": 16,
+   "pss": 0.24189641454762004,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 425.74624238803904
+  },
+  {
+   "candidate_id": "candidate_0065",
+   "formula": "IrOs3",
+   "n_atoms": 12,
+   "pss": -0.5138037868132053,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 404.3180997845905
+  },
+  {
+   "candidate_id": "candidate_0066",
+   "formula": "IrOs2",
+   "n_atoms": 12,
+   "pss": -0.5145541864639798,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 389.21577294234186
+  },
+  {
+   "candidate_id": "candidate_0073",
+   "formula": "IrOs",
+   "n_atoms": 12,
+   "pss": -0.5162213509368104,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 405.5022729508629
+  },
+  {
+   "candidate_id": "candidate_0074",
+   "formula": "Re2Ir3Os7",
+   "n_atoms": 12,
+   "pss": -0.5274995498279699,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 418.66357005734534
+  },
+  {
+   "candidate_id": "candidate_0077",
+   "formula": "IrOs2",
+   "n_atoms": 12,
+   "pss": -0.47185190322008985,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 428.3451280458812
+  },
+  {
+   "candidate_id": "candidate_0084",
+   "formula": "ReIr3",
+   "n_atoms": 4,
+   "pss": -0.5413649220372589,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 392.546604181445
+  },
+  {
+   "candidate_id": "candidate_0086",
+   "formula": "IrOs2",
+   "n_atoms": 6,
+   "pss": 1.0497103598891369,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 406.9253747551237
+  },
+  {
+   "candidate_id": "candidate_0096",
+   "formula": "IrOs",
+   "n_atoms": 12,
+   "pss": 1.0608731717613482,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 414.2303794856437
+  },
+  {
+   "candidate_id": "candidate_0097",
+   "formula": "ReIr2Os",
+   "n_atoms": 4,
+   "pss": -0.5167626153930894,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 405.1924089145057
+  },
+  {
+   "candidate_id": "candidate_0100",
+   "formula": "IrOs",
+   "n_atoms": 4,
+   "pss": 1.0601488206969725,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 419.1974916358665
+  },
+  {
+   "candidate_id": "candidate_0107",
+   "formula": "Re2Os2W",
+   "n_atoms": 10,
+   "pss": -0.637999446436994,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 385.7138942317908
+  },
+  {
+   "candidate_id": "candidate_0118",
+   "formula": "ReIrOs2",
+   "n_atoms": 4,
+   "pss": -0.5298729364948571,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 403.0414378248935
+  },
+  {
+   "candidate_id": "candidate_0124",
+   "formula": "Re7W8",
+   "n_atoms": 15,
+   "pss": -0.9562061697510111,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 280.5757022937872
+  },
+  {
+   "candidate_id": "candidate_0130",
+   "formula": "IrOs2",
+   "n_atoms": 12,
+   "pss": 1.847356514824367,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 421.00146870423043
+  },
+  {
+   "candidate_id": "candidate_0131",
+   "formula": "IrOs5",
+   "n_atoms": 6,
+   "pss": 1.067613426050083,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 419.21721699445567
+  },
+  {
+   "candidate_id": "candidate_0132",
+   "formula": "Re3Os2",
+   "n_atoms": 10,
+   "pss": -0.5716590080885137,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 422.0945610731947
+  },
+  {
+   "candidate_id": "candidate_0134",
+   "formula": "Ir3Os13",
+   "n_atoms": 16,
+   "pss": 0.6670332827123621,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 418.13714648277806
+  },
+  {
+   "candidate_id": "candidate_0140",
+   "formula": "IrOs",
+   "n_atoms": 12,
+   "pss": 1.036987497070963,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 377.19004456125685
+  },
+  {
+   "candidate_id": "candidate_0142",
+   "formula": "Os3Ru",
+   "n_atoms": 16,
+   "pss": 0.3091134013477741,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 418.20350894771593
+  },
+  {
+   "candidate_id": "candidate_0143",
+   "formula": "IrOs3",
+   "n_atoms": 8,
+   "pss": 1.0647342680469032,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 418.15952342837375
+  },
+  {
+   "candidate_id": "candidate_0151",
+   "formula": "ReOs3",
+   "n_atoms": 8,
+   "pss": 1.437772529679419,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 405.6945658881274
+  },
+  {
+   "candidate_id": "candidate_0153",
+   "formula": "Os5W3",
+   "n_atoms": 16,
+   "pss": -0.6681534760615095,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 354.916039583965
+  },
+  {
+   "candidate_id": "candidate_0155",
+   "formula": "IrOs2",
+   "n_atoms": 12,
+   "pss": -0.5184857595294247,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 401.70855504277034
+  },
+  {
+   "candidate_id": "candidate_0157",
+   "formula": "Ir3W2",
+   "n_atoms": 10,
+   "pss": -0.6928449120905387,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 343.8015734043097
+  },
+  {
+   "candidate_id": "candidate_0164",
+   "formula": "Ir2Os",
+   "n_atoms": 12,
+   "pss": 1.0616714444666253,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 399.8230001633293
+  },
+  {
+   "candidate_id": "candidate_0169",
+   "formula": "Ir2Os7W2",
+   "n_atoms": 11,
+   "pss": -0.7550068438507661,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 352.4408266680575
+  },
+  {
+   "candidate_id": "candidate_0170",
+   "formula": "Re3Os5",
+   "n_atoms": 8,
+   "pss": -0.5575996299238907,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 378.4165325092762
+  },
+  {
+   "candidate_id": "candidate_0171",
+   "formula": "Os7Ru",
+   "n_atoms": 8,
+   "pss": -0.4920583533078182,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 403.93705109325873
+  },
+  {
+   "candidate_id": "candidate_0174",
+   "formula": "Re3Os7",
+   "n_atoms": 10,
+   "pss": -0.579382244012365,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 401.2548755245299
+  },
+  {
+   "candidate_id": "candidate_0175",
+   "formula": "ReOs3",
+   "n_atoms": 16,
+   "pss": -0.5421327907928251,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 425.05968758442566
+  },
+  {
+   "candidate_id": "candidate_0177",
+   "formula": "IrOs3",
+   "n_atoms": 4,
+   "pss": 0.2774832195556294,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 410.245189696083
+  },
+  {
+   "candidate_id": "candidate_0184",
+   "formula": "Re2Ir3",
+   "n_atoms": 10,
+   "pss": -0.5733519806387108,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 362.5671900006495
+  },
+  {
+   "candidate_id": "candidate_0194",
+   "formula": "IrOs11",
+   "n_atoms": 12,
+   "pss": -0.4980439587356279,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 420.6494234495126
+  },
+  {
+   "candidate_id": "candidate_0195",
+   "formula": "Os3W2",
+   "n_atoms": 10,
+   "pss": -0.680927298282217,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 361.20727157302986
+  },
+  {
+   "candidate_id": "candidate_0196",
+   "formula": "ReOs3",
+   "n_atoms": 12,
+   "pss": -0.5408507351627317,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 400.07355179728836
+  },
+  {
+   "candidate_id": "candidate_0200",
+   "formula": "IrOs9",
+   "n_atoms": 10,
+   "pss": -0.5067053216946878,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 401.7583712603996
+  },
+  {
+   "candidate_id": "candidate_0215",
+   "formula": "Ir2Os3",
+   "n_atoms": 10,
+   "pss": -0.5154527832958283,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 388.75674279619716
+  },
+  {
+   "candidate_id": "candidate_0221",
+   "formula": "Os",
+   "n_atoms": 3,
+   "pss": 0.5198304068447207,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 414.0698257580022
+  },
+  {
+   "candidate_id": "candidate_0224",
+   "formula": "Re4W",
+   "n_atoms": 10,
+   "pss": -0.6907373548811707,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 335.1077241834852
+  },
+  {
+   "candidate_id": "candidate_0227",
+   "formula": "Re4Ir7",
+   "n_atoms": 11,
+   "pss": -0.7559238748567393,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 332.1701290862767
+  },
+  {
+   "candidate_id": "candidate_0230",
+   "formula": "ReOs7",
+   "n_atoms": 16,
+   "pss": 1.0476329787482714,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 436.4006058734574
+  },
+  {
+   "candidate_id": "candidate_0236",
+   "formula": "IrOs2",
+   "n_atoms": 6,
+   "pss": -0.5198100401371247,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 405.1844574222583
+  },
+  {
+   "candidate_id": "candidate_0241",
+   "formula": "Ir5Os7",
+   "n_atoms": 12,
+   "pss": -0.4994836312474972,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 403.91934272618545
+  },
+  {
+   "candidate_id": "candidate_0244",
+   "formula": "Os7W3",
+   "n_atoms": 10,
+   "pss": -0.6538651978091304,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 369.2000026852173
+  },
+  {
+   "candidate_id": "candidate_0248",
+   "formula": "ReW4",
+   "n_atoms": 5,
+   "pss": -0.8138445945742,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 321.6052146400677
+  },
+  {
+   "candidate_id": "candidate_0249",
+   "formula": "IrOs7",
+   "n_atoms": 8,
+   "pss": 1.0529921481417828,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 404.23926358933295
+  },
+  {
+   "candidate_id": "candidate_0253",
+   "formula": "Ir2Os5",
+   "n_atoms": 14,
+   "pss": -0.49848206832177,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 419.5214226730207
+  },
+  {
+   "candidate_id": "candidate_0261",
+   "formula": "ReOs3",
+   "n_atoms": 12,
+   "pss": -0.5341845152993847,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 405.2285784714318
+  },
+  {
+   "candidate_id": "candidate_0264",
+   "formula": "Ir3Os4",
+   "n_atoms": 7,
+   "pss": -0.8233634045485988,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 326.8530621731822
+  },
+  {
+   "candidate_id": "candidate_0269",
+   "formula": "Re5B3Ir2",
+   "n_atoms": 10,
+   "pss": -0.08361683753467097,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 343.8436324342246
+  },
+  {
+   "candidate_id": "candidate_0273",
+   "formula": "IrOs3",
+   "n_atoms": 12,
+   "pss": -0.495955245399458,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 407.4002303463029
+  },
+  {
+   "candidate_id": "candidate_0284",
+   "formula": "Re(Ir2Os3)2",
+   "n_atoms": 11,
+   "pss": -0.7312963059926489,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 347.5281588715386
+  },
+  {
+   "candidate_id": "candidate_0292",
+   "formula": "Re4Os",
+   "n_atoms": 10,
+   "pss": -0.6438093576265245,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 337.2114703494536
+  },
+  {
+   "candidate_id": "candidate_0294",
+   "formula": "Re2Ir3",
+   "n_atoms": 15,
+   "pss": -0.6876460174279266,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 349.91122384071224
+  },
+  {
+   "candidate_id": "candidate_0299",
+   "formula": "Ir5Os7",
+   "n_atoms": 12,
+   "pss": -0.5003320831437847,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 420.5135276301135
+  },
+  {
+   "candidate_id": "candidate_0300",
+   "formula": "Os3W",
+   "n_atoms": 8,
+   "pss": 0.9565047237786374,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 352.4601136077887
+  },
+  {
+   "candidate_id": "candidate_0301",
+   "formula": "IrOs5",
+   "n_atoms": 6,
+   "pss": -0.4984738412908558,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 422.3838668156426
+  },
+  {
+   "candidate_id": "candidate_0305",
+   "formula": "Ir4Os14W",
+   "n_atoms": 19,
+   "pss": -0.649880430596925,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 367.7547750727399
+  },
+  {
+   "candidate_id": "candidate_0311",
+   "formula": "Os7W3",
+   "n_atoms": 10,
+   "pss": -0.6502883917910348,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 371.46621479740264
+  },
+  {
+   "candidate_id": "candidate_0312",
+   "formula": "Ir2Os3",
+   "n_atoms": 5,
+   "pss": 0.7504143896754285,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 402.31014609721126
+  },
+  {
+   "candidate_id": "candidate_0313",
+   "formula": "Ir5Os11",
+   "n_atoms": 16,
+   "pss": 0.28054793971167036,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 416.97644763860154
+  },
+  {
+   "candidate_id": "candidate_0320",
+   "formula": "Re6Ir8W",
+   "n_atoms": 15,
+   "pss": -0.7476025485281531,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 319.85769980688207
+  },
+  {
+   "candidate_id": "candidate_0330",
+   "formula": "IrOs3",
+   "n_atoms": 4,
+   "pss": 0.2784471758815492,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 400.0689048486388
+  },
+  {
+   "candidate_id": "candidate_0331",
+   "formula": "Ir5Os11",
+   "n_atoms": 16,
+   "pss": 0.279214363869438,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 416.6979107383102
+  },
+  {
+   "candidate_id": "candidate_0332",
+   "formula": "IrOs4",
+   "n_atoms": 5,
+   "pss": 0.7337737080611444,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 387.3497241060197
+  },
+  {
+   "candidate_id": "candidate_0336",
+   "formula": "Re5Ir4",
+   "n_atoms": 18,
+   "pss": -0.7143268569758725,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 320.16356574272135
+  },
+  {
+   "candidate_id": "candidate_0339",
+   "formula": "IrOs3",
+   "n_atoms": 4,
+   "pss": 0.2627098099232428,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 400.94745796844614
+  },
+  {
+   "candidate_id": "candidate_0342",
+   "formula": "ReOs3",
+   "n_atoms": 4,
+   "pss": -0.5245485402398359,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 400.4851582314579
+  },
+  {
+   "candidate_id": "candidate_0343",
+   "formula": "IrOs",
+   "n_atoms": 12,
+   "pss": 1.049519583443765,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 409.68963353587446
+  },
+  {
+   "candidate_id": "candidate_0355",
+   "formula": "Ir2Os",
+   "n_atoms": 12,
+   "pss": 1.0576734440507987,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 416.5712976755134
+  },
+  {
+   "candidate_id": "candidate_0357",
+   "formula": "Re5(Ir2Os3)3",
+   "n_atoms": 20,
+   "pss": -0.5435687418387056,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 386.12703433429743
+  },
+  {
+   "candidate_id": "candidate_0367",
+   "formula": "IrOs3",
+   "n_atoms": 16,
+   "pss": 0.8680993606440656,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 421.22518372156924
+  },
+  {
+   "candidate_id": "candidate_0369",
+   "formula": "IrOs3",
+   "n_atoms": 8,
+   "pss": 1.045862993564568,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 383.3257906442982
+  },
+  {
+   "candidate_id": "candidate_0370",
+   "formula": "Cr3Os13",
+   "n_atoms": 16,
+   "pss": 1.1585917410627256,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 420.03481994589384
+  },
+  {
+   "candidate_id": "candidate_0374",
+   "formula": "Ir7Os5",
+   "n_atoms": 12,
+   "pss": -0.5041182958500053,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 400.74125261840004
+  },
+  {
+   "candidate_id": "candidate_0376",
+   "formula": "ReOs5",
+   "n_atoms": 12,
+   "pss": -0.5394506711894144,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 420.8132960018495
+  },
+  {
+   "candidate_id": "candidate_0377",
+   "formula": "IrOs2",
+   "n_atoms": 6,
+   "pss": 1.5753145217182007,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 401.922128248243
+  },
+  {
+   "candidate_id": "candidate_0383",
+   "formula": "Ir4OsRuW4",
+   "n_atoms": 10,
+   "pss": -0.6479950960649324,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 344.55076931611376
+  },
+  {
+   "candidate_id": "candidate_0388",
+   "formula": "ReOs",
+   "n_atoms": 10,
+   "pss": -0.5711806825511836,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 412.9511350529911
+  },
+  {
+   "candidate_id": "candidate_0393",
+   "formula": "Ir4W",
+   "n_atoms": 15,
+   "pss": 1.317127085690156,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 301.5424283625603
+  },
+  {
+   "candidate_id": "candidate_0396",
+   "formula": "ReOs5",
+   "n_atoms": 6,
+   "pss": 1.042829241458977,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 400.4138234700916
+  },
+  {
+   "candidate_id": "candidate_0397",
+   "formula": "ReOs7",
+   "n_atoms": 16,
+   "pss": 1.2370665438992354,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 428.0691363194475
+  },
+  {
+   "candidate_id": "candidate_0399",
+   "formula": "IrOs2",
+   "n_atoms": 6,
+   "pss": 1.0519907490928802,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 408.8149839775375
+  },
+  {
+   "candidate_id": "candidate_0400",
+   "formula": "ReIr(Os3W)4",
+   "n_atoms": 18,
+   "pss": -0.6699776003735006,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 362.4332700305499
+  },
+  {
+   "candidate_id": "candidate_0403",
+   "formula": "Ir5Os11",
+   "n_atoms": 16,
+   "pss": -0.4902039228194933,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 431.27415514063335
+  },
+  {
+   "candidate_id": "candidate_0404",
+   "formula": "IrOs",
+   "n_atoms": 12,
+   "pss": -0.502044675559934,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 401.3331565759696
+  },
+  {
+   "candidate_id": "candidate_0407",
+   "formula": "Ir3Os",
+   "n_atoms": 12,
+   "pss": -0.4871027458922782,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 416.9474214294954
+  },
+  {
+   "candidate_id": "candidate_0411",
+   "formula": "ReOs5",
+   "n_atoms": 12,
+   "pss": -0.5229113639155969,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 406.52252816488414
+  },
+  {
+   "candidate_id": "candidate_0412",
+   "formula": "IrOs3",
+   "n_atoms": 4,
+   "pss": 0.29163143865173236,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 430.4122802136181
+  },
+  {
+   "candidate_id": "candidate_0413",
+   "formula": "ReOs6",
+   "n_atoms": 14,
+   "pss": 1.0585924601858192,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 413.8343111960106
+  },
+  {
+   "candidate_id": "candidate_0414",
+   "formula": "IrOs3",
+   "n_atoms": 16,
+   "pss": -0.5210636457932174,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 401.6661802982257
+  },
+  {
+   "candidate_id": "candidate_0416",
+   "formula": "Ir5Os7",
+   "n_atoms": 12,
+   "pss": -0.5019974758614074,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 419.0448484240044
+  },
+  {
+   "candidate_id": "candidate_0433",
+   "formula": "Re3Ir5Os11",
+   "n_atoms": 19,
+   "pss": -0.6390871824484389,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 375.13831959053135
+  },
+  {
+   "candidate_id": "candidate_0435",
+   "formula": "Ir6Ru4Rh",
+   "n_atoms": 11,
+   "pss": -0.7000882741482589,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 277.54823430452484
+  },
+  {
+   "candidate_id": "candidate_0440",
+   "formula": "B2IrOs3",
+   "n_atoms": 12,
+   "pss": -0.08560331491091688,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 330.3532004136114
+  },
+  {
+   "candidate_id": "candidate_0446",
+   "formula": "Re",
+   "n_atoms": 3,
+   "pss": 0.4082247428434046,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 384.20140959902346
+  },
+  {
+   "candidate_id": "candidate_0451",
+   "formula": "Re4Os11",
+   "n_atoms": 15,
+   "pss": -0.7013278422721831,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 373.8984334171052
+  },
+  {
+   "candidate_id": "candidate_0460",
+   "formula": "Re3Ir8",
+   "n_atoms": 11,
+   "pss": -0.5566021394639371,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 366.3557230042426
+  },
+  {
+   "candidate_id": "candidate_0473",
+   "formula": "B4OsW2",
+   "n_atoms": 14,
+   "pss": 0.392303338279108,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 319.97868424326595
+  },
+  {
+   "candidate_id": "candidate_0477",
+   "formula": "Ir5Os10Ru3",
+   "n_atoms": 18,
+   "pss": -0.48450397793244293,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 403.1658725607475
+  },
+  {
+   "candidate_id": "candidate_0479",
+   "formula": "Re3Os13",
+   "n_atoms": 16,
+   "pss": -0.5287126331426486,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 394.4014253859223
+  },
+  {
+   "candidate_id": "candidate_0482",
+   "formula": "B6IrOs5",
+   "n_atoms": 12,
+   "pss": 0.3657254723053539,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 375.5055930922535
+  },
+  {
+   "candidate_id": "candidate_0484",
+   "formula": "Re8Ir4W",
+   "n_atoms": 13,
+   "pss": -0.6497395950235363,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 344.06021127312863
+  },
+  {
+   "candidate_id": "candidate_0486",
+   "formula": "Ir6Os5",
+   "n_atoms": 11,
+   "pss": -0.7085437544786457,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 347.3150100564409
+  },
+  {
+   "candidate_id": "candidate_0489",
+   "formula": "ReIr2Os13",
+   "n_atoms": 16,
+   "pss": -0.5077194878597371,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 432.4214897942888
+  },
+  {
+   "candidate_id": "candidate_0492",
+   "formula": "MoOs4",
+   "n_atoms": 10,
+   "pss": 1.3140687730688385,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 410.26928409603397
+  },
+  {
+   "candidate_id": "candidate_0493",
+   "formula": "IrOs3",
+   "n_atoms": 12,
+   "pss": -0.49644311424115384,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 406.16752197663027
+  },
+  {
+   "candidate_id": "candidate_0494",
+   "formula": "Re11Os5",
+   "n_atoms": 16,
+   "pss": -0.610075009053409,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 348.7961978314971
+  },
+  {
+   "candidate_id": "candidate_0502",
+   "formula": "Os5Ru",
+   "n_atoms": 12,
+   "pss": 1.087439420028757,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 408.4764717306419
+  },
+  {
+   "candidate_id": "candidate_0508",
+   "formula": "Re2Os7",
+   "n_atoms": 9,
+   "pss": 1.196646887197623,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 392.9266232005005
+  },
+  {
+   "candidate_id": "candidate_0515",
+   "formula": "Re5Ir6",
+   "n_atoms": 11,
+   "pss": -0.6999761799169648,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 360.08247137496323
+  },
+  {
+   "candidate_id": "candidate_0516",
+   "formula": "Re3Ir9Os7",
+   "n_atoms": 19,
+   "pss": -0.6495381340556532,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 358.0824341006568
+  },
+  {
+   "candidate_id": "candidate_0517",
+   "formula": "ReIr2Os",
+   "n_atoms": 4,
+   "pss": 0.23712988946405536,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 376.1281850022172
+  },
+  {
+   "candidate_id": "candidate_0522",
+   "formula": "Ir3Os8",
+   "n_atoms": 11,
+   "pss": -0.5107567635256135,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 394.82666540818906
+  },
+  {
+   "candidate_id": "candidate_0523",
+   "formula": "Re2Mo3Os5",
+   "n_atoms": 10,
+   "pss": -0.634448657945506,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 326.5121025405314
+  },
+  {
+   "candidate_id": "candidate_0539",
+   "formula": "Ir3Os13",
+   "n_atoms": 16,
+   "pss": 0.2674498932903233,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 413.5321388859416
+  },
+  {
+   "candidate_id": "candidate_0542",
+   "formula": "IrOs3",
+   "n_atoms": 16,
+   "pss": -0.5088345908035797,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 409.69230699016623
+  },
+  {
+   "candidate_id": "candidate_0543",
+   "formula": "Re7W3",
+   "n_atoms": 10,
+   "pss": -0.7256820093166555,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 361.85897013711514
+  },
+  {
+   "candidate_id": "candidate_0549",
+   "formula": "Re5Ir4W",
+   "n_atoms": 10,
+   "pss": -0.6104570860347079,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 356.8466678745009
+  },
+  {
+   "candidate_id": "candidate_0550",
+   "formula": "Ir9OsW5",
+   "n_atoms": 15,
+   "pss": -0.7670457971995124,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 318.48596366545456
+  },
+  {
+   "candidate_id": "candidate_0554",
+   "formula": "Re2(Os3W)3",
+   "n_atoms": 14,
+   "pss": -0.7233104254658657,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 351.39116953153643
+  },
+  {
+   "candidate_id": "candidate_0560",
+   "formula": "IrOs15",
+   "n_atoms": 16,
+   "pss": 0.29859220925786734,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 453.68529843986425
+  },
+  {
+   "candidate_id": "candidate_0563",
+   "formula": "IrOs",
+   "n_atoms": 4,
+   "pss": 1.039409273159444,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 404.5366638626629
+  },
+  {
+   "candidate_id": "candidate_0565",
+   "formula": "IrOs2",
+   "n_atoms": 12,
+   "pss": -0.4960590165144736,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 406.77699087819866
+  },
+  {
+   "candidate_id": "candidate_0568",
+   "formula": "Ir5Os11",
+   "n_atoms": 16,
+   "pss": 0.6791160859857076,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 424.9168593128116
+  },
+  {
+   "candidate_id": "candidate_0574",
+   "formula": "Os5Ru",
+   "n_atoms": 6,
+   "pss": -0.47798311346107314,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 410.1146795396092
+  },
+  {
+   "candidate_id": "candidate_0583",
+   "formula": "IrOs2",
+   "n_atoms": 6,
+   "pss": 1.0640351549372196,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 416.22683375317837
+  },
+  {
+   "candidate_id": "candidate_0591",
+   "formula": "Ir3Os13",
+   "n_atoms": 16,
+   "pss": 0.8637378873472993,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 424.63709174538695
+  },
+  {
+   "candidate_id": "candidate_0594",
+   "formula": "Re2(IrOs2)3",
+   "n_atoms": 11,
+   "pss": -0.6876469597602612,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 360.8613018960714
+  },
+  {
+   "candidate_id": "candidate_0595",
+   "formula": "Re3W2",
+   "n_atoms": 10,
+   "pss": -0.7766575251424206,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 325.2438222470385
+  },
+  {
+   "candidate_id": "candidate_0603",
+   "formula": "IrOs2",
+   "n_atoms": 12,
+   "pss": -0.4978772219088261,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 403.6537642292547
+  },
+  {
+   "candidate_id": "candidate_0619",
+   "formula": "Re2Ir7",
+   "n_atoms": 18,
+   "pss": -0.5649170808798281,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 364.937590272913
+  },
+  {
+   "candidate_id": "candidate_0625",
+   "formula": "IrOs",
+   "n_atoms": 6,
+   "pss": -0.5176184202460222,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 401.3407587876167
+  },
+  {
+   "candidate_id": "candidate_0629",
+   "formula": "Re2Ir2Os",
+   "n_atoms": 5,
+   "pss": -0.5745948058939147,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 376.49148594505454
+  },
+  {
+   "candidate_id": "candidate_0631",
+   "formula": "ReOs",
+   "n_atoms": 4,
+   "pss": 1.0269051696632818,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 397.21601238360034
+  },
+  {
+   "candidate_id": "candidate_0632",
+   "formula": "Re2Ir2Os",
+   "n_atoms": 10,
+   "pss": -0.759635916515615,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 313.1912267246808
+  },
+  {
+   "candidate_id": "candidate_0633",
+   "formula": "Re5Os11",
+   "n_atoms": 16,
+   "pss": 0.23782573779282815,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 425.41897038564986
+  },
+  {
+   "candidate_id": "candidate_0635",
+   "formula": "ReIr5",
+   "n_atoms": 6,
+   "pss": -0.5589247834116714,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 369.8085292891852
+  },
+  {
+   "candidate_id": "candidate_0636",
+   "formula": "Os3W",
+   "n_atoms": 16,
+   "pss": 0.1984893959529537,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 405.1652661799253
+  },
+  {
+   "candidate_id": "candidate_0639",
+   "formula": "Re2Os",
+   "n_atoms": 12,
+   "pss": -0.5984483762159701,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 388.9341282521252
+  },
+  {
+   "candidate_id": "candidate_0641",
+   "formula": "Os7Ru",
+   "n_atoms": 16,
+   "pss": 1.0726209867541021,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 424.2867577780877
+  },
+  {
+   "candidate_id": "candidate_0648",
+   "formula": "Os7W",
+   "n_atoms": 16,
+   "pss": 0.22710689750983196,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 409.4264236231187
+  },
+  {
+   "candidate_id": "candidate_0655",
+   "formula": "Os3W",
+   "n_atoms": 12,
+   "pss": -0.6082792789298163,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 373.74222818458196
+  },
+  {
+   "candidate_id": "candidate_0656",
+   "formula": "Re",
+   "n_atoms": 3,
+   "pss": 1.424148614466443,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 366.61113822047497
+  },
+  {
+   "candidate_id": "candidate_0679",
+   "formula": "Re2Os3",
+   "n_atoms": 10,
+   "pss": -0.5527498515431837,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 400.57604424810165
+  },
+  {
+   "candidate_id": "candidate_0680",
+   "formula": "ReOs5",
+   "n_atoms": 12,
+   "pss": -0.5165936437560955,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 406.3306418543264
+  },
+  {
+   "candidate_id": "candidate_0682",
+   "formula": "IrOs15",
+   "n_atoms": 16,
+   "pss": -0.5192342114020828,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 419.96463057279897
+  },
+  {
+   "candidate_id": "candidate_0687",
+   "formula": "Ir5Os11",
+   "n_atoms": 16,
+   "pss": -0.49137461081349876,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 430.0516920116176
+  },
+  {
+   "candidate_id": "candidate_0691",
+   "formula": "Re3(IrW)2",
+   "n_atoms": 7,
+   "pss": -0.6848512613709719,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 347.56271721574626
+  },
+  {
+   "candidate_id": "candidate_0704",
+   "formula": "Re4Ir7",
+   "n_atoms": 11,
+   "pss": 0.8519906085771699,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 363.31116858424633
+  },
+  {
+   "candidate_id": "candidate_0706",
+   "formula": "Re2Os5W3",
+   "n_atoms": 20,
+   "pss": -0.6543868059452417,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 365.2207773369966
+  },
+  {
+   "candidate_id": "candidate_0709",
+   "formula": "Re9Os",
+   "n_atoms": 10,
+   "pss": -0.6759276400293289,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 351.89298716054424
+  },
+  {
+   "candidate_id": "candidate_0713",
+   "formula": "IrOs8",
+   "n_atoms": 9,
+   "pss": 0.8896879494288886,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 404.1500511466153
+  },
+  {
+   "candidate_id": "candidate_0714",
+   "formula": "IrOs3",
+   "n_atoms": 16,
+   "pss": -0.5199036507024094,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 407.0598386762846
+  },
+  {
+   "candidate_id": "candidate_0715",
+   "formula": "Ir5Os",
+   "n_atoms": 18,
+   "pss": -0.7430144102587691,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 324.8360072238298
+  },
+  {
+   "candidate_id": "candidate_0716",
+   "formula": "Re5B2",
+   "n_atoms": 7,
+   "pss": -0.12875841370179864,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 370.53138701420517
+  },
+  {
+   "candidate_id": "candidate_0719",
+   "formula": "Re5Os4",
+   "n_atoms": 18,
+   "pss": -0.6842002380496742,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 360.4829949402498
+  },
+  {
+   "candidate_id": "candidate_0721",
+   "formula": "Ir3Os7",
+   "n_atoms": 10,
+   "pss": -0.4999211084752423,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 401.29236015118266
+  },
+  {
+   "candidate_id": "candidate_0730",
+   "formula": "Os3W2",
+   "n_atoms": 10,
+   "pss": -0.6664619650254573,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 363.5366861007763
+  },
+  {
+   "candidate_id": "candidate_0731",
+   "formula": "IrOs3",
+   "n_atoms": 16,
+   "pss": 1.0719149786770044,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 409.6537315912379
+  },
+  {
+   "candidate_id": "candidate_0735",
+   "formula": "ReIr2Os5",
+   "n_atoms": 8,
+   "pss": -0.5118408711778853,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 416.21035759653876
+  },
+  {
+   "candidate_id": "candidate_0736",
+   "formula": "IrOs3",
+   "n_atoms": 12,
+   "pss": 0.5395067148509108,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 415.82008284517804
+  },
+  {
+   "candidate_id": "candidate_0737",
+   "formula": "Os5W",
+   "n_atoms": 12,
+   "pss": 1.0251889261101532,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 414.95615560391366
+  },
+  {
+   "candidate_id": "candidate_0744",
+   "formula": "Os13W2",
+   "n_atoms": 15,
+   "pss": -0.7216996947647664,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 360.0618549430205
+  },
+  {
+   "candidate_id": "candidate_0750",
+   "formula": "Re2Os3",
+   "n_atoms": 10,
+   "pss": 0.9969591581388687,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 368.0135732018135
+  },
+  {
+   "candidate_id": "candidate_0751",
+   "formula": "Re4B4(IrOs)5",
+   "n_atoms": 18,
+   "pss": -0.20911625335238837,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 358.38512870612095
+  },
+  {
+   "candidate_id": "candidate_0752",
+   "formula": "Re4B",
+   "n_atoms": 20,
+   "pss": -0.2721844811352866,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 403.77728590338876
+  },
+  {
+   "candidate_id": "candidate_0774",
+   "formula": "ReIr3",
+   "n_atoms": 8,
+   "pss": 1.8120148391647761,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 404.5977746233244
+  },
+  {
+   "candidate_id": "candidate_0775",
+   "formula": "Ir5Os7",
+   "n_atoms": 12,
+   "pss": -0.5061633194209088,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 396.0239282494798
+  },
+  {
+   "candidate_id": "candidate_0782",
+   "formula": "IrOs",
+   "n_atoms": 6,
+   "pss": -0.5279782827046814,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 394.81649091161495
+  },
+  {
+   "candidate_id": "candidate_0785",
+   "formula": "Re3Os4",
+   "n_atoms": 7,
+   "pss": -0.5907228478830111,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 373.71516311331504
+  },
+  {
+   "candidate_id": "candidate_0788",
+   "formula": "Ir8Os5",
+   "n_atoms": 13,
+   "pss": -0.5619188521476908,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 373.4969239627637
+  },
+  {
+   "candidate_id": "candidate_0796",
+   "formula": "Ir4Os",
+   "n_atoms": 5,
+   "pss": 0.7254109889501423,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 373.6266222599208
+  },
+  {
+   "candidate_id": "candidate_0801",
+   "formula": "Ir2Os7",
+   "n_atoms": 9,
+   "pss": 1.2454389808758966,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 408.6764202943424
+  },
+  {
+   "candidate_id": "candidate_0802",
+   "formula": "Ir3Os5",
+   "n_atoms": 16,
+   "pss": 0.27595973739147983,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 409.70798124996986
+  },
+  {
+   "candidate_id": "candidate_0803",
+   "formula": "Re(BOs2)2",
+   "n_atoms": 7,
+   "pss": -0.02482880337746385,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 366.93300061494483
+  },
+  {
+   "candidate_id": "candidate_0806",
+   "formula": "Ir4Os7",
+   "n_atoms": 11,
+   "pss": -0.5059632371810382,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 397.6302658923715
+  },
+  {
+   "candidate_id": "candidate_0809",
+   "formula": "Os7Ru",
+   "n_atoms": 16,
+   "pss": 0.3206287701651346,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 457.7658821146176
+  },
+  {
+   "candidate_id": "candidate_0814",
+   "formula": "Ir7Os9",
+   "n_atoms": 16,
+   "pss": -0.5017922055481195,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 420.8544680358122
+  },
+  {
+   "candidate_id": "candidate_0817",
+   "formula": "Re2Ir3Os7",
+   "n_atoms": 12,
+   "pss": -0.5203523022798532,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 408.67023611186113
+  },
+  {
+   "candidate_id": "candidate_0819",
+   "formula": "Ir2OsW",
+   "n_atoms": 4,
+   "pss": -0.5933427563741899,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 362.20497139266723
+  },
+  {
+   "candidate_id": "candidate_0821",
+   "formula": "Re3Os13",
+   "n_atoms": 16,
+   "pss": 0.2543025728127285,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 433.6169811580709
+  },
+  {
+   "candidate_id": "candidate_0824",
+   "formula": "IrOs3",
+   "n_atoms": 16,
+   "pss": 1.454226122165073,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 420.79627287293033
+  },
+  {
+   "candidate_id": "candidate_0825",
+   "formula": "ReIr2W",
+   "n_atoms": 4,
+   "pss": -0.6378226740167241,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 343.5379605398997
+  },
+  {
+   "candidate_id": "candidate_0832",
+   "formula": "Os5Ru",
+   "n_atoms": 6,
+   "pss": -0.4800321926691026,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 408.57827918420344
+  },
+  {
+   "candidate_id": "candidate_0834",
+   "formula": "ReOs3",
+   "n_atoms": 12,
+   "pss": -0.5720042860596031,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 409.94217536906933
+  },
+  {
+   "candidate_id": "candidate_0838",
+   "formula": "ReIr3Os2",
+   "n_atoms": 12,
+   "pss": -0.5664423323748581,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 354.56874205600093
+  },
+  {
+   "candidate_id": "candidate_0841",
+   "formula": "Ir3Os4Ru",
+   "n_atoms": 16,
+   "pss": -0.506645730369941,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 374.3035772829658
+  },
+  {
+   "candidate_id": "candidate_0844",
+   "formula": "Re4IrOs5",
+   "n_atoms": 10,
+   "pss": -0.5435796096785943,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 404.6429219249966
+  },
+  {
+   "candidate_id": "candidate_0845",
+   "formula": "IrOs5",
+   "n_atoms": 12,
+   "pss": 1.0596832630743755,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 412.0981662675833
+  },
+  {
+   "candidate_id": "candidate_0848",
+   "formula": "Re2Ir2Os5Ru2",
+   "n_atoms": 11,
+   "pss": -0.5148712367311656,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 375.4196301862051
+  },
+  {
+   "candidate_id": "candidate_0851",
+   "formula": "ReIr2Os5",
+   "n_atoms": 16,
+   "pss": -0.5293388265443003,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 411.6031613376475
+  },
+  {
+   "candidate_id": "candidate_0852",
+   "formula": "ReIr4",
+   "n_atoms": 15,
+   "pss": -0.7122638015010184,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 324.1911155545809
+  },
+  {
+   "candidate_id": "candidate_0853",
+   "formula": "Re5Os11",
+   "n_atoms": 16,
+   "pss": -0.5562006693512132,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 419.77553905909406
+  },
+  {
+   "candidate_id": "candidate_0858",
+   "formula": "Re4Os11",
+   "n_atoms": 15,
+   "pss": -0.7128711428390716,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 361.18315428070196
+  },
+  {
+   "candidate_id": "candidate_0859",
+   "formula": "Os11W3",
+   "n_atoms": 14,
+   "pss": -0.706289540026949,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 366.85168761066274
+  },
+  {
+   "candidate_id": "candidate_0860",
+   "formula": "IrW",
+   "n_atoms": 2,
+   "pss": -0.6721934767793402,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 340.70337209278733
+  },
+  {
+   "candidate_id": "candidate_0862",
+   "formula": "Re2Ir7",
+   "n_atoms": 18,
+   "pss": -0.772116455504549,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 320.83688277697985
+  },
+  {
+   "candidate_id": "candidate_0864",
+   "formula": "Re4Os",
+   "n_atoms": 15,
+   "pss": -0.7718544651694711,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 326.9115014335644
+  },
+  {
+   "candidate_id": "candidate_0872",
+   "formula": "IrOs6",
+   "n_atoms": 7,
+   "pss": 0.8343510446341457,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 398.5173198175911
+  },
+  {
+   "candidate_id": "candidate_0879",
+   "formula": "Ir5Os3Ru",
+   "n_atoms": 18,
+   "pss": -0.6772323561429248,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 316.9990818768201
+  },
+  {
+   "candidate_id": "candidate_0883",
+   "formula": "Mo2Ir11Os2",
+   "n_atoms": 15,
+   "pss": -0.6861579223501363,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 329.58816957404565
+  },
+  {
+   "candidate_id": "candidate_0884",
+   "formula": "IrOs5",
+   "n_atoms": 12,
+   "pss": 1.0562514476255878,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 408.7077389314087
+  },
+  {
+   "candidate_id": "candidate_0885",
+   "formula": "Ir3Os5",
+   "n_atoms": 16,
+   "pss": -0.4952894716092565,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 424.1384508880332
+  },
+  {
+   "candidate_id": "candidate_0895",
+   "formula": "Re11B3IrOs2C",
+   "n_atoms": 18,
+   "pss": -0.18896564053536158,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 401.9465600254628
+  },
+  {
+   "candidate_id": "candidate_0898",
+   "formula": "Re3Ir2",
+   "n_atoms": 10,
+   "pss": 0.6649866174986295,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 364.03497880381684
+  },
+  {
+   "candidate_id": "candidate_0899",
+   "formula": "ReOs3",
+   "n_atoms": 12,
+   "pss": -0.5355908601725492,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 404.161513748667
+  },
+  {
+   "candidate_id": "candidate_0902",
+   "formula": "Re3Ir9Os7",
+   "n_atoms": 19,
+   "pss": -0.6483562898595567,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 365.04489974138335
+  },
+  {
+   "candidate_id": "candidate_0908",
+   "formula": "Re2Os3",
+   "n_atoms": 5,
+   "pss": 0.7054025069685602,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 408.382241713351
+  },
+  {
+   "candidate_id": "candidate_0926",
+   "formula": "Re3Os13",
+   "n_atoms": 16,
+   "pss": -0.5307101845828305,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 428.0372498259663
+  },
+  {
+   "candidate_id": "candidate_0927",
+   "formula": "Ir11Os4Ru",
+   "n_atoms": 16,
+   "pss": -0.5062376525527389,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 401.443920336989
+  },
+  {
+   "candidate_id": "candidate_0928",
+   "formula": "Ir3W2",
+   "n_atoms": 10,
+   "pss": -0.6501073884196715,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 335.29725326719915
+  },
+  {
+   "candidate_id": "candidate_0937",
+   "formula": "Ir3Os13",
+   "n_atoms": 16,
+   "pss": 0.6746291534844585,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 406.0339324474145
+  },
+  {
+   "candidate_id": "candidate_0939",
+   "formula": "Re2Ir5Os7Ru2",
+   "n_atoms": 16,
+   "pss": -0.4909360647571053,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 407.2012966851964
+  },
+  {
+   "candidate_id": "candidate_0941",
+   "formula": "Ir11Os9",
+   "n_atoms": 20,
+   "pss": -0.5088437918975932,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 412.8626273987471
+  },
+  {
+   "candidate_id": "candidate_0944",
+   "formula": "Os11W3",
+   "n_atoms": 14,
+   "pss": -0.6917987974308482,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 366.6852407650778
+  },
+  {
+   "candidate_id": "candidate_0946",
+   "formula": "Os",
+   "n_atoms": 5,
+   "pss": -0.49654121310008914,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 442.0316305319712
+  },
+  {
+   "candidate_id": "candidate_0951",
+   "formula": "Re4N",
+   "n_atoms": 10,
+   "pss": -0.22571113991085323,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 406.9437265379691
+  },
+  {
+   "candidate_id": "candidate_0954",
+   "formula": "Os7W3",
+   "n_atoms": 10,
+   "pss": -0.6469414842948091,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 356.9435701956783
+  },
+  {
+   "candidate_id": "candidate_0959",
+   "formula": "ReIrOs",
+   "n_atoms": 6,
+   "pss": -0.5471684423498413,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 390.3526325801136
+  },
+  {
+   "candidate_id": "candidate_0961",
+   "formula": "Os9W",
+   "n_atoms": 10,
+   "pss": -0.5542698409960802,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 376.0086065553739
+  },
+  {
+   "candidate_id": "candidate_0970",
+   "formula": "Ir5Os9",
+   "n_atoms": 14,
+   "pss": -0.5121832681289554,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 406.0738038493062
+  },
+  {
+   "candidate_id": "candidate_0979",
+   "formula": "IrOs3",
+   "n_atoms": 12,
+   "pss": -0.4919048127913187,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 410.92311853282564
+  },
+  {
+   "candidate_id": "candidate_0980",
+   "formula": "Re2IrOs6",
+   "n_atoms": 18,
+   "pss": -0.721460924953197,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 346.63657128017513
+  },
+  {
+   "candidate_id": "candidate_0982",
+   "formula": "IrOs",
+   "n_atoms": 8,
+   "pss": -0.5085589605122963,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 407.688148402518
+  },
+  {
+   "candidate_id": "candidate_0990",
+   "formula": "Re2Os5W3",
+   "n_atoms": 10,
+   "pss": -0.6745276650292003,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 352.2977511444656
+  },
+  {
+   "candidate_id": "candidate_0995",
+   "formula": "Re7Os3",
+   "n_atoms": 10,
+   "pss": -0.6381215026456141,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 360.49798358497105
+  },
+  {
+   "candidate_id": "candidate_1000",
+   "formula": "Ir5Os7",
+   "n_atoms": 12,
+   "pss": -0.5238092479187815,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 395.25786972965744
+  },
+  {
+   "candidate_id": "candidate_1005",
+   "formula": "ReOs2",
+   "n_atoms": 12,
+   "pss": 0.2407169863194917,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 420.8120708972712
+  },
+  {
+   "candidate_id": "candidate_1010",
+   "formula": "Os",
+   "n_atoms": 16,
+   "pss": -0.5024216535900318,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 442.0475869326971
+  },
+  {
+   "candidate_id": "candidate_1015",
+   "formula": "Re4Ir7",
+   "n_atoms": 11,
+   "pss": -0.5631516816136056,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 369.4685773417276
+  },
+  {
+   "candidate_id": "candidate_1016",
+   "formula": "Re4C",
+   "n_atoms": 10,
+   "pss": -0.2450319560512363,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 403.56685772671386
+  },
+  {
+   "candidate_id": "candidate_1019",
+   "formula": "IrOs3",
+   "n_atoms": 16,
+   "pss": 0.8555934339506847,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 408.06060117696853
+  },
+  {
+   "candidate_id": "candidate_1020",
+   "formula": "IrOs7",
+   "n_atoms": 16,
+   "pss": 0.3085504887302052,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 464.09856397080785
+  },
+  {
+   "candidate_id": "candidate_1023",
+   "formula": "IrOs5",
+   "n_atoms": 18,
+   "pss": 0.8981336094290472,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 438.292385380694
+  },
+  {
+   "candidate_id": "candidate_1025",
+   "formula": "Os3Ru",
+   "n_atoms": 12,
+   "pss": -0.46574334690238706,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 407.6358820966886
+  },
+  {
+   "candidate_id": "candidate_1029",
+   "formula": "Os3Ru",
+   "n_atoms": 16,
+   "pss": 0.7101814071850977,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 429.11599315693496
+  },
+  {
+   "candidate_id": "candidate_1031",
+   "formula": "Os2W3",
+   "n_atoms": 10,
+   "pss": -0.757170974847258,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 338.1593809250562
+  },
+  {
+   "candidate_id": "candidate_1033",
+   "formula": "Os2W13",
+   "n_atoms": 15,
+   "pss": 0.6102842221004653,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 298.858601694658
+  },
+  {
+   "candidate_id": "candidate_1034",
+   "formula": "Ir7Os5",
+   "n_atoms": 12,
+   "pss": -0.5206233520000773,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 405.3414176904332
+  },
+  {
+   "candidate_id": "candidate_1035",
+   "formula": "Re3Ir5",
+   "n_atoms": 8,
+   "pss": -0.5612152464870305,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 367.67888351631393
+  },
+  {
+   "candidate_id": "candidate_1048",
+   "formula": "Ir5Ru",
+   "n_atoms": 18,
+   "pss": -0.7358405066272429,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 313.8299939494729
+  },
+  {
+   "candidate_id": "candidate_1050",
+   "formula": "ReOs3",
+   "n_atoms": 16,
+   "pss": 0.22255882408694952,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 407.2320556976568
+  },
+  {
+   "candidate_id": "candidate_1053",
+   "formula": "Re3Os2",
+   "n_atoms": 10,
+   "pss": -0.5932512872195881,
+   "role": "control",
+   "uma_bulk_modulus_gpa": 387.10497947523936
+  },
+  {
+   "candidate_id": "candidate_1064",
+   "formula": "ReOs5",
+   "n_atoms": 12,
+   "pss": 0.26015143484709946,
+   "role": "priority",
+   "uma_bulk_modulus_gpa": 405.49061232454693
+  },
+  {
+   "candidate_id": "candidate_1078",
+   "formula": "Re3Os2",
+   "n_atoms": 15,
+   "pss": -0.7484987047823222,
+   "role": "screened",
+   "uma_bulk_modulus_gpa": 337.47440634378603
+  }
+ ]
+}

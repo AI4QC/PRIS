@@ -1,0 +1,37 @@
+{
+ "order": [
+  {
+   "element": "Na",
+   "symbol": "Na_pv",
+   "title": "PAW_PBE Na_pv 19Sep2006",
+   "enmax_ev": 259.561,
+   "rcore_a": 1.1642,
+   "sha256": "6a2f546d9e11350984debacf3dc457d8cffc0868e817d445faca461816a32b94",
+   "library_relative": "Na_pv/POTCAR"
+  },
+  {
+   "element": "Ag",
+   "symbol": "Ag",
+   "title": "PAW_PBE Ag 02Apr2005",
+   "enmax_ev": 249.844,
+   "rcore_a": 1.3229,
+   "sha256": "6550cfa3543261e132c169e1b98a529204624d72be14e2da2e0242bcb74a174d",
+   "library_relative": "Ag/POTCAR"
+  },
+  {
+   "element": "S",
+   "symbol": "S",
+   "title": "PAW_PBE S 06Sep2000",
+   "enmax_ev": 258.689,
+   "rcore_a": 1.0054,
+   "sha256": "0fc7481fb0695f01bdc6462160264c5c84044ae9ec85a907d398b887a2bc3132",
+   "library_relative": "S/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "Na",
+  "Ag",
+  "S"
+ ]
+}

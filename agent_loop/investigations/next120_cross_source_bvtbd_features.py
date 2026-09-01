@@ -1,0 +1,332 @@
+#!/usr/bin/env python3
+"""Discovery-only cross-source materialization of NEXT119 BVTBD features."""
+
+from __future__ import annotations
+
+import argparse
+from collections import Counter
+from concurrent.futures import ProcessPoolExecutor
+import json
+import math
+import os
+from pathlib import Path
+import shutil
+import tempfile
+import time
+from typing import Sequence
+
+import numpy as np
+import pandas as pd
+from pymatgen.core import Structure
+from pymatgen.io.ase import AseAtomsAdaptor
+
+from src.next11_geometry_only_frames import _parse_frame
+from src.next19_valence_transport import infer_valence_assignment
+from src.next84_scigen_geometry_lockbox import (
+    GEOMETRY_NAMES as SCIGEN_GEOMETRY_NAMES,
+    MANIFEST_NAME as SCIGEN_COHORT_MANIFEST_NAME,
+    METADATA_NAME as SCIGEN_METADATA_NAME,
+)
+from src.next93b_wyformer_blind_lockbox import (
+    GEOMETRY_NAMES as WYFORMER_GEOMETRY_NAMES,
+    MANIFEST_NAME as WYFORMER_COHORT_MANIFEST_NAME,
+    METADATA_NAME as WYFORMER_METADATA_NAME,
+)
+from src.next102_cross_source_dobvr_features import (
+    _discovery_metadata,
+    _read_json,
+    _scigen_payloads,
+    _sha256_file,
+    _validate_scigen,
+    _validate_wyformer,
+    _write_json,
+    _wyformer_payloads,
+)
+from src.next119_bounded_valence_transport import (
+    BUDGETS,
+    CERTIFICATE_METHOD,
+    FEATURE_NAMES as BASE_FEATURE_NAMES,
+    MAX_SITES,
+    compute_bounded_bond_valence_transport_features,
+)
+
+
+PROTOCOL = "2026-08-08-next120-cross-source-discovery-bvtbd-v1"
+DISCOVERY_ROLE = "discovery"
+GRAPH_MODE = "voronoi"
+MANIFEST_NAME = "MANIFEST.json"
+CATALOGUE_NAME = "NEXT120_BVTBD_FEATURE_CATALOGUE.json"
+FEATURE_FILES = {
+    "scigen": "scigen_discovery_bvtbd_features.parquet",
+    "wyformer": "wyformer_discovery_bvtbd_features.parquet",
+}
+NUMERIC_FEATURE_NAMES = BASE_FEATURE_NAMES
+STATUS_COLUMNS = ("bvtbd_supported", "bvtbd_failure")
+FEATURE_COLUMNS = (*NUMERIC_FEATURE_NAMES, *STATUS_COLUMNS)
+EXPECTED_INPUT_SHA256 = {
+    "scigen_cohort_manifest": "dc5bf33c6ce6dc2c10bcd3704688055058145fbe7269ada23ffbe4b141d75fe7",
+    "scigen_metadata": "f91455f23b0a96f60fd1c779249e2be46a7ecf94fcdde2b146426a95aac05bde",
+    "scigen_geometry_discovery": "e561ef12343c66dcc72bcabf6b8719ad727e01c9582a094e281da73b862ab575",
+    "wyformer_cohort_manifest": "e0539d556538cb4c052431bc6a1e5c1663bc3de427677dbc8a446dcc3b4fbc54",
+    "wyformer_metadata": "3b152b4b84c8d3f7ff5e85611dc1fd2728296f150e907ac4578ce55d2b27dd2b",
+    "wyformer_geometry_discovery": "f1ce5ae4fba8c13fcbf3e25de4f596b919d9b41da5b072d9a28eefeaffc69784",
+    "design": "e19cff252bc5f26448dcc4926d9faff250d15196d2a23d3f42440ced1cb333f7",
+}
+
+
+def _failure_row(message: str) -> dict[str, object]:
+    return {
+        **{name: math.nan for name in NUMERIC_FEATURE_NAMES},
+        "bvtbd_supported": False,
+        "bvtbd_failure": message,
+    }
+
+
+def compute_bvtbd_feature_row(structure) -> dict[str, object]:
+    """Infer the frozen valence assignment and evaluate one raw-x0 certificate."""
+
+    try:
+        assignment = infer_valence_assignment(structure)
+        if not assignment.supported or assignment.values is None:
+            return _failure_row(
+                assignment.failure_reason or "valence assignment is unsupported"
+            )
+        result = compute_bounded_bond_valence_transport_features(
+            structure,
+            assignment.values,
+        )
+        if not result.supported:
+            return _failure_row(result.failure_reason or "BVTBD is unsupported")
+        row = {
+            **{name: float(result.features[name]) for name in NUMERIC_FEATURE_NAMES},
+            "bvtbd_supported": True,
+            "bvtbd_failure": None,
+        }
+        if tuple(row) != FEATURE_COLUMNS:
+            raise RuntimeError("NEXT120 feature row schema differs")
+        return row
+    except Exception as exc:
+        return _failure_row(f"{type(exc).__name__}: {exc}")
+
+
+def _compute_scigen_payload(item: tuple[str, bytes]) -> tuple[str, dict[str, object]]:
+    material_id, payload = item
+    try:
+        atoms = _parse_frame(payload, strict_output=True).atoms
+        structure = AseAtomsAdaptor.get_structure(atoms)
+        row = compute_bvtbd_feature_row(structure)
+    except Exception as exc:
+        row = _failure_row(f"structure_parse: {type(exc).__name__}: {exc}")
+    return material_id, row
+
+
+def _compute_wyformer_payload(item: tuple[str, str]) -> tuple[str, dict[str, object]]:
+    material_id, payload = item
+    try:
+        structure = Structure.from_dict(json.loads(payload))
+        row = compute_bvtbd_feature_row(structure)
+    except Exception as exc:
+        row = _failure_row(f"structure_parse: {type(exc).__name__}: {exc}")
+    return material_id, row
+
+
+def _compute_many(payloads: Sequence[tuple], *, source: str, workers: int):
+    function = _compute_scigen_payload if source == "scigen" else _compute_wyformer_payload
+    if workers == 1:
+        return [function(item) for item in payloads]
+    with ProcessPoolExecutor(max_workers=workers) as executor:
+        return list(executor.map(function, payloads, chunksize=8))
+
+
+def _source_counts(table: pd.DataFrame) -> dict[str, object]:
+    supported = table["bvtbd_supported"].eq(True)
+    return {
+        "rows": int(len(table)),
+        "supported": int(supported.sum()),
+        "failures": dict(Counter(table.loc[~supported, "bvtbd_failure"])),
+        "finite_numeric_features": {
+            name: int(np.isfinite(pd.to_numeric(table[name], errors="coerce")).sum())
+            for name in NUMERIC_FEATURE_NAMES
+        },
+    }
+
+
+def _solver_thread_environment(
+    *, require_formal_inputs: bool
+) -> dict[str, str | None]:
+    names = ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS")
+    values = {name: os.environ.get(name) for name in names}
+    if require_formal_inputs and any(value != "1" for value in values.values()):
+        raise ValueError("NEXT120 formal run requires a single-thread solver environment")
+    return values
+
+
+def build_cross_source_discovery_bvtbd_features(
+    *,
+    scigen_cohort_dir: Path,
+    wyformer_cohort_dir: Path,
+    design_path: Path,
+    output_dir: Path,
+    workers: int = 12,
+    require_formal_inputs: bool = True,
+) -> dict[str, object]:
+    """Materialize BVTBD only from physically split discovery geometries."""
+
+    scigen = Path(scigen_cohort_dir).resolve()
+    wyformer = Path(wyformer_cohort_dir).resolve()
+    target = Path(output_dir).resolve()
+    if os.path.lexists(target):
+        raise FileExistsError(str(target))
+    if type(workers) is not int or workers <= 0:
+        raise ValueError("workers must be a positive exact integer")
+    solver_thread_environment = _solver_thread_environment(
+        require_formal_inputs=require_formal_inputs
+    )
+    paths = {
+        "scigen_cohort_manifest": scigen / SCIGEN_COHORT_MANIFEST_NAME,
+        "scigen_metadata": scigen / SCIGEN_METADATA_NAME,
+        "scigen_geometry_discovery": scigen / SCIGEN_GEOMETRY_NAMES[DISCOVERY_ROLE],
+        "wyformer_cohort_manifest": wyformer / WYFORMER_COHORT_MANIFEST_NAME,
+        "wyformer_metadata": wyformer / WYFORMER_METADATA_NAME,
+        "wyformer_geometry_discovery": wyformer / WYFORMER_GEOMETRY_NAMES[DISCOVERY_ROLE],
+        "design": Path(design_path).resolve(),
+    }
+    if any(not path.is_file() for path in paths.values()):
+        raise FileNotFoundError("NEXT120 discovery input is missing")
+    input_hashes = {name: _sha256_file(path) for name, path in paths.items()}
+    if require_formal_inputs and input_hashes != EXPECTED_INPUT_SHA256:
+        raise ValueError("NEXT120 formal input identity differs")
+    _validate_scigen(_read_json(paths["scigen_cohort_manifest"]), input_hashes)
+    _validate_wyformer(_read_json(paths["wyformer_cohort_manifest"]), input_hashes)
+    metadata = {
+        "scigen": _discovery_metadata(paths["scigen_metadata"], source="scigen"),
+        "wyformer": _discovery_metadata(paths["wyformer_metadata"], source="wyformer"),
+    }
+    payloads = {
+        "scigen": _scigen_payloads(
+            paths["scigen_geometry_discovery"],
+            metadata["scigen"]["material_id"].astype(str).tolist(),
+        ),
+        "wyformer": _wyformer_payloads(
+            paths["wyformer_geometry_discovery"],
+            metadata["wyformer"]["material_id"].astype(str).tolist(),
+        ),
+    }
+
+    repository_root = Path(__file__).resolve().parents[1]
+    source_paths = {
+        "src/next19_valence_transport.py": repository_root / "src/next19_valence_transport.py",
+        "src/next38_bond_valence_transport_compatibility_features.py": repository_root / "src/next38_bond_valence_transport_compatibility_features.py",
+        "src/next102_cross_source_dobvr_features.py": repository_root / "src/next102_cross_source_dobvr_features.py",
+        "src/next119_bounded_valence_transport.py": repository_root / "src/next119_bounded_valence_transport.py",
+        "src/next120_cross_source_bvtbd_features.py": Path(__file__).resolve(),
+    }
+    source_hashes = {name: _sha256_file(path) for name, path in source_paths.items()}
+    target.parent.mkdir(parents=True, exist_ok=True)
+    staging = Path(tempfile.mkdtemp(prefix=f".{target.name}.staging-", dir=target.parent))
+    output_paths: list[Path] = []
+    counts: dict[str, object] = {}
+    started = time.perf_counter()
+    try:
+        for source in ("scigen", "wyformer"):
+            computed = _compute_many(payloads[source], source=source, workers=workers)
+            frame = pd.DataFrame(
+                [{"material_id": material_id, **row} for material_id, row in computed]
+            )
+            table = metadata[source].merge(
+                frame,
+                on="material_id",
+                how="left",
+                validate="one_to_one",
+            )
+            if len(table) != len(metadata[source]) or any(
+                name not in table for name in FEATURE_COLUMNS
+            ):
+                raise RuntimeError(f"NEXT120 {source} row accounting differs")
+            feature_path = staging / FEATURE_FILES[source]
+            table.to_parquet(feature_path, index=False)
+            output_paths.append(feature_path)
+            counts[source] = _source_counts(table)
+
+        catalogue = {
+            "protocol": PROTOCOL,
+            "graph_mode": GRAPH_MODE,
+            "certificate_method": CERTIFICATE_METHOD,
+            "budgets": list(BUDGETS),
+            "maximum_sites": MAX_SITES,
+            "partitions_read": [DISCOVERY_ROLE],
+            "numeric_feature_names": list(NUMERIC_FEATURE_NAMES),
+            "status_columns": list(STATUS_COLUMNS),
+            "labels_opened": False,
+            "endpoint_columns_present": False,
+            "coordinate_or_cell_update_applied": False,
+        }
+        catalogue_path = staging / CATALOGUE_NAME
+        _write_json(catalogue_path, catalogue)
+        output_paths.append(catalogue_path)
+        manifest: dict[str, object] = {
+            "protocol": PROTOCOL,
+            "mode": "cross_source_discovery_only_raw_x0_bvtbd_feature_freeze",
+            "graph_mode": GRAPH_MODE,
+            "certificate_method": CERTIFICATE_METHOD,
+            "budgets": list(BUDGETS),
+            "maximum_sites": MAX_SITES,
+            "workers": workers,
+            "solver_thread_environment": solver_thread_environment,
+            "elapsed_seconds": time.perf_counter() - started,
+            "partitions_read": [DISCOVERY_ROLE],
+            "counts": counts,
+            "labels_opened": False,
+            "endpoint_payloads_opened": False,
+            "validation_geometry_opened": False,
+            "replication_geometry_opened": False,
+            "relaxed_structures_opened": False,
+            "dft_calculation_executed": False,
+            "dft_values_used_by_features": False,
+            "learned_energy_force_stress_proxy_used": False,
+            "model_or_proxy_potential_used": False,
+            "physical_relaxation_executed": False,
+            "coordinate_or_cell_update_applied": False,
+            "inputs_sha256": {
+                name: {"path": str(paths[name]), "sha256": value}
+                for name, value in input_hashes.items()
+            },
+            "executed_source_sha256": source_hashes,
+            "outputs_sha256": {
+                path.name: _sha256_file(path) for path in output_paths
+            },
+            "scientific_improvement_claim": False,
+        }
+        _write_json(staging / MANIFEST_NAME, manifest)
+        if any(_sha256_file(path) != input_hashes[name] for name, path in paths.items()):
+            raise RuntimeError("NEXT120 input changed before publication")
+        if any(_sha256_file(path) != source_hashes[name] for name, path in source_paths.items()):
+            raise RuntimeError("NEXT120 source changed before publication")
+        os.replace(staging, target)
+        return manifest
+    except Exception:
+        shutil.rmtree(staging, ignore_errors=True)
+        raise
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--scigen-cohort-dir", type=Path, required=True)
+    parser.add_argument("--wyformer-cohort-dir", type=Path, required=True)
+    parser.add_argument("--design-path", type=Path, required=True)
+    parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--workers", type=int, default=12)
+    args = parser.parse_args()
+    manifest = build_cross_source_discovery_bvtbd_features(
+        scigen_cohort_dir=args.scigen_cohort_dir,
+        wyformer_cohort_dir=args.wyformer_cohort_dir,
+        design_path=args.design_path,
+        output_dir=args.output_dir,
+        workers=args.workers,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

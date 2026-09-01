@@ -1,0 +1,4 @@
+pair,left_score,right_score,n,left_unique_values,right_unique_values,spearman_rho,mean_absolute_percentile_rank_difference,left_has_split_score_ties,right_has_split_score_ties,decile_overlap_status,same_decile_rate,bottom_decile_jaccard,top_decile_jaccard
+CLscore_A__CLscore_B,CLscore_A,CLscore_B,8108676,827491,911376,0.689915048001024,0.17301769105945533,True,True,undefined_due_to_split_score_ties,,,
+CLscore_A__CLscore_jang,CLscore_A,CLscore_jang,8108676,827491,989827,0.4996363131314733,0.2252081362214703,True,True,undefined_due_to_split_score_ties,,,
+CLscore_B__CLscore_jang,CLscore_B,CLscore_jang,8108676,911376,989827,0.38177247834013384,0.2535364856812518,True,True,undefined_due_to_split_score_ties,,,

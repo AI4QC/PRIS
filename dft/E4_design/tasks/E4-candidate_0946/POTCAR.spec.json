@@ -1,0 +1,17 @@
+{
+ "order": [
+  {
+   "element": "Os",
+   "symbol": "Os_pv",
+   "title": "PAW_PBE Os_pv 20Jan2003",
+   "enmax_ev": 228.022,
+   "rcore_a": 1.3229,
+   "sha256": "df2e3ef880fc2502babe687ce20ec2e4b82fab5eb8dd3b5c0a23d3b7861e7a8b",
+   "library_relative": "Os_pv/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "Os"
+ ]
+}

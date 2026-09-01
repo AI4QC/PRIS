@@ -1,0 +1,37 @@
+{
+ "order": [
+  {
+   "element": "Al",
+   "symbol": "Al",
+   "title": "PAW_PBE Al 04Jan2001",
+   "enmax_ev": 240.3,
+   "rcore_a": 1.0054,
+   "sha256": "17880443556af62b473fe41b62a467bd001ad55d2cabe504a3f22e34d4e9db96",
+   "library_relative": "Al/POTCAR"
+  },
+  {
+   "element": "Ag",
+   "symbol": "Ag",
+   "title": "PAW_PBE Ag 02Apr2005",
+   "enmax_ev": 249.844,
+   "rcore_a": 1.3229,
+   "sha256": "6550cfa3543261e132c169e1b98a529204624d72be14e2da2e0242bcb74a174d",
+   "library_relative": "Ag/POTCAR"
+  },
+  {
+   "element": "O",
+   "symbol": "O",
+   "title": "PAW_PBE O 08Apr2002",
+   "enmax_ev": 400.0,
+   "rcore_a": 0.8043,
+   "sha256": "818f92134a0a090dccd8ba1447fa70422a3b330e708bb4f08108d8ae51209ddf",
+   "library_relative": "O/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "Al",
+  "Ag",
+  "O"
+ ]
+}

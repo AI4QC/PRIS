@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "CoB2MoW",
+ "kind": "gnome",
+ "kmesh": [
+  8,
+  10,
+  11
+ ],
+ "n_atoms": 5,
+ "n_kpoints": 880,
+ "parent": "2afa0c9849",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "B",
+  "Co",
+  "Mo",
+  "W"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-2afa0c9849",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-2afa0c9849",
+ "variant": "P0"
+}

@@ -1,0 +1,30 @@
+{
+ "encut_ev": 526.0,
+ "experiment": "E3",
+ "formula": "HoEr2MgCd2Au3",
+ "kind": "gnome",
+ "kmesh": [
+  5,
+  5,
+  8
+ ],
+ "n_atoms": 9,
+ "n_kpoints": 200,
+ "parent": "24dfbfa4b6",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "Au",
+  "Cd",
+  "Er",
+  "Ho",
+  "Mg"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-24dfbfa4b6",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-24dfbfa4b6",
+ "variant": "P0"
+}

@@ -1,0 +1,332 @@
+{
+  "artifact_kind": "additive_forward_property_synthesis_score_audit",
+  "created_utc": "2026-08-23T05:04:20.713527+00:00",
+  "extraction": {
+    "all_six_observed_count": 9301,
+    "all_six_observed_fraction": 0.34966165413533834,
+    "balance_route_count": 9649,
+    "balance_route_fraction": 0.36274436090225565,
+    "elapsed_seconds": 115.58224725723267,
+    "feature_coverage": {
+      "bv_rel_mean": {
+        "observed_count": 9301,
+        "observed_fraction": 0.34966165413533834,
+        "primary_experimental_observed_count": 334,
+        "primary_experimental_observed_fraction": 0.37740112994350283,
+        "primary_observed_count": 664,
+        "primary_observed_fraction": 0.28620689655172415,
+        "primary_theoretical_no_record_observed_count": 330,
+        "primary_theoretical_no_record_observed_fraction": 0.22996515679442509
+      },
+      "frac_isolated": {
+        "observed_count": 9649,
+        "observed_fraction": 0.36274436090225565,
+        "primary_experimental_observed_count": 344,
+        "primary_experimental_observed_fraction": 0.3887005649717514,
+        "primary_observed_count": 687,
+        "primary_observed_fraction": 0.2961206896551724,
+        "primary_theoretical_no_record_observed_count": 343,
+        "primary_theoretical_no_record_observed_fraction": 0.23902439024390243
+      },
+      "madz_mean": {
+        "observed_count": 9649,
+        "observed_fraction": 0.36274436090225565,
+        "primary_experimental_observed_count": 344,
+        "primary_experimental_observed_fraction": 0.3887005649717514,
+        "primary_observed_count": 687,
+        "primary_observed_fraction": 0.2961206896551724,
+        "primary_theoretical_no_record_observed_count": 343,
+        "primary_theoretical_no_record_observed_fraction": 0.23902439024390243
+      },
+      "poly_deg_max": {
+        "observed_count": 9649,
+        "observed_fraction": 0.36274436090225565,
+        "primary_experimental_observed_count": 344,
+        "primary_experimental_observed_fraction": 0.3887005649717514,
+        "primary_observed_count": 687,
+        "primary_observed_fraction": 0.2961206896551724,
+        "primary_theoretical_no_record_observed_count": 343,
+        "primary_theoretical_no_record_observed_fraction": 0.23902439024390243
+      },
+      "vol_per_atom": {
+        "observed_count": 26600,
+        "observed_fraction": 1.0,
+        "primary_experimental_observed_count": 885,
+        "primary_experimental_observed_fraction": 1.0,
+        "primary_observed_count": 2320,
+        "primary_observed_fraction": 1.0,
+        "primary_theoretical_no_record_observed_count": 1435,
+        "primary_theoretical_no_record_observed_fraction": 1.0
+      },
+      "wyckoff_econ_001": {
+        "observed_count": 26600,
+        "observed_fraction": 1.0,
+        "primary_experimental_observed_count": 885,
+        "primary_experimental_observed_fraction": 1.0,
+        "primary_observed_count": 2320,
+        "primary_observed_fraction": 1.0,
+        "primary_theoretical_no_record_observed_count": 1435,
+        "primary_theoretical_no_record_observed_fraction": 1.0
+      }
+    },
+    "historical_size_domain_count": 26600,
+    "historical_size_domain_fraction": 1.0,
+    "implementation": "experiments.pu_synthesizability_20260821.formula_scores.extract_formula_features",
+    "n_observed_counts": {
+      "2": 16951,
+      "5": 348,
+      "6": 9301
+    },
+    "structure_hash_verified_count": 26600,
+    "synthesis_valence_route": "polymorph_rank2.balance; no PRIS fractional fallback",
+    "top_level_extraction_error_count": 0,
+    "workers": 20
+  },
+  "formula": {
+    "beta": [
+      -1.2392289029845764,
+      -0.8404348959814586,
+      -1.1782127479482547,
+      -4.903580203915573,
+      -0.22037834252664987,
+      0.5881912276246081
+    ],
+    "display_name": "synthesis score / \u5408\u6210\u6027\u5206\u6570",
+    "features": [
+      "madz_mean",
+      "wyckoff_econ_001",
+      "bv_rel_mean",
+      "vol_per_atom",
+      "poly_deg_max",
+      "frac_isolated"
+    ],
+    "name": "S_syn",
+    "path": "<repo>/outputs/20260814_f3_synth/F3_frozen.json",
+    "score_definition": "sum_j beta_j * ((x_j or frozen_median_j) - mu_j) / sd_j",
+    "sha256": "ec36fcd8ae662580fd811b716ddab76707857673e83950d1c19c7ae4ee0998f3",
+    "standardization_and_imputation": "frozen discovery-set mu, sd, and medians; no refit"
+  },
+  "inputs": {
+    "labels": {
+      "path": "<repo>/experiments/twoway_threeaxis/ladder_eval.parquet",
+      "rows": 26600,
+      "sha256": "d714a0a064a896a251d5c6b75eb1c5e55fa7aeacd1dd6125d4797f9291e023fc"
+    },
+    "predictions": {
+      "path": "<repo>/outputs/20260821_property_design/forward_full_energyonly_26600/predictions.parquet",
+      "rows": 26600,
+      "sha256": "ac8e87ae1088493cfa8fd1665b8536f691ce368f93b2a30e664ba7f1705c28ec"
+    },
+    "structures": {
+      "path": "$PRIS_ARCHIVE/external_sources/mp_phonon_threeaxis/raw/summary_phonon.parquet",
+      "rows": 26609,
+      "sha256": "0bce29f6808deac088be20d0fad5fcfde765aadb48e721a75768dc3a248aac01"
+    }
+  },
+  "interpretation_limits": [
+    "S_syn is applied frozen with discovery-set median imputation; it is not refit on the forward queue.",
+    "Thresholds are internally calibrated on the 885 experimental-record high-property rows and are operational work points, not an independent external validation.",
+    "made=False means no matched experimental/ICSD record in this dataset; it is not a confirmed synthesis failure.",
+    "The six-term complete-case sensitivity has a different supported denominator and must be reported separately from the imputed full-queue result.",
+    "The bulk modulus is the stored fixed-fractional-coordinate UMA quadratic E(V) proxy, not a relaxed DFT equation of state."
+  ],
+  "output": {
+    "path": "<repo>/outputs/20260822_property_design_synthesis_score/forward_scores.parquet",
+    "rows": 26600,
+    "sha256": "40c843b62a39c937ee9187dfa40302ffda5f5c5be20727acfc6913891c3146af"
+  },
+  "primary_forward_queue": {
+    "all_six_observed_count": 664,
+    "all_six_observed_fraction": 0.28620689655172415,
+    "complete_case_sensitivity_fixed_retention_operating_points": {
+      "0.95": {
+        "experimental_coverage_fraction_of_primary": 0.37740112994350283,
+        "experimental_retained": 318,
+        "experimental_retention_fraction": 0.9520958083832335,
+        "experimental_total": 334,
+        "scope": "six_term_complete_observation_only",
+        "target_experimental_retention_fraction": 0.95,
+        "theoretical_coverage_fraction_of_primary": 0.22996515679442509,
+        "theoretical_no_record_removed": 36,
+        "theoretical_no_record_total": 330,
+        "theoretical_queue_reduction_fraction": 0.10909090909090909,
+        "threshold": 1.2082685860031754,
+        "threshold_rule": "reject synthesis_score < threshold; retain equality ties"
+      },
+      "0.975": {
+        "experimental_coverage_fraction_of_primary": 0.37740112994350283,
+        "experimental_retained": 326,
+        "experimental_retention_fraction": 0.9760479041916168,
+        "experimental_total": 334,
+        "scope": "six_term_complete_observation_only",
+        "target_experimental_retention_fraction": 0.975,
+        "theoretical_coverage_fraction_of_primary": 0.22996515679442509,
+        "theoretical_no_record_removed": 23,
+        "theoretical_no_record_total": 330,
+        "theoretical_queue_reduction_fraction": 0.0696969696969697,
+        "threshold": 0.39971728269520534,
+        "threshold_rule": "reject synthesis_score < threshold; retain equality ties"
+      },
+      "0.99": {
+        "experimental_coverage_fraction_of_primary": 0.37740112994350283,
+        "experimental_retained": 331,
+        "experimental_retention_fraction": 0.9910179640718563,
+        "experimental_total": 334,
+        "scope": "six_term_complete_observation_only",
+        "target_experimental_retention_fraction": 0.99,
+        "theoretical_coverage_fraction_of_primary": 0.22996515679442509,
+        "theoretical_no_record_removed": 3,
+        "theoretical_no_record_total": 330,
+        "theoretical_queue_reduction_fraction": 0.00909090909090909,
+        "threshold": -1.4255574135724756,
+        "threshold_rule": "reject synthesis_score < threshold; retain equality ties"
+      },
+      "1.0": {
+        "experimental_coverage_fraction_of_primary": 0.37740112994350283,
+        "experimental_retained": 334,
+        "experimental_retention_fraction": 1.0,
+        "experimental_total": 334,
+        "scope": "six_term_complete_observation_only",
+        "target_experimental_retention_fraction": 1.0,
+        "theoretical_coverage_fraction_of_primary": 0.22996515679442509,
+        "theoretical_no_record_removed": 0,
+        "theoretical_no_record_total": 330,
+        "theoretical_queue_reduction_fraction": 0.0,
+        "threshold": null,
+        "threshold_rule": "zero experimental screening budget: no score threshold is applied"
+      }
+    },
+    "definition": "fit_valid and bulk_modulus_gpa >= 200; made=True denotes an experimental/ICSD record and made=False denotes no experimental record",
+    "experimental_all_six_observed_count": 334,
+    "experimental_all_six_observed_fraction": 0.37740112994350283,
+    "experimental_record_count": 885,
+    "imputed_full_queue_fixed_retention_operating_points": {
+      "0.95": {
+        "experimental_retained": 841,
+        "experimental_retention_fraction": 0.9502824858757062,
+        "experimental_total": 885,
+        "target_experimental_retention_fraction": 0.95,
+        "theoretical_no_record_removed": 205,
+        "theoretical_no_record_total": 1435,
+        "theoretical_queue_reduction_fraction": 0.14285714285714285,
+        "threshold": -0.10575149577938692,
+        "threshold_rule": "reject synthesis_score < threshold; retain equality ties"
+      },
+      "0.975": {
+        "experimental_retained": 863,
+        "experimental_retention_fraction": 0.9751412429378531,
+        "experimental_total": 885,
+        "target_experimental_retention_fraction": 0.975,
+        "theoretical_no_record_removed": 57,
+        "theoretical_no_record_total": 1435,
+        "theoretical_queue_reduction_fraction": 0.0397212543554007,
+        "threshold": -0.5672253118752671,
+        "threshold_rule": "reject synthesis_score < threshold; retain equality ties"
+      },
+      "0.99": {
+        "experimental_retained": 877,
+        "experimental_retention_fraction": 0.9909604519774011,
+        "experimental_total": 885,
+        "target_experimental_retention_fraction": 0.99,
+        "theoretical_no_record_removed": 24,
+        "theoretical_no_record_total": 1435,
+        "theoretical_queue_reduction_fraction": 0.016724738675958188,
+        "threshold": -0.8506308608813126,
+        "threshold_rule": "reject synthesis_score < threshold; retain equality ties"
+      },
+      "1.0": {
+        "experimental_retained": 885,
+        "experimental_retention_fraction": 1.0,
+        "experimental_total": 885,
+        "target_experimental_retention_fraction": 1.0,
+        "theoretical_no_record_removed": 0,
+        "theoretical_no_record_total": 1435,
+        "theoretical_queue_reduction_fraction": 0.0,
+        "threshold": null,
+        "threshold_rule": "zero experimental screening budget: no score threshold is applied"
+      }
+    },
+    "imputed_full_queue_operating_points_matched_to_pris_retention": {
+      "L1": {
+        "experimental_retained": 885,
+        "experimental_retention_fraction": 1.0,
+        "experimental_total": 885,
+        "matched_pris_experimental_retention_fraction": 1.0,
+        "matched_pris_rung": "L1",
+        "target_experimental_retention_fraction": 1.0,
+        "theoretical_no_record_removed": 0,
+        "theoretical_no_record_total": 1435,
+        "theoretical_queue_reduction_fraction": 0.0,
+        "threshold": null,
+        "threshold_rule": "zero experimental screening budget: no score threshold is applied"
+      },
+      "L1'": {
+        "experimental_retained": 882,
+        "experimental_retention_fraction": 0.9966101694915255,
+        "experimental_total": 885,
+        "matched_pris_experimental_retention_fraction": 0.9966101694915255,
+        "matched_pris_rung": "L1'",
+        "target_experimental_retention_fraction": 0.9966101694915255,
+        "theoretical_no_record_removed": 3,
+        "theoretical_no_record_total": 1435,
+        "theoretical_queue_reduction_fraction": 0.0020905923344947735,
+        "threshold": -1.4255574135724756,
+        "threshold_rule": "reject synthesis_score < threshold; retain equality ties"
+      },
+      "L2": {
+        "experimental_retained": 860,
+        "experimental_retention_fraction": 0.9717514124293786,
+        "experimental_total": 885,
+        "matched_pris_experimental_retention_fraction": 0.9717514124293786,
+        "matched_pris_rung": "L2",
+        "target_experimental_retention_fraction": 0.9717514124293786,
+        "theoretical_no_record_removed": 67,
+        "theoretical_no_record_total": 1435,
+        "theoretical_queue_reduction_fraction": 0.046689895470383276,
+        "threshold": -0.4918911803858721,
+        "threshold_rule": "reject synthesis_score < threshold; retain equality ties"
+      },
+      "L3": {
+        "experimental_retained": 859,
+        "experimental_retention_fraction": 0.9706214689265537,
+        "experimental_total": 885,
+        "matched_pris_experimental_retention_fraction": 0.9706214689265537,
+        "matched_pris_rung": "L3",
+        "target_experimental_retention_fraction": 0.9706214689265537,
+        "theoretical_no_record_removed": 72,
+        "theoretical_no_record_total": 1435,
+        "theoretical_queue_reduction_fraction": 0.050174216027874564,
+        "threshold": -0.4692756245999419,
+        "threshold_rule": "reject synthesis_score < threshold; retain equality ties"
+      },
+      "L4": {
+        "experimental_retained": 789,
+        "experimental_retention_fraction": 0.8915254237288136,
+        "experimental_total": 885,
+        "matched_pris_experimental_retention_fraction": 0.8915254237288136,
+        "matched_pris_rung": "L4",
+        "target_experimental_retention_fraction": 0.8915254237288136,
+        "theoretical_no_record_removed": 565,
+        "theoretical_no_record_total": 1435,
+        "theoretical_queue_reduction_fraction": 0.39372822299651566,
+        "threshold": 0.5074412609432472,
+        "threshold_rule": "reject synthesis_score < threshold; retain equality ties"
+      }
+    },
+    "operating_point_calibration": {
+      "decision_rule": "reject synthesis_score < cutoff; retain equality ties",
+      "experimental_screening_budget": "floor((1 - target_retention) * n_experimental + 1e-12)",
+      "implementation_reference": "experiments.pu_synthesizability_20260821.combined_screening.calibrate_rank_rule",
+      "nonzero_budget_cutoff": "experimental order statistic at zero-based screening-budget index",
+      "zero_budget_rule": "no score threshold is applied"
+    },
+    "rows": 2320,
+    "theoretical_all_six_observed_count": 330,
+    "theoretical_all_six_observed_fraction": 0.22996515679442509,
+    "theoretical_no_record_count": 1435
+  },
+  "runtime": {
+    "pandas_version": "2.1.4",
+    "python_version": "3.11.7"
+  }
+}

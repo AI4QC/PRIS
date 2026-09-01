@@ -1,0 +1,54 @@
+# Derived data: the feature store is gigabytes of parquet under $PRIS_FEATURES.
+*.parquet
+*.extxyz
+*.tar.zst
+*.sqlite
+*.pkl
+*.npy
+
+# Per-structure intermediates are NOT redistributable: they are keyed to ICSD
+# collection codes, and ICSD is covered by FIZ Karlsruhe copyright and the EU
+# sui generis database right. Only aggregate statistics belong in this repo.
+*_raw.csv
+**/structure_overlap_control/
+**/selected_structure_index.csv
+**/pairwise_structure_matches.csv
+**/relax.jsonl
+
+# Intermediates that are large and rebuildable
+experiments/**/out/
+outputs/**/binary_v1/
+outputs/**/binary_v1_tail/
+*.tiff
+
+# Cluster run-time residue
+dft/**/.farm/
+dft/.farm_archive/
+dft/.lsca_check/
+
+# Logs, caches, editors
+*.log
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+.venv/
+venv/
+.codegraph/
+.cursor/
+.tmp/
+.tmp*
+.DS_Store
+
+# Working copies
+*backup-*/
+*(Copy)*
+*.docx
+
+# LaTeX build products
+*.aux
+*.bbl
+*.blg
+*.out
+*.toc
+*.synctex.gz

@@ -1,0 +1,104 @@
+{
+ "S1": {
+  "excl_on_held": 0.7242647058823529,
+  "n_new": 2,
+  "predicates": [
+   [
+    "wyckoff_econ_001",
+    "le",
+    0.6666666666666666,
+    null
+   ],
+   [
+    "bv_rel_mean",
+    "le",
+    0.7143040821865658,
+    null
+   ]
+  ]
+ },
+ "S2": {
+  "excl_on_held": 0.8924466338259441,
+  "n_new": 2,
+  "predicates": [
+   [
+    "wyckoff_econ_001",
+    "le",
+    0.6666666666666666,
+    null
+   ],
+   [
+    "bv_rel_mean",
+    "le",
+    0.7143040821865658,
+    null
+   ]
+  ]
+ },
+ "S3": {
+  "excl_on_held": 1.0,
+  "n_new": 2,
+  "predicates": [
+   [
+    "wyckoff_econ_001",
+    "le",
+    0.6666666666666666,
+    null
+   ],
+   [
+    "bv_rel_mean",
+    "le",
+    0.7143040821865658,
+    null
+   ]
+  ]
+ },
+ "S4": {
+  "excl_on_held": 0.7927710843373494,
+  "n_new": 3,
+  "predicates": [
+   [
+    "wyckoff_econ_001",
+    "le",
+    0.6666666666666666,
+    null
+   ],
+   [
+    "bl_min",
+    "ge",
+    0.8305969530123134,
+    null
+   ],
+   [
+    "bl_cat_max",
+    "ge",
+    0.8934708086371328,
+    0.5
+   ]
+  ]
+ },
+ "S5": {
+  "excl_on_held": 0.6862848134524435,
+  "n_new": 3,
+  "predicates": [
+   [
+    "bl_cat_max",
+    "le",
+    1.0618936270953268,
+    null
+   ],
+   [
+    "bl_min",
+    "ge",
+    0.8305969530123134,
+    null
+   ],
+   [
+    "sg_num_01",
+    "ge",
+    2.0,
+    0.5
+   ]
+  ]
+ }
+}

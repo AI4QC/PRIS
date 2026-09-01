@@ -1,0 +1,37 @@
+{
+ "results": {
+  "F2R": {
+   "coverage": 1.0,
+   "accuracy": 0.6675876576331525,
+   "n_groups": 241
+  },
+  "F2R_full": {
+   "coverage": 1.0,
+   "accuracy": 0.6625625205822301,
+   "n_groups": 241
+  },
+  "F2_restated": {
+   "coverage": 1.0,
+   "accuracy": 0.6239597999642457,
+   "n_groups": 241
+  },
+  "bl_min": {
+   "coverage": 0.9991072551238526,
+   "accuracy": 0.5559817929715677,
+   "n_groups": 241
+  },
+  "vol_per_atom": {
+   "coverage": 0.9884416610854073,
+   "accuracy": 0.43573322287465643,
+   "n_groups": 239
+  }
+ },
+ "delta": 0.043627857668906866,
+ "ci": [
+  -0.016444188128854335,
+  0.10334854074126841
+ ],
+ "H1": false,
+ "H2": true,
+ "n_groups_paired": 241
+}

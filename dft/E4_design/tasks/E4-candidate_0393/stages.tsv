@@ -1,0 +1,2 @@
+relax_cell	relax_cell	POSCAR.init	-
+static	static	POSCAR.static	relax_cell

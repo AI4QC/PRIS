@@ -1,0 +1,63 @@
+% ======================================================================
+% layout_tune.tex -- tune the sn-jnl text block + vertical density so the
+% per-page content distribution reproduces the original revtex version.
+% Reference revtex metrics: textwidth 468pt (164.5mm), textheight 665.5pt
+% (234mm), baselineskip 21pt, font 12pt  ==>  ~70 chars/line, 31.7 lines/pg.
+% sn-jnl uses a smaller body font, so width is scaled down to keep ~70
+% chars/line, and \linespread loosens the leading to ~21pt to match lines/pg.
+% ======================================================================
+
+% --- horizontal: width scaled for sn-jnl's font; centred; no binding shift
+\geometry{textwidth=152mm, textheight=236mm, top=24mm,
+          hmarginratio=1:1, bindingoffset=0pt,
+          marginparwidth=0pt, marginparsep=0pt}
+
+% --- vertical leading (the main lever for lines-per-page); tuned empirically
+% to ~21pt baselineskip, matching the revtex reference.
+\linespread{1.74}
+
+% --- float placement: the defaults reject any float taller than 70% of the
+% text block, which defers the full-width multipanel figures to the end of the
+% document. Loosen them so a figure can be placed in the section that cites it.
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.06}
+\renewcommand{\floatpagefraction}{0.60}
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+
+% --- float / caption spacing; tight fig-to-caption gap (abovecaptionskip).
+% Negative pulls the caption up to absorb trailing whitespace in the figures.
+\setlength{\abovecaptionskip}{-4pt}
+\setlength{\belowcaptionskip}{2pt}
+\setlength{\textfloatsep}{12pt}
+\setlength{\floatsep}{10pt}
+\setlength{\intextsep}{10pt}
+
+% --- last-resort stretch so unbreakable typewriter strings do not leave
+% visibly loose lines; neither document carries an overfull box.
+\setlength{\emergencystretch}{3em}
+
+% --- tighten the reference list: sn-nature sets \bibsep=1em (a blank line
+% between entries); reduce it so references sit close together.
+\AtBeginDocument{\setlength{\bibsep}{1pt plus 0.3pt}}
+
+% The loose body \linespread above would otherwise bleed into captions and
+% stretch them. Reset captions to single spacing in a clean, sn-style caption
+% (small font, bold run-in label, left-justified) -- NOT the squished 0.9.
+\makeatletter
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \begingroup
+    \small \linespread{1.0}\selectfont
+    \leftskip\z@ \rightskip\z@ \parfillskip\z@ plus 1fil\relax
+    \sbox\@tempboxa{\textbf{#1}\quad #2}%
+    \ifdim \wd\@tempboxa >\hsize
+      \textbf{#1}\quad #2\par
+    \else
+      \hb@xt@\hsize{\textbf{#1}\quad #2\hfil}%
+    \fi
+  \endgroup
+  \vskip\belowcaptionskip}
+\makeatother

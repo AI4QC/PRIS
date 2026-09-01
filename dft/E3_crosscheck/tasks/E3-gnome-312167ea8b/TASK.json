@@ -1,0 +1,28 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "Sc6As5Se",
+ "kind": "gnome",
+ "kmesh": [
+  9,
+  3,
+  5
+ ],
+ "n_atoms": 12,
+ "n_kpoints": 135,
+ "parent": "312167ea8b",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "As",
+  "Sc",
+  "Se"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-312167ea8b",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-312167ea8b",
+ "variant": "P0"
+}

@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "Cs2SiF6",
+ "kind": "experimental",
+ "kmesh": [
+  6,
+  6,
+  6
+ ],
+ "n_atoms": 9,
+ "n_kpoints": 216,
+ "parent": "cod-1010285",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "rng_seed_source": "E3|cod-1010285",
+ "species": [
+  "Cs",
+  "F",
+  "Si"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-cod-1010285-S2",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-cod-1010285-S2",
+ "variant": "S2"
+}

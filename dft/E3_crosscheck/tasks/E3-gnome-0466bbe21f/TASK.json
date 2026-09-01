@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "LaPr(Al4Co)2",
+ "kind": "gnome",
+ "kmesh": [
+  8,
+  5,
+  4
+ ],
+ "n_atoms": 12,
+ "n_kpoints": 160,
+ "parent": "0466bbe21f",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "Al",
+  "Co",
+  "La",
+  "Pr"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-0466bbe21f",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-0466bbe21f",
+ "variant": "P0"
+}

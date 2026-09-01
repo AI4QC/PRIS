@@ -1,0 +1,14 @@
+{
+  "all_observed_n": 0,
+  "cohort": "mattergen_inverse_bulk400",
+  "historical_size_domain_n": 1081,
+  "input_sha256": "43bb6b1e54017d434799dd6454a733aa61942ed87173845450164df8dd62871c",
+  "n": 1081,
+  "observed_count_distribution": {
+    "2": 1081
+  },
+  "score_max": 2.4942041581195786,
+  "score_median": -0.335542445836876,
+  "score_min": -0.9562061697510111,
+  "score_sha256": "ec36fcd8ae662580fd811b716ddab76707857673e83950d1c19c7ae4ee0998f3"
+}

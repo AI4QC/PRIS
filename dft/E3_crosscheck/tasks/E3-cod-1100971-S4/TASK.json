@@ -1,0 +1,30 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "MnVCuO4",
+ "kind": "experimental",
+ "kmesh": [
+  5,
+  5,
+  4
+ ],
+ "n_atoms": 14,
+ "n_kpoints": 100,
+ "parent": "cod-1100971",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "rng_seed_source": "E3|cod-1100971",
+ "species": [
+  "Cu",
+  "Mn",
+  "O",
+  "V"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-cod-1100971-S4",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-cod-1100971-S4",
+ "variant": "S4"
+}

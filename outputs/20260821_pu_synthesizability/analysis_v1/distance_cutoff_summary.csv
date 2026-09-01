@@ -1,0 +1,5 @@
+cohort,cutoff_a,total_weight,explicit_violation_weight,no_verdict_weight,explicit_violation_rate,queue_retained
+experimental,0.5,99162.0,690.0,0.0,0.0069583106431899315,0.99304168935681
+experimental,0.7,99162.0,1948.0,0.0,0.019644621931788387,0.9803553780682116
+pu_negative,0.5,364592.0,0.0,0.0,0.0,1.0
+pu_negative,0.7,364592.0,0.0,0.0,0.0,1.0

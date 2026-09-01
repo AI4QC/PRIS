@@ -1,0 +1,45 @@
+{
+  "analysis": "frozen PRIS composition-held-out sensitivity",
+  "git_commit": "a8920d3bd8ddbd2cfd52930f2dd6c5decb2d48f8",
+  "bootstrap": {
+    "replicates": 10000,
+    "seed": 20260829,
+    "interval": "two-sided 95% percentile cluster bootstrap"
+  },
+  "cohorts": {
+    "heldout_all": "all calibration rows",
+    "composition_shared": "calibration reduced composition present in discovery",
+    "composition_unseen": "calibration reduced composition absent from discovery",
+    "chemical_system_unseen": "calibration exact element set absent from discovery"
+  },
+  "missing_feature_convention": "missing counts as satisfying, matching frozen publication evaluation",
+  "thresholds_frozen": true,
+  "rule_search_or_refit": false,
+  "input_files": [
+    {
+      "path": "$PRIS_LAW_TABLES/law_real.parquet",
+      "sha256": "754c95d389e67a7c51aa1e0bd4871648568b055ed2cb08336b471640a3b4b2a7",
+      "bytes": 7206470
+    },
+    {
+      "path": "$PRIS_LAW_TABLES/law_bad.parquet",
+      "sha256": "31b449763baf0eed010ac61c242b5db68cc0b1b52c34eb4a9fb3f2dba5a529ae",
+      "bytes": 5300372
+    },
+    {
+      "path": "$PRIS_FEATURES/law_real_aug.parquet",
+      "sha256": "63c073a35945de9b13cb81b8035e8ec48a1a79000a3c4ab97cd23561fb9e8036",
+      "bytes": 1205012
+    },
+    {
+      "path": "$PRIS_FEATURES/law_bad_aug.parquet",
+      "sha256": "34e064d4b592fb2333fc4b6fd3be61563cefb1ba2b7348e32ea04b531825f271",
+      "bytes": 797009
+    },
+    {
+      "path": "$PRIS_FEATURES/provenance.parquet",
+      "sha256": "64084652f86a4535311f63640e03a5be28aa3530b588dc5e63537938b863b7d8",
+      "bytes": 11081446
+    }
+  ]
+}

@@ -1,0 +1,2031 @@
+{
+  "figure_scope": "production main-text Figure 4 a-f",
+  "style": {
+    "font": "Arial",
+    "grid": false,
+    "background": "white",
+    "palette": "manuscript"
+  },
+  "layout": {
+    "source_size_cm": [
+      18.3,
+      20.0
+    ],
+    "intended_tex_width": "\\textwidth (152 mm)",
+    "row_specific_column_spacing": true
+  },
+  "logic": "controlled mechanism benchmark a-b; complete Set 1-Set 4 ladder plus the PRIS-derived synthesis score (PSS) and MatterSim E_hull threshold c; cross-PU-model relation d; held-out PSS and DFT E_hull energy e; support-matched property-conditioned inverse-design screening with descriptor-space and matched-structure diagnosis f",
+  "panel_records": {
+    "a": {
+      "source": "<repo>/paper/data/fig6_validity.csv",
+      "l4_detection": 0.8789525691699605,
+      "l4_satisfaction": 0.8295454545454546,
+      "n_rows": 9
+    },
+    "b": {
+      "source": "<repo>/paper/data/fig6_validity.csv",
+      "l4_row": [
+        0.7295454545454545,
+        0.8636363636363636,
+        1.0,
+        0.8045454545454546,
+        0.990909090909091
+      ]
+    },
+    "c": {
+      "l4_satisfaction": 80.68514148564975,
+      "l4_screening": 51.882378110326066,
+      "s_syn_matched_satisfaction": 80.6861499364676,
+      "s_syn_matched_screening": 83.67572519418967,
+      "advantage_pp": 31.7933470838636,
+      "rule_ladder": [
+        {
+          "rule": "L1",
+          "experimental_retention": 0.9479034307496824,
+          "pu_screened_rate": 0.0016017904945802
+        },
+        {
+          "rule": "L2",
+          "experimental_retention": 0.882777676932696,
+          "pu_screened_rate": 0.017833633211919
+        },
+        {
+          "rule": "L3",
+          "experimental_retention": 0.8705955910530243,
+          "pu_screened_rate": 0.0186784131302935
+        },
+        {
+          "rule": "L4",
+          "experimental_retention": 0.8068514148564975,
+          "pu_screened_rate": 0.5188237811032607
+        }
+      ]
+    },
+    "d": {
+      "status": "aligned_decile_curves",
+      "source_score_deciles": "<repo>/outputs/20260821_pu_synthesizability/full_pool_analysis_v1/score_deciles.csv",
+      "source_formula_npz": "<repo>/outputs/20260822_pu_formula_scores/full_pool_dual_v2/direct_formula_plots_v3/clscore_formula_density_data.npz",
+      "lines_per_row": 3,
+      "models": [
+        "CGCNN-PU",
+        "MatterSim-1M-MLP-PU",
+        "mean of the two models"
+      ]
+    },
+    "e": {
+      "f3_pairs": 4357,
+      "formula": "PRIS-derived synthesis score (PSS) only"
+    },
+    "f": {
+      "task": "inverse_design_queue_tradeoff",
+      "score": "PRIS-derived synthesis score (PSS)",
+      "calibration": "thresholds fixed by descriptor-support-matched forward experimental structures",
+      "calibration_support": {
+        "mode": "descriptor-support matched",
+        "n_observed": 2,
+        "experimental_n": 541,
+        "forward_experimental_support_counts": {
+          "2": 541,
+          "5": 10,
+          "6": 334
+        },
+        "inverse_support_counts": {
+          "2": 1081
+        }
+      },
+      "inverse_total_n": 1081,
+      "inverse_priority_total_n": 140,
+      "inverse_priority_definition": "UMA bulk-modulus proxy >= 400 GPa",
+      "rule_operating_points": [
+        {
+          "method": "L1",
+          "experimental_retention": 1.0,
+          "forward_theory_reduction": 0.003484320557491289,
+          "inverse_queue_reduction": 0.0,
+          "inverse_priority_retention": 1.0
+        },
+        {
+          "method": "L2",
+          "experimental_retention": 0.9717514124293786,
+          "forward_theory_reduction": 0.033449477351916376,
+          "inverse_queue_reduction": 0.0037002775208140612,
+          "inverse_priority_retention": 1.0
+        },
+        {
+          "method": "L3",
+          "experimental_retention": 0.9706214689265537,
+          "forward_theory_reduction": 0.03623693379790941,
+          "inverse_queue_reduction": 0.0037002775208140612,
+          "inverse_priority_retention": 1.0
+        },
+        {
+          "method": "L4",
+          "experimental_retention": 0.8915254237288136,
+          "forward_theory_reduction": 0.1902439024390244,
+          "inverse_queue_reduction": 0.6734505087881592,
+          "inverse_priority_retention": 0.32142857142857145
+        }
+      ],
+      "frontier": [
+        {
+          "target_experimental_retention": 0.84,
+          "cutoff_score": 0.4765037921779217,
+          "experimental_retention": 0.8410351201478743,
+          "forward_theory_reduction": 0.3832752613240418,
+          "inverse_queue_reduction": 0.6799259944495837,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.841,
+          "cutoff_score": 0.4765037921779217,
+          "experimental_retention": 0.8410351201478743,
+          "forward_theory_reduction": 0.3832752613240418,
+          "inverse_queue_reduction": 0.6799259944495837,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.842,
+          "cutoff_score": 0.47230854290083857,
+          "experimental_retention": 0.8428835489833642,
+          "forward_theory_reduction": 0.3818815331010453,
+          "inverse_queue_reduction": 0.6780758556891767,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.843,
+          "cutoff_score": 0.46862687656197866,
+          "experimental_retention": 0.844731977818854,
+          "forward_theory_reduction": 0.3797909407665505,
+          "inverse_queue_reduction": 0.6771507863089732,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.844,
+          "cutoff_score": 0.46862687656197866,
+          "experimental_retention": 0.844731977818854,
+          "forward_theory_reduction": 0.3797909407665505,
+          "inverse_queue_reduction": 0.6771507863089732,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.845,
+          "cutoff_score": 0.4373072049113623,
+          "experimental_retention": 0.8465804066543438,
+          "forward_theory_reduction": 0.36585365853658536,
+          "inverse_queue_reduction": 0.6706753006475485,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.846,
+          "cutoff_score": 0.4373072049113623,
+          "experimental_retention": 0.8465804066543438,
+          "forward_theory_reduction": 0.36585365853658536,
+          "inverse_queue_reduction": 0.6706753006475485,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.847,
+          "cutoff_score": 0.4263901679156116,
+          "experimental_retention": 0.8484288354898336,
+          "forward_theory_reduction": 0.3616724738675958,
+          "inverse_queue_reduction": 0.6688251618871416,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.848,
+          "cutoff_score": 0.4263901679156116,
+          "experimental_retention": 0.8484288354898336,
+          "forward_theory_reduction": 0.3616724738675958,
+          "inverse_queue_reduction": 0.6688251618871416,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.849,
+          "cutoff_score": 0.42434771160253504,
+          "experimental_retention": 0.8502772643253235,
+          "forward_theory_reduction": 0.3616724738675958,
+          "inverse_queue_reduction": 0.6688251618871416,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.85,
+          "cutoff_score": 0.42434771160253504,
+          "experimental_retention": 0.8502772643253235,
+          "forward_theory_reduction": 0.3616724738675958,
+          "inverse_queue_reduction": 0.6688251618871416,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.851,
+          "cutoff_score": 0.4116025413512562,
+          "experimental_retention": 0.8521256931608133,
+          "forward_theory_reduction": 0.3581881533101045,
+          "inverse_queue_reduction": 0.667900092506938,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.852,
+          "cutoff_score": 0.4116025413512562,
+          "experimental_retention": 0.8521256931608133,
+          "forward_theory_reduction": 0.3581881533101045,
+          "inverse_queue_reduction": 0.667900092506938,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.853,
+          "cutoff_score": 0.4065690225673614,
+          "experimental_retention": 0.8539741219963032,
+          "forward_theory_reduction": 0.3574912891986063,
+          "inverse_queue_reduction": 0.6669750231267345,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.854,
+          "cutoff_score": 0.39680618934800627,
+          "experimental_retention": 0.8558225508317929,
+          "forward_theory_reduction": 0.3533101045296167,
+          "inverse_queue_reduction": 0.6669750231267345,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.855,
+          "cutoff_score": 0.39680618934800627,
+          "experimental_retention": 0.8558225508317929,
+          "forward_theory_reduction": 0.3533101045296167,
+          "inverse_queue_reduction": 0.6669750231267345,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.856,
+          "cutoff_score": 0.3961685819510635,
+          "experimental_retention": 0.8576709796672828,
+          "forward_theory_reduction": 0.3533101045296167,
+          "inverse_queue_reduction": 0.6669750231267345,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.857,
+          "cutoff_score": 0.3961685819510635,
+          "experimental_retention": 0.8576709796672828,
+          "forward_theory_reduction": 0.3533101045296167,
+          "inverse_queue_reduction": 0.6669750231267345,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.858,
+          "cutoff_score": 0.38013224574354976,
+          "experimental_retention": 0.8595194085027726,
+          "forward_theory_reduction": 0.34773519163763067,
+          "inverse_queue_reduction": 0.6641998149861239,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.859,
+          "cutoff_score": 0.38013224574354976,
+          "experimental_retention": 0.8595194085027726,
+          "forward_theory_reduction": 0.34773519163763067,
+          "inverse_queue_reduction": 0.6641998149861239,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.86,
+          "cutoff_score": 0.36584613458438875,
+          "experimental_retention": 0.8613678373382625,
+          "forward_theory_reduction": 0.3421602787456446,
+          "inverse_queue_reduction": 0.6641998149861239,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.861,
+          "cutoff_score": 0.36584613458438875,
+          "experimental_retention": 0.8613678373382625,
+          "forward_theory_reduction": 0.3421602787456446,
+          "inverse_queue_reduction": 0.6641998149861239,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.862,
+          "cutoff_score": 0.3650813031089285,
+          "experimental_retention": 0.8632162661737524,
+          "forward_theory_reduction": 0.34146341463414637,
+          "inverse_queue_reduction": 0.6623496762257169,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.863,
+          "cutoff_score": 0.3650813031089285,
+          "experimental_retention": 0.8632162661737524,
+          "forward_theory_reduction": 0.34146341463414637,
+          "inverse_queue_reduction": 0.6623496762257169,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.864,
+          "cutoff_score": 0.3583237055014389,
+          "experimental_retention": 0.8650646950092421,
+          "forward_theory_reduction": 0.33937282229965154,
+          "inverse_queue_reduction": 0.6623496762257169,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.865,
+          "cutoff_score": 0.3583237055014389,
+          "experimental_retention": 0.8650646950092421,
+          "forward_theory_reduction": 0.33937282229965154,
+          "inverse_queue_reduction": 0.6623496762257169,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.866,
+          "cutoff_score": 0.3419608292533013,
+          "experimental_retention": 0.866913123844732,
+          "forward_theory_reduction": 0.33170731707317075,
+          "inverse_queue_reduction": 0.6595744680851063,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.867,
+          "cutoff_score": 0.3335703176791064,
+          "experimental_retention": 0.8687615526802218,
+          "forward_theory_reduction": 0.3254355400696864,
+          "inverse_queue_reduction": 0.6595744680851063,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.868,
+          "cutoff_score": 0.3335703176791064,
+          "experimental_retention": 0.8687615526802218,
+          "forward_theory_reduction": 0.3254355400696864,
+          "inverse_queue_reduction": 0.6595744680851063,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.869,
+          "cutoff_score": 0.3334507451950538,
+          "experimental_retention": 0.8706099815157117,
+          "forward_theory_reduction": 0.3254355400696864,
+          "inverse_queue_reduction": 0.6595744680851063,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.87,
+          "cutoff_score": 0.3334507451950538,
+          "experimental_retention": 0.8706099815157117,
+          "forward_theory_reduction": 0.3254355400696864,
+          "inverse_queue_reduction": 0.6595744680851063,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.871,
+          "cutoff_score": 0.3328957350619136,
+          "experimental_retention": 0.8724584103512015,
+          "forward_theory_reduction": 0.3254355400696864,
+          "inverse_queue_reduction": 0.6595744680851063,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.872,
+          "cutoff_score": 0.3328957350619136,
+          "experimental_retention": 0.8724584103512015,
+          "forward_theory_reduction": 0.3254355400696864,
+          "inverse_queue_reduction": 0.6595744680851063,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.873,
+          "cutoff_score": 0.3249561545533931,
+          "experimental_retention": 0.8743068391866913,
+          "forward_theory_reduction": 0.3191637630662021,
+          "inverse_queue_reduction": 0.6595744680851063,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.874,
+          "cutoff_score": 0.3249561545533931,
+          "experimental_retention": 0.8743068391866913,
+          "forward_theory_reduction": 0.3191637630662021,
+          "inverse_queue_reduction": 0.6595744680851063,
+          "inverse_priority_retention": 0.32142857142857145,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.875,
+          "cutoff_score": 0.31534306235138765,
+          "experimental_retention": 0.8761552680221811,
+          "forward_theory_reduction": 0.3142857142857143,
+          "inverse_queue_reduction": 0.6577243293246994,
+          "inverse_priority_retention": 0.32857142857142857,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.876,
+          "cutoff_score": 0.31534306235138765,
+          "experimental_retention": 0.8761552680221811,
+          "forward_theory_reduction": 0.3142857142857143,
+          "inverse_queue_reduction": 0.6577243293246994,
+          "inverse_priority_retention": 0.32857142857142857,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.877,
+          "cutoff_score": 0.3144508186631533,
+          "experimental_retention": 0.878003696857671,
+          "forward_theory_reduction": 0.313588850174216,
+          "inverse_queue_reduction": 0.6577243293246994,
+          "inverse_priority_retention": 0.32857142857142857,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.878,
+          "cutoff_score": 0.3144508186631533,
+          "experimental_retention": 0.878003696857671,
+          "forward_theory_reduction": 0.313588850174216,
+          "inverse_queue_reduction": 0.6577243293246994,
+          "inverse_priority_retention": 0.32857142857142857,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.879,
+          "cutoff_score": 0.31260720017587607,
+          "experimental_retention": 0.8798521256931608,
+          "forward_theory_reduction": 0.30940766550522647,
+          "inverse_queue_reduction": 0.6567992599444958,
+          "inverse_priority_retention": 0.32857142857142857,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.88,
+          "cutoff_score": 0.3106760002386558,
+          "experimental_retention": 0.8817005545286506,
+          "forward_theory_reduction": 0.30801393728223,
+          "inverse_queue_reduction": 0.6558741905642923,
+          "inverse_priority_retention": 0.32857142857142857,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.881,
+          "cutoff_score": 0.3106760002386558,
+          "experimental_retention": 0.8817005545286506,
+          "forward_theory_reduction": 0.30801393728223,
+          "inverse_queue_reduction": 0.6558741905642923,
+          "inverse_priority_retention": 0.32857142857142857,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.882,
+          "cutoff_score": 0.3036880789110944,
+          "experimental_retention": 0.8835489833641405,
+          "forward_theory_reduction": 0.30522648083623694,
+          "inverse_queue_reduction": 0.6530989824236818,
+          "inverse_priority_retention": 0.34285714285714286,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.883,
+          "cutoff_score": 0.3036880789110944,
+          "experimental_retention": 0.8835489833641405,
+          "forward_theory_reduction": 0.30522648083623694,
+          "inverse_queue_reduction": 0.6530989824236818,
+          "inverse_priority_retention": 0.34285714285714286,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.884,
+          "cutoff_score": 0.2871082362498687,
+          "experimental_retention": 0.8853974121996303,
+          "forward_theory_reduction": 0.3017421602787456,
+          "inverse_queue_reduction": 0.6475485661424607,
+          "inverse_priority_retention": 0.35714285714285715,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.885,
+          "cutoff_score": 0.2871082362498687,
+          "experimental_retention": 0.8853974121996303,
+          "forward_theory_reduction": 0.3017421602787456,
+          "inverse_queue_reduction": 0.6475485661424607,
+          "inverse_priority_retention": 0.35714285714285715,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.886,
+          "cutoff_score": 0.28649072127556907,
+          "experimental_retention": 0.8872458410351202,
+          "forward_theory_reduction": 0.3017421602787456,
+          "inverse_queue_reduction": 0.6475485661424607,
+          "inverse_priority_retention": 0.35714285714285715,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.887,
+          "cutoff_score": 0.28649072127556907,
+          "experimental_retention": 0.8872458410351202,
+          "forward_theory_reduction": 0.3017421602787456,
+          "inverse_queue_reduction": 0.6475485661424607,
+          "inverse_priority_retention": 0.35714285714285715,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.888,
+          "cutoff_score": 0.2782919757556498,
+          "experimental_retention": 0.88909426987061,
+          "forward_theory_reduction": 0.3010452961672474,
+          "inverse_queue_reduction": 0.6438482886216467,
+          "inverse_priority_retention": 0.37857142857142856,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.889,
+          "cutoff_score": 0.2782919757556498,
+          "experimental_retention": 0.88909426987061,
+          "forward_theory_reduction": 0.3010452961672474,
+          "inverse_queue_reduction": 0.6438482886216467,
+          "inverse_priority_retention": 0.37857142857142856,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.89,
+          "cutoff_score": 0.2771547459274216,
+          "experimental_retention": 0.8909426987060998,
+          "forward_theory_reduction": 0.29895470383275263,
+          "inverse_queue_reduction": 0.6429232192414431,
+          "inverse_priority_retention": 0.38571428571428573,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.891,
+          "cutoff_score": 0.2739820676045909,
+          "experimental_retention": 0.8927911275415896,
+          "forward_theory_reduction": 0.29825783972125436,
+          "inverse_queue_reduction": 0.6410730804810361,
+          "inverse_priority_retention": 0.39285714285714285,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.892,
+          "cutoff_score": 0.2739820676045909,
+          "experimental_retention": 0.8927911275415896,
+          "forward_theory_reduction": 0.29825783972125436,
+          "inverse_queue_reduction": 0.6410730804810361,
+          "inverse_priority_retention": 0.39285714285714285,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.893,
+          "cutoff_score": 0.25855441341854457,
+          "experimental_retention": 0.8946395563770795,
+          "forward_theory_reduction": 0.29686411149825787,
+          "inverse_queue_reduction": 0.6281221091581869,
+          "inverse_priority_retention": 0.4142857142857143,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.894,
+          "cutoff_score": 0.25855441341854457,
+          "experimental_retention": 0.8946395563770795,
+          "forward_theory_reduction": 0.29686411149825787,
+          "inverse_queue_reduction": 0.6281221091581869,
+          "inverse_priority_retention": 0.4142857142857143,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.895,
+          "cutoff_score": 0.2304847234488084,
+          "experimental_retention": 0.8964879852125693,
+          "forward_theory_reduction": 0.28013937282229967,
+          "inverse_queue_reduction": 0.6059204440333025,
+          "inverse_priority_retention": 0.45,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.896,
+          "cutoff_score": 0.2304847234488084,
+          "experimental_retention": 0.8964879852125693,
+          "forward_theory_reduction": 0.28013937282229967,
+          "inverse_queue_reduction": 0.6059204440333025,
+          "inverse_priority_retention": 0.45,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.897,
+          "cutoff_score": 0.22973486030685084,
+          "experimental_retention": 0.8983364140480592,
+          "forward_theory_reduction": 0.28013937282229967,
+          "inverse_queue_reduction": 0.6059204440333025,
+          "inverse_priority_retention": 0.45,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.898,
+          "cutoff_score": 0.22973486030685084,
+          "experimental_retention": 0.8983364140480592,
+          "forward_theory_reduction": 0.28013937282229967,
+          "inverse_queue_reduction": 0.6059204440333025,
+          "inverse_priority_retention": 0.45,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.899,
+          "cutoff_score": 0.22720674723584192,
+          "experimental_retention": 0.9001848428835489,
+          "forward_theory_reduction": 0.2780487804878049,
+          "inverse_queue_reduction": 0.6049953746530989,
+          "inverse_priority_retention": 0.45,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.9,
+          "cutoff_score": 0.22720674723584192,
+          "experimental_retention": 0.9001848428835489,
+          "forward_theory_reduction": 0.2780487804878049,
+          "inverse_queue_reduction": 0.6049953746530989,
+          "inverse_priority_retention": 0.45,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.901,
+          "cutoff_score": 0.2117122438339328,
+          "experimental_retention": 0.9020332717190388,
+          "forward_theory_reduction": 0.2696864111498258,
+          "inverse_queue_reduction": 0.5920444033302498,
+          "inverse_priority_retention": 0.4642857142857143,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.902,
+          "cutoff_score": 0.2117122438339328,
+          "experimental_retention": 0.9020332717190388,
+          "forward_theory_reduction": 0.2696864111498258,
+          "inverse_queue_reduction": 0.5920444033302498,
+          "inverse_priority_retention": 0.4642857142857143,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.903,
+          "cutoff_score": 0.20970219640352097,
+          "experimental_retention": 0.9038817005545287,
+          "forward_theory_reduction": 0.2682926829268293,
+          "inverse_queue_reduction": 0.5920444033302498,
+          "inverse_priority_retention": 0.4642857142857143,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.904,
+          "cutoff_score": 0.18499538399792023,
+          "experimental_retention": 0.9057301293900185,
+          "forward_theory_reduction": 0.2564459930313589,
+          "inverse_queue_reduction": 0.5846438482886216,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.905,
+          "cutoff_score": 0.18499538399792023,
+          "experimental_retention": 0.9057301293900185,
+          "forward_theory_reduction": 0.2564459930313589,
+          "inverse_queue_reduction": 0.5846438482886216,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.906,
+          "cutoff_score": 0.16137715732575816,
+          "experimental_retention": 0.9075785582255084,
+          "forward_theory_reduction": 0.243205574912892,
+          "inverse_queue_reduction": 0.5818686401480111,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.907,
+          "cutoff_score": 0.16137715732575816,
+          "experimental_retention": 0.9075785582255084,
+          "forward_theory_reduction": 0.243205574912892,
+          "inverse_queue_reduction": 0.5818686401480111,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.908,
+          "cutoff_score": 0.09978746376370048,
+          "experimental_retention": 0.9094269870609981,
+          "forward_theory_reduction": 0.21393728222996516,
+          "inverse_queue_reduction": 0.5679925994449584,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.909,
+          "cutoff_score": 0.09978746376370048,
+          "experimental_retention": 0.9094269870609981,
+          "forward_theory_reduction": 0.21393728222996516,
+          "inverse_queue_reduction": 0.5679925994449584,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.91,
+          "cutoff_score": 0.09850796632939449,
+          "experimental_retention": 0.911275415896488,
+          "forward_theory_reduction": 0.21254355400696864,
+          "inverse_queue_reduction": 0.5679925994449584,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.911,
+          "cutoff_score": 0.09850796632939449,
+          "experimental_retention": 0.911275415896488,
+          "forward_theory_reduction": 0.21254355400696864,
+          "inverse_queue_reduction": 0.5679925994449584,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.912,
+          "cutoff_score": 0.09633865808456324,
+          "experimental_retention": 0.9131238447319778,
+          "forward_theory_reduction": 0.2097560975609756,
+          "inverse_queue_reduction": 0.5670675300647549,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.913,
+          "cutoff_score": 0.09633865808456324,
+          "experimental_retention": 0.9131238447319778,
+          "forward_theory_reduction": 0.2097560975609756,
+          "inverse_queue_reduction": 0.5670675300647549,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.914,
+          "cutoff_score": 0.09379619200658426,
+          "experimental_retention": 0.9149722735674677,
+          "forward_theory_reduction": 0.20766550522648083,
+          "inverse_queue_reduction": 0.5661424606845513,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.915,
+          "cutoff_score": 0.09278996467982722,
+          "experimental_retention": 0.9168207024029574,
+          "forward_theory_reduction": 0.20766550522648083,
+          "inverse_queue_reduction": 0.5661424606845513,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.9159999999999999,
+          "cutoff_score": 0.09278996467982722,
+          "experimental_retention": 0.9168207024029574,
+          "forward_theory_reduction": 0.20766550522648083,
+          "inverse_queue_reduction": 0.5661424606845513,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.917,
+          "cutoff_score": 0.06461272360714979,
+          "experimental_retention": 0.9186691312384473,
+          "forward_theory_reduction": 0.19442508710801393,
+          "inverse_queue_reduction": 0.5615171137835338,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.9179999999999999,
+          "cutoff_score": 0.06461272360714979,
+          "experimental_retention": 0.9186691312384473,
+          "forward_theory_reduction": 0.19442508710801393,
+          "inverse_queue_reduction": 0.5615171137835338,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.919,
+          "cutoff_score": 0.05130942580250758,
+          "experimental_retention": 0.9205175600739371,
+          "forward_theory_reduction": 0.18815331010452963,
+          "inverse_queue_reduction": 0.5596669750231268,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.9199999999999999,
+          "cutoff_score": 0.05130942580250758,
+          "experimental_retention": 0.9205175600739371,
+          "forward_theory_reduction": 0.18815331010452963,
+          "inverse_queue_reduction": 0.5596669750231268,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.921,
+          "cutoff_score": -0.030396627787291686,
+          "experimental_retention": 0.922365988909427,
+          "forward_theory_reduction": 0.16794425087108014,
+          "inverse_queue_reduction": 0.5513413506012951,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.9219999999999999,
+          "cutoff_score": -0.030396627787291686,
+          "experimental_retention": 0.922365988909427,
+          "forward_theory_reduction": 0.16794425087108014,
+          "inverse_queue_reduction": 0.5513413506012951,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.923,
+          "cutoff_score": -0.06863444441965727,
+          "experimental_retention": 0.9242144177449169,
+          "forward_theory_reduction": 0.15470383275261324,
+          "inverse_queue_reduction": 0.5485661424606846,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.9239999999999999,
+          "cutoff_score": -0.06863444441965727,
+          "experimental_retention": 0.9242144177449169,
+          "forward_theory_reduction": 0.15470383275261324,
+          "inverse_queue_reduction": 0.5485661424606846,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.925,
+          "cutoff_score": -0.07371151225334815,
+          "experimental_retention": 0.9260628465804066,
+          "forward_theory_reduction": 0.15191637630662022,
+          "inverse_queue_reduction": 0.545790934320074,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.9259999999999999,
+          "cutoff_score": -0.07371151225334815,
+          "experimental_retention": 0.9260628465804066,
+          "forward_theory_reduction": 0.15191637630662022,
+          "inverse_queue_reduction": 0.545790934320074,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.927,
+          "cutoff_score": -0.09707852349357704,
+          "experimental_retention": 0.9279112754158965,
+          "forward_theory_reduction": 0.14494773519163764,
+          "inverse_queue_reduction": 0.5411655874190564,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.9279999999999999,
+          "cutoff_score": -0.10575149577938692,
+          "experimental_retention": 0.9297597042513863,
+          "forward_theory_reduction": 0.14285714285714285,
+          "inverse_queue_reduction": 0.5402405180388529,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.929,
+          "cutoff_score": -0.10575149577938692,
+          "experimental_retention": 0.9297597042513863,
+          "forward_theory_reduction": 0.14285714285714285,
+          "inverse_queue_reduction": 0.5402405180388529,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.9299999999999999,
+          "cutoff_score": -0.15458743555298782,
+          "experimental_retention": 0.9316081330868762,
+          "forward_theory_reduction": 0.12334494773519164,
+          "inverse_queue_reduction": 0.5328399629972248,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.931,
+          "cutoff_score": -0.15458743555298782,
+          "experimental_retention": 0.9316081330868762,
+          "forward_theory_reduction": 0.12334494773519164,
+          "inverse_queue_reduction": 0.5328399629972248,
+          "inverse_priority_retention": 0.4714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.9319999999999999,
+          "cutoff_score": -0.2387208442289782,
+          "experimental_retention": 0.933456561922366,
+          "forward_theory_reduction": 0.09268292682926829,
+          "inverse_queue_reduction": 0.5217391304347826,
+          "inverse_priority_retention": 0.4857142857142857,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.933,
+          "cutoff_score": -0.2387208442289782,
+          "experimental_retention": 0.933456561922366,
+          "forward_theory_reduction": 0.09268292682926829,
+          "inverse_queue_reduction": 0.5217391304347826,
+          "inverse_priority_retention": 0.4857142857142857,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.9339999999999999,
+          "cutoff_score": -0.27570203162009344,
+          "experimental_retention": 0.9353049907578558,
+          "forward_theory_reduction": 0.08222996515679443,
+          "inverse_queue_reduction": 0.515263644773358,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.935,
+          "cutoff_score": -0.27570203162009344,
+          "experimental_retention": 0.9353049907578558,
+          "forward_theory_reduction": 0.08222996515679443,
+          "inverse_queue_reduction": 0.515263644773358,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.9359999999999999,
+          "cutoff_score": -0.2773802860087323,
+          "experimental_retention": 0.9371534195933456,
+          "forward_theory_reduction": 0.08222996515679443,
+          "inverse_queue_reduction": 0.515263644773358,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.9369999999999999,
+          "cutoff_score": -0.2773802860087323,
+          "experimental_retention": 0.9371534195933456,
+          "forward_theory_reduction": 0.08222996515679443,
+          "inverse_queue_reduction": 0.515263644773358,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.938,
+          "cutoff_score": -0.27785980304082536,
+          "experimental_retention": 0.9390018484288355,
+          "forward_theory_reduction": 0.08222996515679443,
+          "inverse_queue_reduction": 0.515263644773358,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.939,
+          "cutoff_score": -0.27785980304082536,
+          "experimental_retention": 0.9390018484288355,
+          "forward_theory_reduction": 0.08222996515679443,
+          "inverse_queue_reduction": 0.515263644773358,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.94,
+          "cutoff_score": -0.2787295493346592,
+          "experimental_retention": 0.9408502772643254,
+          "forward_theory_reduction": 0.08153310104529617,
+          "inverse_queue_reduction": 0.515263644773358,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.941,
+          "cutoff_score": -0.2973301801841143,
+          "experimental_retention": 0.9426987060998152,
+          "forward_theory_reduction": 0.07804878048780488,
+          "inverse_queue_reduction": 0.5115633672525439,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.942,
+          "cutoff_score": -0.2973301801841143,
+          "experimental_retention": 0.9426987060998152,
+          "forward_theory_reduction": 0.07804878048780488,
+          "inverse_queue_reduction": 0.5115633672525439,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.943,
+          "cutoff_score": -0.3142512437289148,
+          "experimental_retention": 0.944547134935305,
+          "forward_theory_reduction": 0.07595818815331011,
+          "inverse_queue_reduction": 0.5032377428307123,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.944,
+          "cutoff_score": -0.3142512437289148,
+          "experimental_retention": 0.944547134935305,
+          "forward_theory_reduction": 0.07595818815331011,
+          "inverse_queue_reduction": 0.5032377428307123,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.945,
+          "cutoff_score": -0.32850927450023526,
+          "experimental_retention": 0.9463955637707948,
+          "forward_theory_reduction": 0.07317073170731707,
+          "inverse_queue_reduction": 0.5032377428307123,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.946,
+          "cutoff_score": -0.32850927450023526,
+          "experimental_retention": 0.9463955637707948,
+          "forward_theory_reduction": 0.07317073170731707,
+          "inverse_queue_reduction": 0.5032377428307123,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.947,
+          "cutoff_score": -0.34178315517902313,
+          "experimental_retention": 0.9482439926062847,
+          "forward_theory_reduction": 0.07038327526132404,
+          "inverse_queue_reduction": 0.4976873265494912,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.948,
+          "cutoff_score": -0.34178315517902313,
+          "experimental_retention": 0.9482439926062847,
+          "forward_theory_reduction": 0.07038327526132404,
+          "inverse_queue_reduction": 0.4976873265494912,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.949,
+          "cutoff_score": -0.35000150926157036,
+          "experimental_retention": 0.9500924214417745,
+          "forward_theory_reduction": 0.06968641114982578,
+          "inverse_queue_reduction": 0.4976873265494912,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.95,
+          "cutoff_score": -0.35000150926157036,
+          "experimental_retention": 0.9500924214417745,
+          "forward_theory_reduction": 0.06968641114982578,
+          "inverse_queue_reduction": 0.4976873265494912,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.951,
+          "cutoff_score": -0.3541407502784314,
+          "experimental_retention": 0.9519408502772643,
+          "forward_theory_reduction": 0.06898954703832752,
+          "inverse_queue_reduction": 0.4976873265494912,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.952,
+          "cutoff_score": -0.36711662614648743,
+          "experimental_retention": 0.9537892791127541,
+          "forward_theory_reduction": 0.06480836236933799,
+          "inverse_queue_reduction": 0.4976873265494912,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.953,
+          "cutoff_score": -0.36711662614648743,
+          "experimental_retention": 0.9537892791127541,
+          "forward_theory_reduction": 0.06480836236933799,
+          "inverse_queue_reduction": 0.4976873265494912,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.954,
+          "cutoff_score": -0.40473062652191194,
+          "experimental_retention": 0.955637707948244,
+          "forward_theory_reduction": 0.06062717770034843,
+          "inverse_queue_reduction": 0.49306197964847365,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.955,
+          "cutoff_score": -0.40473062652191194,
+          "experimental_retention": 0.955637707948244,
+          "forward_theory_reduction": 0.06062717770034843,
+          "inverse_queue_reduction": 0.49306197964847365,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.956,
+          "cutoff_score": -0.4152923291912285,
+          "experimental_retention": 0.9574861367837338,
+          "forward_theory_reduction": 0.05644599303135889,
+          "inverse_queue_reduction": 0.4921369102682701,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.957,
+          "cutoff_score": -0.4152923291912285,
+          "experimental_retention": 0.9574861367837338,
+          "forward_theory_reduction": 0.05644599303135889,
+          "inverse_queue_reduction": 0.4921369102682701,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.958,
+          "cutoff_score": -0.4369804867513225,
+          "experimental_retention": 0.9593345656192237,
+          "forward_theory_reduction": 0.05365853658536585,
+          "inverse_queue_reduction": 0.4902867715078631,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.959,
+          "cutoff_score": -0.4369804867513225,
+          "experimental_retention": 0.9593345656192237,
+          "forward_theory_reduction": 0.05365853658536585,
+          "inverse_queue_reduction": 0.4902867715078631,
+          "inverse_priority_retention": 0.5,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.96,
+          "cutoff_score": -0.4692756245999419,
+          "experimental_retention": 0.9611829944547134,
+          "forward_theory_reduction": 0.050174216027874564,
+          "inverse_queue_reduction": 0.4856614246068455,
+          "inverse_priority_retention": 0.5071428571428571,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.961,
+          "cutoff_score": -0.4692756245999419,
+          "experimental_retention": 0.9611829944547134,
+          "forward_theory_reduction": 0.050174216027874564,
+          "inverse_queue_reduction": 0.4856614246068455,
+          "inverse_priority_retention": 0.5071428571428571,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.962,
+          "cutoff_score": -0.4918911803858721,
+          "experimental_retention": 0.9630314232902033,
+          "forward_theory_reduction": 0.046689895470383276,
+          "inverse_queue_reduction": 0.46993524514338575,
+          "inverse_priority_retention": 0.5642857142857143,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.963,
+          "cutoff_score": -0.4918911803858721,
+          "experimental_retention": 0.9630314232902033,
+          "forward_theory_reduction": 0.046689895470383276,
+          "inverse_queue_reduction": 0.46993524514338575,
+          "inverse_priority_retention": 0.5642857142857143,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.964,
+          "cutoff_score": -0.5142346570510611,
+          "experimental_retention": 0.9648798521256932,
+          "forward_theory_reduction": 0.0445993031358885,
+          "inverse_queue_reduction": 0.40888066604995377,
+          "inverse_priority_retention": 0.7857142857142857,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.965,
+          "cutoff_score": -0.5230327210841792,
+          "experimental_retention": 0.966728280961183,
+          "forward_theory_reduction": 0.04250871080139373,
+          "inverse_queue_reduction": 0.3737280296022202,
+          "inverse_priority_retention": 0.8785714285714286,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.966,
+          "cutoff_score": -0.5230327210841792,
+          "experimental_retention": 0.966728280961183,
+          "forward_theory_reduction": 0.04250871080139373,
+          "inverse_queue_reduction": 0.3737280296022202,
+          "inverse_priority_retention": 0.8785714285714286,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.967,
+          "cutoff_score": -0.5672253118752671,
+          "experimental_retention": 0.9685767097966729,
+          "forward_theory_reduction": 0.0397212543554007,
+          "inverse_queue_reduction": 0.2127659574468085,
+          "inverse_priority_retention": 0.9714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.968,
+          "cutoff_score": -0.5672253118752671,
+          "experimental_retention": 0.9685767097966729,
+          "forward_theory_reduction": 0.0397212543554007,
+          "inverse_queue_reduction": 0.2127659574468085,
+          "inverse_priority_retention": 0.9714285714285714,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.969,
+          "cutoff_score": -0.5822125734797323,
+          "experimental_retention": 0.9704251386321626,
+          "forward_theory_reduction": 0.03832752613240418,
+          "inverse_queue_reduction": 0.16743755781683625,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.97,
+          "cutoff_score": -0.5822125734797323,
+          "experimental_retention": 0.9704251386321626,
+          "forward_theory_reduction": 0.03832752613240418,
+          "inverse_queue_reduction": 0.16743755781683625,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.971,
+          "cutoff_score": -0.5963250755841417,
+          "experimental_retention": 0.9722735674676525,
+          "forward_theory_reduction": 0.03623693379790941,
+          "inverse_queue_reduction": 0.13043478260869565,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.972,
+          "cutoff_score": -0.5963250755841417,
+          "experimental_retention": 0.9722735674676525,
+          "forward_theory_reduction": 0.03623693379790941,
+          "inverse_queue_reduction": 0.13043478260869565,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.973,
+          "cutoff_score": -0.6173377274503637,
+          "experimental_retention": 0.9741219963031423,
+          "forward_theory_reduction": 0.03484320557491289,
+          "inverse_queue_reduction": 0.0851063829787234,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.974,
+          "cutoff_score": -0.6173377274503637,
+          "experimental_retention": 0.9741219963031423,
+          "forward_theory_reduction": 0.03484320557491289,
+          "inverse_queue_reduction": 0.0851063829787234,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.975,
+          "cutoff_score": -0.6368790173149083,
+          "experimental_retention": 0.9759704251386322,
+          "forward_theory_reduction": 0.033449477351916376,
+          "inverse_queue_reduction": 0.056429232192414434,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.976,
+          "cutoff_score": -0.6597919099172308,
+          "experimental_retention": 0.977818853974122,
+          "forward_theory_reduction": 0.02857142857142857,
+          "inverse_queue_reduction": 0.04070305272895467,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.977,
+          "cutoff_score": -0.6597919099172308,
+          "experimental_retention": 0.977818853974122,
+          "forward_theory_reduction": 0.02857142857142857,
+          "inverse_queue_reduction": 0.04070305272895467,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.978,
+          "cutoff_score": -0.67763172873651,
+          "experimental_retention": 0.9796672828096118,
+          "forward_theory_reduction": 0.0264808362369338,
+          "inverse_queue_reduction": 0.034227567067530065,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.979,
+          "cutoff_score": -0.67763172873651,
+          "experimental_retention": 0.9796672828096118,
+          "forward_theory_reduction": 0.0264808362369338,
+          "inverse_queue_reduction": 0.034227567067530065,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.98,
+          "cutoff_score": -0.7019802528207701,
+          "experimental_retention": 0.9815157116451017,
+          "forward_theory_reduction": 0.024390243902439025,
+          "inverse_queue_reduction": 0.02312673450508788,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.981,
+          "cutoff_score": -0.7019802528207701,
+          "experimental_retention": 0.9815157116451017,
+          "forward_theory_reduction": 0.024390243902439025,
+          "inverse_queue_reduction": 0.02312673450508788,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.982,
+          "cutoff_score": -0.7925970161744762,
+          "experimental_retention": 0.9833641404805915,
+          "forward_theory_reduction": 0.018815331010452963,
+          "inverse_queue_reduction": 0.0027752081406105457,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.983,
+          "cutoff_score": -0.7925970161744762,
+          "experimental_retention": 0.9833641404805915,
+          "forward_theory_reduction": 0.018815331010452963,
+          "inverse_queue_reduction": 0.0027752081406105457,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.984,
+          "cutoff_score": -0.8149202619366821,
+          "experimental_retention": 0.9852125693160814,
+          "forward_theory_reduction": 0.016724738675958188,
+          "inverse_queue_reduction": 0.0018501387604070306,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.985,
+          "cutoff_score": -0.8149202619366821,
+          "experimental_retention": 0.9852125693160814,
+          "forward_theory_reduction": 0.016724738675958188,
+          "inverse_queue_reduction": 0.0018501387604070306,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.986,
+          "cutoff_score": -0.8269113787911745,
+          "experimental_retention": 0.9870609981515711,
+          "forward_theory_reduction": 0.016724738675958188,
+          "inverse_queue_reduction": 0.0009250693802035153,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.987,
+          "cutoff_score": -0.8269113787911745,
+          "experimental_retention": 0.9870609981515711,
+          "forward_theory_reduction": 0.016724738675958188,
+          "inverse_queue_reduction": 0.0009250693802035153,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.988,
+          "cutoff_score": -0.8340685351884983,
+          "experimental_retention": 0.988909426987061,
+          "forward_theory_reduction": 0.016724738675958188,
+          "inverse_queue_reduction": 0.0009250693802035153,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.989,
+          "cutoff_score": -0.8413735218546788,
+          "experimental_retention": 0.9907578558225508,
+          "forward_theory_reduction": 0.016724738675958188,
+          "inverse_queue_reduction": 0.0009250693802035153,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.99,
+          "cutoff_score": -0.8413735218546788,
+          "experimental_retention": 0.9907578558225508,
+          "forward_theory_reduction": 0.016724738675958188,
+          "inverse_queue_reduction": 0.0009250693802035153,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.991,
+          "cutoff_score": -0.8506308608813126,
+          "experimental_retention": 0.9926062846580407,
+          "forward_theory_reduction": 0.016724738675958188,
+          "inverse_queue_reduction": 0.0009250693802035153,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.992,
+          "cutoff_score": -0.8506308608813126,
+          "experimental_retention": 0.9926062846580407,
+          "forward_theory_reduction": 0.016724738675958188,
+          "inverse_queue_reduction": 0.0009250693802035153,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.993,
+          "cutoff_score": -0.9563323463005474,
+          "experimental_retention": 0.9944547134935305,
+          "forward_theory_reduction": 0.011846689895470384,
+          "inverse_queue_reduction": 0.0,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.994,
+          "cutoff_score": -0.9563323463005474,
+          "experimental_retention": 0.9944547134935305,
+          "forward_theory_reduction": 0.011846689895470384,
+          "inverse_queue_reduction": 0.0,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.995,
+          "cutoff_score": -1.000582427090429,
+          "experimental_retention": 0.9963031423290203,
+          "forward_theory_reduction": 0.00975609756097561,
+          "inverse_queue_reduction": 0.0,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.996,
+          "cutoff_score": -1.000582427090429,
+          "experimental_retention": 0.9963031423290203,
+          "forward_theory_reduction": 0.00975609756097561,
+          "inverse_queue_reduction": 0.0,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.997,
+          "cutoff_score": -1.060012490971133,
+          "experimental_retention": 0.9981515711645101,
+          "forward_theory_reduction": 0.007665505226480836,
+          "inverse_queue_reduction": 0.0,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.998,
+          "cutoff_score": -1.060012490971133,
+          "experimental_retention": 0.9981515711645101,
+          "forward_theory_reduction": 0.007665505226480836,
+          "inverse_queue_reduction": 0.0,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 0.999,
+          "cutoff_score": -Infinity,
+          "experimental_retention": 1.0,
+          "forward_theory_reduction": 0.0,
+          "inverse_queue_reduction": 0.0,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        },
+        {
+          "target_experimental_retention": 1.0,
+          "cutoff_score": -Infinity,
+          "experimental_retention": 1.0,
+          "forward_theory_reduction": 0.0,
+          "inverse_queue_reduction": 0.0,
+          "inverse_priority_retention": 1.0,
+          "experimental_count": 541,
+          "forward_theory_count": 1435,
+          "inverse_count": 1081
+        }
+      ],
+      "plot_limits": {
+        "x": [
+          29.142857142857146,
+          102.5
+        ],
+        "y": [
+          -2.5,
+          83.23126734505088
+        ]
+      },
+      "curve_points": 161,
+      "rule_point_count": 4,
+      "dft_frontier": {
+        "n_measured": 260,
+        "n_priority": 124,
+        "proxy_to_dft_ratio": 0.9395468522938009,
+        "threshold_gpa": 375.81874091752036,
+        "legend": "PSS, DFT ≥376 GPa"
+      },
+      "diagnostics": {
+        "cutoff": -0.6368790173149083,
+        "screened_n": 61,
+        "retained_n": 1020,
+        "priority_total_n": 140,
+        "priority_retained_n": 140,
+        "screened_distance_0p7_pass_n": 61,
+        "screened_d7_violation_n": 61,
+        "screened_l4_violation_n": 61,
+        "l4_violation_n": 728,
+        "l4_priority_screened_n": 95,
+        "screened_site_fraction_mean": 1.0,
+        "screened_site_fraction_median": 1.0,
+        "screened_volume_per_atom_mean": 15.329090265523147,
+        "screened_volume_per_atom_median": 15.273025575250852,
+        "screened_volume_per_atom_range": [
+          15.016858029230749,
+          16.55819811601098
+        ],
+        "retained_volume_per_atom_mean": 14.330610730498508,
+        "retained_volume_per_atom_median": 14.537455891177352,
+        "examples": [
+          {
+            "role": "screened",
+            "candidate_id": "candidate_0009",
+            "archive_member": "crystal_000009.cif",
+            "cif_sha256": "eeec0d65a66877fe8d9672f9d149d7b0faa1e1300dc0bc1ba2a2097b22ecc426",
+            "formula": "Ir2Os7",
+            "num_sites": 18,
+            "synthesis_score": -0.6378596707391505,
+            "site_fraction": 1.0,
+            "volume_per_atom": 15.017037135660948,
+            "bulk_modulus_proxy_gpa": 381.5342990134223,
+            "space_group": "P1"
+          },
+          {
+            "role": "retained high property",
+            "candidate_id": "candidate_0801",
+            "archive_member": "crystal_000801.cif",
+            "cif_sha256": "98d472308ab576ddecc44d225b7cf3e9c69bae77cd2bac050675979fc4894e70",
+            "formula": "Ir2Os7",
+            "num_sites": 9,
+            "synthesis_score": 1.2454389808758966,
+            "site_fraction": 0.4444444444444444,
+            "volume_per_atom": 14.326763990448825,
+            "bulk_modulus_proxy_gpa": 408.6764202943424,
+            "space_group": "C2/m"
+          }
+        ],
+        "workpoint": {
+          "priority_retention": 1.0,
+          "queue_reduction": 0.056429232192414434
+        },
+        "thumbnail_count": 2,
+        "example_archive": "<repo>/outputs/20260821_property_design/mattergen_bulk400_progress_13shards_adaptive/generated_crystals_cif.zip",
+        "graphic_inset": {
+          "queue_points": 1081,
+          "screened_points": 61,
+          "decision_boundary": true,
+          "variables": [
+            "site fraction",
+            "atomic volume"
+          ]
+        }
+      }
+    }
+  },
+  "panel_c_ehull": {
+    "status": "loaded",
+    "source": "<repo>/outputs/20260822_pu_mattersim_basin_hull_gpu_stratified_pilot_v3/gpu_results_corrected/e_hull_threshold_curve.csv",
+    "rows": 8,
+    "label": "MatterSim basin–hull proxy (corrected full-cell run)",
+    "operating_threshold_ev_per_atom": 0.2,
+    "operating_experimental_retention_total_denominator": 0.8623046875,
+    "operating_pu_screening_total_denominator": 0.7197265625,
+    "warning": "retain proxy wording until the energy reference is confirmed self-consistent; total-denominator rates keep ABSTAIN rows in the queue"
+  },
+  "panel_d": {
+    "status": "aligned_decile_curves",
+    "source_score_deciles": "<repo>/outputs/20260821_pu_synthesizability/full_pool_analysis_v1/score_deciles.csv",
+    "source_formula_npz": "<repo>/outputs/20260822_pu_formula_scores/full_pool_dual_v2/direct_formula_plots_v3/clscore_formula_density_data.npz",
+    "lines_per_row": 3,
+    "models": [
+      "CGCNN-PU",
+      "MatterSim-1M-MLP-PU",
+      "mean of the two models"
+    ]
+  },
+  "panel_f_design_data": {
+    "forward_source": "<repo>/outputs/20260822_property_design_synthesis_score/forward_scores.parquet",
+    "inverse_source": "<repo>/outputs/20260822_property_design_synthesis_score/inverse_scores.parquet",
+    "forward_all_n": 26600,
+    "forward_calibration_n": 2320,
+    "forward_experimental_n": 885,
+    "forward_theoretical_n": 1435,
+    "inverse_all_n": 1081,
+    "inverse_queue_n": 1081,
+    "inverse_priority_n": 140,
+    "inverse_score_complete_n": 0,
+    "inverse_score_observed_terms": {
+      "2": 1081
+    },
+    "forward_property_gate": "valid UMA fit and bulk_modulus_gpa >= 200",
+    "inverse_property_gate": "valid UMA fit and clamped_bulk_modulus_proxy_gpa >= 200",
+    "inverse_priority_gate": "clamped_bulk_modulus_proxy_gpa >= 400"
+  },
+  "formula_vs_L4": {
+    "matched_advantage_pp": 31.7933470838636,
+    "interpretation": "PSS exceeds Set 4 at the matched screening point, not at every satisfaction value"
+  }
+}

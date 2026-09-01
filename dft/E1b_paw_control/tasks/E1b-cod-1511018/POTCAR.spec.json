@@ -1,0 +1,37 @@
+{
+ "order": [
+  {
+   "element": "Ca",
+   "symbol": "Ca_sv",
+   "title": "PAW_PBE Ca_sv 06Sep2000",
+   "enmax_ev": 266.622,
+   "rcore_a": 1.2171,
+   "sha256": "a47365830e737f14e0e6c5cf1ed81b94e081eecf0a33df105380881bc9da05d5",
+   "library_relative": "Ca_sv/POTCAR"
+  },
+  {
+   "element": "B",
+   "symbol": "B_h",
+   "title": "PAW_PBE B_h 06Feb2004",
+   "enmax_ev": 700.0,
+   "rcore_a": 0.5821,
+   "sha256": "c7540516c01448f1a1ccf1c23fa364698ef28e9a5a9a07a54abcc59a762c4464",
+   "library_relative": "B_h/POTCAR"
+  },
+  {
+   "element": "N",
+   "symbol": "N_h",
+   "title": "PAW_PBE N_h 06Feb2004",
+   "enmax_ev": 700.0,
+   "rcore_a": 0.5821,
+   "sha256": "dc52e333fc0a72b86c7e275c90b0fe5a206954848a962e0247ec210b4cd728f3",
+   "library_relative": "N_h/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "Ca",
+  "B",
+  "N"
+ ]
+}

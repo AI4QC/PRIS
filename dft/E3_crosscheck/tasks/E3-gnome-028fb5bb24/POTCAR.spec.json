@@ -1,0 +1,47 @@
+{
+ "order": [
+  {
+   "element": "Dy",
+   "symbol": "Dy_3",
+   "title": "PAW_PBE Dy_3 06Sep2000",
+   "enmax_ev": 155.713,
+   "rcore_a": 1.5875,
+   "sha256": "d1221e5cb31116b1c3a1ed9166184784c35b5d689d241db1502ab87fd3612669",
+   "library_relative": "Dy_3/POTCAR"
+  },
+  {
+   "element": "Y",
+   "symbol": "Y_sv",
+   "title": "PAW_PBE Y_sv 25May2007",
+   "enmax_ev": 202.626,
+   "rcore_a": 1.4817,
+   "sha256": "5e7f7496c6fa99024fec326bcd60dcee8ff7e886f9613d31da35c685a538a036",
+   "library_relative": "Y_sv/POTCAR"
+  },
+  {
+   "element": "Cd",
+   "symbol": "Cd",
+   "title": "PAW_PBE Cd 06Sep2000",
+   "enmax_ev": 274.336,
+   "rcore_a": 1.2171,
+   "sha256": "8b7ca71966beae5276c8bb910adb3ecc013a3354c27473914c94cd54c83be4f7",
+   "library_relative": "Cd/POTCAR"
+  },
+  {
+   "element": "Ga",
+   "symbol": "Ga_d",
+   "title": "PAW_PBE Ga_d 06Jul2010",
+   "enmax_ev": 282.691,
+   "rcore_a": 1.2171,
+   "sha256": "a60ddf36e14f00ea098d9e3914b3745f1b7105e68786148f49ae384e44b4226c",
+   "library_relative": "Ga_d/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "Dy",
+  "Y",
+  "Cd",
+  "Ga"
+ ]
+}

@@ -1,0 +1,30 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "Th2CoSi(PIr)3",
+ "kind": "gnome",
+ "kmesh": [
+  7,
+  7,
+  3
+ ],
+ "n_atoms": 10,
+ "n_kpoints": 147,
+ "parent": "08ffff2afe",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "Co",
+  "Ir",
+  "P",
+  "Si",
+  "Th"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-08ffff2afe",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-08ffff2afe",
+ "variant": "P0"
+}

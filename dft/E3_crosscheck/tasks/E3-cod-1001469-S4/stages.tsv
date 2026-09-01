@@ -1,0 +1,3 @@
+relax_ions_fixed_cell	relax_ions_fixed_cell	POSCAR.init	-
+relax_cell	relax_cell	POSCAR.cell	relax_ions_fixed_cell
+static	static	POSCAR.static	relax_cell

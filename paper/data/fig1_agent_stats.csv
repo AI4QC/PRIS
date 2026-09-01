@@ -1,0 +1,15 @@
+metric,value,note
+session_hours,53,2026-07-27T10:31 to 2026-07-29T15:50
+tool_calls_total,1095,Bash 806 / Read 110 / Edit 56 / Write 35
+multiagent_workflows,14,each spawning 5-11 parallel research + adversarial-verify agents
+web_searches,41,WebSearch 30 + WebFetch 11
+scripts_written,60,15360 lines
+feature_tables,84,"parquet, 1.4 GB"
+databases_screened,5,"ICSD+COD, Alexandria, ELEMENTA, LeMat, OMat24"
+structures_analysed,99162,"experimental; plus 5.95M Alexandria, 2.03M ELEMENTA"
+hypotheses_refuted,11,"by the agent itself, post-hoc, after being stated as a conclusion"
+numbered_investigations,572,"568 numbered rounds + 4 sealed pre-registered chains, 2026-07-27 to 2026-08-14"
+candidate_evaluations,2037606,"documented lower bound; itemised search logs (SI Note S1)"
+scripts_written_total,615,"60 first-session + 546 numbered-round + 9 final-chain scripts"
+archived_result_files,72583,"34.85 GB external numerical outputs"
+rules_surviving,8,"D1-D8, plus two fitted scores"

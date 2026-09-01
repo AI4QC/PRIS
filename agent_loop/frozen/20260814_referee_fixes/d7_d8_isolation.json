@@ -1,0 +1,104 @@
+{
+ "frozen_D7": [
+  "wyckoff_econ_001",
+  "le",
+  0.6666666666666666,
+  null
+ ],
+ "frozen_D8": [
+  "bv_rel_mean",
+  "le",
+  0.7143040821865658,
+  null
+ ],
+ "a_D8_calibration_provenance": {
+  "feature": "bv_rel_mean",
+  "frozen_threshold": 0.7143040821865658,
+  "n_real_discovery": 12632,
+  "n_finite_bv_rel_mean": 10725,
+  "quantiles_over_real_discovery": {
+   "median": 0.09370489145555037,
+   "q75": 0.19947574881688052,
+   "q90": 0.523515350324505,
+   "q95": 0.681765410538117
+  },
+  "closest_qgrid_quantile": {
+   "quantile": "q0.96",
+   "value": 0.7143040821865658,
+   "abs_diff": 0.0
+  },
+  "gii_median_real_discovery": 0.21493506963387748,
+  "n_finite_gii": 10725
+ },
+ "b_calibration_descriptive": {
+  "label": "DESCRIPTIVE: post-hoc decomposition of the already-published L4 calibration evaluation; predicates were frozen on discovery and are applied singly on top of L3. Not a new confirmatory gate.",
+  "L3_only": {
+   "sat": 0.9171228997545781,
+   "exc": 0.7004429678848283,
+   "per_class_exclusion": {
+    "S1": 0.6181592039800995,
+    "S2": 0.5515151515151515,
+    "S3": 0.9553349875930521,
+    "S4": 0.7492877492877492,
+    "S5": 0.5763975155279504
+   }
+  },
+  "L3_plus_D7_only": {
+   "sat": 0.8361336605625826,
+   "exc": 0.8696013289036545,
+   "per_class_exclusion": {
+    "S1": 0.677860696517413,
+    "S2": 0.898989898989899,
+    "S3": 1.0,
+    "S4": 0.7877492877492878,
+    "S5": 0.9838509316770186
+   }
+  },
+  "L3_plus_D8_only": {
+   "sat": 0.8963564281668869,
+   "exc": 0.7621816168327796,
+   "per_class_exclusion": {
+    "S1": 0.6865671641791045,
+    "S2": 0.595959595959596,
+    "S3": 0.9602977667493796,
+    "S4": 0.9145299145299145,
+    "S5": 0.6086956521739131
+   }
+  }
+ },
+ "c_discovery": {
+  "L3_only": {
+   "sat": 0.9071405953134896,
+   "exc": 0.7052386495925494,
+   "per_class_exclusion": {
+    "S1": 0.6108193277310925,
+    "S2": 0.5656814449917897,
+    "S3": 0.9653543307086614,
+    "S4": 0.7620481927710844,
+    "S5": 0.5790856542301629
+   }
+  },
+  "L3_plus_D7_only": {
+   "sat": 0.830905636478784,
+   "exc": 0.8664726426076834,
+   "per_class_exclusion": {
+    "S1": 0.6670168067226891,
+    "S2": 0.8899835796387521,
+    "S3": 1.0,
+    "S4": 0.7927710843373494,
+    "S5": 0.9816079873883342
+   }
+  },
+  "L3_plus_D8_only": {
+   "sat": 0.8842621912602914,
+   "exc": 0.7616996507566938,
+   "per_class_exclusion": {
+    "S1": 0.6827731092436975,
+    "S2": 0.5952380952380952,
+    "S3": 0.9690288713910761,
+    "S4": 0.9114457831325301,
+    "S5": 0.6090383604834472
+   }
+  }
+ }
+}

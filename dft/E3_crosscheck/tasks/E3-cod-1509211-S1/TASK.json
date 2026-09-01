@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "AgBF5",
+ "kind": "experimental",
+ "kmesh": [
+  5,
+  5,
+  10
+ ],
+ "n_atoms": 14,
+ "n_kpoints": 250,
+ "parent": "cod-1509211",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "rng_seed_source": "E3|cod-1509211",
+ "species": [
+  "Ag",
+  "B",
+  "F"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-cod-1509211-S1",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-cod-1509211-S1",
+ "variant": "S1"
+}

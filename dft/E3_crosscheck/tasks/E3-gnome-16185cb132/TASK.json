@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "Ti2AlW2C3",
+ "kind": "gnome",
+ "kmesh": [
+  11,
+  11,
+  2
+ ],
+ "n_atoms": 16,
+ "n_kpoints": 242,
+ "parent": "16185cb132",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "Al",
+  "C",
+  "Ti",
+  "W"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-16185cb132",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-16185cb132",
+ "variant": "P0"
+}

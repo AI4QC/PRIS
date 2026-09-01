@@ -1,0 +1,9 @@
+population,cohort,n_rows,n_parents,n_compositions,n_chemical_systems,fraction_of_heldout_rows
+experimental,heldout_all,5297,,3733,3056,1.0
+experimental,composition_shared,3631,,2345,1981,0.6854823484991505
+experimental,composition_unseen,1666,,1388,1304,0.31451765150084954
+experimental,chemical_system_unseen,1046,,880,847,0.19747026618840854
+chemically_damaged,heldout_all,3612,806.0,736,693,1.0
+chemically_damaged,composition_shared,2406,545.0,480,448,0.6661129568106312
+chemically_damaged,composition_unseen,1206,261.0,256,255,0.3338870431893688
+chemically_damaged,chemical_system_unseen,799,172.0,169,168,0.22120708748615725

@@ -1,0 +1,36 @@
+{
+ "builder_sha256": "d3ba4e9789ba2dba946a4980851b95a2043faf6928e1fde1238d16fb5e2994e1",
+ "packages": {
+  "E1": {
+   "n_tasks": 20,
+   "n_vasp_runs": 340,
+   "package": "E1_rho_curve",
+   "total_atoms": 179
+  },
+  "E1b": {
+   "n_tasks": 8,
+   "n_vasp_runs": 136,
+   "package": "E1b_paw_control",
+   "total_atoms": 69
+  },
+  "E2": {
+   "n_tasks": 128,
+   "n_vasp_runs": 256,
+   "package": "E2_ordering",
+   "total_atoms": 1621
+  },
+  "E3": {
+   "n_tasks": 200,
+   "n_vasp_runs": 600,
+   "package": "E3_crosscheck",
+   "total_atoms": 1954
+  },
+  "E4": {
+   "n_tasks": 261,
+   "n_vasp_runs": 522,
+   "package": "E4_design",
+   "total_atoms": 3038
+  }
+ },
+ "protocol": "2026-08-25-pris-dft-e1e4-v1"
+}

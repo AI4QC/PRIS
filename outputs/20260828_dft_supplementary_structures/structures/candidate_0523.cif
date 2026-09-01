@@ -1,0 +1,36 @@
+# generated using pymatgen
+data_Re2Mo3Os5
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   4.82816263
+_cell_length_b   5.24724416
+_cell_length_c   7.12157319
+_cell_angle_alpha   108.93591846
+_cell_angle_beta   89.93815390
+_cell_angle_gamma   117.43361784
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Re2Mo3Os5
+_chemical_formula_sum   'Re2 Mo3 Os5'
+_cell_volume   149.08031448
+_cell_formula_units_Z   1
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Re  Re0  1  0.59823153  0.50169847  0.10721012  1
+  Re  Re1  1  0.27064890  0.49979868  0.60532945  1
+  Mo  Mo2  1  -0.00079887  0.30676127  0.90252801  1
+  Mo  Mo3  1  0.39010137  0.09084857  0.69864528  1
+  Mo  Mo4  1  0.06972249  0.08746564  0.20235155  1
+  Os  Os5  1  0.78995504  0.88886243  0.50090145  1
+  Os  Os6  1  0.67190174  0.30158682  0.40241946  1
+  Os  Os7  1  0.86308608  0.70177331  0.80292067  1
+  Os  Os8  1  0.19991720  0.70329773  0.30320315  1
+  Os  Os9  1  0.46293507  0.89001640  0.00242756  1

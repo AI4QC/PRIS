@@ -1,0 +1,30 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "Hf4Si4RuRhAu2",
+ "kind": "gnome",
+ "kmesh": [
+  8,
+  5,
+  4
+ ],
+ "n_atoms": 12,
+ "n_kpoints": 160,
+ "parent": "01905f78c6",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "Au",
+  "Hf",
+  "Rh",
+  "Ru",
+  "Si"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-01905f78c6",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-01905f78c6",
+ "variant": "P0"
+}

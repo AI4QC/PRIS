@@ -1,0 +1,14 @@
+[
+ {
+  "stage": "relax_cell",
+  "incar": "relax_cell",
+  "poscar": "POSCAR.init",
+  "from_contcar": ""
+ },
+ {
+  "stage": "static",
+  "incar": "static",
+  "poscar": "POSCAR.static",
+  "from_contcar": "relax_cell"
+ }
+]

@@ -1,0 +1,9 @@
+kind,tier,expression,metric1_name,metric1,metric2_name,metric2,note
+rule,L1,"bl_min >= 0.735",satisfaction,0.9915,exclusion,0.3634,"single rule; 0.18 pp spread across 3 bond definitions"
+rule,L2,"bl_min >= 0.804",satisfaction,0.9577,exclusion,0.6185,"trusted core, rule 1 of 4"
+rule,L2,"IF mean anion CN <= 3.33 THEN bl_mean <= 1.081",satisfaction,0.9577,exclusion,0.6185,"trusted core, rule 2 of 4"
+rule,L2,"madz_range <= 31.45",satisfaction,0.9577,exclusion,0.6185,"trusted core, rule 3 of 4"
+rule,L2,"mad_max <= 15.17",satisfaction,0.9577,exclusion,0.6185,"trusted core, rule 4 of 4"
+rule,L3,"IF ionicity fi > 0.55 THEN no like-charge bonds",satisfaction,0.9169,exclusion,0.7016,"added to L2; false-positive gap -0.5 pp"
+formula,F1,"S = 1.852 z(E_Ewald^point) + 0.951 z(E_Ewald^real) + 0.740 z(V/atom) - 0.718 z(min site Madelung) - 0.687 z(Madelung range) - 0.497 z(sigma_ECoN) + 0.479 z(max ECoN) - 0.455 z(E_Ewald^total)",acc_full,0.6960,acc_at_10pct,0.9116,"computational candidates; inflated by target choice"
+formula,F2,"S = -0.322 z(min_opp_frac) + 0.149 z(ECoN_mean) + 0.137 z(MEFIR mismatch) + 0.060 z(angle variance) + 0.039 z(ECoN_max) - 0.030 z(bond-length RSD) + 0.002 z(p5_n_distinct)",acc_full,0.5725,acc_at_10pct,0.7313,"experimental domain; 7-term compact form"

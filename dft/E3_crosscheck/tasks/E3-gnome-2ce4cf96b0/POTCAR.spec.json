@@ -1,0 +1,57 @@
+{
+ "order": [
+  {
+   "element": "Ho",
+   "symbol": "Ho_3",
+   "title": "PAW_PBE Ho_3 06Sep2000",
+   "enmax_ev": 154.137,
+   "rcore_a": 1.5875,
+   "sha256": "167de0d5ddb2b359bdea3409da8d736f8111514851114f0e95eefb5adda034cb",
+   "library_relative": "Ho_3/POTCAR"
+  },
+  {
+   "element": "Mg",
+   "symbol": "Mg_pv",
+   "title": "PAW_PBE Mg_pv 13Apr2007",
+   "enmax_ev": 403.929,
+   "rcore_a": 1.0584,
+   "sha256": "f474ac0dd33840b9ae76c01d57fea79fdf77cdfbb07d5ade72c65f83c709b62b",
+   "library_relative": "Mg_pv/POTCAR"
+  },
+  {
+   "element": "Zn",
+   "symbol": "Zn",
+   "title": "PAW_PBE Zn 06Sep2000",
+   "enmax_ev": 276.723,
+   "rcore_a": 1.2171,
+   "sha256": "501fddbd8274dd8e9725d4f3de27861d7f1e553a7e18441bc79fed8f346e7f23",
+   "library_relative": "Zn/POTCAR"
+  },
+  {
+   "element": "Ga",
+   "symbol": "Ga_d",
+   "title": "PAW_PBE Ga_d 06Jul2010",
+   "enmax_ev": 282.691,
+   "rcore_a": 1.2171,
+   "sha256": "a60ddf36e14f00ea098d9e3914b3745f1b7105e68786148f49ae384e44b4226c",
+   "library_relative": "Ga_d/POTCAR"
+  },
+  {
+   "element": "Hg",
+   "symbol": "Hg",
+   "title": "PAW_PBE Hg 06Sep2000",
+   "enmax_ev": 233.204,
+   "rcore_a": 1.3229,
+   "sha256": "b58054e5facb8a6c456f8fea289fc655b681c0fa06131ba074282c377c596e89",
+   "library_relative": "Hg/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "Ho",
+  "Mg",
+  "Zn",
+  "Ga",
+  "Hg"
+ ]
+}

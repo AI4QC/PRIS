@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "Ce4Pr3Nd3Ru4",
+ "kind": "gnome",
+ "kmesh": [
+  5,
+  5,
+  4
+ ],
+ "n_atoms": 14,
+ "n_kpoints": 100,
+ "parent": "2f7949e9f9",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "Ce",
+  "Nd",
+  "Pr",
+  "Ru"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-2f7949e9f9",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-2f7949e9f9",
+ "variant": "P0"
+}

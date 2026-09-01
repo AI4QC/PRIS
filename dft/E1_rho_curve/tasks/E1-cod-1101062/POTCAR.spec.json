@@ -1,0 +1,37 @@
+{
+ "order": [
+  {
+   "element": "Ca",
+   "symbol": "Ca_sv",
+   "title": "PAW_PBE Ca_sv 06Sep2000",
+   "enmax_ev": 266.622,
+   "rcore_a": 1.2171,
+   "sha256": "a47365830e737f14e0e6c5cf1ed81b94e081eecf0a33df105380881bc9da05d5",
+   "library_relative": "Ca_sv/POTCAR"
+  },
+  {
+   "element": "Fe",
+   "symbol": "Fe_pv",
+   "title": "PAW_PBE Fe_pv 02Aug2007",
+   "enmax_ev": 293.238,
+   "rcore_a": 1.1642,
+   "sha256": "5d22e414b1f82158bf2c7ecb8b97b28fd0923e48cadc1c3bf74d524558f5dd32",
+   "library_relative": "Fe_pv/POTCAR"
+  },
+  {
+   "element": "O",
+   "symbol": "O",
+   "title": "PAW_PBE O 08Apr2002",
+   "enmax_ev": 400.0,
+   "rcore_a": 0.8043,
+   "sha256": "818f92134a0a090dccd8ba1447fa70422a3b330e708bb4f08108d8ae51209ddf",
+   "library_relative": "O/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "Ca",
+  "Fe",
+  "O"
+ ]
+}

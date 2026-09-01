@@ -1,0 +1,8 @@
+rule,satisfaction,sat_hi,algo_spread_pp,george
+Pauling 1 (radius ratio),0.617,0.648,4.05,0.66
+Pauling 2 (bond strength),0.179,0.202,0.83,0.2
+Pauling 3 (edge/face),0.734,0.734,3.93,0.733
+Pauling 4 (high-valence),0.347,0.403,5.74,0.4
+Pauling 5 (parsimony),0.678,0.678,1.81,0.703
+Rules 2-5 jointly,0.0651,0.116,,0.13
+This work: rho>=0.735,0.9919,0.9919,0.18,

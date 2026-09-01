@@ -1,0 +1,27 @@
+{
+ "order": [
+  {
+   "element": "Re",
+   "symbol": "Re_pv",
+   "title": "PAW_PBE Re_pv 06Sep2000",
+   "enmax_ev": 226.216,
+   "rcore_a": 1.3229,
+   "sha256": "9136fabd3a1e35b9fb4b1f356ef358c338d3d4e46f3e96ab15e45974af27d0c0",
+   "library_relative": "Re_pv/POTCAR"
+  },
+  {
+   "element": "N",
+   "symbol": "N",
+   "title": "PAW_PBE N 08Apr2002",
+   "enmax_ev": 400.0,
+   "rcore_a": 0.7938,
+   "sha256": "e053789ff3a61a86a1b75d8a110fcc91f86041011e7b0817c7c99e4e8a6349d7",
+   "library_relative": "N/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "Re",
+  "N"
+ ]
+}

@@ -1,0 +1,7 @@
+cohort,min_per_cohort,rows_on_common_support,fraction_of_unique_cohort,n_strata,effective_sample_size,max_row_weight
+experimental,1,401,0.0040438877795929895,230,285.7221380059442,0.013301088270858524
+pu_negative,1,426,0.0011684293676218897,230,322.8963191528825,0.010882708585247884
+experimental,5,0,0.0,0,0.0,
+pu_negative,5,0,0.0,0,0.0,
+experimental,10,0,0.0,0,0.0,
+pu_negative,10,0,0.0,0,0.0,

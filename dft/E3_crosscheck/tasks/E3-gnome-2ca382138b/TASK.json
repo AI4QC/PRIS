@@ -1,0 +1,30 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "Tb2ThSc2AlRh3",
+ "kind": "gnome",
+ "kmesh": [
+  5,
+  5,
+  7
+ ],
+ "n_atoms": 9,
+ "n_kpoints": 175,
+ "parent": "2ca382138b",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "species": [
+  "Al",
+  "Rh",
+  "Sc",
+  "Tb",
+  "Th"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-gnome-2ca382138b",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-gnome-2ca382138b",
+ "variant": "P0"
+}

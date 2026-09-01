@@ -1,0 +1,18 @@
+real records 17682, bad parents 2712
+  real 2000/17682 -> 1999
+  real 4000/17682 -> 3999
+  real 6000/17682 -> 5979
+  real 8000/17682 -> 7978
+  real 10000/17682 -> 9978
+spglib: ssm_get_exact_positions failed.
+spglib: get_bravais_exact_positions_and_lattice failed.
+  real 12000/17682 -> 11977
+  real 14000/17682 -> 13972
+  real 16000/17682 -> 15970
+wrote 17651 -> law_real_aug.parquet
+  bad 500/2712 -> 2318
+  bad 1000/2712 -> 4641
+  bad 1500/2712 -> 6958
+  bad 2000/2712 -> 9258
+  bad 2500/2712 -> 11549
+wrote 12530 -> law_bad_aug.parquet

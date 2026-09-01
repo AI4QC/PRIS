@@ -1,0 +1,31 @@
+{
+  "figure": "experiments/pu_model_performance_audit/standard_roc_confusion/pu_models_roc_auc_confusion.pdf",
+  "models": {
+    "A": {
+      "model": "CGCNN-PU",
+      "auc_mean": 0.9765387726880976,
+      "auc_sd": 0.0007616998689551466,
+      "n_bags": 50,
+      "n_per_bag": 39596,
+      "thresholds": [
+        0.5
+      ]
+    },
+    "B": {
+      "model": "MatterSim-1M-MLP-PU",
+      "auc_mean": 0.9465606619129878,
+      "auc_sd": 0.0009407556498263241,
+      "n_bags": 50,
+      "n_per_bag": 37849,
+      "thresholds": [
+        0.5
+      ]
+    }
+  },
+  "protocol": "validation only; experimental positives plus sampled pseudo-negatives; no independent test split",
+  "confusion_matrix": {
+    "threshold": 0.5,
+    "counts_are": "mean per bag",
+    "row_percentages": "within validation label"
+  }
+}

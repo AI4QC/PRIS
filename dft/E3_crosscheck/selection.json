@@ -1,0 +1,507 @@
+{
+ "damage_operators": [
+  "S1",
+  "S2",
+  "S3",
+  "S4",
+  "S5"
+ ],
+ "experiment": "E3",
+ "experimental": [
+  {
+   "formula": "Ba2CePtO6",
+   "n_atoms": 10,
+   "source_id": "cod-1001469",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Rb2SnI6",
+   "n_atoms": 9,
+   "source_id": "cod-1010052",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Cs2SnI6",
+   "n_atoms": 9,
+   "source_id": "cod-1010053",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Cs2AgAuCl6",
+   "n_atoms": 10,
+   "source_id": "cod-1010145",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "K2SnCl6",
+   "n_atoms": 9,
+   "source_id": "cod-1010173",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Rb2SnCl6",
+   "n_atoms": 9,
+   "source_id": "cod-1010175",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Tl2SnCl6",
+   "n_atoms": 9,
+   "source_id": "cod-1010177",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Rb2PbCl6",
+   "n_atoms": 9,
+   "source_id": "cod-1010179",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Cs2PbCl6",
+   "n_atoms": 9,
+   "source_id": "cod-1010180",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Rb2PtCl6",
+   "n_atoms": 9,
+   "source_id": "cod-1010182",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Rb2TiCl6",
+   "n_atoms": 9,
+   "source_id": "cod-1010193",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Cs2TiCl6",
+   "n_atoms": 9,
+   "source_id": "cod-1010194",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Rb2ZrCl6",
+   "n_atoms": 9,
+   "source_id": "cod-1010195",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Cs2SiF6",
+   "n_atoms": 9,
+   "source_id": "cod-1010285",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Cs2GeF6",
+   "n_atoms": 9,
+   "source_id": "cod-1010286",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "K2PdCl6",
+   "n_atoms": 9,
+   "source_id": "cod-1010888",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "K2OsCl6",
+   "n_atoms": 9,
+   "source_id": "cod-1011311",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "K2OsBr6",
+   "n_atoms": 9,
+   "source_id": "cod-1011312",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "MnVCuO4",
+   "n_atoms": 14,
+   "source_id": "cod-1100971",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "KTcO4",
+   "n_atoms": 12,
+   "source_id": "cod-1501467",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "MnNbF6",
+   "n_atoms": 8,
+   "source_id": "cod-1507759",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "NaAlF4",
+   "n_atoms": 12,
+   "source_id": "cod-1507767",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "AgAsSe2",
+   "n_atoms": 4,
+   "source_id": "cod-1509200",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "AgBF5",
+   "n_atoms": 14,
+   "source_id": "cod-1509211",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "BaYAgTe3",
+   "n_atoms": 12,
+   "source_id": "cod-1509226",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "AlAgO2",
+   "n_atoms": 8,
+   "source_id": "cod-1509232",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "CrAgSe2",
+   "n_atoms": 4,
+   "source_id": "cod-1509271",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Cr2AgTe4",
+   "n_atoms": 14,
+   "source_id": "cod-1509274",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Cs2AgF4",
+   "n_atoms": 7,
+   "source_id": "cod-1509284",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "formula": "Cs2VAgS4",
+   "n_atoms": 16,
+   "source_id": "cod-1509287",
+   "variants": [
+    "P0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+   ]
+  }
+ ],
+ "gnome": [
+  {
+   "formula": "Hf4Si4RuRhAu2",
+   "material_id": "01905f78c6",
+   "n_atoms": 12
+  },
+  {
+   "formula": "DyY3(CdGa2)2",
+   "material_id": "028fb5bb24",
+   "n_atoms": 10
+  },
+  {
+   "formula": "LaPr(Al4Co)2",
+   "material_id": "0466bbe21f",
+   "n_atoms": 12
+  },
+  {
+   "formula": "Tb2ThPt9",
+   "material_id": "085d6ee4f8",
+   "n_atoms": 12
+  },
+  {
+   "formula": "Th2CoSi(PIr)3",
+   "material_id": "08ffff2afe",
+   "n_atoms": 10
+  },
+  {
+   "formula": "ThCdPRuPt",
+   "material_id": "11c1970495",
+   "n_atoms": 10
+  },
+  {
+   "formula": "Ti2AlW2C3",
+   "material_id": "16185cb132",
+   "n_atoms": 16
+  },
+  {
+   "formula": "CaPmCdIn",
+   "material_id": "195425d136",
+   "n_atoms": 4
+  },
+  {
+   "formula": "Dy9Y3(TcIr)2",
+   "material_id": "1c2831771d",
+   "n_atoms": 16
+  },
+  {
+   "formula": "Tb9Y3(OsRh)2",
+   "material_id": "2190cc44da",
+   "n_atoms": 16
+  },
+  {
+   "formula": "ScFeCoMoP2",
+   "material_id": "2245563081",
+   "n_atoms": 12
+  },
+  {
+   "formula": "DyHo3(TmSn)6",
+   "material_id": "2446f0e8d9",
+   "n_atoms": 16
+  },
+  {
+   "formula": "ThNp(TeAs)2",
+   "material_id": "246bffd300",
+   "n_atoms": 6
+  },
+  {
+   "formula": "HoEr2MgCd2Au3",
+   "material_id": "24dfbfa4b6",
+   "n_atoms": 9
+  },
+  {
+   "formula": "La3TbNi2(AsSe)2",
+   "material_id": "25c316ed15",
+   "n_atoms": 10
+  },
+  {
+   "formula": "CoB2MoW",
+   "material_id": "2afa0c9849",
+   "n_atoms": 5
+  },
+  {
+   "formula": "Tb2ThSc2AlRh3",
+   "material_id": "2ca382138b",
+   "n_atoms": 9
+  },
+  {
+   "formula": "Ho3Mg2ZnGa2Hg",
+   "material_id": "2ce4cf96b0",
+   "n_atoms": 9
+  },
+  {
+   "formula": "Ce4Pr3Nd3Ru4",
+   "material_id": "2f7949e9f9",
+   "n_atoms": 14
+  },
+  {
+   "formula": "Sc6As5Se",
+   "material_id": "312167ea8b",
+   "n_atoms": 12
+  }
+ ],
+ "n_experimental_parents": 30,
+ "n_gnome_parents": 20,
+ "rule": "30 discovery-split experimental parents with <=16 sites for which all five damage operators S1-S5 of src/make_negatives.py apply, first by source_id, each with its five damaged variants; plus 20 unmodified GNoME parents <=16 atoms by material_id. Damage RNG seeded by sha256('E3|<source_id>'), not Python's salted hash(). A parent is also dropped when its S2 or S5 exchange leaves a crystal identical to the parent, which happens when the two cation sublattices are related by a lattice translation. Parents must be ordered with a shortest contact of at least 1.0 A, and a parent is dropped whole if any of its six cells falls below 0.9 A. Each cell relaxes ions at fixed cell first, matching the MatterSim protocol it is compared with, and only then releases the cell."
+}

@@ -1,0 +1,10 @@
+step 1: +econ_max               cv 0.6148 (+1.6148)
+step 2: +gii                    cv 0.6504 (+0.0356)
+step 3: +cn_cat_max             cv 0.6663 (+0.0158)
+step 4: +p2_max_dev             cv 0.6750 (+0.0088)
+step 5: +wyckoff_econ_01        cv 0.6794 (+0.0044)
+step 6: +econ_min               cv 0.6871 (+0.0077)
+step 7: +p5_max_distinct        cv 0.6879 (+0.0008)
+stop: gain < 0.002
+F2 restated on discovery: higher 0.3986 / lower 0.6014 -> orient higher_better=False
+F2R frozen: 6 terms, cv 0.6871, discovery acc 0.6883

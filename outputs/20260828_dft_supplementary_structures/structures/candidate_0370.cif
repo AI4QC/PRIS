@@ -1,0 +1,42 @@
+# generated using pymatgen
+data_Cr3Os13
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.44834773
+_cell_length_b   5.44743623
+_cell_length_c   8.68599339
+_cell_angle_alpha   89.99419640
+_cell_angle_beta   90.00399597
+_cell_angle_gamma   120.01795799
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Cr3Os13
+_chemical_formula_sum   'Cr3 Os13'
+_cell_volume   223.21762315
+_cell_formula_units_Z   1
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Cr  Cr0  1  0.40895011  0.26784318  0.08430733  1
+  Cr  Cr1  1  0.07519329  0.60078429  0.33400527  1
+  Cr  Cr2  1  0.40879771  0.26748676  0.58381734  1
+  Os  Os3  1  0.57147345  0.59349072  0.33407145  1
+  Os  Os4  1  0.57146341  0.10424047  0.33404678  1
+  Os  Os5  1  0.90935141  0.26928685  0.08565086  1
+  Os  Os6  1  0.24517421  0.43059998  0.83419151  1
+  Os  Os7  1  0.40700907  0.76633610  0.08551270  1
+  Os  Os8  1  0.90952660  0.26928325  0.58242277  1
+  Os  Os9  1  0.73511497  0.43063130  0.83412449  1
+  Os  Os10  1  0.74198379  0.93421632  0.83414241  1
+  Os  Os11  1  0.90901747  0.76620584  0.08560461  1
+  Os  Os12  1  0.90935527  0.76645041  0.58261084  1
+  Os  Os13  1  0.40690050  0.76673483  0.58270209  1
+  Os  Os14  1  0.08244050  0.10427148  0.33406657  1
+  Os  Os15  1  0.24517475  0.94082867  0.83415662  1

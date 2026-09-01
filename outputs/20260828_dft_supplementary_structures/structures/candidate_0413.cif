@@ -1,0 +1,40 @@
+# generated using pymatgen
+data_ReOs6
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   4.78496190
+_cell_length_b   6.47996371
+_cell_length_c   7.04513665
+_cell_angle_alpha   94.93568595
+_cell_angle_beta   89.96142073
+_cell_angle_gamma   111.70012865
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   ReOs6
+_chemical_formula_sum   'Re2 Os12'
+_cell_volume   202.09637377
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Re  Re0  1  0.14682486  0.63214356  0.11872053  1
+  Re  Re1  1  0.90702182  0.48819577  0.76092494  1
+  Os  Os2  1  0.33785157  0.34613776  0.90479052  1
+  Os  Os3  1  0.57410999  0.48882031  0.26197461  1
+  Os  Os4  1  0.47983045  0.63152924  0.61763070  1
+  Os  Os5  1  0.43026947  0.20274190  0.54485313  1
+  Os  Os6  1  0.62366028  0.91758734  0.33464174  1
+  Os  Os7  1  0.28989282  0.91737135  0.83185971  1
+  Os  Os8  1  0.71616684  0.77431606  0.97476417  1
+  Os  Os9  1  0.04990881  0.77501376  0.47542358  1
+  Os  Os10  1  0.19366488  0.05986159  0.18741771  1
+  Os  Os11  1  0.86023543  0.06057004  0.69202696  1
+  Os  Os12  1  0.76391434  0.20291941  0.04764577  1
+  Os  Os13  1  0.00394839  0.34545637  0.40416935  1

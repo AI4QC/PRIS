@@ -1,0 +1,189 @@
+# -*- coding: utf-8 -*-
+# LeakGuard C 级(构造溯源)的声明表。每个特征声明四件事:
+#   atoms : 计算它用到的**溯源原子**(传递闭包由 atoms 表的 from 字段展开)
+#   op    : 聚合算子(包络算子 span/range/nunique/std/max/min 会触发 R2)
+#   scope : 聚合域(见 scope_rank,数字越小域越粗)
+#   base  : 被聚合的底量
+# 靶声明 forbidden_atoms = 该靶的定义式**自身的输入**。
+# 规则:
+#   R1  特征原子闭包 ∩ 靶的 forbidden_atoms ≠ ∅            -> BLOCK(构造级泄漏)
+#   R2  同 base + 包络算子 + 聚合域 ⊇ 靶域                  -> BLOCK(恒真蕴含入口)
+#   R3  同 base + 同域(靶的充分统计量族)                  -> REVIEW
+# 未声明的特征一律 BLOCK(默认拒绝)。
+
+scope_rank:
+  global: 0
+  structure: 1
+  sp_group: 2          # (source_id, element, ox)
+  cation_orbit: 3
+  anion_orbit: 3
+  site: 4
+  bond: 5
+
+# ------------------------------------------------------------------ 溯源原子
+atoms:
+  comp:          {desc: "化学式:元素与化学计量"}
+  ox_formal:     {desc: "形式电荷(ox_source ∈ cif/guess,禁 BVAnalyzer)"}
+  elem_const:    {desc: "元素常数表 X/r/ie1/group/period/block/Z/nd"}
+  proto:         {desc: "结构原型标签"}
+  mult:          {desc: "位点重数"}
+  bond_inc_cat:  {desc: "阳离子位点 -> (阴离子位点, 像) 关联表", from: []}
+  bond_inc_an:   {desc: "阴离子位点 -> (阳离子位点, 像) 关联表 = 谁与谁共享该阴离子", from: []}
+  cn_orbit:      {desc: "阳离子轨道的配位数", from: [bond_inc_cat]}
+  an_cn_site:    {desc: "阴离子位点的阳离子配位数 = |bond_inc_an|", from: [bond_inc_an]}
+  ox_bonded_cat: {desc: "与某阴离子成键的那批阳离子的形式电荷", from: [bond_inc_an, ox_formal]}
+  z_abs:         {desc: "阴离子形式电荷绝对值", from: [ox_formal]}
+  pair_graph:    {desc: "多面体对的共享模式 corner/edge/face", from: [bond_inc_an]}
+  s_prior:       {desc: "Hawthorne 先验键强,解 A s = v(A 同时含阳/阴节点行)",
+                  from: [bond_inc_cat, bond_inc_an, ox_formal]}
+
+# ------------------------------------------------------------------ 压缩靶
+targets:
+  T_CONN:
+    desc: "阳离子轨道是否参与共边/共面(泡林 3/4 的审计量)"
+    scope: cation_orbit
+    base: shared_anion_count
+    # tgt = 1 <=> ∃ 邻居多面体与之共享 >= 2 个阴离子。这是 bond_inc_an 的直接函数。
+    forbidden_atoms: [bond_inc_an, an_cn_site, pair_graph, s_prior, ox_bonded_cat]
+    inherit: [t0]
+  T_P2:
+    desc: "阴离子轨道的 |Σ s_pauling − |z|| > 0.2(泡林 2)"
+    scope: anion_orbit
+    base: pauling_sum_dev
+    # dev = Σ_j ox_j/CN_j − z_abs。定义式的输入就是这四个原子。
+    forbidden_atoms: [bond_inc_an, an_cn_site, ox_bonded_cat, z_abs, cn_orbit, s_prior]
+    inherit: []
+  T_P5:
+    desc: "结构内某 (元素, 氧化态) 是否占多于一种配位环境(泡林 5),论域限 n_orb>=2"
+    scope: sp_group
+    base: cn
+    # tgt = 1[nunique(cn | sid,el,ox) > 1]。cn 本身是必需的搜索原料,
+    # 不整体禁用;靠 R2 拦"同底量 + 包络算子 + 域包含靶域"这条恒真通道。
+    forbidden_atoms: []
+    inherit: [t0]
+
+# ------------------------------------------------------ T0 组成级底座(41 个)
+common:
+  t0:
+    ox:            {atoms: [ox_formal], op: identity, scope: sp_group, base: ox}
+    Z:             {atoms: [elem_const], op: identity, scope: sp_group, base: elem}
+    group:         {atoms: [elem_const], op: identity, scope: sp_group, base: elem}
+    period:        {atoms: [elem_const], op: identity, scope: sp_group, base: elem}
+    block:         {atoms: [elem_const], op: identity, scope: sp_group, base: elem}
+    X:             {atoms: [elem_const], op: identity, scope: sp_group, base: elem}
+    nd_neutral:    {atoms: [elem_const], op: identity, scope: sp_group, base: elem}
+    nd_ion:        {atoms: [elem_const, ox_formal], op: arith, scope: sp_group, base: elem}
+    r_atomic:      {atoms: [elem_const], op: identity, scope: sp_group, base: elem}
+    r_calc:        {atoms: [elem_const], op: identity, scope: sp_group, base: elem}
+    ie1:           {atoms: [elem_const], op: identity, scope: sp_group, base: elem}
+    r_uni:         {atoms: [elem_const, ox_formal], op: lookup, scope: sp_group, base: elem}
+    r_uni_an:      {atoms: [elem_const, comp], op: lookup, scope: structure, base: elem}
+    X_an:          {atoms: [elem_const, comp], op: identity, scope: structure, base: elem}
+    period_an:     {atoms: [elem_const, comp], op: identity, scope: structure, base: elem}
+    group_an:      {atoms: [elem_const, comp], op: identity, scope: structure, base: elem}
+    ratio_uni:     {atoms: [elem_const, ox_formal, comp], op: ratio, scope: sp_group, base: elem}
+    ratio_calc:    {atoms: [elem_const, comp], op: ratio, scope: sp_group, base: elem}
+    dX:            {atoms: [elem_const, comp], op: arith, scope: sp_group, base: elem}
+    ion_pot:       {atoms: [elem_const, ox_formal], op: ratio, scope: sp_group, base: elem}
+    ion_pot2:      {atoms: [elem_const, ox_formal], op: ratio, scope: sp_group, base: elem}
+    acid_str:      {atoms: [elem_const, ox_formal, comp], op: ratio, scope: sp_group, base: elem}
+    ox_over_group: {atoms: [elem_const, ox_formal], op: ratio, scope: sp_group, base: ox}
+    ox_x_frac:     {atoms: [ox_formal, comp], op: prod, scope: sp_group, base: ox}
+    charge_per_an: {atoms: [ox_formal, comp], op: ratio, scope: structure, base: ox}
+    ox_rel:        {atoms: [ox_formal, comp], op: arith, scope: sp_group, base: ox}
+    ox_is_max:     {atoms: [ox_formal, comp], op: indicator, scope: sp_group, base: ox}
+    bv_budget:     {atoms: [comp, elem_const], op: ratio, scope: structure, base: comp}
+    r_sum:         {atoms: [elem_const, ox_formal, comp], op: arith, scope: sp_group, base: elem}
+    X_prod:        {atoms: [elem_const, comp], op: prod, scope: sp_group, base: elem}
+    ionicity:      {atoms: [elem_const, comp], op: arith, scope: sp_group, base: elem}
+    ox_an:         {atoms: [comp], op: lookup, scope: structure, base: ox}
+    x_in_cat:      {atoms: [comp], op: ratio, scope: sp_group, base: comp}
+    n_cat_at:      {atoms: [comp], op: sum, scope: structure, base: comp}
+    n_an_at:       {atoms: [comp], op: count, scope: structure, base: comp}
+    cat_an_ratio:  {atoms: [comp], op: ratio, scope: structure, base: comp}
+    ox_mean_cat:   {atoms: [ox_formal, comp], op: mean, scope: structure, base: ox}
+    ox_max_cat:    {atoms: [ox_formal, comp], op: max, scope: structure, base: ox}
+    ox_min_cat:    {atoms: [ox_formal, comp], op: min, scope: structure, base: ox}
+    n_cat_species: {atoms: [comp, ox_formal], op: nunique, scope: structure, base: species}
+    n_elements:    {atoms: [comp], op: nunique, scope: structure, base: species}
+
+# ------------------------------------------------------------------ 各靶新增
+features:
+  T_CONN:
+    cn:            {atoms: [cn_orbit], op: count, scope: cation_orbit, base: cn}
+    s_pau:         {atoms: [cn_orbit, ox_formal], op: ratio, scope: cation_orbit, base: cn,
+                    note: "z/CN,泡林静电价"}
+    an_cn_mean:    {atoms: [an_cn_site], op: mean, scope: cation_orbit, base: an_cn,
+                    note: "本轨道所有键的阴离子配位数均值 —— 直接读 bond_inc_an"}
+    an_cn_max:     {atoms: [an_cn_site], op: max, scope: cation_orbit, base: an_cn}
+    an_cn_min:     {atoms: [an_cn_site], op: min, scope: cation_orbit, base: an_cn}
+    an_link:       {atoms: [an_cn_site, cn_orbit], op: sum, scope: cation_orbit, base: an_cn,
+                    note: "cn*(an_cn_mean-1) = Σ_bonds(an_cn-1) = 该多面体与邻居的关联数;
+                           tgt = 1[an_link > deg] 是恒等式(2500 结构/30266 位点一致率 1.000000)"}
+    sp_mean:       {atoms: [s_prior], op: mean, scope: cation_orbit, base: s_prior}
+    sp_std:        {atoms: [s_prior], op: std, scope: cation_orbit, base: s_prior}
+    sp_min:        {atoms: [s_prior], op: min, scope: cation_orbit, base: s_prior}
+    sp_range:      {atoms: [s_prior], op: range, scope: cation_orbit, base: s_prior}
+    sp_dev:        {atoms: [s_prior, cn_orbit, ox_formal], op: arith, scope: cation_orbit, base: s_prior}
+    cn_mean_st:    {atoms: [cn_orbit], op: mean, scope: structure, base: cn}
+    cn_min_st:     {atoms: [cn_orbit], op: min, scope: structure, base: cn}
+    cn_max_st:     {atoms: [cn_orbit], op: max, scope: structure, base: cn}
+    n_orb_st:      {atoms: [proto], op: count, scope: structure, base: orbit_count}
+    s_max_st:      {atoms: [cn_orbit, ox_formal], op: max, scope: structure, base: cn}
+    s_min_st:      {atoms: [cn_orbit, ox_formal], op: min, scope: structure, base: cn}
+    n_cn_st:       {atoms: [cn_orbit], op: nunique, scope: structure, base: cn}
+    cn_rel:        {atoms: [cn_orbit], op: arith, scope: cation_orbit, base: cn}
+    s_rel:         {atoms: [cn_orbit, ox_formal], op: arith, scope: cation_orbit, base: cn}
+    is_min_cn:     {atoms: [cn_orbit], op: indicator, scope: cation_orbit, base: cn}
+    is_max_s:      {atoms: [cn_orbit, ox_formal], op: indicator, scope: cation_orbit, base: cn}
+    cn_span_st:    {atoms: [cn_orbit], op: span, scope: structure, base: cn}
+    n_orb_sp:      {atoms: [comp, ox_formal], op: count, scope: sp_group, base: orbit_count}
+    an_cn_mean_st: {atoms: [an_cn_site], op: mean, scope: structure, base: an_cn}
+    an_cn_std_st:  {atoms: [an_cn_site], op: std, scope: structure, base: an_cn}
+
+  T_P2:
+    b_ox_mean:     {atoms: [ox_bonded_cat], op: mean, scope: anion_orbit, base: ox_bonded,
+                    note: "Σ_j z_j = an_cn * b_ox_mean,正是 dev 的分子"}
+    b_ox_max:      {atoms: [ox_bonded_cat], op: max, scope: anion_orbit, base: ox_bonded}
+    b_ox_min:      {atoms: [ox_bonded_cat], op: min, scope: anion_orbit, base: ox_bonded}
+    an_cn:         {atoms: [an_cn_site], op: count, scope: anion_orbit, base: an_cn,
+                    note: "dev 求和式的项数"}
+    z_abs:         {atoms: [z_abs], op: identity, scope: anion_orbit, base: z_abs,
+                    note: "dev = Σ − z_abs 的被减项,literally 定义式的一半"}
+    ox_spread:     {atoms: [ox_bonded_cat], op: range, scope: anion_orbit, base: ox_bonded}
+    charge_per_bond: {atoms: [ox_bonded_cat, an_cn_site], op: ratio, scope: anion_orbit, base: ox_bonded}
+    an_cn_x_ox:    {atoms: [ox_bonded_cat, an_cn_site], op: prod, scope: anion_orbit, base: ox_bonded,
+                    note: "= Σ_j z_j 精确重建"}
+    excess:        {atoms: [ox_bonded_cat, an_cn_site, z_abs], op: ratio, scope: anion_orbit, base: pauling_sum_dev,
+                    note: "= Σ_j z_j / z_abs;与 dev 只差 CN_j 除数"}
+    f_edge:        {atoms: [pair_graph], op: mean, scope: structure, base: pair_mode}
+    f_face:        {atoms: [pair_graph], op: mean, scope: structure, base: pair_mode}
+    n_pair:        {atoms: [pair_graph], op: count, scope: structure, base: pair_mode}
+    an_cn_mean_st: {atoms: [an_cn_site], op: mean, scope: structure, base: an_cn}
+    an_cn_max_st:  {atoms: [an_cn_site], op: max, scope: structure, base: an_cn}
+    an_cn_std_st:  {atoms: [an_cn_site], op: std, scope: structure, base: an_cn}
+    an_cn_rel:     {atoms: [an_cn_site], op: arith, scope: anion_orbit, base: an_cn}
+    ox_mean_cat:   {atoms: [ox_formal, comp], op: mean, scope: structure, base: ox}
+    ox_max_cat:    {atoms: [ox_formal, comp], op: max, scope: structure, base: ox}
+    n_cat_orb:     {atoms: [proto], op: count, scope: structure, base: orbit_count}
+    n_cat_el:      {atoms: [comp], op: nunique, scope: structure, base: species}
+    X_an:          {atoms: [elem_const, comp], op: identity, scope: structure, base: elem}
+    period_an:     {atoms: [elem_const, comp], op: identity, scope: structure, base: elem}
+
+  T_P5:
+    n_orb:         {atoms: [comp, ox_formal, proto], op: count, scope: sp_group, base: orbit_count}
+    cn_mode:       {atoms: [cn_orbit], op: mode, scope: sp_group, base: cn,
+                    note: "与靶同域同底量 -> R3"}
+    s_pau:         {atoms: [cn_orbit, ox_formal], op: ratio, scope: sp_group, base: cn}
+    mult_sum:      {atoms: [mult], op: sum, scope: sp_group, base: mult}
+    n_orb_st:      {atoms: [proto], op: count, scope: structure, base: orbit_count}
+    cn_mean_st:    {atoms: [cn_orbit], op: mean, scope: structure, base: cn}
+    cn_span_st:    {atoms: [cn_orbit], op: span, scope: structure, base: cn,
+                    note: "span=0 => 全结构 CN 同值 => 任何子群 nunique=1 => tgt=0,逻辑恒真"}
+    f_edge:        {atoms: [pair_graph], op: mean, scope: structure, base: pair_mode}
+    f_face:        {atoms: [pair_graph], op: mean, scope: structure, base: pair_mode}
+    n_pair:        {atoms: [pair_graph], op: count, scope: structure, base: pair_mode}
+    an_cn_mean_st: {atoms: [an_cn_site], op: mean, scope: structure, base: an_cn}
+    an_cn_std_st:  {atoms: [an_cn_site], op: std, scope: structure, base: an_cn}
+    frac_orb:      {atoms: [comp, ox_formal, proto], op: ratio, scope: sp_group, base: orbit_count}
+    pair_per_orb:  {atoms: [pair_graph, proto], op: ratio, scope: structure, base: pair_mode}

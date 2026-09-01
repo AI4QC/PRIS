@@ -1,0 +1,29 @@
+{
+ "encut_ev": 520.0,
+ "experiment": "E3",
+ "formula": "Rb2TiCl6",
+ "kind": "experimental",
+ "kmesh": [
+  5,
+  8,
+  5
+ ],
+ "n_atoms": 9,
+ "n_kpoints": 200,
+ "parent": "cod-1010193",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "rng_seed_source": "E3|cod-1010193",
+ "species": [
+  "Cl",
+  "Rb",
+  "Ti"
+ ],
+ "stages": [
+  "relax_ions_fixed_cell",
+  "relax_cell",
+  "static"
+ ],
+ "task": "E3-cod-1010193-S1",
+ "task_dir": "<repo>/dft/E3_crosscheck/tasks/E3-cod-1010193-S1",
+ "variant": "S1"
+}

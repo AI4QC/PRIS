@@ -1,0 +1,47 @@
+{
+ "order": [
+  {
+   "element": "Ti",
+   "symbol": "Ti_pv",
+   "title": "PAW_PBE Ti_pv 07Sep2000",
+   "enmax_ev": 222.335,
+   "rcore_a": 1.3229,
+   "sha256": "f757a1b2c6d082f4c628fa3d987464a8763bf92e53844ac0500b0e2ddc9ce5c0",
+   "library_relative": "Ti_pv/POTCAR"
+  },
+  {
+   "element": "Al",
+   "symbol": "Al",
+   "title": "PAW_PBE Al 04Jan2001",
+   "enmax_ev": 240.3,
+   "rcore_a": 1.0054,
+   "sha256": "17880443556af62b473fe41b62a467bd001ad55d2cabe504a3f22e34d4e9db96",
+   "library_relative": "Al/POTCAR"
+  },
+  {
+   "element": "W",
+   "symbol": "W_sv",
+   "title": "PAW_PBE W_sv 04Sep2015",
+   "enmax_ev": 223.057,
+   "rcore_a": 1.3229,
+   "sha256": "931c2d770f65867ef30f3db3421922900fc0890ebac5c3e12f63b6a2064023d7",
+   "library_relative": "W_sv/POTCAR"
+  },
+  {
+   "element": "C",
+   "symbol": "C",
+   "title": "PAW_PBE C 08Apr2002",
+   "enmax_ev": 400.0,
+   "rcore_a": 0.7938,
+   "sha256": "253f7b50bb8d59471dbedb8285d89021f4a42ed1a2c5d38a03a736e69125dd95",
+   "library_relative": "C/POTCAR"
+  }
+ ],
+ "library": "<path>",
+ "site_symbols": [
+  "Ti",
+  "Al",
+  "W",
+  "C"
+ ]
+}

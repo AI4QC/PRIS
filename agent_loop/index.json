@@ -1,0 +1,5599 @@
+{
+ "schema": "pris-agent-loop-index-v1",
+ "note": "One entry per numbered investigation. Presence is provenance, not scientific success: most of these were refuted or abandoned, and README.md says which lines were later corrected.",
+ "counts": {
+  "stages": 478,
+  "with_script": 414,
+  "with_plan": 360,
+  "with_test": 410
+ },
+ "stages": [
+  {
+   "next": 2,
+   "plans": [],
+   "scripts": [
+    "next2_guards.py",
+    "next2_law_search.py",
+    "next2_law_stability.py",
+    "next2_lockbox.py",
+    "next2_targeted.py",
+    "next2_targeted_extra.py",
+    "next2_targeted_fp.py",
+    "next2_temporal.py"
+   ],
+   "tests": [
+    "test_next2_guards.py"
+   ]
+  },
+  {
+   "next": 3,
+   "plans": [],
+   "scripts": [
+    "next3_falsification.py",
+    "next3_features.py",
+    "next3_law_search.py",
+    "next3_law_stability.py",
+    "next3_targeted.py",
+    "next3_targeted_w4.py",
+    "next3_targeted_w4b.py"
+   ],
+   "tests": [
+    "test_next3_features.py",
+    "test_next3_law_search.py"
+   ]
+  },
+  {
+   "next": 4,
+   "plans": [],
+   "scripts": [
+    "next4_falsification.py",
+    "next4_features.py",
+    "next4_law_search.py",
+    "next4_law_stability.py"
+   ],
+   "tests": [
+    "test_next4_falsification.py",
+    "test_next4_features.py",
+    "test_next4_law_search.py",
+    "test_next4_law_stability.py"
+   ]
+  },
+  {
+   "next": 5,
+   "plans": [],
+   "scripts": [
+    "next5_consensus_diagnostic.py",
+    "next5_falsification.py",
+    "next5_input_audit.py",
+    "next5_law_search.py",
+    "next5_law_stability.py",
+    "next5_provenance_closure.py"
+   ],
+   "tests": [
+    "test_next5_consensus_diagnostic.py",
+    "test_next5_falsification.py",
+    "test_next5_input_audit.py",
+    "test_next5_law_search.py",
+    "test_next5_law_stability.py",
+    "test_next5_provenance_closure.py"
+   ]
+  },
+  {
+   "next": 6,
+   "plans": [],
+   "scripts": [
+    "next6_elementa_diagnostics.py",
+    "next6_elementa_initial.py",
+    "next6_elementa_p9.py",
+    "next6_elementa_protocol.py",
+    "next6_elementa_search.py",
+    "next6_hybrid_search.py",
+    "next6_mattersim_baseline.py",
+    "next6_mattersim_evaluate.py",
+    "next6_wbm_build.py",
+    "next6_wbm_calibrate.py",
+    "next6_wbm_evaluate.py",
+    "next6_wbm_features.py",
+    "next6_wbm_protocol.py"
+   ],
+   "tests": [
+    "test_next6_elementa_diagnostics.py",
+    "test_next6_elementa_initial.py",
+    "test_next6_elementa_p9.py",
+    "test_next6_elementa_protocol.py",
+    "test_next6_elementa_search.py",
+    "test_next6_hybrid_search.py",
+    "test_next6_mattersim_baseline.py",
+    "test_next6_mattersim_evaluate.py",
+    "test_next6_wbm_build.py",
+    "test_next6_wbm_calibrate.py",
+    "test_next6_wbm_evaluate.py",
+    "test_next6_wbm_features.py",
+    "test_next6_wbm_protocol.py"
+   ]
+  },
+  {
+   "next": 7,
+   "plans": [],
+   "scripts": [
+    "next7_fewstep_evaluate.py",
+    "next7_fewstep_protocol.py",
+    "next7_mattersim_features.py",
+    "next7_mattersim_prerelax.py"
+   ],
+   "tests": [
+    "test_next7_fewstep_evaluate.py",
+    "test_next7_fewstep_protocol.py",
+    "test_next7_mattersim_features.py",
+    "test_next7_mattersim_prerelax.py"
+   ]
+  },
+  {
+   "next": 8,
+   "plans": [],
+   "scripts": [
+    "next8_mattersim_committee_features.py",
+    "next8_mattersim_committee_protocol.py"
+   ],
+   "tests": [
+    "test_next8_mattersim_committee_features.py",
+    "test_next8_mattersim_committee_protocol.py"
+   ]
+  },
+  {
+   "next": 9,
+   "plans": [
+    "2026-08-01-next9-lrrc-design.md",
+    "2026-08-01-next9-lrrc-implementation.md"
+   ],
+   "scripts": [
+    "next9_lrrc.py",
+    "next9_lrrc_synthetic.py"
+   ],
+   "tests": [
+    "test_next9_lrrc.py",
+    "test_next9_lrrc_synthetic.py"
+   ]
+  },
+  {
+   "next": 10,
+   "plans": [
+    "2026-08-01-next10-lrrc-gate-diagnostic-design.md",
+    "2026-08-01-next10-lrrc-gate-diagnostic-implementation.md",
+    "2026-08-01-next10-lrrc-preopening-stop-rule.md"
+   ],
+   "scripts": [
+    "next10_lrrc_gate_diagnostic.py",
+    "next10_lrrc_mattersim_features.py"
+   ],
+   "tests": [
+    "test_next10_lrrc_gate_diagnostic.py",
+    "test_next10_lrrc_mattersim_features.py"
+   ]
+  },
+  {
+   "next": 11,
+   "plans": [
+    "2026-08-02-next11-phsc-design.md",
+    "2026-08-02-next11-phsc-implementation.md"
+   ],
+   "scripts": [
+    "next11_geometry_only_frames.py",
+    "next11_phsc.py",
+    "next11_phsc_label_free_stop.py",
+    "next11_phsc_mattersim_features.py",
+    "next11_phsc_synthetic.py"
+   ],
+   "tests": [
+    "test_next11_geometry_only_frames.py",
+    "test_next11_phsc.py",
+    "test_next11_phsc_label_free_stop.py",
+    "test_next11_phsc_mattersim_features.py",
+    "test_next11_phsc_synthetic.py"
+   ]
+  },
+  {
+   "next": 12,
+   "plans": [
+    "2026-08-02-next12-chsc-independent-dft.md"
+   ],
+   "scripts": [
+    "next12_chsc.py",
+    "next12_chsc_label_free_overlap.py",
+    "next12_chsc_mattersim_features.py",
+    "next12_chsc_synthetic.py",
+    "next12_dft_endpoint_evaluate.py",
+    "next12_dft_queue.py",
+    "next12_pauling_controls.py",
+    "next12_prospective_cohort.py",
+    "next12_prospective_gates.py"
+   ],
+   "tests": [
+    "test_next12_chsc.py",
+    "test_next12_chsc_label_free_overlap.py",
+    "test_next12_chsc_mattersim_features.py",
+    "test_next12_chsc_synthetic.py",
+    "test_next12_dft_endpoint_evaluate.py",
+    "test_next12_dft_queue.py",
+    "test_next12_pauling_controls.py",
+    "test_next12_prospective_cohort.py",
+    "test_next12_prospective_gates.py"
+   ]
+  },
+  {
+   "next": 13,
+   "plans": [
+    "2026-08-02-next13-acsc-coupled-hessian.md",
+    "2026-08-02-next13b-acsc-direct-mode.md",
+    "2026-08-02-next13c-acsc-direct-ladder.md",
+    "2026-08-02-next13d-acsc-dft-pairs.md"
+   ],
+   "scripts": [
+    "next13_acsc.py",
+    "next13_acsc_label_free_overlap.py",
+    "next13_acsc_mattersim_features.py",
+    "next13_acsc_old_cohort.py",
+    "next13_acsc_synthetic.py",
+    "next13b_acsc_direct.py",
+    "next13b_acsc_direct_mattersim.py",
+    "next13c_acsc_direct_ladder.py",
+    "next13c_acsc_nested_overlap.py",
+    "next13d_acsc_dft_endpoint_evaluate.py",
+    "next13d_acsc_dft_pairs.py"
+   ],
+   "tests": [
+    "test_next13_acsc.py",
+    "test_next13_acsc_label_free_overlap.py",
+    "test_next13_acsc_mattersim_features.py",
+    "test_next13_acsc_old_cohort.py",
+    "test_next13_acsc_synthetic.py",
+    "test_next13b_acsc_direct.py",
+    "test_next13b_acsc_direct_mattersim.py",
+    "test_next13c_acsc_direct_ladder.py",
+    "test_next13c_acsc_nested_overlap.py",
+    "test_next13d_acsc_dft_endpoint_evaluate.py",
+    "test_next13d_acsc_dft_pairs.py"
+   ]
+  },
+  {
+   "next": 14,
+   "plans": [
+    "2026-08-02-next14-wbm-acsc-external-validation.md"
+   ],
+   "scripts": [
+    "next14_wbm_acsc_features.py",
+    "next14_wbm_evaluate.py",
+    "next14_wbm_holdout.py",
+    "next14_wbm_pauling.py"
+   ],
+   "tests": [
+    "test_next14_wbm_acsc_features.py",
+    "test_next14_wbm_evaluate.py",
+    "test_next14_wbm_holdout.py",
+    "test_next14_wbm_pauling.py"
+   ]
+  },
+  {
+   "next": 15,
+   "plans": [
+    "2026-08-02-next15-basin-hull-design.md"
+   ],
+   "scripts": [
+    "next15_basin_hull.py",
+    "next15_basin_hull_evaluate.py"
+   ],
+   "tests": [
+    "test_next15_basin_hull.py",
+    "test_next15_basin_hull_evaluate.py"
+   ]
+  },
+  {
+   "next": 16,
+   "plans": [
+    "2026-08-02-next16-alexandria-basin-hull-design.md"
+   ],
+   "scripts": [
+    "next16_alexandria_source_map.py",
+    "next16_elementa_basin_hull.py",
+    "next16_elementa_evaluate.py",
+    "next16_elementa_holdout.py"
+   ],
+   "tests": [
+    "test_next16_alexandria_source_map.py",
+    "test_next16_elementa_basin_hull.py",
+    "test_next16_elementa_evaluate.py",
+    "test_next16_elementa_holdout.py"
+   ]
+  },
+  {
+   "next": 17,
+   "plans": [
+    "2026-08-02-next17-strict-relax-gap-design.md"
+   ],
+   "scripts": [
+    "next17_freeze.py",
+    "next17_frozen_rule.py",
+    "next17_strict_relax_gap.py",
+    "next17_strict_relax_gap_evaluate.py"
+   ],
+   "tests": [
+    "test_next17_frozen_rule.py",
+    "test_next17_strict_relax_gap.py",
+    "test_next17_strict_relax_gap_evaluate.py"
+   ]
+  },
+  {
+   "next": 18,
+   "plans": [
+    "2026-08-02-next18-alexandria-external-falsification.md"
+   ],
+   "scripts": [
+    "next18_alexandria_holdout.py"
+   ],
+   "tests": [
+    "test_next18_alexandria_holdout.py"
+   ]
+  },
+  {
+   "next": 19,
+   "plans": [
+    "2026-08-02-next19-valence-transport-law-design.md",
+    "2026-08-02-next19-valence-transport-law-implementation.md"
+   ],
+   "scripts": [
+    "next19_evaluate.py",
+    "next19_feature_build.py",
+    "next19_valence_transport.py"
+   ],
+   "tests": [
+    "test_next19_evaluate.py",
+    "test_next19_feature_build.py",
+    "test_next19_valence_transport.py"
+   ]
+  },
+  {
+   "next": 20,
+   "plans": [
+    "2026-08-02-next20-valence-rigidity-design.md"
+   ],
+   "scripts": [
+    "next20_feature_build.py",
+    "next20_valence_rigidity.py"
+   ],
+   "tests": [
+    "test_next20_feature_build.py",
+    "test_next20_valence_rigidity.py"
+   ]
+  },
+  {
+   "next": 21,
+   "plans": [
+    "2026-08-02-next21-normalized-madelung-design.md"
+   ],
+   "scripts": [
+    "next21_feature_build.py",
+    "next21_normalized_madelung.py"
+   ],
+   "tests": [
+    "test_next21_feature_build.py",
+    "test_next21_normalized_madelung.py"
+   ]
+  },
+  {
+   "next": 22,
+   "plans": [
+    "2026-08-02-next22-scale-calibrated-bond-valence-design.md"
+   ],
+   "scripts": [
+    "next22_bond_valence_equilibrium.py",
+    "next22_feature_build.py"
+   ],
+   "tests": [
+    "test_next22_bond_valence_equilibrium.py",
+    "test_next22_feature_build.py"
+   ]
+  },
+  {
+   "next": 23,
+   "plans": [
+    "2026-08-02-next23-relaxation-collapse-design.md",
+    "2026-08-02-next23-relaxation-collapse-implementation.md"
+   ],
+   "scripts": [
+    "next23_apply_rule.py",
+    "next23_evaluate.py",
+    "next23_pauling_controls.py",
+    "next23_relaxation_rule.py",
+    "next23_wbm_holdout.py"
+   ],
+   "tests": [
+    "test_next23_apply_rule.py",
+    "test_next23_evaluate.py",
+    "test_next23_pauling_controls.py",
+    "test_next23_relaxation_rule.py",
+    "test_next23_wbm_holdout.py"
+   ]
+  },
+  {
+   "next": 24,
+   "plans": [
+    "2026-08-03-next24-generated-cross-source-design.md",
+    "2026-08-03-next24-generated-cross-source-implementation.md"
+   ],
+   "scripts": [
+    "next24_apply_rule.py",
+    "next24_pauling_controls.py",
+    "next24_ssagen_holdout.py"
+   ],
+   "tests": [
+    "test_next24_apply_rule.py",
+    "test_next24_pauling_controls.py",
+    "test_next24_ssagen_holdout.py"
+   ]
+  },
+  {
+   "next": 25,
+   "plans": [
+    "2026-08-03-next25-omatg-blind-csp-design.md",
+    "2026-08-03-next25-omatg-blind-csp-implementation.md"
+   ],
+   "scripts": [
+    "next25_apply_rule.py",
+    "next25_omatg_compositions.py",
+    "next25_omatg_evaluate.py",
+    "next25_omatg_holdout.py",
+    "next25_omatg_run.py",
+    "next25_pauling_controls.py"
+   ],
+   "tests": [
+    "test_next25_apply_rule.py",
+    "test_next25_omatg_compositions.py",
+    "test_next25_omatg_evaluate.py",
+    "test_next25_omatg_holdout.py",
+    "test_next25_omatg_run.py",
+    "test_next25_pauling_controls.py"
+   ]
+  },
+  {
+   "next": 26,
+   "plans": [
+    "2026-08-03-next26-omc25-packing-law-design.md",
+    "2026-08-03-next26-omc25-packing-law-implementation.md"
+   ],
+   "scripts": [
+    "next26_apply_rule.py",
+    "next26_development.py",
+    "next26_evaluate.py",
+    "next26_omc25.py",
+    "next26_packing.py"
+   ],
+   "tests": [
+    "test_next26_development.py",
+    "test_next26_omc25.py",
+    "test_next26_packing.py"
+   ]
+  },
+  {
+   "next": 27,
+   "plans": [
+    "2026-08-03-next27-periodic-contact-pressure-design.md",
+    "2026-08-03-next27-periodic-contact-pressure-implementation.md"
+   ],
+   "scripts": [
+    "next27_apply_rule.py",
+    "next27_build_endpoints.py",
+    "next27_development.py",
+    "next27_evaluate.py",
+    "next27_omc25_stream_extract.py",
+    "next27_periodic_packing.py"
+   ],
+   "tests": [
+    "test_next27_build_endpoints.py",
+    "test_next27_development.py",
+    "test_next27_evaluate.py",
+    "test_next27_omc25_stream_extract.py",
+    "test_next27_periodic_packing.py"
+   ]
+  },
+  {
+   "next": 28,
+   "plans": [
+    "2026-08-03-next28-contact-coordination-design.md",
+    "2026-08-03-next28-contact-coordination-implementation.md"
+   ],
+   "scripts": [
+    "next28_build_endpoints.py",
+    "next28_contact_coordination.py",
+    "next28_evaluate.py"
+   ],
+   "tests": [
+    "test_next28_contact_coordination.py",
+    "test_next28_evaluate.py"
+   ]
+  },
+  {
+   "next": 29,
+   "plans": [],
+   "scripts": [
+    "next29_omatg_contact_transport.py"
+   ],
+   "tests": [
+    "test_next29_omatg_contact_transport.py"
+   ]
+  },
+  {
+   "next": 30,
+   "plans": [
+    "2026-08-03-next30-inorganic-hull-law-design.md",
+    "2026-08-03-next30-inorganic-hull-law-implementation.md"
+   ],
+   "scripts": [
+    "next30_inorganic_hull_law.py"
+   ],
+   "tests": [
+    "test_next30_inorganic_hull_law.py"
+   ]
+  },
+  {
+   "next": 31,
+   "plans": [],
+   "scripts": [
+    "next31_omc25_energy_evaluate.py",
+    "next31_omc25_energy_ranking.py"
+   ],
+   "tests": [
+    "test_next31_omc25_energy_evaluate.py",
+    "test_next31_omc25_energy_ranking.py"
+   ]
+  },
+  {
+   "next": 32,
+   "plans": [
+    "2026-08-03-next32-omat24-inorganic-response-design.md",
+    "2026-08-03-next32-omat24-inorganic-response-implementation.md"
+   ],
+   "scripts": [
+    "next32_inorganic_response_evaluate.py",
+    "next32_inorganic_response_features.py",
+    "next32_inorganic_response_rule.py",
+    "next32_omat24_cohort.py"
+   ],
+   "tests": [
+    "test_next32_inorganic_response_evaluate.py",
+    "test_next32_inorganic_response_features.py",
+    "test_next32_inorganic_response_rule.py",
+    "test_next32_omat24_cohort.py"
+   ]
+  },
+  {
+   "next": 33,
+   "plans": [
+    "2026-08-03-next33-symmetry-steric-design.md",
+    "2026-08-03-next33-symmetry-steric-implementation.md"
+   ],
+   "scripts": [
+    "next33_symmetry_steric_features.py",
+    "next33_symmetry_steric_rule.py"
+   ],
+   "tests": [
+    "test_next33_symmetry_steric_features.py",
+    "test_next33_symmetry_steric_rule.py"
+   ]
+  },
+  {
+   "next": 34,
+   "plans": [
+    "2026-08-03-next34-analytic-field-design.md",
+    "2026-08-03-next34-analytic-field-implementation.md"
+   ],
+   "scripts": [
+    "next34_analytic_field_features.py",
+    "next34_analytic_field_rule.py"
+   ],
+   "tests": [
+    "test_next34_analytic_field_features.py",
+    "test_next34_analytic_field_rule.py"
+   ]
+  },
+  {
+   "next": 35,
+   "plans": [
+    "2026-08-03-next35-coulomb-steric-balance-design.md",
+    "2026-08-03-next35-coulomb-steric-balance-implementation.md"
+   ],
+   "scripts": [
+    "next35_coulomb_steric_balance_features.py",
+    "next35_coulomb_steric_balance_rule.py"
+   ],
+   "tests": [
+    "test_next35_coulomb_steric_balance_features.py",
+    "test_next35_coulomb_steric_balance_rule.py"
+   ]
+  },
+  {
+   "next": 36,
+   "plans": [
+    "2026-08-03-next36-charge-spectrum-design.md",
+    "2026-08-03-next36-charge-spectrum-implementation.md"
+   ],
+   "scripts": [
+    "next36_charge_spectrum_features.py",
+    "next36_charge_spectrum_rule.py"
+   ],
+   "tests": [
+    "test_next36_charge_spectrum_features.py",
+    "test_next36_charge_spectrum_rule.py"
+   ]
+  },
+  {
+   "next": 37,
+   "plans": [
+    "2026-08-03-next37-self-stress-compatibility-design.md",
+    "2026-08-03-next37-self-stress-compatibility-implementation.md"
+   ],
+   "scripts": [
+    "next37_self_stress_compatibility_features.py",
+    "next37_self_stress_compatibility_rule.py"
+   ],
+   "tests": [
+    "test_next37_self_stress_compatibility_features.py",
+    "test_next37_self_stress_compatibility_rule.py"
+   ]
+  },
+  {
+   "next": 38,
+   "plans": [
+    "2026-08-03-next38-bond-valence-transport-compatibility-design.md",
+    "2026-08-03-next38-bond-valence-transport-compatibility-implementation.md"
+   ],
+   "scripts": [
+    "next38_bond_valence_transport_compatibility_features.py",
+    "next38_bond_valence_transport_compatibility_rule.py"
+   ],
+   "tests": [
+    "test_next38_bond_valence_transport_compatibility_features.py",
+    "test_next38_bond_valence_transport_compatibility_rule.py"
+   ]
+  },
+  {
+   "next": 39,
+   "plans": [
+    "2026-08-03-next39-omat24-trajectory-confirmation-design.md",
+    "2026-08-03-next39-omat24-trajectory-confirmation-implementation.md"
+   ],
+   "scripts": [
+    "next39_next23_predictions.py",
+    "next39_omat24_trajectory_cohort.py",
+    "next39_trajectory_evaluate.py"
+   ],
+   "tests": [
+    "test_next39_next23_predictions.py",
+    "test_next39_omat24_trajectory_cohort.py",
+    "test_next39_trajectory_evaluate.py"
+   ]
+  },
+  {
+   "next": 40,
+   "plans": [
+    "2026-08-03-next40-omat24-short-horizon-design.md",
+    "2026-08-03-next40-omat24-short-horizon-implementation.md"
+   ],
+   "scripts": [
+    "next40_omat24_short_source.py"
+   ],
+   "tests": [
+    "test_next40_omat24_short_source.py"
+   ]
+  },
+  {
+   "next": 41,
+   "plans": [
+    "2026-08-03-next41-source-balanced-contact-guard-design.md",
+    "2026-08-03-next41-source-balanced-contact-guard-implementation.md"
+   ],
+   "scripts": [
+    "next41_contact_guard_features.py",
+    "next41_source_balanced_guard_search.py"
+   ],
+   "tests": [
+    "test_next41_contact_guard_features.py",
+    "test_next41_source_balanced_guard_search.py"
+   ]
+  },
+  {
+   "next": 42,
+   "plans": [
+    "2026-08-03-next42-converged-alexandria-source-design.md",
+    "2026-08-03-next42-converged-alexandria-source-implementation.md"
+   ],
+   "scripts": [
+    "next42_alexandria_cohort.py",
+    "next42_alexandria_evaluate.py",
+    "next42_alexandria_source_audit.py",
+    "next42_next23_predictions.py"
+   ],
+   "tests": [
+    "test_next42_alexandria_cohort.py",
+    "test_next42_alexandria_evaluate.py",
+    "test_next42_alexandria_source_audit.py",
+    "test_next42_next23_predictions.py"
+   ]
+  },
+  {
+   "next": 43,
+   "plans": [
+    "2026-08-03-next43-analytic-law-search-design.md",
+    "2026-08-03-next43-analytic-law-search-implementation.md"
+   ],
+   "scripts": [
+    "next43_analytic_feature_bank.py",
+    "next43_finite_law_search.py"
+   ],
+   "tests": [
+    "test_next43_analytic_feature_bank.py",
+    "test_next43_finite_law_search.py"
+   ]
+  },
+  {
+   "next": 44,
+   "plans": [
+    "2026-08-03-next44-rich-analytic-features-design.md",
+    "2026-08-03-next44-rich-analytic-features-implementation.md"
+   ],
+   "scripts": [
+    "next44_rich_analytic_features.py",
+    "next44_rich_law_search.py"
+   ],
+   "tests": [
+    "test_next44_rich_analytic_features.py",
+    "test_next44_rich_law_search.py"
+   ]
+  },
+  {
+   "next": 45,
+   "plans": [
+    "2026-08-03-next45-exhaustive-rectangles-design.md"
+   ],
+   "scripts": [
+    "next45_exhaustive_rectangles.py"
+   ],
+   "tests": [
+    "test_next45_exhaustive_rectangles.py"
+   ]
+  },
+  {
+   "next": 46,
+   "plans": [
+    "2026-08-03-next46-motif-coherence-design.md"
+   ],
+   "scripts": [
+    "next46_motif_coherence_features.py",
+    "next46_motif_law_search.py"
+   ],
+   "tests": [
+    "test_next46_motif_coherence_features.py",
+    "test_next46_motif_law_search.py"
+   ]
+  },
+  {
+   "next": 47,
+   "plans": [
+    "2026-08-03-next47-omc25-energy-replication-design.md",
+    "2026-08-03-next47-omc25-energy-replication-implementation.md"
+   ],
+   "scripts": [
+    "next47_omc25_energy_replication.py"
+   ],
+   "tests": [
+    "test_next47_omc25_energy_replication.py"
+   ]
+  },
+  {
+   "next": 48,
+   "plans": [
+    "2026-08-03-next48-qmof-external-validation-design.md",
+    "2026-08-03-next48-qmof-external-validation-implementation.md"
+   ],
+   "scripts": [
+    "next48_qmof_external_validation.py"
+   ],
+   "tests": [
+    "test_next48_qmof_external_validation.py"
+   ]
+  },
+  {
+   "next": 49,
+   "plans": [
+    "2026-08-03-next49-framework-topology-design.md",
+    "2026-08-03-next49-framework-topology-implementation.md"
+   ],
+   "scripts": [
+    "next49_framework_topology.py"
+   ],
+   "tests": [
+    "test_next49_framework_topology.py"
+   ]
+  },
+  {
+   "next": 50,
+   "plans": [],
+   "scripts": [
+    "next50_framework_motif_features.py",
+    "next50_framework_rule_search.py"
+   ],
+   "tests": [
+    "test_next50_framework_motif_features.py",
+    "test_next50_framework_rule_search.py"
+   ]
+  },
+  {
+   "next": 51,
+   "plans": [],
+   "scripts": [
+    "next51_odac23_lockbox.py"
+   ],
+   "tests": [
+    "test_next51_odac23_lockbox.py"
+   ]
+  },
+  {
+   "next": 52,
+   "plans": [],
+   "scripts": [
+    "next52_site_resolved_motif_features.py"
+   ],
+   "tests": [
+    "test_next52_site_resolved_motif_features.py"
+   ]
+  },
+  {
+   "next": 53,
+   "plans": [
+    "2026-08-03-next53-odac23-extraction-deviation.md",
+    "2026-08-03-next53-odac23-split-protocol-design.md"
+   ],
+   "scripts": [
+    "next53_odac23_train_cohort.py"
+   ],
+   "tests": [
+    "test_next53_odac23_train_cohort.py"
+   ]
+  },
+  {
+   "next": 54,
+   "plans": [
+    "2026-08-03-next54-odac23-train-partition-design.md"
+   ],
+   "scripts": [
+    "next54_odac23_train_selection.py"
+   ],
+   "tests": [
+    "test_next54_odac23_train_selection.py"
+   ]
+  },
+  {
+   "next": 55,
+   "plans": [
+    "2026-08-03-next55-odac23-analytic-feature-design.md"
+   ],
+   "scripts": [
+    "next55_odac23_analytic_features.py"
+   ],
+   "tests": [
+    "test_next55_odac23_analytic_features.py"
+   ]
+  },
+  {
+   "next": 56,
+   "plans": [],
+   "scripts": [
+    "next56_odac23_label_firewall.py"
+   ],
+   "tests": [
+    "test_next56_odac23_label_firewall.py"
+   ]
+  },
+  {
+   "next": 57,
+   "plans": [
+    "2026-08-03-next57-odac23-discovery-search-design.md"
+   ],
+   "scripts": [
+    "next57_odac23_discovery_search.py"
+   ],
+   "tests": [
+    "test_next57_odac23_discovery_search.py"
+   ]
+  },
+  {
+   "next": 58,
+   "plans": [
+    "2026-08-03-next58-odac23-shared-motif-feature-design.md"
+   ],
+   "scripts": [
+    "next58_odac23_shared_motif_features.py"
+   ],
+   "tests": [
+    "test_next58_odac23_shared_motif_features.py"
+   ]
+  },
+  {
+   "next": 59,
+   "plans": [
+    "2026-08-03-next59-odac23-motif-discovery-search-design.md"
+   ],
+   "scripts": [
+    "next59_odac23_motif_discovery_search.py"
+   ],
+   "tests": []
+  },
+  {
+   "next": 60,
+   "plans": [
+    "2026-08-03-next60-odac23-robust-scaffold-endpoint-design.md"
+   ],
+   "scripts": [
+    "next60_odac23_robust_scaffold_endpoint.py"
+   ],
+   "tests": [
+    "test_next60_odac23_robust_scaffold_endpoint.py"
+   ]
+  },
+  {
+   "next": 61,
+   "plans": [
+    "2026-08-03-next61-odac23-robust-endpoint-search-design.md"
+   ],
+   "scripts": [
+    "next61_odac23_robust_endpoint_search.py"
+   ],
+   "tests": []
+  },
+  {
+   "next": 62,
+   "plans": [
+    "2026-08-03-next62-odac23-conjunctive-search-design.md"
+   ],
+   "scripts": [
+    "next62_odac23_conjunctive_search.py"
+   ],
+   "tests": [
+    "test_next62_odac23_conjunctive_search.py"
+   ]
+  },
+  {
+   "next": 63,
+   "plans": [
+    "2026-08-03-next63-odac23-metal-chemistry-feature-design.md"
+   ],
+   "scripts": [
+    "next63_odac23_metal_chemistry_features.py"
+   ],
+   "tests": [
+    "test_next63_odac23_metal_chemistry_features.py"
+   ]
+  },
+  {
+   "next": 64,
+   "plans": [
+    "2026-08-03-next64-odac23-metal-chemistry-search-design.md"
+   ],
+   "scripts": [
+    "next64_odac23_metal_chemistry_search.py"
+   ],
+   "tests": []
+  },
+  {
+   "next": 65,
+   "plans": [
+    "2026-08-03-next65-odac23-physics-coupling-feature-design.md"
+   ],
+   "scripts": [
+    "next65_odac23_physics_couplings.py"
+   ],
+   "tests": [
+    "test_next65_odac23_physics_couplings.py"
+   ]
+  },
+  {
+   "next": 66,
+   "plans": [
+    "2026-08-03-next66-odac23-physics-coupling-search-design.md"
+   ],
+   "scripts": [
+    "next66_odac23_physics_coupling_search.py"
+   ],
+   "tests": []
+  },
+  {
+   "next": 67,
+   "plans": [
+    "2026-08-03-next67-odac23-monotone-expanded-search-design.md"
+   ],
+   "scripts": [
+    "next67_odac23_monotone_expanded_search.py"
+   ],
+   "tests": [
+    "test_next67_odac23_monotone_expanded_search.py"
+   ]
+  },
+  {
+   "next": 68,
+   "plans": [
+    "2026-08-03-next68-odac23-sparse-stable-law-design.md"
+   ],
+   "scripts": [
+    "next68_odac23_sparse_stable_law.py"
+   ],
+   "tests": [
+    "test_next68_odac23_sparse_stable_law.py"
+   ]
+  },
+  {
+   "next": 69,
+   "plans": [
+    "2026-08-03-next69-odac23-local-bond-valence-feature-design.md"
+   ],
+   "scripts": [
+    "next69_odac23_local_bond_valence_features.py"
+   ],
+   "tests": [
+    "test_next69_odac23_local_bond_valence_features.py"
+   ]
+  },
+  {
+   "next": 70,
+   "plans": [
+    "2026-08-03-next70-odac23-metal-donor-bond-valence-feature-design.md"
+   ],
+   "scripts": [
+    "next70_odac23_metal_donor_bond_valence_features.py"
+   ],
+   "tests": [
+    "test_next70_odac23_metal_donor_bond_valence_features.py"
+   ]
+  },
+  {
+   "next": 71,
+   "plans": [
+    "2026-08-03-next71-odac23-precision-targeted-stable-law-design.md"
+   ],
+   "scripts": [
+    "next71_odac23_precision_targeted_stable_law.py"
+   ],
+   "tests": [
+    "test_next71_odac23_precision_targeted_stable_law.py"
+   ]
+  },
+  {
+   "next": 72,
+   "plans": [
+    "2026-08-03-next72-odac23-anchored-tail-correction-search-design.md"
+   ],
+   "scripts": [
+    "next72_odac23_anchored_tail_correction_search.py"
+   ],
+   "tests": [
+    "test_next72_odac23_anchored_tail_correction_search.py"
+   ]
+  },
+  {
+   "next": 73,
+   "plans": [
+    "2026-08-03-next73-odac23-exact-threshold-calibration-design.md"
+   ],
+   "scripts": [
+    "next73_odac23_exact_threshold_calibration.py"
+   ],
+   "tests": [
+    "test_next73_odac23_exact_threshold_calibration.py"
+   ]
+  },
+  {
+   "next": 74,
+   "plans": [
+    "2026-08-03-next74-odac23-one-shot-internal-validation-design.md"
+   ],
+   "scripts": [
+    "next74_odac23_one_shot_internal_validation.py"
+   ],
+   "tests": [
+    "test_next74_odac23_one_shot_internal_validation.py"
+   ]
+  },
+  {
+   "next": 75,
+   "plans": [
+    "2026-08-03-next75-odac23-metal-ligand-rigidity-feature-design.md"
+   ],
+   "scripts": [
+    "next75_odac23_metal_ligand_rigidity_features.py"
+   ],
+   "tests": [
+    "test_next75_odac23_metal_ligand_rigidity_features.py"
+   ]
+  },
+  {
+   "next": 76,
+   "plans": [
+    "2026-08-03-next76-odac23-rigidity-tail-search-design.md"
+   ],
+   "scripts": [
+    "next76_odac23_rigidity_tail_search.py"
+   ],
+   "tests": [
+    "test_next76_odac23_rigidity_tail_search.py"
+   ]
+  },
+  {
+   "next": 77,
+   "plans": [
+    "2026-08-03-next77-odac23-analytic-electrostatic-feature-design.md"
+   ],
+   "scripts": [
+    "next77_odac23_analytic_electrostatic_features.py"
+   ],
+   "tests": [
+    "test_next77_odac23_analytic_electrostatic_features.py"
+   ]
+  },
+  {
+   "next": 78,
+   "plans": [
+    "2026-08-03-next78-odac23-electrostatic-tail-search-design.md"
+   ],
+   "scripts": [
+    "next78_odac23_electrostatic_tail_search.py"
+   ],
+   "tests": [
+    "test_next78_odac23_electrostatic_tail_search.py"
+   ]
+  },
+  {
+   "next": 79,
+   "plans": [
+    "2026-08-03-next79-odac23-electrostatic-residual-guard-design.md"
+   ],
+   "scripts": [
+    "next79_odac23_electrostatic_residual_guard.py"
+   ],
+   "tests": [
+    "test_next79_odac23_electrostatic_residual_guard.py"
+   ]
+  },
+  {
+   "next": 80,
+   "plans": [
+    "2026-08-03-next80-periodic-repulsive-load-resolvability-design.md"
+   ],
+   "scripts": [
+    "next80_periodic_repulsive_load_resolvability.py"
+   ],
+   "tests": [
+    "test_next80_periodic_repulsive_load_resolvability.py"
+   ]
+  },
+  {
+   "next": 81,
+   "plans": [
+    "2026-08-03-next81-prlr-label-free-rule-freeze-design.md"
+   ],
+   "scripts": [
+    "next81_prlr_label_free_rule_freeze.py"
+   ],
+   "tests": [
+    "test_next81_prlr_label_free_rule_freeze.py"
+   ]
+  },
+  {
+   "next": 82,
+   "plans": [
+    "2026-08-03-next82-prlr-one-shot-discovery-evaluation-design.md"
+   ],
+   "scripts": [
+    "next82_prlr_discovery_evaluation.py"
+   ],
+   "tests": [
+    "test_next82_prlr_discovery_evaluation.py"
+   ]
+  },
+  {
+   "next": 83,
+   "plans": [
+    "2026-08-03-next83-next89-scigen-independent-dft-validation-design.md"
+   ],
+   "scripts": [
+    "next83_scigen_source_audit.py"
+   ],
+   "tests": [
+    "test_next83_scigen_source_audit.py"
+   ]
+  },
+  {
+   "next": 84,
+   "plans": [],
+   "scripts": [
+    "next84_scigen_geometry_lockbox.py"
+   ],
+   "tests": [
+    "test_next84_scigen_geometry_lockbox.py"
+   ]
+  },
+  {
+   "next": 85,
+   "plans": [],
+   "scripts": [
+    "next85_scigen_label_free_features.py"
+   ],
+   "tests": [
+    "test_next85_scigen_label_free_features.py"
+   ]
+  },
+  {
+   "next": 86,
+   "plans": [
+    "2026-08-03-next86-scigen-term-catalogue-amendment.md"
+   ],
+   "scripts": [
+    "next86_scigen_endpoint_router.py",
+    "next86_scigen_term_catalogue.py"
+   ],
+   "tests": [
+    "test_next86_scigen_endpoint_router.py",
+    "test_next86_scigen_term_catalogue.py"
+   ]
+  },
+  {
+   "next": 87,
+   "plans": [
+    "2026-08-03-next87-scigen-sparse-search-implementation.md"
+   ],
+   "scripts": [
+    "next87_scigen_sparse_law_search.py"
+   ],
+   "tests": [
+    "test_next87_scigen_sparse_law_search.py"
+   ]
+  },
+  {
+   "next": 89,
+   "plans": [
+    "2026-08-03-next83-next89-scigen-independent-dft-validation-design.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 90,
+   "plans": [
+    "2026-08-03-next90-scigen-mechanism-envelope-design.md"
+   ],
+   "scripts": [
+    "next90_scigen_mechanism_envelope.py"
+   ],
+   "tests": [
+    "test_next90_scigen_mechanism_envelope.py"
+   ]
+  },
+  {
+   "next": 91,
+   "plans": [
+    "2026-08-03-next91-next93-scigen-fixed-rli-validation-design.md"
+   ],
+   "scripts": [
+    "next91_scigen_fixed_rli_candidate.py"
+   ],
+   "tests": [
+    "test_next91_scigen_fixed_rli_candidate.py"
+   ]
+  },
+  {
+   "next": 92,
+   "plans": [],
+   "scripts": [
+    "next92_scigen_one_shot_validation.py"
+   ],
+   "tests": [
+    "test_next92_scigen_one_shot_validation.py"
+   ]
+  },
+  {
+   "next": 93,
+   "plans": [
+    "2026-08-03-next91-next93-scigen-fixed-rli-validation-design.md",
+    "2026-08-03-next93-next97-wyformer-no-dft-loop.md",
+    "2026-08-03-next93b-wyformer-blind-reroute-amendment.md"
+   ],
+   "scripts": [
+    "next93_wyformer_source_lockbox.py",
+    "next93b_wyformer_blind_lockbox.py"
+   ],
+   "tests": [
+    "test_next93_wyformer_source_lockbox.py",
+    "test_next93b_wyformer_blind_lockbox.py"
+   ]
+  },
+  {
+   "next": 94,
+   "plans": [],
+   "scripts": [
+    "next94_wyformer_label_free_features.py"
+   ],
+   "tests": [
+    "test_next94_wyformer_label_free_features.py"
+   ]
+  },
+  {
+   "next": 95,
+   "plans": [],
+   "scripts": [
+    "next95_wyformer_sparse_law_search.py"
+   ],
+   "tests": [
+    "test_next95_wyformer_sparse_law_search.py"
+   ]
+  },
+  {
+   "next": 96,
+   "plans": [
+    "2026-08-04-next96-next97-wyformer-dual-operating-validation.md"
+   ],
+   "scripts": [
+    "next96_wyformer_dual_operating_candidate.py"
+   ],
+   "tests": [
+    "test_next96_wyformer_dual_operating_candidate.py"
+   ]
+  },
+  {
+   "next": 97,
+   "plans": [
+    "2026-08-03-next93-next97-wyformer-no-dft-loop.md",
+    "2026-08-04-next96-next97-wyformer-dual-operating-validation.md"
+   ],
+   "scripts": [
+    "next97_wyformer_one_shot_validation.py"
+   ],
+   "tests": [
+    "test_next97_wyformer_one_shot_validation.py"
+   ]
+  },
+  {
+   "next": 98,
+   "plans": [
+    "2026-08-04-next98-next100-cross-source-replication.md",
+    "2026-08-04-next98b-cross-source-exhaustive-amendment.md"
+   ],
+   "scripts": [
+    "next98_cross_source_discovery_search.py",
+    "next98b_cross_source_exhaustive_search.py"
+   ],
+   "tests": [
+    "test_next98_cross_source_discovery_search.py",
+    "test_next98b_cross_source_exhaustive_search.py"
+   ]
+  },
+  {
+   "next": 100,
+   "plans": [
+    "2026-08-04-next98-next100-cross-source-replication.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 101,
+   "plans": [
+    "2026-08-04-next101-discrete-oxidation-bv-realizability.md",
+    "2026-08-04-next101b-expanded-catalogue-amendment.md"
+   ],
+   "scripts": [
+    "next101_discrete_oxidation_bv_realizability.py",
+    "next101b_expanded_oxidation_bv_realizability.py"
+   ],
+   "tests": [
+    "test_next101_discrete_oxidation_bv_realizability.py",
+    "test_next101b_expanded_oxidation_bv_realizability.py"
+   ]
+  },
+  {
+   "next": 102,
+   "plans": [],
+   "scripts": [
+    "next102_cross_source_dobvr_features.py"
+   ],
+   "tests": [
+    "test_next102_cross_source_dobvr_features.py"
+   ]
+  },
+  {
+   "next": 103,
+   "plans": [
+    "2026-08-04-next103-dobvr-optional-guard-cross-source-search.md"
+   ],
+   "scripts": [
+    "next103_dobvr_optional_guard_search.py"
+   ],
+   "tests": [
+    "test_next103_dobvr_optional_guard_search.py"
+   ]
+  },
+  {
+   "next": 104,
+   "plans": [
+    "2026-08-04-next104-convex-mixed-valence-flow-certificate-design.md",
+    "2026-08-04-next104-convex-mixed-valence-flow-certificate.md"
+   ],
+   "scripts": [
+    "next104_convex_mixed_valence_flow.py"
+   ],
+   "tests": [
+    "test_next104_convex_mixed_valence_flow.py"
+   ]
+  },
+  {
+   "next": 105,
+   "plans": [],
+   "scripts": [
+    "next105_cross_source_cmvf_features.py"
+   ],
+   "tests": [
+    "test_next105_cross_source_cmvf_features.py"
+   ]
+  },
+  {
+   "next": 106,
+   "plans": [
+    "2026-08-04-next106-cmvf-search.md"
+   ],
+   "scripts": [
+    "next106_cmvf_optional_guard_search.py"
+   ],
+   "tests": [
+    "test_next106_cmvf_optional_guard_search.py"
+   ]
+  },
+  {
+   "next": 107,
+   "plans": [
+    "2026-08-04-next107-two-axis-cmvf-guard-search.md"
+   ],
+   "scripts": [
+    "next107_two_axis_cmvf_guard_search.py"
+   ],
+   "tests": [
+    "test_next107_two_axis_cmvf_guard_search.py"
+   ]
+  },
+  {
+   "next": 108,
+   "plans": [
+    "2026-08-04-next108-near-miss-expanded-flow-rescue.md"
+   ],
+   "scripts": [
+    "next108_near_miss_cmvf_rescue.py"
+   ],
+   "tests": [
+    "test_next108_near_miss_cmvf_rescue.py"
+   ]
+  },
+  {
+   "next": 109,
+   "plans": [
+    "2026-08-08-next109-convex-mixed-valence-obstruction-design.md",
+    "2026-08-08-next109-next111-cmvo-implementation.md"
+   ],
+   "scripts": [
+    "next109_convex_mixed_valence_obstruction.py"
+   ],
+   "tests": [
+    "test_next109_convex_mixed_valence_obstruction.py"
+   ]
+  },
+  {
+   "next": 110,
+   "plans": [],
+   "scripts": [
+    "next110_cross_source_cmvo_features.py"
+   ],
+   "tests": [
+    "test_next110_cross_source_cmvo_features.py"
+   ]
+  },
+  {
+   "next": 111,
+   "plans": [
+    "2026-08-08-next109-next111-cmvo-implementation.md",
+    "2026-08-08-next111-cmvo-search-freeze.md"
+   ],
+   "scripts": [
+    "next111_cmvo_optional_search.py"
+   ],
+   "tests": [
+    "test_next111_cmvo_optional_search.py"
+   ]
+  },
+  {
+   "next": 112,
+   "plans": [
+    "2026-08-08-next112-next114-obstruction-morphology-implementation.md",
+    "2026-08-08-next112-obstruction-morphology-design.md"
+   ],
+   "scripts": [
+    "next112_obstruction_morphology.py"
+   ],
+   "tests": [
+    "test_next112_obstruction_morphology.py"
+   ]
+  },
+  {
+   "next": 113,
+   "plans": [],
+   "scripts": [
+    "next113_cross_source_cmvom_features.py"
+   ],
+   "tests": [
+    "test_next113_cross_source_cmvom_features.py"
+   ]
+  },
+  {
+   "next": 114,
+   "plans": [
+    "2026-08-08-next112-next114-obstruction-morphology-implementation.md"
+   ],
+   "scripts": [
+    "next114_cmvom_frontier_rescue.py"
+   ],
+   "tests": [
+    "test_next114_cmvom_frontier_rescue.py"
+   ]
+  },
+  {
+   "next": 115,
+   "plans": [
+    "2026-08-08-next115-hall-closure-design.md",
+    "2026-08-08-next115-next117-hall-closure-implementation.md"
+   ],
+   "scripts": [
+    "next115_hall_cut_interval_deficit.py"
+   ],
+   "tests": [
+    "test_next115_hall_cut_interval_deficit.py"
+   ]
+  },
+  {
+   "next": 116,
+   "plans": [],
+   "scripts": [
+    "next116_cross_source_hcid_features.py"
+   ],
+   "tests": [
+    "test_next116_cross_source_hcid_features.py"
+   ]
+  },
+  {
+   "next": 117,
+   "plans": [
+    "2026-08-08-next115-next117-hall-closure-implementation.md"
+   ],
+   "scripts": [
+    "next117_hcid_frontier_rescue.py"
+   ],
+   "tests": [
+    "test_next117_hcid_frontier_rescue.py"
+   ]
+  },
+  {
+   "next": 118,
+   "plans": [
+    "2026-08-08-next118-metallic-applicability-protection-design.md"
+   ],
+   "scripts": [
+    "next118_metallic_applicability_protection.py"
+   ],
+   "tests": [
+    "test_next118_metallic_applicability_protection.py"
+   ]
+  },
+  {
+   "next": 119,
+   "plans": [
+    "2026-08-08-next119-bounded-valence-transport-design.md"
+   ],
+   "scripts": [
+    "next119_bounded_valence_transport.py"
+   ],
+   "tests": [
+    "test_next119_bounded_valence_transport.py"
+   ]
+  },
+  {
+   "next": 120,
+   "plans": [],
+   "scripts": [
+    "next120_cross_source_bvtbd_features.py"
+   ],
+   "tests": [
+    "test_next120_cross_source_bvtbd_features.py"
+   ]
+  },
+  {
+   "next": 121,
+   "plans": [
+    "2026-08-08-next121-bvtbd-frontier-rescue-design.md"
+   ],
+   "scripts": [
+    "next121_bvtbd_frontier_rescue.py"
+   ],
+   "tests": [
+    "test_next121_bvtbd_frontier_rescue.py"
+   ]
+  },
+  {
+   "next": 122,
+   "plans": [
+    "2026-08-08-next122-safe12-bvtc-prlr-rescue-design.md"
+   ],
+   "scripts": [
+    "next122_safe12_bvtc_prlr_rescue.py"
+   ],
+   "tests": [
+    "test_next122_safe12_bvtc_prlr_rescue.py"
+   ]
+  },
+  {
+   "next": 123,
+   "plans": [
+    "2026-08-08-next123-multiscale-hall-contact-robustness-design.md",
+    "2026-08-08-next123-next125-mhcr-implementation.md"
+   ],
+   "scripts": [
+    "next123_multiscale_hall_contact_robustness.py"
+   ],
+   "tests": [
+    "test_next123_multiscale_hall_contact_robustness.py"
+   ]
+  },
+  {
+   "next": 124,
+   "plans": [],
+   "scripts": [
+    "next124_cross_source_mhcr_features.py"
+   ],
+   "tests": [
+    "test_next124_cross_source_mhcr_features.py"
+   ]
+  },
+  {
+   "next": 125,
+   "plans": [
+    "2026-08-08-next123-next125-mhcr-implementation.md"
+   ],
+   "scripts": [
+    "next125_mhcr_frontier_rescue.py"
+   ],
+   "tests": [
+    "test_next125_mhcr_frontier_rescue.py"
+   ]
+  },
+  {
+   "next": 126,
+   "plans": [
+    "2026-08-08-next126-next127-hall-profile-persistence.md"
+   ],
+   "scripts": [
+    "next126_hall_profile_persistence.py"
+   ],
+   "tests": [
+    "test_next126_hall_profile_persistence.py"
+   ]
+  },
+  {
+   "next": 127,
+   "plans": [
+    "2026-08-08-next126-next127-hall-profile-persistence.md"
+   ],
+   "scripts": [
+    "next127_hall_profile_persistence_rescue.py"
+   ],
+   "tests": [
+    "test_next127_hall_profile_persistence_rescue.py"
+   ]
+  },
+  {
+   "next": 128,
+   "plans": [
+    "2026-08-08-next128-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next128_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next128_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 129,
+   "plans": [
+    "2026-08-08-next129-next130-coordination-protection.md"
+   ],
+   "scripts": [
+    "next129_coordination_protection.py"
+   ],
+   "tests": [
+    "test_next129_coordination_protection.py"
+   ]
+  },
+  {
+   "next": 130,
+   "plans": [
+    "2026-08-08-next129-next130-coordination-protection.md"
+   ],
+   "scripts": [
+    "next130_coordination_protection_search.py"
+   ],
+   "tests": [
+    "test_next130_coordination_protection_search.py"
+   ]
+  },
+  {
+   "next": 131,
+   "plans": [
+    "2026-08-08-next131-protected-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next131_protected_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next131_protected_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 132,
+   "plans": [],
+   "scripts": [
+    "next132_extended_coordination_protection_search.py"
+   ],
+   "tests": [
+    "test_next132_extended_coordination_protection_search.py"
+   ]
+  },
+  {
+   "next": 133,
+   "plans": [
+    "2026-08-08-next133-next134-compactness-protection.md"
+   ],
+   "scripts": [
+    "next133_compactness_protection.py"
+   ],
+   "tests": [
+    "test_next133_compactness_protection.py"
+   ]
+  },
+  {
+   "next": 134,
+   "plans": [
+    "2026-08-08-next133-next134-compactness-protection.md"
+   ],
+   "scripts": [
+    "next134_compactness_protection_search.py"
+   ],
+   "tests": [
+    "test_next134_compactness_protection_search.py"
+   ]
+  },
+  {
+   "next": 135,
+   "plans": [],
+   "scripts": [
+    "next135_conjunctive_compactness_search.py"
+   ],
+   "tests": [
+    "test_next135_conjunctive_compactness_search.py"
+   ]
+  },
+  {
+   "next": 136,
+   "plans": [
+    "2026-08-08-next136-conjunctive-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next136_conjunctive_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next136_conjunctive_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 137,
+   "plans": [],
+   "scripts": [
+    "next137_conjunctive_bottleneck_search.py"
+   ],
+   "tests": [
+    "test_next137_conjunctive_bottleneck_search.py"
+   ]
+  },
+  {
+   "next": 138,
+   "plans": [
+    "2026-08-08-next138-bottleneck-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next138_bottleneck_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next138_bottleneck_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 139,
+   "plans": [
+    "2026-08-08-next139-analytic-field-protection.md"
+   ],
+   "scripts": [
+    "next139_analytic_field_protection.py"
+   ],
+   "tests": [
+    "test_next139_analytic_field_protection.py"
+   ]
+  },
+  {
+   "next": 140,
+   "plans": [],
+   "scripts": [
+    "next140_analytic_field_protection_search.py"
+   ],
+   "tests": [
+    "test_next140_analytic_field_protection_search.py"
+   ]
+  },
+  {
+   "next": 141,
+   "plans": [
+    "2026-08-08-next141-analytic-field-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next141_analytic_field_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next141_analytic_field_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 142,
+   "plans": [
+    "2026-08-08-next142-threshold-local-retention-audit.md"
+   ],
+   "scripts": [
+    "next142_threshold_local_retention_audit.py"
+   ],
+   "tests": [
+    "test_next142_threshold_local_retention_audit.py"
+   ]
+  },
+  {
+   "next": 143,
+   "plans": [
+    "2026-08-08-next143-coulomb-steric-balance-protection.md"
+   ],
+   "scripts": [
+    "next143_coulomb_steric_balance_protection.py"
+   ],
+   "tests": [
+    "test_next143_coulomb_steric_balance_protection.py"
+   ]
+  },
+  {
+   "next": 144,
+   "plans": [],
+   "scripts": [
+    "next144_coulomb_steric_balance_protection_search.py"
+   ],
+   "tests": [
+    "test_next144_coulomb_steric_balance_protection_search.py"
+   ]
+  },
+  {
+   "next": 145,
+   "plans": [
+    "2026-08-08-next145-coulomb-steric-balance-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next145_coulomb_steric_balance_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next145_coulomb_steric_balance_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 146,
+   "plans": [],
+   "scripts": [
+    "next146_conditional_balance_exemption_search.py"
+   ],
+   "tests": [
+    "test_next146_conditional_balance_exemption_search.py"
+   ]
+  },
+  {
+   "next": 147,
+   "plans": [
+    "2026-08-08-next147-conditional-balance-exemption-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next147_conditional_balance_exemption_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next147_conditional_balance_exemption_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 148,
+   "plans": [
+    "2026-08-08-next148-charge-order-spectrum-protection.md"
+   ],
+   "scripts": [
+    "next148_charge_order_spectrum_protection.py"
+   ],
+   "tests": [
+    "test_next148_charge_order_spectrum_protection.py"
+   ]
+  },
+  {
+   "next": 149,
+   "plans": [],
+   "scripts": [
+    "next149_charge_order_spectrum_protection_search.py"
+   ],
+   "tests": [
+    "test_next149_charge_order_spectrum_protection_search.py"
+   ]
+  },
+  {
+   "next": 150,
+   "plans": [
+    "2026-08-08-next150-charge-order-spectrum-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next150_charge_order_spectrum_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next150_charge_order_spectrum_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 151,
+   "plans": [
+    "2026-08-08-next151-violation-multiplicity-audit.md"
+   ],
+   "scripts": [
+    "next151_violation_multiplicity_audit.py"
+   ],
+   "tests": [
+    "test_next151_violation_multiplicity_audit.py"
+   ]
+  },
+  {
+   "next": 152,
+   "plans": [
+    "2026-08-08-next152-trimmed-joint-base-search.md"
+   ],
+   "scripts": [
+    "next152_trimmed_joint_base_search.py"
+   ],
+   "tests": [
+    "test_next152_trimmed_joint_base_search.py"
+   ]
+  },
+  {
+   "next": 153,
+   "plans": [
+    "2026-08-08-next153-top2-attenuation-homotopy-search.md"
+   ],
+   "scripts": [
+    "next153_top2_attenuation_homotopy_search.py"
+   ],
+   "tests": [
+    "test_next153_top2_attenuation_homotopy_search.py"
+   ]
+  },
+  {
+   "next": 154,
+   "plans": [
+    "2026-08-08-next154-top2-attenuation-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next154_top2_attenuation_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next154_top2_attenuation_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 155,
+   "plans": [
+    "2026-08-08-next155-robust-contribution-transform-audit.md"
+   ],
+   "scripts": [
+    "next155_robust_contribution_transform_audit.py"
+   ],
+   "tests": [
+    "test_next155_robust_contribution_transform_audit.py"
+   ]
+  },
+  {
+   "next": 156,
+   "plans": [
+    "2026-08-08-next156-capped-contribution-joint-base-search.md"
+   ],
+   "scripts": [
+    "next156_capped_contribution_joint_base_search.py"
+   ],
+   "tests": [
+    "test_next156_capped_contribution_joint_base_search.py"
+   ]
+  },
+  {
+   "next": 157,
+   "plans": [
+    "2026-08-08-next157-mechanism-family-consensus-audit.md"
+   ],
+   "scripts": [
+    "next157_mechanism_family_consensus_audit.py"
+   ],
+   "tests": [
+    "test_next157_mechanism_family_consensus_audit.py"
+   ]
+  },
+  {
+   "next": 158,
+   "plans": [
+    "2026-08-08-next158-mechanism-family-consensus-search.md"
+   ],
+   "scripts": [
+    "next158_mechanism_family_consensus_search.py"
+   ],
+   "tests": [
+    "test_next158_mechanism_family_consensus_search.py"
+   ]
+  },
+  {
+   "next": 159,
+   "plans": [
+    "2026-08-08-next159-mechanism-family-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next159_mechanism_family_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next159_mechanism_family_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 160,
+   "plans": [
+    "2026-08-08-next160-secondary-family-consensus-rescue.md"
+   ],
+   "scripts": [
+    "next160_secondary_family_consensus_rescue.py"
+   ],
+   "tests": [
+    "test_next160_secondary_family_consensus_rescue.py"
+   ]
+  },
+  {
+   "next": 161,
+   "plans": [
+    "2026-08-08-next161-family-dominance-attenuation-audit.md"
+   ],
+   "scripts": [
+    "next161_family_dominance_attenuation_audit.py"
+   ],
+   "tests": [
+    "test_next161_family_dominance_attenuation_audit.py"
+   ]
+  },
+  {
+   "next": 162,
+   "plans": [
+    "2026-08-08-next162-family-dominance-attenuation-search.md"
+   ],
+   "scripts": [
+    "next162_family_dominance_attenuation_search.py"
+   ],
+   "tests": [
+    "test_next162_family_dominance_attenuation_search.py"
+   ]
+  },
+  {
+   "next": 163,
+   "plans": [
+    "2026-08-08-next163-interior-family-attenuation-search.md"
+   ],
+   "scripts": [
+    "next163_interior_family_attenuation_search.py"
+   ],
+   "tests": [
+    "test_next163_interior_family_attenuation_search.py"
+   ]
+  },
+  {
+   "next": 164,
+   "plans": [
+    "2026-08-08-next164-interior-attenuation-broad-residual.md"
+   ],
+   "scripts": [
+    "next164_interior_attenuation_broad_residual.py"
+   ],
+   "tests": [
+    "test_next164_interior_attenuation_broad_residual.py"
+   ]
+  },
+  {
+   "next": 165,
+   "plans": [
+    "2026-08-08-next165-family-specific-repair-audit.md"
+   ],
+   "scripts": [
+    "next165_family_specific_repair_audit.py"
+   ],
+   "tests": [
+    "test_next165_family_specific_repair_audit.py"
+   ]
+  },
+  {
+   "next": 166,
+   "plans": [
+    "2026-08-08-next166-periodic-contact-topology-features.md"
+   ],
+   "scripts": [
+    "next166_periodic_contact_topology_features.py"
+   ],
+   "tests": [
+    "test_next166_periodic_contact_topology_features.py"
+   ]
+  },
+  {
+   "next": 167,
+   "plans": [
+    "2026-08-08-next167-periodic-contact-topology-audit.md"
+   ],
+   "scripts": [
+    "next167_periodic_contact_topology_audit.py"
+   ],
+   "tests": [
+    "test_next167_periodic_contact_topology_audit.py"
+   ]
+  },
+  {
+   "next": 168,
+   "plans": [
+    "2026-08-08-next168-next170-periodic-local-directional-rigidity.md"
+   ],
+   "scripts": [
+    "next168_periodic_local_directional_rigidity.py"
+   ],
+   "tests": [
+    "test_next168_periodic_local_directional_rigidity.py"
+   ]
+  },
+  {
+   "next": 169,
+   "plans": [],
+   "scripts": [
+    "next169_periodic_local_directional_rigidity_audit.py"
+   ],
+   "tests": [
+    "test_next169_periodic_local_directional_rigidity_audit.py"
+   ]
+  },
+  {
+   "next": 170,
+   "plans": [
+    "2026-08-08-next168-next170-periodic-local-directional-rigidity.md",
+    "2026-08-08-next170-local-directional-rigidity-attenuation-search.md"
+   ],
+   "scripts": [
+    "next170_local_directional_rigidity_attenuation_search.py"
+   ],
+   "tests": [
+    "test_next170_local_directional_rigidity_attenuation_search.py"
+   ]
+  },
+  {
+   "next": 171,
+   "plans": [
+    "2026-08-08-next171-repair-interval-local-rigidity-search.md"
+   ],
+   "scripts": [
+    "next171_repair_interval_local_rigidity_search.py"
+   ],
+   "tests": [
+    "test_next171_repair_interval_local_rigidity_search.py"
+   ]
+  },
+  {
+   "next": 172,
+   "plans": [
+    "2026-08-08-next172-repair-interval-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next172_repair_interval_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next172_repair_interval_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 173,
+   "plans": [
+    "2026-08-08-next173-next174-weighted-local-directional-rigidity.md"
+   ],
+   "scripts": [
+    "next173_weighted_local_directional_rigidity.py"
+   ],
+   "tests": [
+    "test_next173_weighted_local_directional_rigidity.py"
+   ]
+  },
+  {
+   "next": 174,
+   "plans": [
+    "2026-08-08-next173-next174-weighted-local-directional-rigidity.md"
+   ],
+   "scripts": [
+    "next174_weighted_local_directional_rigidity_audit.py"
+   ],
+   "tests": [
+    "test_next174_weighted_local_directional_rigidity_audit.py"
+   ]
+  },
+  {
+   "next": 175,
+   "plans": [
+    "2026-08-08-next175-weighted-rigidity-repair-width-search.md"
+   ],
+   "scripts": [
+    "next175_weighted_rigidity_repair_width_search.py"
+   ],
+   "tests": [
+    "test_next175_weighted_rigidity_repair_width_search.py"
+   ]
+  },
+  {
+   "next": 176,
+   "plans": [
+    "2026-08-08-next176-weighted-rigidity-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next176_weighted_rigidity_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next176_weighted_rigidity_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 177,
+   "plans": [
+    "2026-08-08-next177-weighted-rigidity-amplitude-extension-search.md"
+   ],
+   "scripts": [
+    "next177_weighted_rigidity_amplitude_extension_search.py"
+   ],
+   "tests": [
+    "test_next177_weighted_rigidity_amplitude_extension_search.py"
+   ]
+  },
+  {
+   "next": 178,
+   "plans": [
+    "2026-08-08-next178-amplitude-extension-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next178_amplitude_extension_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next178_amplitude_extension_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 179,
+   "plans": [
+    "2026-08-08-next179-next180-strong-neighborhood-directional-closure.md"
+   ],
+   "scripts": [
+    "next179_strong_neighborhood_directional_closure.py"
+   ],
+   "tests": [
+    "test_next179_strong_neighborhood_directional_closure.py"
+   ]
+  },
+  {
+   "next": 180,
+   "plans": [
+    "2026-08-08-next179-next180-strong-neighborhood-directional-closure.md"
+   ],
+   "scripts": [
+    "next180_strong_neighborhood_directional_closure_audit.py"
+   ],
+   "tests": [
+    "test_next180_strong_neighborhood_directional_closure_audit.py"
+   ]
+  },
+  {
+   "next": 181,
+   "plans": [
+    "2026-08-08-next181-strong-closure-repair-width-search.md"
+   ],
+   "scripts": [
+    "next181_strong_closure_repair_width_search.py"
+   ],
+   "tests": [
+    "test_next181_strong_closure_repair_width_search.py"
+   ]
+  },
+  {
+   "next": 182,
+   "plans": [
+    "2026-08-08-next182-local-family-closure-attenuation-search.md"
+   ],
+   "scripts": [
+    "next182_local_family_closure_attenuation_search.py"
+   ],
+   "tests": [
+    "test_next182_local_family_closure_attenuation_search.py"
+   ]
+  },
+  {
+   "next": 183,
+   "plans": [
+    "2026-08-08-next183-next184-conditional-nonlocal-cleanliness-closure.md"
+   ],
+   "scripts": [
+    "next183_conditional_nonlocal_closure_audit.py"
+   ],
+   "tests": [
+    "test_next183_conditional_nonlocal_closure_audit.py"
+   ]
+  },
+  {
+   "next": 184,
+   "plans": [
+    "2026-08-08-next183-next184-conditional-nonlocal-cleanliness-closure.md"
+   ],
+   "scripts": [
+    "next184_conditional_nonlocal_closure_search.py"
+   ],
+   "tests": [
+    "test_next184_conditional_nonlocal_closure_search.py"
+   ]
+  },
+  {
+   "next": 185,
+   "plans": [
+    "2026-08-08-next185-conditional-closure-broad-residual-diagnostic.md"
+   ],
+   "scripts": [
+    "next185_conditional_closure_broad_residual_diagnostic.py"
+   ],
+   "tests": [
+    "test_next185_conditional_closure_broad_residual_diagnostic.py"
+   ]
+  },
+  {
+   "next": 186,
+   "plans": [
+    "2026-08-08-next186-next187-local-nonlocal-contradiction-relief.md"
+   ],
+   "scripts": [
+    "next186_local_nonlocal_contradiction_relief_audit.py"
+   ],
+   "tests": [
+    "test_next186_local_nonlocal_contradiction_relief_audit.py"
+   ]
+  },
+  {
+   "next": 187,
+   "plans": [
+    "2026-08-08-next186-next187-local-nonlocal-contradiction-relief.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 188,
+   "plans": [
+    "2026-08-08-next188-next189-contradiction-severity-penalty.md"
+   ],
+   "scripts": [
+    "next188_contradiction_severity_audit.py"
+   ],
+   "tests": [
+    "test_next188_contradiction_severity_audit.py"
+   ]
+  },
+  {
+   "next": 189,
+   "plans": [
+    "2026-08-08-next188-next189-contradiction-severity-penalty.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 190,
+   "plans": [
+    "2026-08-08-next190-next191-latent-symmetry-recoverability.md"
+   ],
+   "scripts": [
+    "next190_latent_symmetry_recoverability_audit.py"
+   ],
+   "tests": [
+    "test_next190_latent_symmetry_recoverability_audit.py"
+   ]
+  },
+  {
+   "next": 191,
+   "plans": [
+    "2026-08-08-next190-next191-latent-symmetry-recoverability.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 192,
+   "plans": [
+    "2026-08-08-next192-next193-signed-safe-margin-certificate.md"
+   ],
+   "scripts": [
+    "next192_signed_safe_margin_audit.py"
+   ],
+   "tests": [
+    "test_next192_signed_safe_margin_audit.py"
+   ]
+  },
+  {
+   "next": 193,
+   "plans": [
+    "2026-08-08-next192-next193-signed-safe-margin-certificate.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 194,
+   "plans": [
+    "2026-08-08-next194-next195-signed-local-closure-certificate.md"
+   ],
+   "scripts": [
+    "next194_signed_local_closure_audit.py"
+   ],
+   "tests": [
+    "test_next194_signed_local_closure_audit.py"
+   ]
+  },
+  {
+   "next": 195,
+   "plans": [
+    "2026-08-08-next194-next195-signed-local-closure-certificate.md"
+   ],
+   "scripts": [
+    "next195_signed_local_closure_search.py"
+   ],
+   "tests": [
+    "test_next195_signed_local_closure_search.py"
+   ]
+  },
+  {
+   "next": 196,
+   "plans": [
+    "2026-08-08-next196-signed-local-closure-broad-residual.md"
+   ],
+   "scripts": [
+    "next196_signed_local_closure_broad_residual.py"
+   ],
+   "tests": [
+    "test_next196_signed_local_closure_broad_residual.py"
+   ]
+  },
+  {
+   "next": 197,
+   "plans": [
+    "2026-08-08-next197-next198-discrete-protected-exception.md"
+   ],
+   "scripts": [
+    "next197_discrete_protected_exception_search.py"
+   ],
+   "tests": [
+    "test_next197_discrete_protected_exception_search.py"
+   ]
+  },
+  {
+   "next": 198,
+   "plans": [
+    "2026-08-08-next197-next198-discrete-protected-exception.md"
+   ],
+   "scripts": [
+    "next198_discrete_protected_exception_broad_residual.py"
+   ],
+   "tests": [
+    "test_next198_discrete_protected_exception_broad_residual.py"
+   ]
+  },
+  {
+   "next": 199,
+   "plans": [
+    "2026-08-08-next199-next200-cross-source-motif-coherence.md"
+   ],
+   "scripts": [
+    "next199_cross_source_motif_features.py"
+   ],
+   "tests": [
+    "test_next199_cross_source_motif_features.py"
+   ]
+  },
+  {
+   "next": 200,
+   "plans": [
+    "2026-08-08-next199-next200-cross-source-motif-coherence.md"
+   ],
+   "scripts": [
+    "next200_cross_source_motif_audit.py"
+   ],
+   "tests": [
+    "test_next200_cross_source_motif_audit.py"
+   ]
+  },
+  {
+   "next": 201,
+   "plans": [
+    "2026-08-08-next201-motif-weight-floor-repair.md"
+   ],
+   "scripts": [
+    "next201_motif_weight_floor_repair.py"
+   ],
+   "tests": [
+    "test_next201_motif_weight_floor_repair.py"
+   ]
+  },
+  {
+   "next": 202,
+   "plans": [
+    "2026-08-08-next202-next204-motif-conjunction.md"
+   ],
+   "scripts": [
+    "next202_motif_conjunction_audit.py"
+   ],
+   "tests": [
+    "test_next202_motif_conjunction_audit.py"
+   ]
+  },
+  {
+   "next": 203,
+   "plans": [],
+   "scripts": [
+    "next203_motif_conjunction_exception_search.py"
+   ],
+   "tests": [
+    "test_next203_motif_conjunction_exception_search.py"
+   ]
+  },
+  {
+   "next": 204,
+   "plans": [
+    "2026-08-08-next202-next204-motif-conjunction.md"
+   ],
+   "scripts": [
+    "next204_motif_conjunction_broad_residual.py"
+   ],
+   "tests": [
+    "test_next204_motif_conjunction_broad_residual.py"
+   ]
+  },
+  {
+   "next": 205,
+   "plans": [
+    "2026-08-08-next205-next206-exception-depth.md"
+   ],
+   "scripts": [
+    "next205_motif_exception_depth_search.py"
+   ],
+   "tests": [
+    "test_next205_motif_exception_depth_search.py"
+   ]
+  },
+  {
+   "next": 206,
+   "plans": [
+    "2026-08-08-next205-next206-exception-depth.md"
+   ],
+   "scripts": [
+    "next206_motif_exception_depth_broad_residual.py"
+   ],
+   "tests": [
+    "test_next206_motif_exception_depth_broad_residual.py"
+   ]
+  },
+  {
+   "next": 207,
+   "plans": [
+    "2026-08-08-next207-next209-residual-x0-certificate.md"
+   ],
+   "scripts": [
+    "next207_residual_x0_feature_audit.py"
+   ],
+   "tests": [
+    "test_next207_residual_x0_feature_audit.py"
+   ]
+  },
+  {
+   "next": 208,
+   "plans": [
+    "2026-08-08-next208-residual-x0-exception-search.md"
+   ],
+   "scripts": [
+    "next208_residual_x0_exception_search.py"
+   ],
+   "tests": [
+    "test_next208_residual_x0_exception_search.py"
+   ]
+  },
+  {
+   "next": 209,
+   "plans": [
+    "2026-08-08-next207-next209-residual-x0-certificate.md",
+    "2026-08-08-next209-residual-x0-broad-diagnostic.md"
+   ],
+   "scripts": [
+    "next209_residual_x0_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next209_residual_x0_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 210,
+   "plans": [
+    "2026-08-08-next210-next211-residual-risk-lift.md"
+   ],
+   "scripts": [
+    "next210_residual_risk_lift_search.py"
+   ],
+   "tests": [
+    "test_next210_residual_risk_lift_search.py"
+   ]
+  },
+  {
+   "next": 211,
+   "plans": [
+    "2026-08-08-next210-next211-residual-risk-lift.md",
+    "2026-08-08-next211-residual-risk-lift-broad-diagnostic.md"
+   ],
+   "scripts": [
+    "next211_residual_risk_lift_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next211_residual_risk_lift_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 212,
+   "plans": [
+    "2026-08-08-next212-next213-two-signal-risk-lift.md"
+   ],
+   "scripts": [
+    "next212_two_signal_risk_lift_search.py"
+   ],
+   "tests": [
+    "test_next212_two_signal_risk_lift_search.py"
+   ]
+  },
+  {
+   "next": 213,
+   "plans": [
+    "2026-08-08-next212-next213-two-signal-risk-lift.md",
+    "2026-08-08-next213-two-signal-broad-diagnostic.md"
+   ],
+   "scripts": [
+    "next213_two_signal_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next213_two_signal_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 214,
+   "plans": [
+    "2026-08-08-next214-forward-stagewise-risk-lift.md"
+   ],
+   "scripts": [
+    "next214_forward_stagewise_risk_lift.py"
+   ],
+   "tests": [
+    "test_next214_forward_stagewise_risk_lift.py"
+   ]
+  },
+  {
+   "next": 215,
+   "plans": [
+    "2026-08-08-next215-next217-continuous-relief-certificate.md"
+   ],
+   "scripts": [
+    "next215_repair_band_relief_audit.py"
+   ],
+   "tests": [
+    "test_next215_repair_band_relief_audit.py"
+   ]
+  },
+  {
+   "next": 216,
+   "plans": [
+    "2026-08-08-next216-repair-band-relief-search.md"
+   ],
+   "scripts": [
+    "next216_repair_band_relief_search.py"
+   ],
+   "tests": [
+    "test_next216_repair_band_relief_search.py"
+   ]
+  },
+  {
+   "next": 217,
+   "plans": [
+    "2026-08-08-next215-next217-continuous-relief-certificate.md",
+    "2026-08-08-next217-repair-band-broad-diagnostic.md"
+   ],
+   "scripts": [
+    "next217_repair_band_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next217_repair_band_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 218,
+   "plans": [
+    "2026-08-08-next218-next219-lower-anchored-relief.md"
+   ],
+   "scripts": [
+    "next218_lower_anchored_relief_search.py"
+   ],
+   "tests": [
+    "test_next218_lower_anchored_relief_search.py"
+   ]
+  },
+  {
+   "next": 219,
+   "plans": [
+    "2026-08-08-next218-next219-lower-anchored-relief.md"
+   ],
+   "scripts": [
+    "next219_lower_anchored_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next219_lower_anchored_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 220,
+   "plans": [
+    "2026-08-08-next220-next221-signed-redistribution.md"
+   ],
+   "scripts": [
+    "next220_signed_redistribution_search.py"
+   ],
+   "tests": [
+    "test_next220_signed_redistribution_search.py"
+   ]
+  },
+  {
+   "next": 221,
+   "plans": [
+    "2026-08-08-next220-next221-signed-redistribution.md"
+   ],
+   "scripts": [
+    "next221_signed_redistribution_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next221_signed_redistribution_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 222,
+   "plans": [
+    "2026-08-08-next222-forward-stagewise-signed-redistribution.md"
+   ],
+   "scripts": [
+    "next222_forward_stagewise_signed_redistribution.py"
+   ],
+   "tests": [
+    "test_next222_forward_stagewise_signed_redistribution.py"
+   ]
+  },
+  {
+   "next": 223,
+   "plans": [
+    "2026-08-09-next223-next224-dual-evidence-consensus.md"
+   ],
+   "scripts": [
+    "next223_dual_evidence_consensus_search.py"
+   ],
+   "tests": [
+    "test_next223_dual_evidence_consensus_search.py"
+   ]
+  },
+  {
+   "next": 224,
+   "plans": [
+    "2026-08-09-next223-next224-dual-evidence-consensus.md"
+   ],
+   "scripts": [
+    "next224_dual_evidence_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next224_dual_evidence_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 225,
+   "plans": [
+    "2026-08-09-next225-next226-agreement-gated-consensus.md"
+   ],
+   "scripts": [
+    "next225_agreement_gated_consensus_search.py"
+   ],
+   "tests": [
+    "test_next225_agreement_gated_consensus_search.py"
+   ]
+  },
+  {
+   "next": 226,
+   "plans": [
+    "2026-08-09-next225-next226-agreement-gated-consensus.md"
+   ],
+   "scripts": [
+    "next226_agreement_gated_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next226_agreement_gated_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 227,
+   "plans": [
+    "2026-08-09-next227-next229-margin-local-redistribution.md"
+   ],
+   "scripts": [
+    "next227_margin_local_feature_audit.py"
+   ],
+   "tests": [
+    "test_next227_margin_local_feature_audit.py"
+   ]
+  },
+  {
+   "next": 228,
+   "plans": [],
+   "scripts": [
+    "next228_margin_local_redistribution_search.py"
+   ],
+   "tests": [
+    "test_next228_margin_local_redistribution_search.py"
+   ]
+  },
+  {
+   "next": 229,
+   "plans": [
+    "2026-08-09-next227-next229-margin-local-redistribution.md"
+   ],
+   "scripts": [
+    "next229_margin_local_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next229_margin_local_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 230,
+   "plans": [
+    "2026-08-09-next230-next232-stagewise-margin-local-redistribution.md"
+   ],
+   "scripts": [
+    "next230_stagewise_margin_local_feature_audit.py"
+   ],
+   "tests": [
+    "test_next230_stagewise_margin_local_feature_audit.py"
+   ]
+  },
+  {
+   "next": 231,
+   "plans": [],
+   "scripts": [
+    "next231_stagewise_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next231_stagewise_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 232,
+   "plans": [
+    "2026-08-09-next230-next232-stagewise-margin-local-redistribution.md"
+   ],
+   "scripts": [
+    "next232_stagewise_margin_local_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next232_stagewise_margin_local_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 233,
+   "plans": [
+    "2026-08-09-next233-next235-final-stagewise-margin-local-redistribution.md"
+   ],
+   "scripts": [
+    "next233_final_stagewise_margin_local_feature_audit.py"
+   ],
+   "tests": [
+    "test_next233_final_stagewise_margin_local_feature_audit.py"
+   ]
+  },
+  {
+   "next": 234,
+   "plans": [],
+   "scripts": [
+    "next234_final_stagewise_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next234_final_stagewise_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 235,
+   "plans": [
+    "2026-08-09-next233-next235-final-stagewise-margin-local-redistribution.md"
+   ],
+   "scripts": [
+    "next235_final_stagewise_margin_local_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next235_final_stagewise_margin_local_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 236,
+   "plans": [
+    "2026-08-09-next236-next238-chemistry-conditioned-certificate-search.md"
+   ],
+   "scripts": [
+    "next236_chemistry_conditioned_feature_audit.py"
+   ],
+   "tests": [
+    "test_next236_chemistry_conditioned_feature_audit.py"
+   ]
+  },
+  {
+   "next": 237,
+   "plans": [
+    "2026-08-09-next237-selection-domain-correction.md"
+   ],
+   "scripts": [
+    "next237_chemistry_conditioned_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next237_chemistry_conditioned_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 238,
+   "plans": [
+    "2026-08-09-next236-next238-chemistry-conditioned-certificate-search.md"
+   ],
+   "scripts": [
+    "next238_chemistry_conditioned_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next238_chemistry_conditioned_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 239,
+   "plans": [
+    "2026-08-09-next239-next242-morphometric-voronoi-bond-order.md"
+   ],
+   "scripts": [
+    "next239_morphometric_voronoi_bond_order.py"
+   ],
+   "tests": [
+    "test_next239_morphometric_voronoi_bond_order.py"
+   ]
+  },
+  {
+   "next": 240,
+   "plans": [],
+   "scripts": [
+    "next240_mvbo_feature_audit.py"
+   ],
+   "tests": [
+    "test_next240_mvbo_feature_audit.py"
+   ]
+  },
+  {
+   "next": 241,
+   "plans": [],
+   "scripts": [
+    "next241_mvbo_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next241_mvbo_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 242,
+   "plans": [
+    "2026-08-09-next239-next242-morphometric-voronoi-bond-order.md"
+   ],
+   "scripts": [
+    "next242_mvbo_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next242_mvbo_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 243,
+   "plans": [
+    "2026-08-09-next243-next246-coarse-grained-voronoi-bond-order.md"
+   ],
+   "scripts": [
+    "next243_coarse_grained_voronoi_bond_order.py"
+   ],
+   "tests": [
+    "test_next243_coarse_grained_voronoi_bond_order.py"
+   ]
+  },
+  {
+   "next": 244,
+   "plans": [],
+   "scripts": [
+    "next244_cmvbo_feature_audit.py"
+   ],
+   "tests": [
+    "test_next244_cmvbo_feature_audit.py"
+   ]
+  },
+  {
+   "next": 245,
+   "plans": [],
+   "scripts": [
+    "next245_cmvbo_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next245_cmvbo_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 246,
+   "plans": [
+    "2026-08-09-next243-next246-coarse-grained-voronoi-bond-order.md"
+   ],
+   "scripts": [
+    "next246_cmvbo_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next246_cmvbo_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 247,
+   "plans": [
+    "2026-08-09-next247-next250-third-order-voronoi-bond-order.md"
+   ],
+   "scripts": [
+    "next247_third_order_voronoi_bond_order.py"
+   ],
+   "tests": [
+    "test_next247_third_order_voronoi_bond_order.py"
+   ]
+  },
+  {
+   "next": 248,
+   "plans": [],
+   "scripts": [
+    "next248_tvbo_feature_audit.py"
+   ],
+   "tests": [
+    "test_next248_tvbo_feature_audit.py"
+   ]
+  },
+  {
+   "next": 250,
+   "plans": [
+    "2026-08-09-next247-next250-third-order-voronoi-bond-order.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 251,
+   "plans": [
+    "2026-08-09-next251-next254-species-voronoi-topology-consistency.md",
+    "2026-08-09-next251-next254-svtc-preoutcome-amendment-2.md",
+    "2026-08-09-next251-next254-svtc-preoutcome-amendment.md"
+   ],
+   "scripts": [
+    "next251_species_voronoi_topology_consistency.py"
+   ],
+   "tests": [
+    "test_next251_species_voronoi_topology_consistency.py"
+   ]
+  },
+  {
+   "next": 252,
+   "plans": [],
+   "scripts": [
+    "next252_svtc_feature_audit.py"
+   ],
+   "tests": [
+    "test_next252_svtc_feature_audit.py"
+   ]
+  },
+  {
+   "next": 254,
+   "plans": [
+    "2026-08-09-next251-next254-species-voronoi-topology-consistency.md",
+    "2026-08-09-next251-next254-svtc-preoutcome-amendment-2.md",
+    "2026-08-09-next251-next254-svtc-preoutcome-amendment.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 255,
+   "plans": [
+    "2026-08-09-next255-next258-delaunay-void-cage-isotropy.md"
+   ],
+   "scripts": [
+    "next255_delaunay_void_cage_isotropy.py"
+   ],
+   "tests": [
+    "test_next255_delaunay_void_cage_isotropy.py"
+   ]
+  },
+  {
+   "next": 256,
+   "plans": [],
+   "scripts": [
+    "next256_dvci_feature_audit.py"
+   ],
+   "tests": [
+    "test_next256_dvci_feature_audit.py"
+   ]
+  },
+  {
+   "next": 257,
+   "plans": [],
+   "scripts": [
+    "next257_dvci_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next257_dvci_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 258,
+   "plans": [
+    "2026-08-09-next255-next258-delaunay-void-cage-isotropy.md"
+   ],
+   "scripts": [
+    "next258_dvci_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next258_dvci_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 259,
+   "plans": [
+    "2026-08-09-next259-next262-periodic-void-bottleneck-persistence.md"
+   ],
+   "scripts": [
+    "next259_periodic_void_bottleneck_persistence.py"
+   ],
+   "tests": [
+    "test_next259_periodic_void_bottleneck_persistence.py"
+   ]
+  },
+  {
+   "next": 260,
+   "plans": [],
+   "scripts": [
+    "next260_pvbp_feature_audit.py"
+   ],
+   "tests": [
+    "test_next260_pvbp_feature_audit.py"
+   ]
+  },
+  {
+   "next": 261,
+   "plans": [],
+   "scripts": [
+    "next261_pvbp_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next261_pvbp_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 262,
+   "plans": [
+    "2026-08-09-next259-next262-periodic-void-bottleneck-persistence.md"
+   ],
+   "scripts": [
+    "next262_pvbp_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next262_pvbp_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 263,
+   "plans": [
+    "2026-08-09-next263-next266-local-angular-persistent-homology.md"
+   ],
+   "scripts": [
+    "next263_local_angular_persistent_homology.py"
+   ],
+   "tests": [
+    "test_next263_local_angular_persistent_homology.py"
+   ]
+  },
+  {
+   "next": 264,
+   "plans": [],
+   "scripts": [
+    "next264_laph_feature_audit.py"
+   ],
+   "tests": [
+    "test_next264_laph_feature_audit.py"
+   ]
+  },
+  {
+   "next": 266,
+   "plans": [
+    "2026-08-09-next263-next266-local-angular-persistent-homology.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 267,
+   "plans": [
+    "2026-08-09-next267-next270-periodic-radical-voronoi-packing.md"
+   ],
+   "scripts": [
+    "next267_periodic_radical_voronoi_packing.py"
+   ],
+   "tests": [
+    "test_next267_periodic_radical_voronoi_packing.py"
+   ]
+  },
+  {
+   "next": 268,
+   "plans": [],
+   "scripts": [
+    "next268_prv_feature_audit.py"
+   ],
+   "tests": [
+    "test_next268_prv_feature_audit.py"
+   ]
+  },
+  {
+   "next": 269,
+   "plans": [],
+   "scripts": [
+    "next269_prv_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next269_prv_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 270,
+   "plans": [
+    "2026-08-09-next267-next270-periodic-radical-voronoi-packing.md"
+   ],
+   "scripts": [
+    "next270_prv_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next270_prv_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 271,
+   "plans": [
+    "2026-08-09-next271-next274-joint-radical-packing.md"
+   ],
+   "scripts": [
+    "next271_joint_radical_packing_features.py"
+   ],
+   "tests": [
+    "test_next271_joint_radical_packing_features.py"
+   ]
+  },
+  {
+   "next": 272,
+   "plans": [],
+   "scripts": [
+    "next272_joint_radical_feature_audit.py"
+   ],
+   "tests": [
+    "test_next272_joint_radical_feature_audit.py"
+   ]
+  },
+  {
+   "next": 273,
+   "plans": [],
+   "scripts": [
+    "next273_joint_radical_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next273_joint_radical_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 274,
+   "plans": [
+    "2026-08-09-next271-next274-joint-radical-packing.md"
+   ],
+   "scripts": [
+    "next274_joint_radical_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next274_joint_radical_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 275,
+   "plans": [
+    "2026-08-09-next275-next278-species-resolved-radical-packing.md"
+   ],
+   "scripts": [
+    "next275_species_resolved_radical_packing.py"
+   ],
+   "tests": [
+    "test_next275_species_resolved_radical_packing.py"
+   ]
+  },
+  {
+   "next": 276,
+   "plans": [],
+   "scripts": [
+    "next276_species_resolved_radical_feature_audit.py"
+   ],
+   "tests": [
+    "test_next276_species_resolved_radical_feature_audit.py"
+   ]
+  },
+  {
+   "next": 277,
+   "plans": [],
+   "scripts": [
+    "next277_species_resolved_radical_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next277_species_resolved_radical_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 278,
+   "plans": [
+    "2026-08-09-next275-next278-species-resolved-radical-packing.md"
+   ],
+   "scripts": [
+    "next278_species_resolved_radical_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next278_species_resolved_radical_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 279,
+   "plans": [
+    "2026-08-09-next279-next282-radical-packing-autocorrelation-amendment-2.md",
+    "2026-08-09-next279-next282-radical-packing-autocorrelation-amendment.md",
+    "2026-08-09-next279-next282-radical-packing-autocorrelation.md"
+   ],
+   "scripts": [
+    "next279_radical_packing_autocorrelation.py"
+   ],
+   "tests": [
+    "test_next279_radical_packing_autocorrelation.py"
+   ]
+  },
+  {
+   "next": 280,
+   "plans": [],
+   "scripts": [
+    "next280_radical_packing_autocorrelation_audit.py"
+   ],
+   "tests": [
+    "test_next280_radical_packing_autocorrelation_audit.py"
+   ]
+  },
+  {
+   "next": 282,
+   "plans": [
+    "2026-08-09-next279-next282-radical-packing-autocorrelation-amendment-2.md",
+    "2026-08-09-next279-next282-radical-packing-autocorrelation-amendment.md",
+    "2026-08-09-next279-next282-radical-packing-autocorrelation.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 283,
+   "plans": [
+    "2026-08-09-next283-next286-power-cell-shape-volume-coupling-amendment.md",
+    "2026-08-09-next283-next286-power-cell-shape-volume-coupling.md"
+   ],
+   "scripts": [
+    "next283_power_cell_shape_volume_coupling.py"
+   ],
+   "tests": [
+    "test_next283_power_cell_shape_volume_coupling.py"
+   ]
+  },
+  {
+   "next": 284,
+   "plans": [],
+   "scripts": [
+    "next284_power_cell_shape_volume_feature_audit.py"
+   ],
+   "tests": [
+    "test_next284_power_cell_shape_volume_feature_audit.py"
+   ]
+  },
+  {
+   "next": 285,
+   "plans": [],
+   "scripts": [
+    "next285_power_cell_shape_volume_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next285_power_cell_shape_volume_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 286,
+   "plans": [
+    "2026-08-09-next283-next286-power-cell-shape-volume-coupling-amendment.md",
+    "2026-08-09-next283-next286-power-cell-shape-volume-coupling.md"
+   ],
+   "scripts": [
+    "next286_power_cell_shape_volume_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next286_power_cell_shape_volume_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 287,
+   "plans": [
+    "2026-08-09-next287-next288-prv-one-sided-relief.md"
+   ],
+   "scripts": [
+    "next287_prv_one_sided_relief_search.py"
+   ],
+   "tests": [
+    "test_next287_prv_one_sided_relief_search.py"
+   ]
+  },
+  {
+   "next": 288,
+   "plans": [
+    "2026-08-09-next287-next288-prv-one-sided-relief.md"
+   ],
+   "scripts": [
+    "next288_prv_one_sided_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next288_prv_one_sided_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 289,
+   "plans": [
+    "2026-08-09-next289-next290-prv-confidence-deadzone.md"
+   ],
+   "scripts": [
+    "next289_prv_confidence_deadzone_search.py"
+   ],
+   "tests": [
+    "test_next289_prv_confidence_deadzone_search.py"
+   ]
+  },
+  {
+   "next": 290,
+   "plans": [
+    "2026-08-09-next289-next290-prv-confidence-deadzone.md"
+   ],
+   "scripts": [
+    "next290_prv_confidence_deadzone_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next290_prv_confidence_deadzone_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 291,
+   "plans": [
+    "2026-08-09-next291-next294-radius-weighted-delaunay-cage-isotropy.md"
+   ],
+   "scripts": [
+    "next291_radius_weighted_delaunay_cage_isotropy.py"
+   ],
+   "tests": [
+    "test_next291_radius_weighted_delaunay_cage_isotropy.py"
+   ]
+  },
+  {
+   "next": 292,
+   "plans": [],
+   "scripts": [
+    "next292_rwdci_feature_audit.py"
+   ],
+   "tests": [
+    "test_next292_rwdci_feature_audit.py"
+   ]
+  },
+  {
+   "next": 294,
+   "plans": [
+    "2026-08-09-next291-next294-radius-weighted-delaunay-cage-isotropy.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 295,
+   "plans": [
+    "2026-08-09-next295-next298-positive-contact-force-closure.md"
+   ],
+   "scripts": [
+    "next295_positive_contact_force_closure.py"
+   ],
+   "tests": [
+    "test_next295_positive_contact_force_closure.py"
+   ]
+  },
+  {
+   "next": 296,
+   "plans": [],
+   "scripts": [
+    "next296_pcfc_feature_audit.py"
+   ],
+   "tests": [
+    "test_next296_pcfc_feature_audit.py"
+   ]
+  },
+  {
+   "next": 298,
+   "plans": [
+    "2026-08-09-next295-next298-positive-contact-force-closure.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 299,
+   "plans": [
+    "2026-08-09-next299-next302-minimal-opposite-sign-periodic-cage.md"
+   ],
+   "scripts": [
+    "next299_minimal_opposite_sign_periodic_cage.py"
+   ],
+   "tests": [
+    "test_next299_minimal_opposite_sign_periodic_cage.py"
+   ]
+  },
+  {
+   "next": 300,
+   "plans": [],
+   "scripts": [
+    "next300_mospc_feature_audit.py"
+   ],
+   "tests": [
+    "test_next300_mospc_feature_audit.py"
+   ]
+  },
+  {
+   "next": 301,
+   "plans": [],
+   "scripts": [
+    "next301_mospc_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next301_mospc_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 302,
+   "plans": [
+    "2026-08-09-next299-next302-minimal-opposite-sign-periodic-cage.md"
+   ],
+   "scripts": [
+    "next302_mospc_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next302_mospc_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 303,
+   "plans": [
+    "2026-08-09-next303-next306-periodic-reciprocal-cage-balance.md"
+   ],
+   "scripts": [
+    "next303_periodic_reciprocal_cage_balance.py"
+   ],
+   "tests": [
+    "test_next303_periodic_reciprocal_cage_balance.py"
+   ]
+  },
+  {
+   "next": 304,
+   "plans": [],
+   "scripts": [
+    "next304_prcb_feature_audit.py"
+   ],
+   "tests": [
+    "test_next304_prcb_feature_audit.py"
+   ]
+  },
+  {
+   "next": 305,
+   "plans": [],
+   "scripts": [
+    "next305_prcb_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next305_prcb_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 306,
+   "plans": [
+    "2026-08-09-next303-next306-periodic-reciprocal-cage-balance.md"
+   ],
+   "scripts": [
+    "next306_prcb_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next306_prcb_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 307,
+   "plans": [
+    "2026-08-09-next307-next310-periodic-bond-valence-hodge-loop.md"
+   ],
+   "scripts": [
+    "next307_periodic_bond_valence_hodge_loop.py"
+   ],
+   "tests": [
+    "test_next307_periodic_bond_valence_hodge_loop.py"
+   ]
+  },
+  {
+   "next": 308,
+   "plans": [],
+   "scripts": [
+    "next308_pbvhl_feature_audit.py"
+   ],
+   "tests": [
+    "test_next308_pbvhl_feature_audit.py"
+   ]
+  },
+  {
+   "next": 310,
+   "plans": [
+    "2026-08-09-next307-next310-periodic-bond-valence-hodge-loop.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 311,
+   "plans": [
+    "2026-08-09-next311-next314-periodic-charge-alternation-eigenmode.md"
+   ],
+   "scripts": [
+    "next311_periodic_charge_alternation_eigenmode.py"
+   ],
+   "tests": [
+    "test_next311_periodic_charge_alternation_eigenmode.py"
+   ]
+  },
+  {
+   "next": 312,
+   "plans": [],
+   "scripts": [
+    "next312_pcae_feature_audit.py"
+   ],
+   "tests": [
+    "test_next312_pcae_feature_audit.py"
+   ]
+  },
+  {
+   "next": 313,
+   "plans": [],
+   "scripts": [
+    "next313_pcae_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next313_pcae_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 314,
+   "plans": [
+    "2026-08-09-next311-next314-periodic-charge-alternation-eigenmode.md"
+   ],
+   "scripts": [
+    "next314_pcae_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next314_pcae_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 315,
+   "plans": [
+    "2026-08-09-next315-next318-periodic-charge-green-resistance.md"
+   ],
+   "scripts": [
+    "next315_periodic_charge_green_resistance.py"
+   ],
+   "tests": [
+    "test_next315_periodic_charge_green_resistance.py"
+   ]
+  },
+  {
+   "next": 316,
+   "plans": [],
+   "scripts": [
+    "next316_pcgr_feature_audit.py"
+   ],
+   "tests": [
+    "test_next316_pcgr_feature_audit.py"
+   ]
+  },
+  {
+   "next": 317,
+   "plans": [],
+   "scripts": [
+    "next317_pcgr_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next317_pcgr_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 318,
+   "plans": [
+    "2026-08-09-next315-next318-periodic-charge-green-resistance.md"
+   ],
+   "scripts": [
+    "next318_pcgr_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next318_pcgr_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 319,
+   "plans": [
+    "2026-08-09-next319-next322-periodic-contact-shell-neutralization.md"
+   ],
+   "scripts": [
+    "next319_periodic_contact_shell_neutralization.py"
+   ],
+   "tests": [
+    "test_next319_periodic_contact_shell_neutralization.py"
+   ]
+  },
+  {
+   "next": 320,
+   "plans": [],
+   "scripts": [
+    "next320_pcsn_feature_audit.py"
+   ],
+   "tests": [
+    "test_next320_pcsn_feature_audit.py"
+   ]
+  },
+  {
+   "next": 322,
+   "plans": [
+    "2026-08-09-next319-next322-periodic-contact-shell-neutralization.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 323,
+   "plans": [
+    "2026-08-09-next323-next326-periodic-global-contact-equilibrium.md"
+   ],
+   "scripts": [
+    "next323_periodic_global_contact_equilibrium.py"
+   ],
+   "tests": [
+    "test_next323_periodic_global_contact_equilibrium.py",
+    "test_next323_pgce_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 324,
+   "plans": [],
+   "scripts": [
+    "next324_pgce_feature_audit.py"
+   ],
+   "tests": [
+    "test_next324_pgce_feature_audit.py"
+   ]
+  },
+  {
+   "next": 326,
+   "plans": [
+    "2026-08-09-next323-next326-periodic-global-contact-equilibrium.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 327,
+   "plans": [
+    "2026-08-13-next327-next330-radical-facet-positive-enclosure.md"
+   ],
+   "scripts": [
+    "next327_radical_facet_positive_enclosure.py"
+   ],
+   "tests": [
+    "test_next327_radical_facet_positive_enclosure.py",
+    "test_next327_rfpe_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 330,
+   "plans": [
+    "2026-08-13-next327-next330-radical-facet-positive-enclosure.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 331,
+   "plans": [
+    "2026-08-13-next331-next334-radical-facet-minimum-participation.md"
+   ],
+   "scripts": [
+    "next331_radical_facet_minimum_participation.py"
+   ],
+   "tests": [
+    "test_next331_radical_facet_minimum_participation.py",
+    "test_next331_rfmp_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 334,
+   "plans": [
+    "2026-08-13-next331-next334-radical-facet-minimum-participation.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 335,
+   "plans": [
+    "2026-08-13-next335-next338-radical-facet-minkowski-tensor.md"
+   ],
+   "scripts": [
+    "next335_radical_facet_minkowski_tensor.py"
+   ],
+   "tests": [
+    "test_next335_radical_facet_minkowski_tensor.py",
+    "test_next335_rfmt_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 338,
+   "plans": [
+    "2026-08-13-next335-next338-radical-facet-minkowski-tensor.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 339,
+   "plans": [
+    "2026-08-13-next339-next342-periodic-geometric-homogenized-transmissivity-amendment.md",
+    "2026-08-13-next339-next342-periodic-geometric-homogenized-transmissivity.md"
+   ],
+   "scripts": [
+    "next339_periodic_geometric_homogenized_transmissivity.py"
+   ],
+   "tests": [
+    "test_next339_periodic_geometric_homogenized_transmissivity.py",
+    "test_next339_pght_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 342,
+   "plans": [
+    "2026-08-13-next339-next342-periodic-geometric-homogenized-transmissivity-amendment.md",
+    "2026-08-13-next339-next342-periodic-geometric-homogenized-transmissivity.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 343,
+   "plans": [
+    "2026-08-13-next343-next346-periodic-allocation-redistribution-impedance.md"
+   ],
+   "scripts": [
+    "next343_periodic_allocation_redistribution_impedance.py"
+   ],
+   "tests": [
+    "test_next343_pari_label_blind_probe.py",
+    "test_next343_periodic_allocation_redistribution_impedance.py"
+   ]
+  },
+  {
+   "next": 346,
+   "plans": [
+    "2026-08-13-next343-next346-periodic-allocation-redistribution-impedance.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 347,
+   "plans": [
+    "2026-08-13-next347-next350-periodic-allocation-redistribution-capacity.md"
+   ],
+   "scripts": [
+    "next347_periodic_allocation_redistribution_capacity.py"
+   ],
+   "tests": [
+    "test_next347_parc_label_blind_probe.py",
+    "test_next347_periodic_allocation_redistribution_capacity.py"
+   ]
+  },
+  {
+   "next": 348,
+   "plans": [],
+   "scripts": [
+    "next348_parc_feature_audit.py"
+   ],
+   "tests": [
+    "test_next348_parc_feature_audit.py"
+   ]
+  },
+  {
+   "next": 350,
+   "plans": [
+    "2026-08-13-next347-next350-periodic-allocation-redistribution-capacity.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 351,
+   "plans": [
+    "2026-08-13-next351-next354-periodic-deviatoric-strain-rigidity.md"
+   ],
+   "scripts": [
+    "next351_periodic_deviatoric_strain_rigidity.py"
+   ],
+   "tests": [
+    "test_next351_pdsr_label_blind_probe.py",
+    "test_next351_periodic_deviatoric_strain_rigidity.py"
+   ]
+  },
+  {
+   "next": 354,
+   "plans": [
+    "2026-08-13-next351-next354-periodic-deviatoric-strain-rigidity.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 355,
+   "plans": [
+    "2026-08-13-next355-next358-radical-facet-deviatoric-rigidity.md"
+   ],
+   "scripts": [
+    "next355_radical_facet_deviatoric_rigidity.py",
+    "next355_rfdr_formal_build.py"
+   ],
+   "tests": [
+    "test_next355_radical_facet_deviatoric_rigidity.py",
+    "test_next355_rfdr_formal_build.py",
+    "test_next355_rfdr_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 356,
+   "plans": [],
+   "scripts": [
+    "next356_rfdr_feature_audit.py"
+   ],
+   "tests": [
+    "test_next356_rfdr_feature_audit.py"
+   ]
+  },
+  {
+   "next": 358,
+   "plans": [
+    "2026-08-13-next355-next358-radical-facet-deviatoric-rigidity.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 359,
+   "plans": [
+    "2026-08-13-next359-next362-radical-facet-normal-covering.md"
+   ],
+   "scripts": [
+    "next359_radical_facet_normal_covering.py",
+    "next359_rfnc_formal_build.py"
+   ],
+   "tests": [
+    "test_next359_radical_facet_normal_covering.py",
+    "test_next359_rfnc_formal_build.py",
+    "test_next359_rfnc_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 360,
+   "plans": [],
+   "scripts": [
+    "next360_rfnc_feature_audit.py"
+   ],
+   "tests": [
+    "test_next360_rfnc_feature_audit.py"
+   ]
+  },
+  {
+   "next": 362,
+   "plans": [
+    "2026-08-13-next359-next362-radical-facet-normal-covering.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 363,
+   "plans": [
+    "2026-08-13-next363-next366-first-charge-bragg-extinction.md"
+   ],
+   "scripts": [
+    "next363_first_charge_bragg_extinction.py"
+   ],
+   "tests": [
+    "test_next363_fcbe_label_blind_probe.py",
+    "test_next363_first_charge_bragg_extinction.py"
+   ]
+  },
+  {
+   "next": 366,
+   "plans": [
+    "2026-08-13-next363-next366-first-charge-bragg-extinction.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 367,
+   "plans": [
+    "2026-08-13-next367-next370-periodic-bond-valence-equal-uniformity.md"
+   ],
+   "scripts": [
+    "next367_pbveu_formal_build.py",
+    "next367_periodic_bond_valence_equal_uniformity.py"
+   ],
+   "tests": [
+    "test_next367_pbveu_formal_build.py",
+    "test_next367_pbveu_label_blind_probe.py",
+    "test_next367_periodic_bond_valence_equal_uniformity.py"
+   ]
+  },
+  {
+   "next": 368,
+   "plans": [],
+   "scripts": [
+    "next368_pbveu_feature_audit.py"
+   ],
+   "tests": [
+    "test_next368_pbveu_feature_audit.py"
+   ]
+  },
+  {
+   "next": 370,
+   "plans": [
+    "2026-08-13-next367-next370-periodic-bond-valence-equal-uniformity.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 371,
+   "plans": [
+    "2026-08-13-next371-next374-periodic-chardi-return-consistency.md"
+   ],
+   "scripts": [
+    "next371_periodic_chardi_return_consistency.py"
+   ],
+   "tests": [
+    "test_next371_pchardi_label_blind_probe.py",
+    "test_next371_periodic_chardi_return_consistency.py"
+   ]
+  },
+  {
+   "next": 374,
+   "plans": [
+    "2026-08-13-next371-next374-periodic-chardi-return-consistency.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 375,
+   "plans": [
+    "2026-08-13-next375-next378-periodic-coordination-reciprocity-likelihood.md"
+   ],
+   "scripts": [
+    "next375_periodic_coordination_reciprocity_likelihood.py"
+   ],
+   "tests": [
+    "test_next375_pcrl_label_blind_probe.py",
+    "test_next375_periodic_coordination_reciprocity_likelihood.py"
+   ]
+  },
+  {
+   "next": 376,
+   "plans": [],
+   "scripts": [
+    "next376_pcrl_formal_build.py"
+   ],
+   "tests": [
+    "test_next376_pcrl_formal_build.py"
+   ]
+  },
+  {
+   "next": 377,
+   "plans": [],
+   "scripts": [
+    "next377_pcrl_feature_audit.py"
+   ],
+   "tests": [
+    "test_next377_pcrl_feature_audit.py"
+   ]
+  },
+  {
+   "next": 378,
+   "plans": [
+    "2026-08-13-next375-next378-periodic-coordination-reciprocity-likelihood.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 379,
+   "plans": [
+    "2026-08-13-next379-next382-periodic-skeletal-net-bottleneck.md"
+   ],
+   "scripts": [
+    "next379_periodic_skeletal_net_bottleneck.py"
+   ],
+   "tests": [
+    "test_next379_periodic_skeletal_net_bottleneck.py",
+    "test_next379_psnb_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 380,
+   "plans": [],
+   "scripts": [
+    "next380_psnb_formal_build.py"
+   ],
+   "tests": [
+    "test_next380_psnb_formal_build.py"
+   ]
+  },
+  {
+   "next": 381,
+   "plans": [],
+   "scripts": [
+    "next381_psnb_feature_audit.py"
+   ],
+   "tests": [
+    "test_next381_psnb_feature_audit.py"
+   ]
+  },
+  {
+   "next": 382,
+   "plans": [
+    "2026-08-13-next379-next382-periodic-skeletal-net-bottleneck.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 383,
+   "plans": [
+    "2026-08-13-next383-next386-periodic-skeletal-path-collision.md"
+   ],
+   "scripts": [
+    "next383_periodic_skeletal_path_collision.py"
+   ],
+   "tests": [
+    "test_next383_periodic_skeletal_path_collision.py",
+    "test_next383_pspc_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 384,
+   "plans": [],
+   "scripts": [
+    "next384_pspc_formal_build.py"
+   ],
+   "tests": [
+    "test_next384_pspc_formal_build.py"
+   ]
+  },
+  {
+   "next": 385,
+   "plans": [],
+   "scripts": [
+    "next385_pspc_feature_audit.py"
+   ],
+   "tests": [
+    "test_next385_pspc_feature_audit.py"
+   ]
+  },
+  {
+   "next": 386,
+   "plans": [
+    "2026-08-13-next383-next386-periodic-skeletal-path-collision.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 387,
+   "plans": [
+    "2026-08-13-next387-next390-periodic-skeletal-vertex-bypass.md"
+   ],
+   "scripts": [
+    "next387_periodic_skeletal_vertex_bypass.py"
+   ],
+   "tests": [
+    "test_next387_periodic_skeletal_vertex_bypass.py",
+    "test_next387_psvb_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 390,
+   "plans": [
+    "2026-08-13-next387-next390-periodic-skeletal-vertex-bypass.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 391,
+   "plans": [
+    "2026-08-13-next391-next394-periodic-skeletal-ball-growth.md"
+   ],
+   "scripts": [
+    "next391_periodic_skeletal_ball_growth.py"
+   ],
+   "tests": [
+    "test_next391_periodic_skeletal_ball_growth.py",
+    "test_next391_psbg_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 394,
+   "plans": [
+    "2026-08-13-next391-next394-periodic-skeletal-ball-growth.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 395,
+   "plans": [
+    "2026-08-13-next395-next398-periodic-bond-valence-tensor-isotropy.md"
+   ],
+   "scripts": [
+    "next395_periodic_bond_valence_tensor_isotropy.py"
+   ],
+   "tests": [
+    "test_next395_pbvti_label_blind_probe.py",
+    "test_next395_periodic_bond_valence_tensor_isotropy.py"
+   ]
+  },
+  {
+   "next": 398,
+   "plans": [
+    "2026-08-13-next395-next398-periodic-bond-valence-tensor-isotropy.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 399,
+   "plans": [
+    "2026-08-13-next399-next402-zachara-bond-valence-vector-closure.md"
+   ],
+   "scripts": [
+    "next399_zachara_bond_valence_vector_closure.py"
+   ],
+   "tests": [
+    "test_next399_zachara_bond_valence_vector_closure.py",
+    "test_next399_zbvvc_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 402,
+   "plans": [
+    "2026-08-13-next399-next402-zachara-bond-valence-vector-closure.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 403,
+   "plans": [
+    "2026-08-13-next403-next406-zachara-over-linear-vector-gain.md"
+   ],
+   "scripts": [
+    "next403_zachara_over_linear_vector_gain.py"
+   ],
+   "tests": [
+    "test_next403_zachara_over_linear_vector_gain.py",
+    "test_next403_zbvvg_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 404,
+   "plans": [],
+   "scripts": [
+    "next404_zbvvg_formal_build.py"
+   ],
+   "tests": [
+    "test_next404_zbvvg_formal_build.py"
+   ]
+  },
+  {
+   "next": 405,
+   "plans": [],
+   "scripts": [
+    "next405_zbvvg_feature_audit.py"
+   ],
+   "tests": [
+    "test_next405_zbvvg_feature_audit.py"
+   ]
+  },
+  {
+   "next": 406,
+   "plans": [
+    "2026-08-13-next403-next406-zachara-over-linear-vector-gain.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 407,
+   "plans": [
+    "2026-08-13-next407-citation-erratum.md",
+    "2026-08-13-next407-next410-beck-ecn-simplicity.md"
+   ],
+   "scripts": [
+    "next407_beck_ecn_simplicity.py"
+   ],
+   "tests": [
+    "test_next407_beck_ecn_simplicity.py",
+    "test_next407_becns_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 410,
+   "plans": [
+    "2026-08-13-next407-next410-beck-ecn-simplicity.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 411,
+   "plans": [
+    "2026-08-13-next411-next414-same-sign-shell-purity.md"
+   ],
+   "scripts": [
+    "next411_same_sign_shell_purity.py"
+   ],
+   "tests": [
+    "test_next411_same_sign_shell_purity.py",
+    "test_next411_sssp_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 412,
+   "plans": [],
+   "scripts": [
+    "next412_sssp_formal_build.py"
+   ],
+   "tests": [
+    "test_next412_sssp_formal_build.py"
+   ]
+  },
+  {
+   "next": 413,
+   "plans": [],
+   "scripts": [
+    "next413_sssp_feature_audit.py"
+   ],
+   "tests": [
+    "test_next413_sssp_feature_audit.py"
+   ]
+  },
+  {
+   "next": 414,
+   "plans": [
+    "2026-08-13-next411-next414-same-sign-shell-purity.md"
+   ],
+   "scripts": [
+    "next414_sssp_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next414_sssp_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 415,
+   "plans": [],
+   "scripts": [
+    "next415_sssp_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next415_sssp_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 416,
+   "plans": [
+    "2026-08-13-next416-next419-opposite-bridge-separation.md"
+   ],
+   "scripts": [
+    "next416_opposite_bridge_separation.py"
+   ],
+   "tests": [
+    "test_next416_obs_label_blind_probe.py",
+    "test_next416_opposite_bridge_separation.py"
+   ]
+  },
+  {
+   "next": 419,
+   "plans": [
+    "2026-08-13-next416-next419-opposite-bridge-separation.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 420,
+   "plans": [
+    "2026-08-13-next420-next424-pauling4-bond-strength-segregation.md"
+   ],
+   "scripts": [
+    "next420_pauling4_bond_strength_segregation.py"
+   ],
+   "tests": [
+    "test_next420_p4bss_label_blind_probe.py",
+    "test_next420_pauling4_bond_strength_segregation.py"
+   ]
+  },
+  {
+   "next": 421,
+   "plans": [],
+   "scripts": [
+    "next421_p4bss_formal_build.py"
+   ],
+   "tests": [
+    "test_next421_p4bss_formal_build.py"
+   ]
+  },
+  {
+   "next": 422,
+   "plans": [],
+   "scripts": [
+    "next422_p4bss_feature_audit.py"
+   ],
+   "tests": [
+    "test_next422_p4bss_feature_audit.py"
+   ]
+  },
+  {
+   "next": 424,
+   "plans": [
+    "2026-08-13-next420-next424-pauling4-bond-strength-segregation.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 425,
+   "plans": [
+    "2026-08-13-next425-next429-apriori-bond-strength-length-order.md"
+   ],
+   "scripts": [
+    "next425_apriori_bond_strength_length_order.py"
+   ],
+   "tests": [
+    "test_next425_aprbs_label_blind_probe.py",
+    "test_next425_apriori_bond_strength_length_order.py"
+   ]
+  },
+  {
+   "next": 426,
+   "plans": [],
+   "scripts": [
+    "next426_aprbs_formal_build.py"
+   ],
+   "tests": [
+    "test_next426_aprbs_formal_build.py",
+    "test_next426_aprbs_formal_coverage_diagnostic.py"
+   ]
+  },
+  {
+   "next": 429,
+   "plans": [
+    "2026-08-13-next425-next429-apriori-bond-strength-length-order.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 430,
+   "plans": [
+    "2026-08-13-next430-next434-endpoint-strength-length-order.md"
+   ],
+   "scripts": [
+    "next430_endpoint_strength_length_order.py"
+   ],
+   "tests": [
+    "test_next430_ecslo_label_blind_probe.py",
+    "test_next430_endpoint_strength_length_order.py"
+   ]
+  },
+  {
+   "next": 434,
+   "plans": [
+    "2026-08-13-next430-next434-endpoint-strength-length-order.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 435,
+   "plans": [
+    "2026-08-13-next435-next439-positive-valence-transport-margin.md"
+   ],
+   "scripts": [
+    "next435_positive_valence_transport_margin.py"
+   ],
+   "tests": [
+    "test_next435_positive_valence_transport_margin.py",
+    "test_next435_pvtm_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 436,
+   "plans": [],
+   "scripts": [
+    "next436_pvtm_formal_build.py"
+   ],
+   "tests": [
+    "test_next436_pvtm_formal_build.py"
+   ]
+  },
+  {
+   "next": 437,
+   "plans": [],
+   "scripts": [
+    "next437_pvtm_feature_audit.py"
+   ],
+   "tests": [
+    "test_next437_pvtm_feature_audit.py"
+   ]
+  },
+  {
+   "next": 439,
+   "plans": [
+    "2026-08-13-next435-next439-positive-valence-transport-margin.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 440,
+   "plans": [
+    "2026-08-13-next440-next444-path-constrained-apriori-bond-positivity.md"
+   ],
+   "scripts": [
+    "next440_path_constrained_apriori_bond_positivity.py"
+   ],
+   "tests": [
+    "test_next440_path_constrained_apriori_bond_positivity.py",
+    "test_next440_pcabp_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 444,
+   "plans": [
+    "2026-08-13-next440-next444-path-constrained-apriori-bond-positivity.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 445,
+   "plans": [
+    "2026-08-13-next445-next449-path-constrained-bond-strength-matching.md"
+   ],
+   "scripts": [
+    "next445_path_constrained_bond_strength_matching.py"
+   ],
+   "tests": [
+    "test_next445_path_constrained_bond_strength_matching.py",
+    "test_next445_pcabsm_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 449,
+   "plans": [
+    "2026-08-13-next445-next449-path-constrained-bond-strength-matching.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 450,
+   "plans": [
+    "2026-08-13-next450-next454-equitable-bond-class-transport-margin.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 454,
+   "plans": [
+    "2026-08-13-next450-next454-equitable-bond-class-transport-margin.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 455,
+   "plans": [
+    "2026-08-13-next455-next459-path-field-participation-uniformity.md"
+   ],
+   "scripts": [
+    "next455_path_field_participation_uniformity.py"
+   ],
+   "tests": [
+    "test_next455_path_field_participation_uniformity.py",
+    "test_next455_pfpu_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 459,
+   "plans": [
+    "2026-08-13-next455-next459-path-field-participation-uniformity.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 460,
+   "plans": [
+    "2026-08-13-next460-next464-characteristic-lewis-anion-matching.md"
+   ],
+   "scripts": [
+    "next460_characteristic_lewis_anion_matching.py"
+   ],
+   "tests": [
+    "test_next460_characteristic_lewis_anion_matching.py",
+    "test_next460_clam_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 464,
+   "plans": [
+    "2026-08-13-next460-next464-characteristic-lewis-anion-matching.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 465,
+   "plans": [
+    "2026-08-13-next465-next469-mixed-valence-characteristic-lewis-matching.md"
+   ],
+   "scripts": [
+    "next465_mixed_valence_characteristic_lewis_matching.py"
+   ],
+   "tests": [
+    "test_next465_mixed_valence_characteristic_lewis_matching.py",
+    "test_next465_mvclam_label_blind_support_probe.py"
+   ]
+  },
+  {
+   "next": 469,
+   "plans": [
+    "2026-08-13-next465-next469-mixed-valence-characteristic-lewis-matching.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 470,
+   "plans": [
+    "2026-08-13-next470-next474-element-characteristic-coordination-compatibility.md"
+   ],
+   "scripts": [
+    "next470_element_characteristic_coordination_compatibility.py"
+   ],
+   "tests": [
+    "test_next470_eccc_label_blind_novelty_probe.py",
+    "test_next470_eccc_label_blind_support_probe.py",
+    "test_next470_element_characteristic_coordination_compatibility.py"
+   ]
+  },
+  {
+   "next": 471,
+   "plans": [],
+   "scripts": [
+    "next471_eccc_formal_build.py"
+   ],
+   "tests": [
+    "test_next471_eccc_formal_build.py"
+   ]
+  },
+  {
+   "next": 474,
+   "plans": [
+    "2026-08-13-next470-next474-element-characteristic-coordination-compatibility.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 475,
+   "plans": [
+    "2026-08-13-next475-next479-characteristic-coordination-bottleneck.md"
+   ],
+   "scripts": [
+    "next475_characteristic_coordination_bottleneck.py"
+   ],
+   "tests": [
+    "test_next475_cccb_label_blind_novelty_probe.py",
+    "test_next475_cccb_label_blind_support_probe.py",
+    "test_next475_characteristic_coordination_bottleneck.py"
+   ]
+  },
+  {
+   "next": 479,
+   "plans": [
+    "2026-08-13-next475-next479-characteristic-coordination-bottleneck.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 480,
+   "plans": [
+    "2026-08-13-next480-next484-site-balanced-characteristic-coordination.md"
+   ],
+   "scripts": [
+    "next480_site_balanced_characteristic_coordination.py"
+   ],
+   "tests": [
+    "test_next480_sbcc_label_blind_novelty_probe.py",
+    "test_next480_sbcc_label_blind_support_probe.py",
+    "test_next480_site_balanced_characteristic_coordination.py"
+   ]
+  },
+  {
+   "next": 484,
+   "plans": [
+    "2026-08-13-next480-next484-site-balanced-characteristic-coordination.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 485,
+   "plans": [
+    "2026-08-13-next485-next489-complex-anion-contact-correspondence.md"
+   ],
+   "scripts": [
+    "next485_complex_anion_contact_correspondence.py"
+   ],
+   "tests": [
+    "test_next485_cacc_label_blind_engineering_probe.py",
+    "test_next485_complex_anion_contact_correspondence.py"
+   ]
+  },
+  {
+   "next": 489,
+   "plans": [
+    "2026-08-13-next485-next489-complex-anion-contact-correspondence.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 490,
+   "plans": [
+    "2026-08-13-next490-next494-coordination-conditioned-lewis-acidity-balance.md"
+   ],
+   "scripts": [
+    "next490_coordination_conditioned_lewis_acidity_balance.py"
+   ],
+   "tests": [
+    "test_next490_cclab_label_blind_engineering_probe.py",
+    "test_next490_cclab_label_blind_novelty_probe.py",
+    "test_next490_coordination_conditioned_lewis_acidity_balance.py"
+   ]
+  },
+  {
+   "next": 491,
+   "plans": [],
+   "scripts": [
+    "next491_cclab_formal_build.py"
+   ],
+   "tests": [
+    "test_next491_cclab_formal_build.py"
+   ]
+  },
+  {
+   "next": 494,
+   "plans": [
+    "2026-08-13-next490-next494-coordination-conditioned-lewis-acidity-balance.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 495,
+   "plans": [
+    "2026-08-13-next495-next499-cclab-conservative-domain-extension.md"
+   ],
+   "scripts": [
+    "next495_cclab_conservative_domain_extension.py"
+   ],
+   "tests": [
+    "test_next495_cclab_cde_label_blind_probe.py",
+    "test_next495_cclab_conservative_domain_extension.py"
+   ]
+  },
+  {
+   "next": 496,
+   "plans": [],
+   "scripts": [
+    "next496_cclab_cde_formal_build.py"
+   ],
+   "tests": [
+    "test_next496_cclab_cde_formal_build.py"
+   ]
+  },
+  {
+   "next": 497,
+   "plans": [],
+   "scripts": [
+    "next497_cclab_cde_feature_audit.py"
+   ],
+   "tests": [
+    "test_next497_cclab_cde_feature_audit.py"
+   ]
+  },
+  {
+   "next": 498,
+   "plans": [
+    "2026-08-13-next498-cclab-cde-margin-local-search.md"
+   ],
+   "scripts": [
+    "next498_cclab_cde_margin_local_search.py"
+   ],
+   "tests": [
+    "test_next498_cclab_cde_margin_local_search.py"
+   ]
+  },
+  {
+   "next": 499,
+   "plans": [
+    "2026-08-13-next495-next499-cclab-conservative-domain-extension.md"
+   ],
+   "scripts": [
+    "next499_cclab_cde_broad_diagnostic.py"
+   ],
+   "tests": [
+    "test_next499_cclab_cde_broad_diagnostic.py"
+   ]
+  },
+  {
+   "next": 500,
+   "plans": [
+    "2026-08-13-next500-next504-topological-bond-angular-correspondence.md"
+   ],
+   "scripts": [
+    "next500_topological_bond_angular_correspondence.py"
+   ],
+   "tests": [
+    "test_next500_tbac_label_blind_engineering_probe.py",
+    "test_next500_tbac_label_blind_novelty_probe.py",
+    "test_next500_topological_bond_angular_correspondence.py"
+   ]
+  },
+  {
+   "next": 501,
+   "plans": [],
+   "scripts": [
+    "next501_tbac_formal_build.py"
+   ],
+   "tests": [
+    "test_next501_tbac_formal_build.py"
+   ]
+  },
+  {
+   "next": 502,
+   "plans": [],
+   "scripts": [
+    "next502_tbac_feature_audit.py"
+   ],
+   "tests": [
+    "test_next502_tbac_feature_audit.py"
+   ]
+  },
+  {
+   "next": 504,
+   "plans": [
+    "2026-08-13-next500-next504-topological-bond-angular-correspondence.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 505,
+   "plans": [
+    "2026-08-13-next505-next509-madelung-valence-class-homogeneity.md"
+   ],
+   "scripts": [
+    "next505_madelung_valence_class_homogeneity.py"
+   ],
+   "tests": [
+    "test_next505_madelung_valence_class_homogeneity.py",
+    "test_next505_mvch_label_blind_engineering_probe.py",
+    "test_next505_mvch_label_blind_novelty_probe.py"
+   ]
+  },
+  {
+   "next": 506,
+   "plans": [],
+   "scripts": [
+    "next506_mvch_formal_build.py"
+   ],
+   "tests": [
+    "test_next506_mvch_formal_build.py"
+   ]
+  },
+  {
+   "next": 507,
+   "plans": [],
+   "scripts": [
+    "next507_mvch_feature_audit.py"
+   ],
+   "tests": [
+    "test_next507_mvch_feature_audit.py"
+   ]
+  },
+  {
+   "next": 509,
+   "plans": [
+    "2026-08-13-next505-next509-madelung-valence-class-homogeneity.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 510,
+   "plans": [
+    "2026-08-13-next510-next514-madelung-charge-potential-antitonicity.md"
+   ],
+   "scripts": [
+    "next510_madelung_charge_potential_antitonicity.py"
+   ],
+   "tests": [
+    "test_next510_madelung_charge_potential_antitonicity.py",
+    "test_next510_mcpa_label_blind_engineering_probe.py",
+    "test_next510_mcpa_label_blind_novelty_probe.py"
+   ]
+  },
+  {
+   "next": 511,
+   "plans": [],
+   "scripts": [
+    "next511_mcpa_formal_build.py"
+   ],
+   "tests": [
+    "test_next511_mcpa_formal_build.py"
+   ]
+  },
+  {
+   "next": 512,
+   "plans": [],
+   "scripts": [
+    "next512_mcpa_feature_audit.py"
+   ],
+   "tests": [
+    "test_next512_mcpa_feature_audit.py"
+   ]
+  },
+  {
+   "next": 514,
+   "plans": [
+    "2026-08-13-next510-next514-madelung-charge-potential-antitonicity.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 515,
+   "plans": [
+    "2026-08-13-next515-next519-eccc-conservative-domain-extension.md"
+   ],
+   "scripts": [
+    "next515_eccc_conservative_domain_extension.py"
+   ],
+   "tests": [
+    "test_next515_eccc_cde_label_blind_probe.py",
+    "test_next515_eccc_conservative_domain_extension.py"
+   ]
+  },
+  {
+   "next": 516,
+   "plans": [],
+   "scripts": [
+    "next516_eccc_cde_formal_build.py"
+   ],
+   "tests": [
+    "test_next516_eccc_cde_formal_build.py"
+   ]
+  },
+  {
+   "next": 517,
+   "plans": [],
+   "scripts": [
+    "next517_eccc_cde_feature_audit.py"
+   ],
+   "tests": [
+    "test_next517_eccc_cde_feature_audit.py"
+   ]
+  },
+  {
+   "next": 519,
+   "plans": [
+    "2026-08-13-next515-next519-eccc-conservative-domain-extension.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 520,
+   "plans": [
+    "2026-08-13-next520-mcpe-supercell-correction.md",
+    "2026-08-13-next520-next524-madelung-chemical-potential-equalization.md"
+   ],
+   "scripts": [
+    "next520_madelung_chemical_potential_equalization.py"
+   ],
+   "tests": [
+    "test_next520_madelung_chemical_potential_equalization.py",
+    "test_next520_mcpe_label_blind_engineering_probe.py",
+    "test_next520_mcpe_label_blind_novelty_probe.py"
+   ]
+  },
+  {
+   "next": 521,
+   "plans": [],
+   "scripts": [
+    "next521_mcpe_formal_build.py"
+   ],
+   "tests": [
+    "test_next521_mcpe_formal_build.py"
+   ]
+  },
+  {
+   "next": 522,
+   "plans": [],
+   "scripts": [
+    "next522_mcpe_feature_audit.py"
+   ],
+   "tests": [
+    "test_next522_mcpe_feature_audit.py"
+   ]
+  },
+  {
+   "next": 524,
+   "plans": [
+    "2026-08-13-next520-next524-madelung-chemical-potential-equalization.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 525,
+   "plans": [
+    "2026-08-13-next525-next528-sssp-standalone-sequential-validation.md"
+   ],
+   "scripts": [
+    "next525_sssp_standalone_freeze.py"
+   ],
+   "tests": [
+    "test_next525_sssp_standalone_freeze.py"
+   ]
+  },
+  {
+   "next": 526,
+   "plans": [],
+   "scripts": [
+    "next526_sssp_holdout_feature_freeze.py"
+   ],
+   "tests": [
+    "test_next526_sssp_holdout_feature_freeze.py"
+   ]
+  },
+  {
+   "next": 527,
+   "plans": [],
+   "scripts": [
+    "next527_sssp_one_shot_validation.py"
+   ],
+   "tests": [
+    "test_next527_sssp_one_shot_validation.py"
+   ]
+  },
+  {
+   "next": 528,
+   "plans": [
+    "2026-08-13-next525-next528-sssp-standalone-sequential-validation.md"
+   ],
+   "scripts": [
+    "next528_sssp_one_shot_replication.py"
+   ],
+   "tests": [
+    "test_next528_sssp_one_shot_replication.py"
+   ]
+  },
+  {
+   "next": 529,
+   "plans": [
+    "2026-08-13-next529-next532-sssp-bond-valence-coherence.md"
+   ],
+   "scripts": [
+    "next529_sssp_bvc_development_freeze.py"
+   ],
+   "tests": [
+    "test_next529_sssp_bvc_development_freeze.py"
+   ]
+  },
+  {
+   "next": 530,
+   "plans": [],
+   "scripts": [
+    "next530_sssp_bvc_wbm_cohort.py"
+   ],
+   "tests": [
+    "test_next530_sssp_bvc_wbm_cohort.py"
+   ]
+  },
+  {
+   "next": 531,
+   "plans": [],
+   "scripts": [
+    "next531_sssp_bvc_wbm_features.py"
+   ],
+   "tests": [
+    "test_next531_sssp_bvc_wbm_features.py"
+   ]
+  },
+  {
+   "next": 532,
+   "plans": [
+    "2026-08-13-next529-next532-sssp-bond-valence-coherence.md"
+   ],
+   "scripts": [
+    "next532_sssp_bvc_wbm_external_evaluation.py"
+   ],
+   "tests": [
+    "test_next532_sssp_bvc_wbm_external_evaluation.py"
+   ]
+  },
+  {
+   "next": 533,
+   "plans": [
+    "2026-08-13-next533-next536-odac-sssp-framework-guard.md"
+   ],
+   "scripts": [
+    "next533_odac23_sssp_label_free_features.py"
+   ],
+   "tests": [
+    "test_next533_odac23_sssp_label_free_features.py"
+   ]
+  },
+  {
+   "next": 534,
+   "plans": [],
+   "scripts": [
+    "next534_odac23_sssp_framework_guard.py"
+   ],
+   "tests": [
+    "test_next534_odac23_sssp_framework_guard.py"
+   ]
+  },
+  {
+   "next": 536,
+   "plans": [
+    "2026-08-13-next533-next536-odac-sssp-framework-guard.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 537,
+   "plans": [
+    "2026-08-13-next537-next542-periodic-bond-angle-affine-accommodation.md"
+   ],
+   "scripts": [
+    "next537_periodic_bond_angle_affine_accommodation.py"
+   ],
+   "tests": [
+    "test_next537_periodic_bond_angle_affine_accommodation.py"
+   ]
+  },
+  {
+   "next": 538,
+   "plans": [],
+   "scripts": [],
+   "tests": [
+    "test_next538_pbaaa_label_blind_probe.py"
+   ]
+  },
+  {
+   "next": 539,
+   "plans": [],
+   "scripts": [
+    "next539_odac23_pbaaa_label_free_features.py"
+   ],
+   "tests": [
+    "test_next539_odac23_pbaaa_label_free_features.py"
+   ]
+  },
+  {
+   "next": 540,
+   "plans": [],
+   "scripts": [
+    "next540_odac23_pbaaa_framework_guard.py"
+   ],
+   "tests": [
+    "test_next540_odac23_pbaaa_framework_guard.py"
+   ]
+  },
+  {
+   "next": 541,
+   "plans": [
+    "2026-08-13-next541-next542-jarvis-cdvae-dft-response.md"
+   ],
+   "scripts": [
+    "next541_jarvis_cdvae_initial_prediction_freeze.py"
+   ],
+   "tests": [
+    "test_next541_jarvis_cdvae_initial_prediction_freeze.py"
+   ]
+  },
+  {
+   "next": 542,
+   "plans": [
+    "2026-08-13-next537-next542-periodic-bond-angle-affine-accommodation.md",
+    "2026-08-13-next541-next542-jarvis-cdvae-dft-response.md"
+   ],
+   "scripts": [
+    "next542_jarvis_cdvae_dft_response.py"
+   ],
+   "tests": [
+    "test_next542_jarvis_cdvae_dft_response.py"
+   ]
+  },
+  {
+   "next": 543,
+   "plans": [
+    "2026-08-13-next543-next545-lisi-random-relaxation-confirmation.md"
+   ],
+   "scripts": [
+    "next543_lisi_random_relaxation_initial_cohort.py"
+   ],
+   "tests": [
+    "test_next543_lisi_random_relaxation_initial_cohort.py"
+   ]
+  },
+  {
+   "next": 544,
+   "plans": [],
+   "scripts": [
+    "next544_lisi_random_relaxation_prediction_freeze.py"
+   ],
+   "tests": [
+    "test_next544_lisi_random_relaxation_prediction_freeze.py"
+   ]
+  },
+  {
+   "next": 545,
+   "plans": [
+    "2026-08-13-next543-next545-lisi-random-relaxation-confirmation.md"
+   ],
+   "scripts": [
+    "next545_lisi_random_relaxation_confirmation.py"
+   ],
+   "tests": [
+    "test_next545_lisi_random_relaxation_confirmation.py"
+   ]
+  },
+  {
+   "next": 546,
+   "plans": [
+    "2026-08-13-next546-next548-lisi-analytic-mechanism-search.md"
+   ],
+   "scripts": [
+    "next546_lisi_analytic_mechanism_search.py"
+   ],
+   "tests": [
+    "test_next546_lisi_analytic_mechanism_search.py"
+   ]
+  },
+  {
+   "next": 548,
+   "plans": [
+    "2026-08-13-next546-next548-lisi-analytic-mechanism-search.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 549,
+   "plans": [
+    "2026-08-13-next549-next550-omc25-two-sided-contact-transfer.md"
+   ],
+   "scripts": [
+    "next549_omc25_two_sided_contact_freeze.py"
+   ],
+   "tests": [
+    "test_next549_omc25_two_sided_contact_freeze.py"
+   ]
+  },
+  {
+   "next": 550,
+   "plans": [
+    "2026-08-13-next549-next550-omc25-two-sided-contact-transfer.md"
+   ],
+   "scripts": [
+    "next550_omc25_two_sided_contact_evaluate.py"
+   ],
+   "tests": [
+    "test_next550_omc25_two_sided_contact_evaluate.py"
+   ]
+  },
+  {
+   "next": 551,
+   "plans": [
+    "2026-08-13-next551-next554-hea-blind-law-search.md"
+   ],
+   "scripts": [
+    "next551_hea_initial_cohort.py"
+   ],
+   "tests": [
+    "test_next551_hea_initial_cohort.py"
+   ]
+  },
+  {
+   "next": 552,
+   "plans": [],
+   "scripts": [
+    "next552_hea_analytic_feature_freeze.py"
+   ],
+   "tests": [
+    "test_next552_hea_analytic_feature_freeze.py"
+   ]
+  },
+  {
+   "next": 553,
+   "plans": [],
+   "scripts": [
+    "next553_hea_development_search.py"
+   ],
+   "tests": [
+    "test_next553_hea_development_search.py"
+   ]
+  },
+  {
+   "next": 554,
+   "plans": [
+    "2026-08-13-next551-next554-hea-blind-law-search.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 555,
+   "plans": [
+    "2026-08-13-next555-next556-hea-extreme-waste.md"
+   ],
+   "scripts": [
+    "next555_hea_extreme_waste_search.py"
+   ],
+   "tests": [
+    "test_next555_hea_extreme_waste_search.py"
+   ]
+  },
+  {
+   "next": 556,
+   "plans": [
+    "2026-08-13-next555-next556-hea-extreme-waste.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 557,
+   "plans": [
+    "2026-08-14-next557-next558-hea-packing-deficit.md"
+   ],
+   "scripts": [
+    "next557_hea_packing_deficit_freeze.py"
+   ],
+   "tests": []
+  },
+  {
+   "next": 558,
+   "plans": [
+    "2026-08-14-next557-next558-hea-packing-deficit.md"
+   ],
+   "scripts": [
+    "next558_hea_packing_deficit_validation.py"
+   ],
+   "tests": [
+    "test_next558_hea_packing_deficit_validation.py"
+   ]
+  },
+  {
+   "next": 559,
+   "plans": [
+    "2026-08-14-next559-next561-hea-entropy-packing.md"
+   ],
+   "scripts": [
+    "next559_hea_entropy_packing_discovery.py"
+   ],
+   "tests": [
+    "test_next559_hea_entropy_packing_discovery.py"
+   ]
+  },
+  {
+   "next": 560,
+   "plans": [],
+   "scripts": [
+    "next560_hea_entropy_packing_cohort.py"
+   ],
+   "tests": [
+    "test_next560_hea_entropy_packing_cohort.py"
+   ]
+  },
+  {
+   "next": 561,
+   "plans": [
+    "2026-08-14-next559-next561-hea-entropy-packing.md"
+   ],
+   "scripts": [
+    "next561_hea_entropy_packing_confirmation.py"
+   ],
+   "tests": [
+    "test_next561_hea_entropy_packing_confirmation.py"
+   ]
+  },
+  {
+   "next": 562,
+   "plans": [
+    "2026-08-14-next562-next564-hea-stable-analytic-union.md"
+   ],
+   "scripts": [
+    "next562_hea_stable_analytic_union_search.py"
+   ],
+   "tests": [
+    "test_next562_hea_stable_analytic_union_search.py"
+   ]
+  },
+  {
+   "next": 564,
+   "plans": [
+    "2026-08-14-next562-next564-hea-stable-analytic-union.md"
+   ],
+   "scripts": [],
+   "tests": []
+  },
+  {
+   "next": 565,
+   "plans": [
+    "2026-08-14-next565-next568-hea-mechanism-calibration.md"
+   ],
+   "scripts": [
+    "next565_hea_mechanism_formula_family.py"
+   ],
+   "tests": [
+    "test_next565_hea_mechanism_formula_family.py"
+   ]
+  },
+  {
+   "next": 566,
+   "plans": [],
+   "scripts": [
+    "next566_hea_mechanism_selection_cohort.py",
+    "next566b_hea_mechanism_selection.py"
+   ],
+   "tests": [
+    "test_next566_hea_mechanism_selection_cohort.py",
+    "test_next566b_hea_mechanism_selection.py"
+   ]
+  },
+  {
+   "next": 567,
+   "plans": [],
+   "scripts": [
+    "next567_hea_mechanism_confirmation_cohort.py"
+   ],
+   "tests": [
+    "test_next567_hea_mechanism_confirmation_cohort.py"
+   ]
+  },
+  {
+   "next": 568,
+   "plans": [
+    "2026-08-14-next565-next568-hea-mechanism-calibration.md"
+   ],
+   "scripts": [
+    "next568_hea_mechanism_confirmation.py"
+   ],
+   "tests": [
+    "test_next568_hea_mechanism_confirmation.py"
+   ]
+  }
+ ]
+}

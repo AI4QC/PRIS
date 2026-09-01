@@ -1,0 +1,104 @@
+[
+ {
+  "stage": "v00",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v00",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v01",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v01",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v02",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v02",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v03",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v03",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v04",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v04",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v05",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v05",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v06",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v06",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v07",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v07",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v08",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v08",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v09",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v09",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v10",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v10",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v11",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v11",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v12",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v12",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v13",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v13",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v14",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v14",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v15",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v15",
+  "from_contcar": ""
+ },
+ {
+  "stage": "v16",
+  "incar": "static_soft",
+  "poscar": "POSCAR.v16",
+  "from_contcar": ""
+ }
+]

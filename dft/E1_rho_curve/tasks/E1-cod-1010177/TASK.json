@@ -1,0 +1,132 @@
+{
+ "anion": "Cl",
+ "encut_ev": 520.0,
+ "experiment": "E1",
+ "formula": "Tl2SnCl6",
+ "kmesh": [
+  8,
+  8,
+  8
+ ],
+ "n_atoms": 9,
+ "n_kpoints": 512,
+ "parent_min_contact_a": 2.3928,
+ "points": [
+  {
+   "index": 0,
+   "rho_target": 0.6,
+   "scale": 0.626881
+  },
+  {
+   "index": 1,
+   "rho_target": 0.65,
+   "scale": 0.679121
+  },
+  {
+   "index": 2,
+   "rho_target": 0.7,
+   "scale": 0.731361
+  },
+  {
+   "index": 3,
+   "rho_target": 0.75,
+   "scale": 0.783601
+  },
+  {
+   "index": 4,
+   "rho_target": 0.8,
+   "scale": 0.835841
+  },
+  {
+   "index": 5,
+   "rho_target": 0.85,
+   "scale": 0.888081
+  },
+  {
+   "index": 6,
+   "rho_target": 0.9,
+   "scale": 0.940321
+  },
+  {
+   "index": 7,
+   "rho_target": 0.95,
+   "scale": 0.992561
+  },
+  {
+   "index": 8,
+   "rho_target": 1.0,
+   "scale": 1.044801
+  },
+  {
+   "index": 9,
+   "rho_target": 1.05,
+   "scale": 1.097041
+  },
+  {
+   "index": 10,
+   "rho_target": 1.1,
+   "scale": 1.149281
+  },
+  {
+   "index": 11,
+   "rho_target": 1.15,
+   "scale": 1.201521
+  },
+  {
+   "index": 12,
+   "rho_target": 1.2,
+   "scale": 1.253761
+  },
+  {
+   "index": 13,
+   "rho_target": 1.25,
+   "scale": 1.306001
+  },
+  {
+   "index": 14,
+   "rho_target": 1.3,
+   "scale": 1.358241
+  },
+  {
+   "index": 15,
+   "rho_target": 1.35,
+   "scale": 1.410481
+  },
+  {
+   "index": 16,
+   "rho_target": 1.4,
+   "scale": 1.462721
+  }
+ ],
+ "potentials": "standard",
+ "protocol": "2026-08-25-pris-dft-e1e4-v1",
+ "radius_sum_a": 2.5,
+ "rho_c_parent": 0.95712,
+ "source_id": "cod-1010177",
+ "species": [
+  "Cl",
+  "Sn",
+  "Tl"
+ ],
+ "stages": [
+  "v00",
+  "v01",
+  "v02",
+  "v03",
+  "v04",
+  "v05",
+  "v06",
+  "v07",
+  "v08",
+  "v09",
+  "v10",
+  "v11",
+  "v12",
+  "v13",
+  "v14",
+  "v15",
+  "v16"
+ ],
+ "task": "E1-cod-1010177",
+ "task_dir": "<repo>/dft/E1_rho_curve/tasks/E1-cod-1010177"
+}

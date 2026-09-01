@@ -1,0 +1,206 @@
+{
+ "experiment": "E1",
+ "n_selected": 20,
+ "rho_grid": [
+  0.6,
+  0.65,
+  0.7,
+  0.75,
+  0.8,
+  0.85,
+  0.9,
+  0.95,
+  1.0,
+  1.05,
+  1.1,
+  1.15,
+  1.2,
+  1.25,
+  1.3,
+  1.35,
+  1.4
+ ],
+ "rule": "discovery split, in_analysis_set, n_sites<=12, ordered with a shortest contact of at least 1.0 A, integer charge balance available, parent rho_c in [0.75,1.30]; first 4 per anion by source_id over O,S,F,Cl,N. Each parent is scaled rigidly and isotropically onto the frozen reduced-contact grid; static energies only.",
+ "structures": [
+  {
+   "anion": "O",
+   "encut_ev": 520.0,
+   "formula": "Ba2CePtO6",
+   "n_atoms": 10,
+   "radius_sum_a": 2.234,
+   "rho_c_parent": 0.933488,
+   "source_id": "cod-1001469"
+  },
+  {
+   "anion": "O",
+   "encut_ev": 520.0,
+   "formula": "WO3",
+   "n_atoms": 12,
+   "radius_sum_a": 2.0,
+   "rho_c_parent": 0.943335,
+   "source_id": "cod-1004057"
+  },
+  {
+   "anion": "O",
+   "encut_ev": 520.0,
+   "formula": "Pr2O3",
+   "n_atoms": 5,
+   "radius_sum_a": 1.897,
+   "rho_c_parent": 0.878822,
+   "source_id": "cod-1010280"
+  },
+  {
+   "anion": "O",
+   "encut_ev": 520.0,
+   "formula": "CaFe2O3",
+   "n_atoms": 6,
+   "radius_sum_a": 2.18,
+   "rho_c_parent": 0.840497,
+   "source_id": "cod-1101062"
+  },
+  {
+   "anion": "S",
+   "encut_ev": 520.0,
+   "formula": "GeS",
+   "n_atoms": 8,
+   "radius_sum_a": 2.57,
+   "rho_c_parent": 0.848572,
+   "source_id": "cod-1010649"
+  },
+  {
+   "anion": "S",
+   "encut_ev": 520.0,
+   "formula": "GaAgS2",
+   "n_atoms": 8,
+   "radius_sum_a": 2.703,
+   "rho_c_parent": 0.816538,
+   "source_id": "cod-1509349"
+  },
+  {
+   "anion": "S",
+   "encut_ev": 520.0,
+   "formula": "Na3AgS2",
+   "n_atoms": 12,
+   "radius_sum_a": 2.99,
+   "rho_c_parent": 0.792679,
+   "source_id": "cod-1509476"
+  },
+  {
+   "anion": "S",
+   "encut_ev": 520.0,
+   "formula": "TaAgS3",
+   "n_atoms": 10,
+   "radius_sum_a": 2.99,
+   "rho_c_parent": 0.796008,
+   "source_id": "cod-1509527"
+  },
+  {
+   "anion": "F",
+   "encut_ev": 520.0,
+   "formula": "ZrCoF6",
+   "n_atoms": 8,
+   "radius_sum_a": 2.05,
+   "rho_c_parent": 0.966474,
+   "source_id": "cod-1008795"
+  },
+  {
+   "anion": "F",
+   "encut_ev": 520.0,
+   "formula": "Cs2SiF6",
+   "n_atoms": 9,
+   "radius_sum_a": 1.7706,
+   "rho_c_parent": 1.05438,
+   "source_id": "cod-1010285"
+  },
+  {
+   "anion": "F",
+   "encut_ev": 520.0,
+   "formula": "Cs2GeF6",
+   "n_atoms": 9,
+   "radius_sum_a": 1.86,
+   "rho_c_parent": 0.966667,
+   "source_id": "cod-1010286"
+  },
+  {
+   "anion": "F",
+   "encut_ev": 520.0,
+   "formula": "MnNbF6",
+   "n_atoms": 8,
+   "radius_sum_a": 2.0212,
+   "rho_c_parent": 0.975252,
+   "source_id": "cod-1507759"
+  },
+  {
+   "anion": "Cl",
+   "encut_ev": 520.0,
+   "formula": "Cs2AgAuCl6",
+   "n_atoms": 10,
+   "radius_sum_a": 2.7323,
+   "rho_c_parent": 0.917905,
+   "source_id": "cod-1010145"
+  },
+  {
+   "anion": "Cl",
+   "encut_ev": 520.0,
+   "formula": "K2SnCl6",
+   "n_atoms": 9,
+   "radius_sum_a": 2.5,
+   "rho_c_parent": 0.978334,
+   "source_id": "cod-1010173"
+  },
+  {
+   "anion": "Cl",
+   "encut_ev": 520.0,
+   "formula": "Rb2SnCl6",
+   "n_atoms": 9,
+   "radius_sum_a": 2.5,
+   "rho_c_parent": 0.969504,
+   "source_id": "cod-1010175"
+  },
+  {
+   "anion": "Cl",
+   "encut_ev": 520.0,
+   "formula": "Tl2SnCl6",
+   "n_atoms": 9,
+   "radius_sum_a": 2.5,
+   "rho_c_parent": 0.95712,
+   "source_id": "cod-1010177"
+  },
+  {
+   "anion": "N",
+   "encut_ev": 520.0,
+   "formula": "La3Ni2B2N3",
+   "n_atoms": 10,
+   "radius_sum_a": 1.7186,
+   "rho_c_parent": 1.05839,
+   "source_id": "cod-1510743"
+  },
+  {
+   "anion": "N",
+   "encut_ev": 520.0,
+   "formula": "Ca3BN3",
+   "n_atoms": 7,
+   "radius_sum_a": 1.73,
+   "rho_c_parent": 0.781479,
+   "source_id": "cod-1511018"
+  },
+  {
+   "anion": "N",
+   "encut_ev": 520.0,
+   "formula": "LaNiBN",
+   "n_atoms": 8,
+   "radius_sum_a": 1.8138,
+   "rho_c_parent": 1.058834,
+   "source_id": "cod-1511203"
+  },
+  {
+   "anion": "N",
+   "encut_ev": 649.0,
+   "formula": "Li3BN2",
+   "n_atoms": 12,
+   "radius_sum_a": 1.73,
+   "rho_c_parent": 0.773604,
+   "source_id": "cod-1511227"
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+series,unified_round,date,event,contributing_ruleset,satisfaction,detection,best_value,split,source_file
+det_at_sat_ge_0.90,1,2026-07-27,programme start; no rule set on this task yet (Pauling rules 2-5 jointly satisfy 0.0651 of experimental structures and never reach the 0.90 floor),none,,,,,paper/FACTS.md sec 3
+det_at_sat_ge_0.90,4,2026-07-28,D1 contact floor rho >= 0.735 -> L1,L1,0.9918821974702662,0.2890365448504983,0.2890365448504983,calibration,paper/si_data/s5_split_consistency.csv row calibration L1
+det_at_sat_ge_0.90,13,2026-07-29,D3 + D4 + D5 added at rho >= 0.804 -> L2 (trusted core),L2,0.9579006985085896,0.6121262458471761,0.6121262458471761,calibration,paper/si_data/s5_split_consistency.csv row calibration L2
+det_at_sat_ge_0.90,13,2026-07-29,D6 ionicity-guarded like-charge-bond ban -> L3 (five-law set),L3,0.917122899754578,0.7004429678848283,0.7004429678848283,calibration,paper/si_data/s5_split_consistency.csv row calibration L3
+det_at_sat_ge_0.90,15,2026-07-29,D2 guarded band -> L1' and the certified-tree episode (discovery split only); neither advances this axis,L3 (unchanged),,,0.7004429678848283,calibration,paper/si_data/s5_split_consistency.csv row calibration L1'; paper/FACTS.md sec 9-10
+det_at_sat_ge_0.90,21,2026-08-01,five-law refinement V4 evaluated once on the sealed split; frozen gate not met (+0.0105 < +0.02),L3 (unchanged),,,0.7004429678848283,calibration,reports/2026-08-01-v4-lockbox-confirmation.md
+det_at_sat_ge_0.90,584,2026-08-14,end of the numbered investigations; no attempt on this task passed its frozen gate - flat,L3 (unchanged),,,0.7004429678848283,calibration,attempts.csv (this directory)
+det_at_sat_ge_0.90,585,2026-08-14,L4 lands at satisfaction 0.8180 which is below the 0.90 floor; this axis does not move and L3 remains the best rule set at that floor,L3 (unchanged),,,0.7004429678848283,calibration,outputs/20260814_l4_plausibility/calib_result.json
+det_at_sat_ge_0.90,594,2026-08-15,end of axis (external evaluations are on other populations and cannot advance this curve),L3 (unchanged),,,0.7004429678848283,calibration,paper/FACTS.md sec 23 and 26-29
+min_sat_det,1,2026-07-27,programme start,none,,,,,paper/FACTS.md sec 3
+min_sat_det,4,2026-07-28,D1 -> L1 (minimum is damage detection),L1,0.9918821974702662,0.2890365448504983,0.2890365448504983,calibration,paper/si_data/s5_split_consistency.csv row calibration L1
+min_sat_det,13,2026-07-29,L2 (min is the detection rate),L2,0.9579006985085896,0.6121262458471761,0.6121262458471761,calibration,paper/si_data/s5_split_consistency.csv row calibration L2
+min_sat_det,13,2026-07-29,L3 (min is the detection rate),L3,0.917122899754578,0.7004429678848283,0.7004429678848283,calibration,paper/si_data/s5_split_consistency.csv row calibration L3
+min_sat_det,15,2026-07-29,L1' and the certified-tree episode; no advance,L3 (unchanged),,,0.7004429678848283,calibration,paper/si_data/s5_split_consistency.csv row calibration L1'
+min_sat_det,21,2026-08-01,sealed-split confirmation attempt fails its frozen gate; no advance,L3 (unchanged),,,0.7004429678848283,calibration,reports/2026-08-01-v4-lockbox-confirmation.md
+min_sat_det,584,2026-08-14,end of the numbered investigations - flat,L3 (unchanged),,,0.7004429678848283,calibration,attempts.csv (this directory)
+min_sat_det,585,2026-08-14,D7 + D8 -> L4 clears 0.8 on both axes (min is now the satisfaction),L4,0.8180101944496885,0.9111295681063123,0.8180101944496885,calibration (one-shot),outputs/20260814_l4_plausibility/calib_result.json; paper/si_data/s5_split_consistency.csv row calibration L4
+min_sat_det,594,2026-08-15,end of axis,L4 (unchanged),,,0.8180101944496885,calibration,paper/FACTS.md sec 23 and 26-29

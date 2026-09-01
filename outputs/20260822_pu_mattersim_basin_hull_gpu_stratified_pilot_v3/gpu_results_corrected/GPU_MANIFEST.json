@@ -1,0 +1,243 @@
+{
+  "counts": {
+    "abstain": 3,
+    "capped_at_max_steps": 202,
+    "experimental": 1024,
+    "keep": 1167,
+    "pu_negative": 1024,
+    "reject": 878,
+    "rows": 2048,
+    "supported": 2045
+  },
+  "errors": {
+    "CIF parse failed: ValueError: Invalid CIF file with no structures!": 3
+  },
+  "evidence_role": "exploratory label-free MatterSim basin-hull proxy; no PU endpoint labels read",
+  "inputs_sha256": {
+    "checkpoint": "e3df9fa708725e3d453140646c7d1838324b347a3d1214cf1440522146f872b5",
+    "reference_entries": "8673ee6d9b7cff8266b93c3bae9ea34115329bd59b95b81ebf4a8d0e3a671799",
+    "selected_structures": "9db3126c81ed16b628128242312b3467082cd70a292226d061249cb61d2b3c37"
+  },
+  "output_sha256": {
+    "e_hull_threshold_curve.csv": "704036b9fcda5b7378e07b3b55cd63a3a0f0d2823173ac86531704149b57912b",
+    "gpu_basin_hull.parquet": "946e6aaf3b65ef90de339ade2be768c4a4fd508b373b3e3d0abe4c6c72d5e2d9"
+  },
+  "protocol": "2026-08-22-pu-mattersim-basin-hull-gpu-stratified-v2-full-cell-formula",
+  "relaxation": {
+    "atom_budget": 512,
+    "batch_size": 128,
+    "filter": "FRECHETCELLFILTER",
+    "fmax_ev_per_a": 0.05,
+    "max_prediction_steps": 64,
+    "optimizer": "FIRE"
+  },
+  "rule": {
+    "failure_policy": "ABSTAIN",
+    "formula": "B64 = E_MatterSim_relaxed/N - E_raw_MP_hull(composition)",
+    "threshold_ev_per_atom": 0.2
+  },
+  "runtime": {
+    "ase": "3.29.0",
+    "cuda_available": true,
+    "device": "cuda:0",
+    "gpu_name": "NVIDIA A40",
+    "mattersim": "1.2.3",
+    "numpy": "1.26.4",
+    "pandas": "2.0.3",
+    "pymatgen": "unknown",
+    "python": "3.10.18",
+    "torch": "2.6.0+cu124"
+  },
+  "threshold_curve": [
+    {
+      "cohort": "experimental",
+      "keep_rate_of_supported": 0.11263467189030363,
+      "n_abstain": 3,
+      "n_reject": 906,
+      "n_supported": 1021,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.8873653281096964,
+      "reject_rate_of_total": 0.884765625,
+      "threshold_ev_per_atom": 0.0
+    },
+    {
+      "cohort": "pu_negative",
+      "keep_rate_of_supported": 0.0263671875,
+      "n_abstain": 0,
+      "n_reject": 997,
+      "n_supported": 1024,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.9736328125,
+      "reject_rate_of_total": 0.9736328125,
+      "threshold_ev_per_atom": 0.0
+    },
+    {
+      "cohort": "experimental",
+      "keep_rate_of_supported": 0.5024485798237023,
+      "n_abstain": 3,
+      "n_reject": 508,
+      "n_supported": 1021,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.4975514201762977,
+      "reject_rate_of_total": 0.49609375,
+      "threshold_ev_per_atom": 0.02
+    },
+    {
+      "cohort": "pu_negative",
+      "keep_rate_of_supported": 0.037109375,
+      "n_abstain": 0,
+      "n_reject": 986,
+      "n_supported": 1024,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.962890625,
+      "reject_rate_of_total": 0.962890625,
+      "threshold_ev_per_atom": 0.02
+    },
+    {
+      "cohort": "experimental",
+      "keep_rate_of_supported": 0.6993143976493633,
+      "n_abstain": 3,
+      "n_reject": 307,
+      "n_supported": 1021,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.3006856023506366,
+      "reject_rate_of_total": 0.2998046875,
+      "threshold_ev_per_atom": 0.05
+    },
+    {
+      "cohort": "pu_negative",
+      "keep_rate_of_supported": 0.0673828125,
+      "n_abstain": 0,
+      "n_reject": 955,
+      "n_supported": 1024,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.9326171875,
+      "reject_rate_of_total": 0.9326171875,
+      "threshold_ev_per_atom": 0.05
+    },
+    {
+      "cohort": "experimental",
+      "keep_rate_of_supported": 0.7952987267384917,
+      "n_abstain": 3,
+      "n_reject": 209,
+      "n_supported": 1021,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.20470127326150833,
+      "reject_rate_of_total": 0.2041015625,
+      "threshold_ev_per_atom": 0.1
+    },
+    {
+      "cohort": "pu_negative",
+      "keep_rate_of_supported": 0.1318359375,
+      "n_abstain": 0,
+      "n_reject": 889,
+      "n_supported": 1024,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.8681640625,
+      "reject_rate_of_total": 0.8681640625,
+      "threshold_ev_per_atom": 0.1
+    },
+    {
+      "cohort": "experimental",
+      "keep_rate_of_supported": 0.861900097943193,
+      "n_abstain": 3,
+      "n_reject": 141,
+      "n_supported": 1021,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.13809990205680706,
+      "reject_rate_of_total": 0.1376953125,
+      "threshold_ev_per_atom": 0.2
+    },
+    {
+      "cohort": "pu_negative",
+      "keep_rate_of_supported": 0.2802734375,
+      "n_abstain": 0,
+      "n_reject": 737,
+      "n_supported": 1024,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.7197265625,
+      "reject_rate_of_total": 0.7197265625,
+      "threshold_ev_per_atom": 0.2
+    },
+    {
+      "cohort": "experimental",
+      "keep_rate_of_supported": 0.8971596474045054,
+      "n_abstain": 3,
+      "n_reject": 105,
+      "n_supported": 1021,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.10284035259549461,
+      "reject_rate_of_total": 0.1025390625,
+      "threshold_ev_per_atom": 0.3
+    },
+    {
+      "cohort": "pu_negative",
+      "keep_rate_of_supported": 0.396484375,
+      "n_abstain": 0,
+      "n_reject": 618,
+      "n_supported": 1024,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.603515625,
+      "reject_rate_of_total": 0.603515625,
+      "threshold_ev_per_atom": 0.3
+    },
+    {
+      "cohort": "experimental",
+      "keep_rate_of_supported": 0.9451518119490695,
+      "n_abstain": 3,
+      "n_reject": 56,
+      "n_supported": 1021,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.05484818805093046,
+      "reject_rate_of_total": 0.0546875,
+      "threshold_ev_per_atom": 0.5
+    },
+    {
+      "cohort": "pu_negative",
+      "keep_rate_of_supported": 0.5400390625,
+      "n_abstain": 0,
+      "n_reject": 471,
+      "n_supported": 1024,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.4599609375,
+      "reject_rate_of_total": 0.4599609375,
+      "threshold_ev_per_atom": 0.5
+    },
+    {
+      "cohort": "experimental",
+      "keep_rate_of_supported": 0.9833496571988247,
+      "n_abstain": 3,
+      "n_reject": 17,
+      "n_supported": 1021,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.01665034280117532,
+      "reject_rate_of_total": 0.0166015625,
+      "threshold_ev_per_atom": 1.0
+    },
+    {
+      "cohort": "pu_negative",
+      "keep_rate_of_supported": 0.8251953125,
+      "n_abstain": 0,
+      "n_reject": 179,
+      "n_supported": 1024,
+      "n_total": 1024,
+      "reject_rate_of_supported": 0.1748046875,
+      "reject_rate_of_total": 0.1748046875,
+      "threshold_ev_per_atom": 1.0
+    }
+  ],
+  "threshold_grid": [
+    0.0,
+    0.02,
+    0.05,
+    0.1,
+    0.2,
+    0.3,
+    0.5,
+    1.0
+  ],
+  "timing": {
+    "seconds_per_structure": 0.41890775621141074,
+    "total_seconds": 857.9230833649635
+  }
+}
