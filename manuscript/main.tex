@@ -8,6 +8,7 @@
 \usepackage{placeins}%   \FloatBarrier
 \usepackage{url}%
 \usepackage{siunitx}%
+\usepackage{bookmark}%  after the class's hyperref: lets the back matter sit at the root of the outline
 
 \input{layout_tune.tex}
 
@@ -60,6 +61,7 @@ generative models for materials, autonomous scientific discovery}
 
 \backmatter
 
+\bookmarksetup{startatroot}
 \bmhead{Data availability}
 Entries from the Inorganic Crystal Structure Database are not redistributable under
 the terms of the FIZ Karlsruhe licence and the European Union \emph{sui generis}
@@ -72,6 +74,7 @@ Data: one CIF per candidate, with an index giving its composition, its space
 group and distinct-site fraction both as generated and after relaxation, its
 synthesizability score, and its computed bulk modulus.
 
+\bookmarksetup{startatroot}
 \bmhead{Code availability}
 All analysis code, the pre-registration document and the figure-generation scripts
 are available at \url{https://github.com/AI4QC/PRIS}.
@@ -79,18 +82,24 @@ are available at \url{https://github.com/AI4QC/PRIS}.
 % Keep the reference list compact without changing its font or content.
 \begingroup
 \linespread{1.60}\selectfont
+\bookmarksetup{startatroot}
+\phantomsection
+\addcontentsline{toc}{section}{References}
 \bibliography{refs}
 \endgroup
 
+\bookmarksetup{startatroot}
 \bmhead{Acknowledgements}
 We gratefully acknowledge financial support from the HKUST Start-up Fund. We thank HKUST
 Fok Ying Tung Research Institute and National Supercomputing Center in Guangzhou Nansha
 Sub-center for computational resources.
 
+\bookmarksetup{startatroot}
 \bmhead{Author contributions}
 Z.S. and L.C. conceived the study. Z.S. built the agent workflow, analysed the results,
 performed the density functional theory calculations and wrote the manuscript. L.C.
 supervised the study and revised the manuscript.
 
+\bookmarksetup{startatroot}
 \bmhead{Competing interests} The authors declare no competing interests.
 \end{document}

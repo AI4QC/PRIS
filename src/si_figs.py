@@ -295,7 +295,9 @@ def si10_unguarded_band():
     整体搬自主图原 Fig. 3c;无守卫双侧带的三个数字取自 fig4_band.csv 的
     0.99 满足率行(two_excl / two_S4 / two_sat),与原面板逐位一致。
     """
-    fig, ax = plt.subplots(figsize=(12.6 * CM, 8.8 * CM))
+    # every other \textwidth SI figure is ~17.8 cm native and is therefore reduced by
+    # LaTeX; at 12.6 cm this one was enlarged 1.23x and printed larger than its neighbours
+    fig, ax = plt.subplots(figsize=(18.8 * CM, 8.8 * CM))
     fig.subplots_adjust(left=0.108, right=0.988, top=0.972, bottom=0.148)
 
     dis = _split("discovery")
@@ -303,7 +305,7 @@ def si10_unguarded_band():
     bd = bd[np.isclose(bd.floor, 0.99)].iloc[0]
 
     names = ["Set 1\nLaw 1 alone", "\n\nunconditional\ntwo-sided range",
-             "Set 1$'$\nLaw 1 + Law 2", "Set 2\n\nLaw 1, Law 3–Law 5",
+             "Set 1′\nLaw 1 + Law 2", "Set 2\n\nLaw 1, Law 3–Law 5",
              "Set 3\nLaw 1, Law 3–Law 6", "Set 4\n\nLaw 1, Law 3–Law 8"]
     tot = [float(dis.loc["L1", "excl"]), float(bd.two_excl),
            float(dis.loc["L1'", "excl"]), float(dis.loc["L2", "excl"]),

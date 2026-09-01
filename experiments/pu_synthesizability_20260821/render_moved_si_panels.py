@@ -189,7 +189,9 @@ def build_energy_phonon_record_figure() -> tuple[plt.Figure, dict[str, Any]]:
     merged.style()
     width_cm, height_cm = 10.0, 7.0
     fig = plt.figure(figsize=(width_cm * CM, height_cm * CM), facecolor="white")
-    grid = fig.add_gridspec(1, 1, left=0.16, right=0.97, bottom=0.16, top=0.97)
+    # the two series labels are annotated past the last x tick, and this bundle saves
+    # at the exact canvas size, so the axes must stop short of the right edge
+    grid = fig.add_gridspec(1, 1, left=0.16, right=0.86, bottom=0.16, top=0.97)
     outer = fig.add_subplot(grid[0])
     record = merged.panel_physical_states_si(
         outer,

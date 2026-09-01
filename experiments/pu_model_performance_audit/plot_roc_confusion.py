@@ -200,7 +200,7 @@ def render(output_dir: Path, raw_a: Path, raw_b: Path) -> dict:
     a = load_model(raw_a); b = load_model(raw_b)
     fig, _ = build_figure(a, b)
     stem = output_dir / "pu_models_roc_auc_confusion"
-    fig.savefig(stem.with_suffix(".pdf"), facecolor="white",
+    fig.savefig(stem.with_suffix(".pdf"), dpi=400, facecolor="white",
                 metadata={"Title": "PU model validation ROC and confusion matrices"})
     fig.savefig(stem.with_suffix(".svg"), facecolor="white")
     fig.savefig(stem.with_suffix(".png"), dpi=600, facecolor="white")

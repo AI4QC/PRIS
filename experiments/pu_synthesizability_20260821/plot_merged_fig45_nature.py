@@ -1541,7 +1541,7 @@ def render(output_dir: Path, *, ehull_path: Path | None = EHULL_DEFAULT,
         ),
     }
     stem = output_dir / "pris_fig45_merged_nature"
-    fig.savefig(stem.with_suffix(".pdf"), facecolor="white", metadata={"Title": "PRIS Figure 4 a-f"})
+    fig.savefig(stem.with_suffix(".pdf"), dpi=400, facecolor="white", metadata={"Title": "PRIS Figure 4 a-f"})
     fig.savefig(stem.with_suffix(".svg"), facecolor="white")
     fig.savefig(stem.with_suffix(".png"), dpi=600, facecolor="white")
     fig.savefig(stem.with_suffix(".tiff"), dpi=600, facecolor="white")
