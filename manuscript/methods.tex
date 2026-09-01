@@ -4,8 +4,9 @@
 
 The autonomous programme ran under one continuous analysis protocol from 27 July to
 14 August 2026. The multi-agent loop coordinated task assignment, parallel execution and
-result exchange but did not itself call a large language model (LLM). Instead, our agents did all their reasoning by calling Codex directly through our own
-\texttt{codex-api} client, which we built on the official OpenAI Python SDK
+result exchange but made no large language model (LLM) calls of its own. Our agents reasoned
+entirely by calling Codex through our own \texttt{codex-api} client, which we built on the
+official OpenAI Python SDK
 (\url{https://github.com/szl666/codex-api}). Codex used GPT-5.6-sol as its base model.
 Across multiple sessions, our agents proposed hypotheses, designed and ran analyses, wrote
 code, constructed checks and diagnosed failed claims in a shell with data access.
@@ -85,18 +86,17 @@ Sections~\ref{si-note:s3}, \ref{si-note:s17} and~\ref{si-note:s18}.
 
 The damaged structures came from five perturbations that preserved composition,
 stoichiometry and atom count: uniaxial compression, cation--cation exchange, random
-displacement, isotropic expansion and cation--anion exchange. Independent contact,
-electrostatic and MatterSim-relaxation checks measured their physical and energetic
-severity. We selected laws to maximise damage detection subject to an experimental-structure
+displacement, isotropic expansion and cation--anion exchange. We measured their physical and energetic
+severity with independent contact, electrostatic and MatterSim-relaxation checks. We selected laws to maximise damage detection subject to an experimental-structure
 satisfaction floor. Fixed Set~4 was then evaluated once on held-out data and compared with
 a provably optimal decision tree within the tested depth-three class. A separate
 threshold-transfer analysis re-derived each continuous cutoff at the corresponding held-out
 percentile and measured the resulting verdict changes.
 
-For leave-one-damage-class-out evaluation, tree and single-threshold selection were repeated
-completely. For Set~4 we reselected only its additions on a Set~3 base that had already seen all five
-classes, so this variant tests transfer of the added mechanisms, not de novo discovery. The distance-cutoff benchmark compared PRIS with fixed 0.5- and 0.7-\AA{}
-cutoffs and one matched to Set~4 satisfaction, on 440 experimental structures
+For leave-one-damage-class-out evaluation, we reran tree and single-threshold selection
+in full. For Set~4 we reselected only its additions on a Set~3 base that had already seen all five
+classes, so this variant tests transfer of the added mechanisms, not de novo discovery. The distance-cutoff benchmark compared PRIS against fixed 0.5- and 0.7-\AA{}
+cutoffs and one matched to Set~4 satisfaction, using 440 experimental structures
 and 2{,}024 composition-preserving damaged variants. Exact perturbation operators,
 search grids, physical checks, omitted-class boundaries and threshold-transfer results
 are in Supplementary Sections~\ref{si-note:s4}, \ref{si-note:s5}, \ref{si-note:s7},
@@ -108,23 +108,24 @@ and~\ref{si-note:s18}.
 With PRIS thresholds fixed, external evaluation covered GNoME and seven crystal generators,
 similar-element merging, MatterSim relaxation, coordinate-based checks and historical
 falsified depositions. Following a protocol fixed before computation, we sampled 5{,}000 of the 554{,}054
-released GNoME structures. Separate analyses relaxed 500 raw MatterGen outputs and compared
+released GNoME structures. We separately relaxed 500 raw MatterGen outputs and compared
 thermodynamic stability, dynamical stability and experimental record across 26{,}600
 Materials Project structures. Same-composition ranking covered 18{,}920 pairs spanning
-1{,}508 compositions, weighted compositions equally, excluded ties from binary accuracy and
-used composition-cluster bootstrap intervals.
+1{,}508 compositions. We weighted compositions equally, excluded ties from binary accuracy
+and used composition-cluster bootstrap intervals.
 
 PSS was fitted on development compositions as an antisymmetric, zero-intercept logistic
-score of the six standardised descriptors in equation~\ref{eq:pss}. Unavailable descriptors
-took frozen development-set medians. The score was evaluated once on held-out compositions
-before transfer. To test synthesizability trends, we trained a 50-bag CGCNN-PU model on
+score of the six standardised descriptors in equation~\ref{eq:pss}, with frozen
+development-set medians for unavailable descriptors. The score was evaluated once on
+held-out compositions before transfer. To test synthesizability trends, we trained a 50-bag CGCNN-PU model on
 99{,}162 experimental and 8{,}125{,}976 unlabelled structures. We independently trained 50 MLP PU
 heads on frozen 128-dimensional MatterSim-v1.0.0-1M representations
 \cite{jang2020structure,song2025llm,yang2024mattersim}. Consensus between the two models defined the
 hard-to-synthesize cohort. For inverse design, 13 independently seeded MatterGen runs
-conditioned at 400\,GPa yielded 1{,}081 unique candidates. Independent UMA bulk-modulus
-predictions defined the high-property subset, and 541 experimental high-property structures
-fixed the screening threshold, using the two PSS descriptors available for the candidates. Supplementary
+conditioned on a 400\,GPa bulk modulus yielded 1{,}081 unique candidates. Independent UMA
+bulk-modulus predictions defined the high-property subset, and 541 experimental
+high-property structures fixed the screening threshold on the two PSS descriptors available
+for the candidates. Supplementary
 Sections~\ref{si-note:s13}, \ref{si-note:s15}, \ref{si-note:pu-transfer},
 \ref{si-note:s17} and~\ref{si-note:s19} give the data sets, descriptors, imputation,
 coefficients, model validation, phase-hull construction, inverse-design checks and

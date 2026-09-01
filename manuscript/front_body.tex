@@ -5,33 +5,33 @@ Crystal discovery is shifting from generating candidate structures to deciding w
 predictions warrant calculation and experiment. High-throughput databases, crystal
 generators and tool-using agents
 \cite{jain2013commentary,merchant2023scaling,xie2022crystal,jiao2023crystal,sriram2024flowllm,antunes2024crystal,boiko2023autonomous,mbran2024augmenting}
-now supply candidates faster than density functional theory (DFT) calculations of
-thermodynamic energies and phonon spectra, or experiments, can assess them
+now supply candidates faster than experiment or density functional theory (DFT)
+calculations of thermodynamic energies and phonon spectra can assess them
 \cite{bartel2019new,petretto2018highthroughput,zhu2024highthroughput,szymanski2023autonomous}.
 Yet many generative pipelines test little more than a fixed
 minimum interatomic distance
 \cite{court20203d,xie2022crystal,jiao2023crystal,miller2024flowmm,betala2025lematgenbench},
-and avoiding gross overlap does not establish plausible coordination, electrostatics,
-bond valence or chemical ordering. A recent Comment argues that data alone will struggle to deliver materials discovery, and that AI
+and avoiding gross overlap does not make coordination, electrostatics,
+bond valence or chemical ordering plausible. A recent Comment argues that data alone will struggle to deliver materials discovery, and that AI
 must learn the chemical rules governing atomic arrangements \cite{smit2026dataonly}. What
 is missing is a rapid, interpretable set of laws for structural plausibility that identify
 the physical or chemical constraint a structure violates. Such laws would sit between elementary geometry and the
 costlier questions of thermodynamic stability, dynamical stability and synthesizability.
 
-Pauling's five rules offer a richer precedent. They connect ionic size, coordination,
-electrostatic valence and a preference for simpler structures. Requiring only a radius
+Pauling's five rules offer a richer precedent. They connect ionic size, coordination
+and electrostatic valence, and they favour simpler structures. Requiring only a radius
 table and formal charges, they exemplify a tradition of simple laws whose chemical
 reasoning can be examined directly
 \cite{pauling1929principles,goldschmidt1926gesetze,pettifor1984chemical,zunger1980systematization,hawthorne2014structure}.
 But these rules and the modern distance cutoff err in opposite directions. An audit found
 that only 13\% of about 5{,}000 oxides satisfied rules 2--5 together
-\cite{george2020limited}. In our evaluations, only 6.5\% of charge-balanced ionic
+\cite{george2020limited}, and in our evaluations only 6.5\% of charge-balanced ionic
 experimental structures did. At the opposite extreme, the 0.5- and 0.7-\AA{}
 minimum-distance cutoffs used in generative pipelines detected just 1.6\% and 3.2\% of
-chemically damaged structures. The classical
-rules, applied jointly, are too idealised, and the distance cutoff is
-inexpensive but element-blind. Experimental-structure satisfaction alone cannot show what
-a criterion rejects. A good law must keep experimental
+chemically damaged structures. Applied jointly, the classical
+rules are too idealised, and the distance cutoff is inexpensive but element-blind.
+Experimental-structure satisfaction alone cannot show what a criterion rejects. A good law
+must therefore keep experimental
 structures, detect damaged ones at a high rate and say why they are implausible.
 
 Two tests determine the value of such laws: whether they track synthesizability and whether
@@ -40,7 +40,6 @@ failures, so synthesizability has been estimated using crystal-likeness scores
 \cite{jang2020structure}, language models \cite{song2025llm} or recommendation engines
 \cite{griesemer2025wideranging}. None of them tests an explicit chemical law, so it remains unknown whether a structural
 criterion fitted without synthesis labels tracks synthesizability.
-
 The second test asks whether the structure handed to DFT or experiment is correct
 at all. Every later assessment assumes it is, yet prominent cases show that the chemistry
 can be misassigned.
@@ -51,7 +50,7 @@ to the artificial ordering of similar elements, such as rare-earth pairs and Zr-
 over sites that should be equivalent \cite{cheetham2024artificial,smit2026dataonly}. Chemical
 ordering also shaped A-Lab's success criterion, which accepted ordered and partially
 disordered products \cite{szymanski2023autonomous}. A reanalysis disputed several novelty
-and phase assignments \cite{leeman2024challenges}. An author correction later found
+and phase assignments \cite{leeman2024challenges}, and an author correction later found
 four of A-Lab's 40 successes inconclusive \cite{szymanski2026correction}.
 A more severe failure places the wrong element on a single site. Harrison and colleagues
 documented at least 70 falsified structures in which genuine diffraction data were paired
@@ -60,25 +59,24 @@ depositions records the same pattern across Cu, Ni, Mn and Fe labels
 \cite{iucr2012retraction}. Distance cutoffs and energy calculations examine neither
 chemical ordering nor elemental identity. That blind spot leaves two open cases: whether generated catalogues artificially order
 similar elements, and how a wrong occupant at plausible coordinates can pass existing
-structural screens. Closing either requires laws that name the failing
-physical variable.
+structural screens. Closing either requires laws that name the physical constraint that fails.
 
 Here we show that autonomous agents can discover such laws. Our agents received experimental
 structures \cite{zagorac2019recent,grazulis2009crystallography}, interpretable quantities
 and prescribed ways to damage a crystal. They generated, implemented and actively tested
-candidate laws. Because failed claims remained on record, refutation rather than proposal
-volume measured progress. Of two million candidate laws, eight survived: the Plausibility Rules
+candidate laws. Because failed claims remained on record, refutation, not proposal
+volume, measured progress. Of two million candidate laws, eight survived: the Plausibility Rules
 for Inorganic Structures (PRIS). Each law encodes one of five mechanisms: short-range
 repulsion, ionic contact and packing, electrostatic balance, bond-valence conservation and
 crystallographic site complexity. Every violation therefore identifies the mechanism that
-fails. Sets of these laws reached 82--99\% experimental-structure satisfaction. The
+fails. Sets of these laws reached 82--99\% experimental-structure satisfaction, and the
 strictest set detected 87.9\% of chemically damaged structures.
 No synthesis label entered the selection of the PRIS laws, yet PRIS plausibility is
 linearly correlated with synthesizability. Our agents' PRIS-derived synthesis score (PSS)
-screened 83.7\% of hard-to-synthesize structures while keeping 80.7\% of experimental ones.
-Every removal was traceable to a named mechanism. In an inverse-design task targeting a
+screened 83.7\% of hard-to-synthesize structures while keeping 80.7\% of experimental ones,
+and every removal was traceable to a named mechanism. In an inverse-design task targeting a
 high bulk modulus, explainable screening by PRIS and PSS reduced the DFT validation queue for
-MatterGen outputs by up to 67.3\%. The same screen kept 99.2\% of the
+MatterGen outputs by up to 67.3\%. That screen kept 99.2\% of the
 structures that reached the design target under DFT. The same mechanisms close both open cases: they trace GNoME's low-symmetry excess to
 artificial ordering and expose wrong-element assignments hidden behind plausible coordinates. PRIS thereby turns crystal screening from a
 pass-or-fail check into a chemical diagnosis. Autonomous agents required to refute their own claims can discover physicochemical laws

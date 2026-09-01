@@ -17,6 +17,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.patches as mp
+from matplotlib.lines import Line2D
 from pathlib import Path
 from pymatgen.core import Structure, Lattice
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
@@ -135,7 +136,7 @@ def verdicts(v, mode):
 COL = {"Mg": "#BD93D0", "Al": "#4178A6", "O": "#E7796D"}
 # spheres are drawn semi-transparent so the exchange rings read clearly
 SPHERE_ALPHA = 0.80
-RAD = {"Mg": 60, "Al": 52, "O": 88}
+RAD = {"Mg": 82, "Al": 72, "O": 120}
 P2C = [[-1, 1, 1], [1, -1, 1], [1, 1, -1]]     # fcc primitive -> cubic cell
 
 def render(ax, s, scale_ref=None, zoom=1.0):
@@ -200,8 +201,8 @@ def main():
     # Axes3D.apply_aspect, so the square side is what has to be budgeted.
     fx, fy = 1.0 / W2, 1.0 / FH                     # inch -> figure fraction
     SQ = 1.54                                       # cube square side (inch)
-    TITLE_B, READ_B, GAP_R = 0.19, 0.32, 0.12       # bands and inter-row gap
-    LINE = 0.135                                    # reading line pitch (inch)
+    TITLE_B, READ_B, GAP_R = 0.19, 0.36, 0.12       # bands and inter-row gap
+    LINE = 0.150                                    # reading line pitch (inch)
     rows_top = [1.0 - 0.06 * fy]
     rows_top.append(rows_top[0] - (TITLE_B + SQ + READ_B + GAP_R) * fy)
     # column centres: the left and right margins are equal and wide enough to
@@ -238,13 +239,28 @@ def main():
                       f"{readings[m]['d8']:.2f}")]
             col = "#0A5A3C"
         else:
-            # two readings to a line keeps every cell to at most two lines
+            # two readings to a line keeps every cell to at most two lines, but a
+            # pair of long names (D5's "like bonds" beside "sites") would run into
+            # the page edge, so the line is broken on width rather than on count
             items = [f"{n}  {s}" for n, s in v[:4]]
-            lines = ["  ·  ".join(items[i:i + 2]) for i in range(0, len(items), 2)]
+            SEP, BUDGET = "  ·  ", 45
+            # "$\\rho$" is six source characters and one glyph, so the budget is
+            # measured on what is drawn rather than on what is written
+            def drawn(s):
+                return len(s.replace("$\\rho$", "r"))
+            lines, cur = [], ""
+            for it in items:
+                trial = it if not cur else cur + SEP + it
+                if cur and drawn(trial) > BUDGET:
+                    lines.append(cur); cur = it
+                else:
+                    cur = trial
+            if cur:
+                lines.append(cur)
             col = "#CC4C43"
         for li, ln in enumerate(lines):
             fig.text(cx, cube_top - (SQ + 0.045 + LINE * li) * fy, ln,
-                     ha="center", va="top", fontsize=7.6, color=col)
+                     ha="center", va="top", fontsize=8.5, color=col)
 
     # ---- panel b: mechanism by damage type, all rows on the held-out split
     axb = fig.add_axes(RECT_B)
@@ -364,8 +380,15 @@ def main():
     # 行晶胞同高;这一列本来就是空的,因此不占任何图面预算,也不压任何图元。
     key_y = rows_top[0] - (TITLE_B + SQ / 2) * fy
     for ki, el in enumerate(("Mg", "Al", "O")):
-        fig.text(x_left, key_y + (1 - ki) * 0.155 * fy, "●  " + el,
-                 ha="left", va="center", fontsize=7.6, color=COL[el])
+        y = key_y + (1 - ki) * 0.185 * fy
+        # the dot is drawn as a marker, not as a text bullet, so that the sphere
+        # and its label can be sized independently of each other
+        fig.add_artist(Line2D([x_left + 0.006], [y], marker="o", markersize=7.0,
+                              color=COL[el], markeredgecolor="#212224",
+                              markeredgewidth=0.3, linestyle="none",
+                              transform=fig.transFigure))
+        fig.text(x_left + 0.020, y, el, ha="left", va="center",
+                 fontsize=8.5, color=COL[el])
 
     for ext_ in ("pdf", "png"):
         fig.savefig(OUT / f"fig3_anatomy.{ext_}")

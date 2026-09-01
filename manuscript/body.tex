@@ -14,10 +14,10 @@ calculate and try to disprove: one that experimental structures satisfy but pres
 perturbations of them violate. Autonomous agents propose such
 statements rapidly, but only testing rules out the false explanations for an apparent
 success. Our
-agents proposed and implemented hypotheses, and selected thresholds on a discovery split.
-They then designed counterexamples and attempted refutation with held-out data and physical
+agents proposed and implemented hypotheses and selected thresholds on a discovery split, then
+designed counterexamples and attempted refutation with held-out data and physical
 checks (Fig.~\ref{fig:loop}a). Refuted claims remained in the record as diagnostics for
-the next cycle, making that search a sequence of falsifiable experiments (Supplementary
+the next cycle, so these cycles formed a sequence of falsifiable experiments (Supplementary
 Figs.~\ref{si-sifig:ledger} and~\ref{si-sifig:modes}).
 
 \begin{figure}[p]
@@ -42,25 +42,25 @@ Figs.~\ref{si-sifig:ledger} and~\ref{si-sifig:modes}).
   each set.
   \textbf{e},~Running best held-out performance versus investigation index: damage
   detection subject to the satisfaction floor (blue) and the smaller of satisfaction and
-  detection (green). The inset enlarges the earliest investigations. The strip beneath
+  detection (green). The inset enlarges the earliest investigations, and the strip beneath
   shows investigation outcomes.}
   \label{fig:loop}
 \end{figure}
 
 We drew fixed splits from 99{,}162 experimental ionic structures in the
 ICSD and COD \cite{zagorac2019recent,grazulis2009crystallography} (details in Methods and Supplementary
-Fig.~\ref{si-sifig:ranking-data}). Each damaged structure
-came from an experimental parent by a known displacement, strain or element exchange.
+Fig.~\ref{si-sifig:ranking-data}). We generated each damaged structure
+from an experimental parent by a known displacement, strain or element exchange.
 Across 572 investigations spanning plausibility, stability and synthesis, our agents
 logged 2{,}037{,}606 candidate evaluations (Fig.~\ref{fig:loop}b,c). Every additional check
-gave a passing claim another way to fail. Eleven initially successful conclusions later
-failed these checks (Supplementary Section~\ref{si-note:s6}). The failures arose from misleading metrics
+gave a passing claim another way to fail, and eleven initially successful conclusions
+later failed these checks (Supplementary Section~\ref{si-note:s6}). The failures arose from misleading metrics
 or class imbalance, laws recognising the perturbation procedure, and implementation errors.
 The best law set improved only four times, the
 last after more than five hundred investigations (Fig.~\ref{fig:loop}e). Eight one-line laws survived these two
-million evaluations and form PRIS.
+million evaluations and now form PRIS.
 
-The eight laws bundle into nested sets, each demanding a fuller model of an ionic crystal
+The eight laws fall into nested sets, each demanding a fuller model of an ionic crystal
 (Fig.~\ref{fig:loop}d): a hard-sphere contact floor (Set~1); the two-sided contact window in ionic
 compounds (Set~1$'$); the rigid-ion lattice with packing and Madelung laws (Set~2); that
 lattice as a charge-consistent bond network (Set~3); and full crystal chemistry with
@@ -76,9 +76,9 @@ benchmark convention (details in Methods). Damage detection is the fraction of d
 marked implausible by at least one law. A loose law that every structure satisfies scores
 100\% satisfaction and 0\% detection. A strict law that rejects every structure scores
 0\% satisfaction and 100\% detection. Both measurements are needed
-(Fig.~\ref{fig:rules}a). Charge neutrality is a composition-only baseline and detected no
-damage because every perturbation preserves composition. Fixed minimum-distance cutoffs are
-element-blind and detected little damage.
+(Fig.~\ref{fig:rules}a). Charge neutrality, a composition-only baseline, detected no
+damage because every perturbation preserves composition. Fixed minimum-distance cutoffs, which are
+element-blind, detected little damage.
 
 Law~1 replaces the fixed distance with the radius-scaled reduced contact:
 \begin{equation}
@@ -122,9 +122,9 @@ Figure~\ref{fig:loop}d lists the laws in each set and their thresholds. A
 structure not meeting a trigger condition satisfies that conditional law. A structure
 lacking a required input in deployment receives no verdict rather than a pass (details in Methods).
 
-A single contact floor encodes only the repulsive wall. Expansion lengthens rather than
-shortens contacts. A cation--anion exchange can leave every coordinate unchanged. Distinct
-failures can share the same closest distance. Set~2 therefore judges the rigid-ion lattice,
+A single contact floor encodes only the repulsive wall, but expansion lengthens rather than
+shortens contacts, and a cation--anion exchange can leave every coordinate unchanged. Because
+distinct failures can share the same closest distance, Set~2 judges the rigid-ion lattice,
 and Set~3 the bond network. On held-out data Set~3 reached
 91.7\% satisfaction and 70.0\% damage detection, above 55.2\% in every damage class.
 Relative to Set~1, it detected nearly two and a half times as much damage. The cost was
@@ -132,7 +132,7 @@ rejecting one experimental structure in twelve rather than one in a hundred and 
 Set~4 trades satisfaction for detection by adding a permissive bond-valence-deviation law
 and an empirical distinct-site-fraction law. It reached 81.8\% satisfaction and 91.1\%
 overall detection, with at least 73.4\% in every class (Fig.~\ref{fig:rules}b and
-Supplementary Figs.~\ref{si-sifig:perclass} and~\ref{si-sifig:amplitude}). Set~4 detected more by combining laws against different failures, not by tightening one
+Supplementary Figs.~\ref{si-sifig:perclass} and~\ref{si-sifig:amplitude}). Set~4 detected more by combining laws that target different failures, not by tightening one
 cutoff.
 
 Neither familiar criterion reaches this balance: the distance cutoff detects too little
@@ -162,19 +162,19 @@ experimental-structure satisfaction and 91.9\% damage detection
   \textbf{c},~Satisfaction of Pauling rules 2--5, individually and jointly (grey), and of
   the five law sets (colours) on the same held-out structures.
   \textbf{d},~Law thresholds re-derived at their defining percentiles on held-out data,
-  shown as the ratio to the frozen values. Unity means no change. The right-hand
+  shown as the ratio to the frozen values, with unity meaning no change. The right-hand
   column gives the percentage of held-out experimental-structure verdicts that change.
   The inset compares verdict changes for experimental and chemically damaged structures on
-  a common percentage scale. The dashed line marks equality. Marker shape identifies the
-  law in both the main panel and inset.}
+  a common percentage scale, where the dashed line marks equality. Marker shape identifies
+  the law in both the main panel and inset.}
   \label{fig:rules}
 \end{figure}
 \FloatBarrier
 
 Thresholds shifted between the splits, but verdicts changed little. At the same held-out
 percentiles, the contact, packing and bond-valence thresholds moved by at most 1.5\%. The two
-electrostatic thresholds moved further (details in Methods). These larger shifts changed 5.0--7.8\% of chemically damaged verdicts but only
-0.25--0.33\% of experimental-structure verdicts (inset, common 0--20\% scale).
+electrostatic thresholds moved further (details in Methods). These larger shifts changed 5.0--7.8\% of verdicts on chemically damaged structures but only
+0.25--0.33\% on experimental structures (inset, common 0--20\% scale).
 Law~7 changed similar fractions in the two populations (3.2\% and 2.9\%, respectively;
 Fig.~\ref{fig:rules}d). Separating mechanism from threshold keeps the laws testable rather than
 reducing them to an opaque fitted score. Supplementary Figs.~\ref{si-sifig:threshold},
@@ -188,12 +188,12 @@ Structural implausibility arises through a few physical mechanisms, and each PRI
 written to test exactly one of them. Short-range repulsion (Law~1), ionic contact (Law~2)
 and packing (Law~3) describe geometry. Electrostatic balance (Law~4--Law~6), bond-valence
 conservation (Law~8) and crystallographic site complexity (Law~7) describe complementary
-chemical and symmetry constraints without imposing a hierarchy. Figure~\ref{fig:anatomy}a
-shows their responses to five chemically damaged variants of MgAl$_2$O$_4$. The Mg--Al exchange
-approximates natural inverse-spinel order. Uniaxial compression lowers \rhoc{} from 0.99 to
-0.76, whereas isotropic expansion raises it to 1.28, beyond the 1.05 ceiling of Law~2. A
+chemical and symmetry constraints without imposing a hierarchy. Figure~\ref{fig:anatomy}a shows their responses to five chemically damaged variants of
+MgAl$_2$O$_4$, including an Mg--Al exchange that approximates natural inverse-spinel order.
+Uniaxial compression lowers \rhoc{} from 0.99 to 0.76, whereas isotropic expansion raises it
+to 1.28, beyond the 1.05 ceiling of Law~2. A
 cation--anion exchange leaves \rhoc{} at 0.99 but creates eight like-charge bonds. No single
-distance quantity represents all five mechanisms. Each unsatisfied law
+distance quantity captures all five mechanisms. Each unsatisfied law
 names both the measured quantity and its mechanism.
 
 \begin{figure}[tp]
@@ -221,24 +221,24 @@ The first mechanism, at the shortest length scale, is short-range repulsion, enc
 Law~1. Coulomb attraction varies as \(1/d\), whereas closed-shell repulsion rises
 approximately exponentially under compression \cite{born1932gittertheorie}, so a
 sufficiently short ion pair is unlikely in an unconstrained local minimum
-(Fig.~\ref{fig:anatomy}c). A floor, however, cannot detect expansion. In a
+(Fig.~\ref{fig:anatomy}c). A floor cannot detect expansion, but in a
 sufficiently ionic compound (\fion{} above 0.50) at least one cation--anion contact
 should approach the radius sum \cite{hawthorne2026crystal}. Law~2 therefore marks a
 shortest contact beyond 1.05 times that sum as unusually open. Within this domain, 96.25\% of
 expanded discovery-split structures exceeded that ceiling, compared with 0.62\% of
 experimental ionic structures. Law~3 limits packing differently: it caps the mean
-reduced cation--anion contact at 1.081 when mean anion coordination is at most 3.333. Low coordination with long contacts marks an open environment, so Law~3
+reduced cation--anion contact at 1.081 when mean anion coordination is at most 3.333. Low coordination with long contacts indicates an open environment, so Law~3
 detects expansion without Law~2's ionic-character requirement.
 
-Packing laws cannot detect a wrong-site exchange that changes no coordinate. Law~4--Law~6
+Geometry alone cannot detect a wrong-site exchange that changes no coordinate. Law~4--Law~6
 instead look for three failures of electrostatic balance
 \cite{ewald1921berechnung,hoppe1979effective}. Law~4 limits the range of site Madelung
 energy divided by valence magnitude. Law~5 limits the largest site Madelung energy and catches a
 single strongly destabilised site. For \fion{} above 0.55, Law~6 permits no like-charge
 bond and therefore catches a cation--anion exchange that leaves the distance matrix
 unchanged.
-An Ewald sum does not test whether local bonds supply each ion's expected valence. Law~8
-does. Bond valences decay exponentially with distance: expansion
+An Ewald sum does not test whether local bonds supply each ion's expected valence, but
+Law~8 does. Bond valences decay exponentially with distance: expansion
 lowers a site's sum, whereas compression or a wrong-site exchange can create an excess
 \cite{brown2009recent,brese1991bond}. Across discovery and held-out structures with finite values,
 the median of the mean relative deviation from nominal valence was 0.094 for experimental
@@ -250,22 +250,21 @@ Moving atoms or reassigning elements often makes equivalent environments unique,
 experimental structures keep that fraction low. Law~7 thus turns Pauling's
 preference for structural simplicity into an empirical chemical-order law. Each added
 mechanism fills detection gaps that the earlier laws leave open in the held-out population
-(Fig.~\ref{fig:anatomy}b). Together they turn screening into diagnosis by indicating
-whether the next check concerns ionic size, oxidation state, site occupancy, local
-bonding or symmetry. Because these laws are physical rather than fitted, they should decide plausibility
+(Fig.~\ref{fig:anatomy}b). Together they turn screening into diagnosis by pointing the next
+check at ionic size, oxidation state, site occupancy, local bonding or symmetry. Because these laws are physical rather than fitted, they should decide plausibility
 before any relaxation is run.
 
 \subsection{Screening candidates before expensive calculations}
 \label{sec:certified}
 
 Plausibility can be decided only from quantities an unrelaxed structure
-already carries. In a validation queue, where generators outpace the calculations that
-relax and rank their output, we benchmarked PRIS against
+already carries. In a validation queue, generators outpace the calculations that
+relax and rank their output, so we benchmarked PRIS against
 the 0.5- and 0.7-\AA{} cutoffs used in generator pipelines
 \cite{xie2022crystal,betala2025lematgenbench} (details in Methods). These distance cutoffs detected only
 1.6--3.2\% of the damage. On this benchmark, Set~4 reached 83.0\% satisfaction and detected
-87.9\% of the damage (Fig.~\ref{fig:validation-synthesis}a). Tightened to the
-same satisfaction, a distance cutoff still detected 2.6-fold less damage than Set~4 (details in Methods).
+87.9\% of the damage (Fig.~\ref{fig:validation-synthesis}a). Set~4 still detected
+2.6-fold more damage than a distance cutoff tightened to the same satisfaction (details in Methods).
 An aggregate rate could be dominated by one easily detected perturbation, but
 class-resolved rates ruled that out. Every mechanism detected the classes used to select it
 and, more tellingly, classes withheld from that selection
@@ -275,7 +274,7 @@ Figs.~\ref{si-sifig:loko} and~\ref{si-sifig:validation-boundary-omission}a,b).
 
 \label{sec:pauling}\label{sec:database}\label{sec:scores}\label{sec:formulas}
 
-A plausible crystal must still cross the synthesizability barrier. Ranking synthesizability requires a
+A plausible crystal must still be made, and ranking candidates by synthesizability requires a
 continuous companion to the discrete PRIS laws. Our agents therefore fitted the
 PRIS-derived synthesis score (PSS) on development pairs of recorded and computed-only
 polymorphs with the same composition (details in Methods). The fitted score is
@@ -291,12 +290,12 @@ polymorphs with the same composition (details in Methods). The fitted score is
 \end{equation}
 The six terms, defined in Methods, are atomic volume, Madelung environment, bond-valence
 deviation, distinct-site fraction, maximum cation-polyhedron connectivity and the fraction
-of isolated cation polyhedra. The last two terms describe connectivity. Atomic volume has
+of isolated cation polyhedra. The last two describe connectivity, and atomic volume has
 the dominant negative coefficient, favouring density. Refitting on random halves of the
 development structures reproduces the ranking and sign of every coefficient. The six terms
 are correlated without being redundant (Supplementary
 Figs.~\ref{si-sifig:pss-coefficient-stability} and~\ref{si-sifig:pss-term-correlation}). A
-higher PSS marks a structure as easier to synthesize. Testing this
+higher PSS marks a structure as easier to synthesize, and testing that
 interpretation requires structures unlikely to be synthesized.
 
 Labelled examples of such structures are scarce because databases record many successes
@@ -304,16 +303,16 @@ but few definitive failures. Positive--unlabelled (PU) learning estimates crysta
 through CLscore \cite{jang2020structure,song2025llm}. We trained two scorers on
 experimental structures and an unlabelled LeMat and ELEMENTA pool
 \cite{ramlaoui2025lemat,elementa2025dataset}. CGCNN-PU is a crystal
-graph convolutional network with PU heads, and learns its
+graph convolutional network with PU heads that learns its
 representation within the synthesis task. The second model, MatterSim-1M-MLP-PU, instead freezes the representations of a universal
 potential \cite{yang2024mattersim} and trains only the PU heads (details in Methods).
 Agreement between these distinct routes reduces the risk of a model-specific artefact. The
 364{,}592 unique structures ranked lowest by both machine-learning models are therefore
-treated as hard-to-synthesize structures.
+treated as the hard-to-synthesize cohort.
 
 Set~4 and PSS answer different questions, and on the hard-to-synthesize cohort they
-proved complementary. Set~4 screened
-51.9\% of this cohort at 80.7\% experimental satisfaction. At the same satisfaction, PSS
+proved complementary. At 80.7\% experimental
+satisfaction, Set~4 screened 51.9\% of this cohort, whereas PSS
 screened 83.7\%
 (Fig.~\ref{fig:validation-synthesis}c and Supplementary
 Fig.~\ref{si-sifig:l4-contribution}a,b). A threshold on the MatterSim-computed energy above the convex hull,
@@ -327,7 +326,7 @@ Any relation with CLscore would be unexpected, because no synthesis label or PU 
 entered the discovery of Law~1--Law~8. Both PU models gave the same directional relation
 (details in Methods, Fig.~\ref{fig:validation-synthesis}d and Supplementary
 Fig.~\ref{si-sifig:pu-model-performance}a--d). Across CLscore deciles, mean Set~4 violation
-fell from 50.3\% to 30.4\%. Mean PSS rose from $-11.37$ to $-0.18$. Linear fits of mean
+fell from 50.3\% to 30.4\% while mean PSS rose from $-11.37$ to $-0.18$. Linear fits of mean
 PSS against decile index had $R^2=0.99$ for CGCNN-PU and $0.92$ for
 MatterSim-1M-MLP-PU. Plausibility and predicted
 synthesizability are linearly related across the population, but that link need not order
@@ -345,13 +344,13 @@ individual structures.
   for Set~1--Set~4, the PSS threshold sweep, distance cutoffs (grey squares) and a
   sweep over a MatterSim-computed hull-energy threshold (slate-grey triangles). Connectors
   join Set~4 and PSS at matched satisfaction.
-  \textbf{d},~Set~4 violation and mean PSS across within-model CLscore percentiles for
+  \textbf{d},~Set~4 violation and mean PSS across within-model CLscore deciles for
   CGCNN-PU, MatterSim-1M-MLP-PU and their pointwise mean. Shading spans each model's
   interquartile PSS range. Each panel gives the coefficient of determination for each
-  model's straight-line fit in the decile index.
+  model's straight-line fit against the decile index.
   \textbf{e},~Held-out same-composition pair accuracy for PSS and DFT
-  \(E_{\mathrm{hull}}\) as higher-confidence fractions are retained (shading, confidence
-  intervals).
+  \(E_{\mathrm{hull}}\) against the fraction of most-confident pairs retained (shading,
+  confidence intervals).
   \textbf{f},~Across PSS thresholds, DFT-validation queue reduction versus retention of
   candidates that the universal machine-learned interatomic potential (UMA) predicts to
   have bulk modulus \(\geq400\)\,GPa; the Set~4 operating point is marked. The inset
@@ -369,8 +368,8 @@ structure could exist, whereas synthesis planning asks which credible polymorph 
 satisfy the same broad laws (details in Methods and Supplementary
 Fig.~\ref{si-sifig:polymorph-ranking}a--c). Our own refutation step caught an error in the first
 analysis: our agents had counted ties as ranking failures, making Pauling's rules appear
-anti-predictive. Our agents then proposed a symmetry explanation. Auditing the same pairs within composition
-refuted it. Treating ties as no decision removed the artefact.
+anti-predictive. Our agents then proposed a symmetry explanation, but auditing the same pairs within
+composition refuted it. Treating ties as no decision removed the artefact.
 The laws delimit a plausible region without ordering it. Within that region, PSS identified
 the recorded polymorph in each pair with 68.1\% accuracy, compared with 75.0\% for DFT
 \(E_{\mathrm{hull}}\) (details in Methods). On the most confident fifth of pairs, however, PSS reached 94.4\%
@@ -380,11 +379,10 @@ high-confidence candidates first and leave the closer energy comparisons to DFT.
 We conditioned independently seeded MatterGen runs on a bulk modulus of
 400\,GPa. The runs yielded 1{,}081 unique, unrelaxed structures (details in Methods). UMA, a universal
 machine-learned interatomic potential trained on no data from this work
-\cite{wood2025uma}, predicted each candidate's bulk modulus. UMA placed 140 candidates at or
+\cite{wood2025uma}, predicted each candidate's bulk modulus and placed 140 of them at or
 above the target. For the generated candidates, only the site-complexity and
 atomic-volume terms of PSS were available. We therefore calibrated a PSS threshold on
-experimental structures using those two terms (details in Methods). That threshold removed 61
-candidates from the queue. Because the score is continuous, that threshold is an operating point rather than a fixed rule. Across the threshold's range,
+experimental structures using those two terms (details in Methods). That threshold removed 61 candidates from the queue, but because the score is continuous, it is an operating point rather than a fixed rule. Across the threshold's range,
 PRIS and PSS reduce the DFT validation queue by up to 67.3\%, and its setting
 decides how many high-property candidates survive.
 
@@ -399,7 +397,7 @@ cuts the queue by up to 67.3\%
 Fig.~\ref{si-sifig:dft-e4-bulk}).
 Under DFT relaxation, sites that differ only in unconverged coordinates should merge, never
 split further. On the generator's coordinates, 61
-of the 260 candidates satisfied Law~7. After DFT relaxation, 113 satisfied it. No candidate
+of the 260 candidates satisfied Law~7, and after DFT relaxation, 113 satisfied it. No candidate
 moved in the opposite direction. Every additional Law~7 pass occurred among candidates
 retained by PSS (Supplementary Fig.~\ref{si-sifig:dft-e4-composition}).
 
@@ -414,9 +412,9 @@ Ir$_2$Os$_7$ candidate has P1 symmetry, 18 distinct sites among 18,
 four distinct sites among nine, \(V/N=14.327\)\,\AA$^3$ and a PSS of 1.245. Complete site
 splitting with open packing again characterises the removed structures.
 Because the discrete laws cannot weigh packing against site complexity, their operating
-points span two extremes. Set~1--Set~3 retained all 140 high-property candidates but reduced
+points fall at two extremes. Set~1--Set~3 retained all 140 high-property candidates but reduced
 the queue by only 0--0.4\%. Set~4 reduced it by 67.3\% but lost most of those candidates
-(details in Methods). Within the Set~4-violating subset, PSS screened structures that combined maximal
+(details in Methods). Within the Set~4-violating subset, PSS screened structures that combined complete
 site splitting with open packing. PSS retained 140 of 140 high-property candidates, including every one that Set~4 would
 remove. These tunable PRIS and PSS operating points gave an
 explainable reduction of the DFT validation queue by up to 67.3\%. PRIS
@@ -445,7 +443,7 @@ first on public generators (Fig.~\ref{fig:deploy}).
   \textbf{a},~Minimum-distance-cutoff satisfaction versus Set~4 satisfaction among
   charge-assignable outputs from seven generators and from MP-20, the usual benchmark for
   these generators (green diamond). Filled circles mark generation without
-  imposed symmetry, open squares symmetry-constrained generation. Nearly
+  imposed symmetry, and open squares mark symmetry-constrained generation. Nearly
   coincident markers are offset and connected to their true coordinates.
   \textbf{b},~Upper, fraction of the GNoME sample failing Law~7 by source space group; the
   dashed line gives the whole-sample fraction. Lower, DFT order--disorder temperatures for
@@ -467,7 +465,7 @@ first on public generators (Fig.~\ref{fig:deploy}).
   KErBr$_4$ parent, with damage detection for four reimplemented coordinate checks
   and for the six PRIS laws on the same parent-matched exchanges.
   \textbf{f},~Measured CPU time per structure for Law~1 and for all eight laws, with the
-  literature-scale DFT-relaxation estimate (dashed). The upper axis converts the same
+  DFT-relaxation estimate from the literature (dashed). The upper axis converts the same
   values to total time for the displayed queue.}
   \label{fig:deploy}
 \end{figure}
@@ -487,17 +485,13 @@ Every generator in the higher-satisfaction group builds its outputs on Wyckoff p
 so the construction, not the sampler, decides how many outputs satisfy Set~4.
 
 Law~7 needs no charge assignment, so it can audit a whole catalogue. We examined 5{,}000 uniformly drawn GNoME structures under a pre-fixed protocol
-(details in Methods). Overall, 40.64\% failed Law~7, including all \(P1\) structures. \(Pm\) and
-\(Cm\) structures were nearly as affected (Fig.~\ref{fig:deploy}b, upper; details in Methods; charge-law
+(details in Methods). Overall, 40.64\% failed Law~7, including all \(P1\) structures, with \(Pm\) and \(Cm\) structures failing nearly as often (Fig.~\ref{fig:deploy}b, upper; details in Methods; charge-law
 coverage in Supplementary Fig.~\ref{si-sifig:charge-coverage}). Severe strain could mimic
 this pattern, so we relaxed the same cells with MatterSim \cite{yang2024mattersim} to
 measure the energy released by real damage. For the 150
 unmodified GNoME parents, the median energy released on relaxation was less than
 0.001\,eV per atom. Their compressed and displaced counterparts released
-medians of 0.22 and 6.05\,eV per atom, respectively (Fig.~\ref{fig:deploy}c). To test whether
-this separation belongs to the structures rather than to the MatterSim potential, we
-recomputed 200 cells with DFT. MatterSim and DFT agreed at a Spearman rank
-correlation of 0.953. Under DFT, twenty unmodified GNoME parents released a median of
+medians of 0.22 and 6.05\,eV per atom, respectively (Fig.~\ref{fig:deploy}c). To test whether this separation reflects the structures rather than the MatterSim potential, we recomputed 200 cells with DFT. MatterSim and DFT agreed, with a Spearman rank correlation of 0.953. Under DFT, twenty unmodified GNoME parents released a median of
 0.0001\,eV per atom (dashed curve in Fig.~\ref{fig:deploy}c; Supplementary
 Fig.~\ref{si-sifig:dft-e3-paired}).
 
@@ -506,19 +500,17 @@ MatterGen outputs grouped by their Set~4 verdict (details in Methods), it did no
 plausibility. Failures released a median of 0.007\,eV per atom, close to
 the 0.006\,eV per atom of the no-verdict group and far below both damage regimes
 (Fig.~\ref{fig:deploy}d). Small relaxation energy therefore rules out gross strain but not
-electrostatic, bond-valence or site-complexity failures. One chemical explanation remained
-to test: if artificial ordering creates the extra sites, merging similar species
-should restore equivalence.
+electrostatic, bond-valence or site-complexity failures. One chemical explanation remained untested: if artificial ordering creates the extra sites, merging similar species should restore equivalence.
 
 We replaced chemically similar elements with one shared label. Of 150
 sampled Law~7-failing entries, 113 contained a mergeable pair. At a symmetry tolerance of
 0.1\,\AA{}, merging brought the distinct-site fraction to the Law~7 threshold or below in 78\% of
 these entries. It raised the space-group symmetry in 79\%, a change that none of 27
 mergeable experimental entries showed. Artificial ordering therefore explains much of the
-sampled pattern and answers the controversy for these entries: changing labels restores
+sampled pattern and resolves the controversy for these entries: changing labels restores
 equivalence without moving an atom.
 
-An artificial ordering should cost nothing to permute. DFT relaxed every
+An artificial ordering should cost nothing to permute. We relaxed with DFT every
 symmetry-distinct ordering of 23 such entries and 10 experimental structures. Scrambling a
 GNoME entry's ordering cost a median of 0.0001\,eV per atom, compared with 0.036\,eV per
 atom for the experimental structures. The orderings became
@@ -529,18 +521,17 @@ Fig.~\ref{si-sifig:dft-e2-ordering}). These energies put a number on the critiqu
 nearly indistinguishable elements \cite{smit2026dataonly}.
 
 The converse error leaves the geometry intact but assigns the wrong element to a fixed
-site.
-Wrong-element assignment has an experimental precedent. Harrison and colleagues reported at least 70
+site, and it has an experimental precedent. Harrison and colleagues reported at least 70
 falsified structures in which genuine diffraction intensity data were reused after atomic
 or metal identities were changed \cite{harrison2010falsified}. Hirshfeld rigid-bond alerts
-and anomalous metal--ligand distances first exposed the problem. Structure-factor
-comparisons then confirmed it \cite{harrison2010falsified}. An element exchange at fixed coordinates redistributes formal charges, Madelung energies
+and anomalous metal--ligand distances first exposed the problem, which structure-factor
+comparisons then confirmed \cite{harrison2010falsified}. An element exchange at fixed coordinates redistributes formal charges, Madelung energies
 and bond valences. Because those falsifications could also alter cell parameters and delete
 reflections, we isolated chemical identity by exchanging species while holding the lattice
 and every coordinate fixed.
 
 On these parent-matched exchanges, we compared six PRIS laws (Law~1 and Law~4--Law~8)
-with four reimplemented coordinate-computable check families \cite{spek2009structure}
+with four reimplemented families of coordinate checks \cite{spek2009structure}
 (Supplementary Section~\ref{si-note:s17}). The coordinate checks detected 19 of 69
 cation--cation exchanges (27.5\%) and 40 of 83 cation--anion exchanges (48.2\%).
 PRIS detected 62 of 69 cation--cation exchanges (89.9\%) and 82 of 83 cation--anion
@@ -548,8 +539,8 @@ exchanges (98.8\%; Fig.~\ref{fig:deploy}e). PRIS catches what the coordinate che
 depend on chemical identity even when no atom moves.
 The same mechanisms recur in a recovered archive of retracted depositions. Four evaluable
 entries share one M(C$_2$H$_2$N$_3$Cl) framework, with M labelled Cu, Ni, Mn or Fe
-\cite{iucr2012retraction}. Each entry gave \rhoc{} = 0.53 and a mean bond-valence
-deviation of 0.77--0.78, violating Law~1 and Law~8.
+\cite{iucr2012retraction}. The entries all gave \rhoc{} = 0.53 and mean bond-valence
+deviations of 0.77--0.78, violating Law~1 and Law~8.
 
 These diagnoses run on the structure as given, cheaply enough for routine use. Law~1
 evaluates 10{,}000 cells of 6--20 atoms in under one second. All eight laws on the
@@ -561,7 +552,7 @@ laboratories can run this screen before expensive validation, and each violation
 mechanism to review.
 
 What survives that screen still faces thermodynamic stability, dynamical stability and
-synthesis. These three do not track one another. On published phonon data
+synthesis, three assessments that do not track one another. On published phonon data
 \cite{petretto2018highthroughput,zhu2024highthroughput}, 35.6\% of on-hull structures had
 imaginary modes. Among recorded entries, 41.7\% were metastable. Conversely, 4{,}271
 unrecorded entries were dynamically stable and within 50\,meV per atom of the hull (details in Methods).
@@ -575,9 +566,9 @@ comes first rather than competing with them.
 PRIS acts at three levels of decision: the validation queue, the database and the
 individual site. At the queue level, population-derived conditional laws bridge the
 restrictive Pauling rules and permissive distance cutoffs. A binary screen can legitimately
-tie polymorphs within the plausible region. PSS or energy then ranks them. At the database
+tie polymorphs within the plausible region, leaving PSS or energy to rank them. At the database
 level, Law~7 and label merging both trace part of GNoME's low-symmetry excess to site
-splitting by artificial ordering. This is the mechanism at issue in the ordering
+splitting by artificial ordering, the mechanism at issue in the ordering
 controversy. At the site level, charge- and bond-valence-sensitive laws expose an incorrect
 occupant at fixed coordinates. Coordinate-based screening cannot detect this failure.
 
@@ -585,8 +576,7 @@ Our discovery, benchmark and external tests establish structural plausibility as
 an independent layer of assessment. This layer asks whether an arrangement obeys
 physicochemical laws at all, so it precedes thermodynamic stability, dynamical
 stability and synthesizability. These distinct questions cannot be collapsed into one
-reconciling score.
-The structural-plausibility check returns a falsifiable diagnosis, not a score.
+reconciling score, so the structural-plausibility check returns a falsifiable diagnosis instead.
 Set~1--Set~4 demand a fuller model of the crystal as a task's risk rises. The
 five mechanisms remain separate, with no imposed hierarchy, and every unsatisfied law names
 the failure mechanism.
@@ -595,12 +585,12 @@ The five mechanisms also reach beyond plausibility. Laws discovered without synt
 agree with two contrasting PU models, revealing an unexpected population-level link to
 predicted synthesizability. PSS turns that link into a continuous, tunable score. In inverse
 design, PSS weighs competing mechanisms: dense packing moderates a Law~7 warning, and the
-structures it removes combine complete site splitting with open
+structures PSS removes combine complete site splitting with open
 packing. Together, PRIS and PSS link each anomaly to a measurable physical quantity
 and remove chemically suspect candidates before expensive computation begins.
-Beyond queue screening, the same verdicts can label database entries and training data. A
-missing charge or radius returns no verdict rather than a pass, keeping uncertain entries
-separate from implausible ones.
+Beyond queue screening, the same verdicts can label database entries and training data. An
+entry missing a charge or radius receives no verdict rather than a pass, keeping uncertain
+entries separate from implausible ones.
 
 Confidence in the structural-plausibility check rests on how the laws were retained. Active
 refutation distinguished benchmark artefacts from real physics in an autonomous-agent
@@ -611,6 +601,6 @@ initially successful conclusions and left eight compact laws. The preserved fail
 links each surviving law to the counterexamples and checks it withstood. Reporting
 failed attempts has been called a condition for progress
 \cite{smit2026dataonly}. This record is that report. Backed by the
-record, crystal screening does not stop at a pass-or-fail verdict. It explains why a
+record, crystal screening does not stop at a pass-or-fail verdict but explains why a
 structure is implausible. Through active refutation, autonomous agents can discover
 physicochemical laws that guide subsequent calculations and experiments.

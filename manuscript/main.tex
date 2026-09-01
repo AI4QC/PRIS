@@ -13,7 +13,7 @@
 
 % --- clickable cross-references and citations
 %% the class loads hyperref itself with link colouring off. Re-assert at
-%% egin{document} so that cross-references and citations are visibly clickable
+%% begin{document} so that cross-references and citations are visibly clickable
 \AtBeginDocument{\hypersetup{colorlinks=true,
   linkcolor={blue!55!black}, citecolor={blue!55!black},
   urlcolor={blue!55!black}, filecolor={blue!55!black},
@@ -60,15 +60,6 @@ generative models for materials, autonomous scientific discovery}
 
 \backmatter
 
-\bmhead{Acknowledgements}
-We gratefully acknowledge financial support from the HKUST Start-up Fund. We thank HKUST
-Fok Ying Tung Research Institute and National Supercomputing Center in Guangzhou Nansha
-Sub-center for computational resources.
-
-\section*{Declarations}
-
-\bmhead{Competing interests} The authors declare no competing interests.
-
 \bmhead{Data availability}
 Entries from the Inorganic Crystal Structure Database are not redistributable under
 the terms of the FIZ Karlsruhe licence and the European Union \emph{sui generis}
@@ -91,4 +82,15 @@ are available at \url{https://github.com/AI4QC/PRIS}.
 \bibliography{refs}
 \endgroup
 
+\bmhead{Acknowledgements}
+We gratefully acknowledge financial support from the HKUST Start-up Fund. We thank HKUST
+Fok Ying Tung Research Institute and National Supercomputing Center in Guangzhou Nansha
+Sub-center for computational resources.
+
+\bmhead{Author contributions}
+Z.S. and L.C. conceived the study. Z.S. built the agent workflow, analysed the results,
+performed the density functional theory calculations and wrote the manuscript. L.C.
+supervised the study and revised the manuscript.
+
+\bmhead{Competing interests} The authors declare no competing interests.
 \end{document}
