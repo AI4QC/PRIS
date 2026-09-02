@@ -8,6 +8,11 @@
 crystal diagnosis and screening**
 
 [![arXiv](https://img.shields.io/badge/arXiv-2609.01209-b31b1b.svg)](https://arxiv.org/abs/2609.01209)
+[![Project page](https://img.shields.io/badge/project%20page-ai4qc.github.io%2FPRIS-4CC9F0.svg)](https://ai4qc.github.io/PRIS/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg)](LICENSE)
+
+**Project page:** <https://ai4qc.github.io/PRIS/> — the eight laws, the headline results, the five
+main figures, a worked example of the analyser, and one-page posters of the paper.
 
 An autonomous agent ran 572 numbered investigations over 99,162 experimental crystal
 structures under a pre-registered protocol, evaluated 2,037,606 candidate laws, and kept
@@ -155,6 +160,7 @@ experiments/         the analyses behind Fig. 4 and five supplementary figures
 pipeline/            data acquisition
 tests/               checks on the laws, the score and the figures
 manuscript/          submission sources and the two compiled PDFs
+docs/                the project page served at https://ai4qc.github.io/PRIS/
 ```
 
 `manuscript/main.pdf` and `manuscript/si.pdf` are the compiled manuscript and

@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRIS — Plausibility Rules for Inorganic Structures</title>
+<meta name="description" content="Eight one-line laws for crystal-structure plausibility, discovered by autonomous agents that proposed, tested and refuted two million candidate laws. Each rejection names the physicochemical mechanism that fails.">
+<meta name="author" content="Zhilong Song, Lixue Cheng">
+<link rel="canonical" href="https://ai4qc.github.io/PRIS/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PRIS — Plausibility Rules for Inorganic Structures">
+<meta property="og:description" content="Two million hypotheses refuted. Eight crystal laws left. Autonomous discovery of structure-plausibility laws for explainable and rapid crystal diagnosis and screening.">
+<meta property="og:url" content="https://ai4qc.github.io/PRIS/">
+<meta property="og:image" content="https://ai4qc.github.io/PRIS/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PRIS — Plausibility Rules for Inorganic Structures">
+<meta name="twitter:description" content="Two million hypotheses refuted. Eight crystal laws left.">
+<meta name="twitter:image" content="https://ai4qc.github.io/PRIS/assets/og.png">
+<meta name="theme-color" content="#0A0F1E">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"ScholarlyArticle",
+ "headline":"Autonomous discovery of new structure-plausibility laws for explainable and rapid crystal diagnosis and screening",
+ "author":[{"@type":"Person","name":"Zhilong Song"},{"@type":"Person","name":"Lixue Cheng"}],
+ "datePublished":"2026-09-01","identifier":"arXiv:2609.01209",
+ "url":"https://arxiv.org/abs/2609.01209","sameAs":"https://arxiv.org/abs/2609.01209",
+ "codeRepository":"https://github.com/AI4QC/PRIS"}
+</script>
+<style>
+  :root{
+    --bg0:#0A0F1E; --bg1:#101833; --bg2:#0C1226;
+    --cy:#4CC9F0; --cy2:#7FDBF5; --go:#FFB703; --coral:#F4796B; --green:#35C48E; --violet:#A98BF5; --blue:#3B7DD8;
+    --tx:#E8EDF7; --tx2:#DCE6F7; --mut:#9FB0CE; --mut2:#8497B8; --mut3:#6E82A4; --mut4:#54657F;
+    --line:rgba(140,175,225,.20); --line2:rgba(140,175,225,.12);
+    --card:linear-gradient(155deg,rgba(255,255,255,.055),rgba(255,255,255,.02));
+    --r:18px; --max:1180px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    font-family:Inter,"SF Pro Display","Helvetica Neue",Arial,sans-serif;color:var(--tx);
+    background:
+      radial-gradient(1100px 620px at 78% -8%, rgba(76,201,240,.16), transparent 62%),
+      radial-gradient(820px 520px at 4% 22%, rgba(255,183,3,.08), transparent 60%),
+      linear-gradient(168deg,var(--bg0) 0%,var(--bg1) 46%,var(--bg2) 100%);
+    background-attachment:fixed;-webkit-font-smoothing:antialiased;line-height:1.5;
+  }
+  a{color:var(--cy2);text-decoration:none}
+  a:hover{text-decoration:underline;text-underline-offset:3px}
+  b,strong{color:var(--tx2);font-weight:600}
+  .num{font-variant-numeric:tabular-nums;font-weight:700;letter-spacing:-.02em}
+  sub,sup{line-height:0}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+  @media (max-width:640px){.wrap{padding:0 18px}}
+
+  /* lattice backdrop */
+  .lattice{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.9}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      background:rgba(10,15,30,.62);border-bottom:1px solid var(--line2)}
+  nav .wrap{display:flex;align-items:center;gap:22px;height:60px}
+  .brand{font-weight:800;letter-spacing:.18em;font-size:18px;
+         background:linear-gradient(90deg,#7FDBF5,#4CC9F0 35%,#8FD3A8 62%,#FFB703);
+         -webkit-background-clip:text;background-clip:text;color:transparent}
+  .brand:hover{text-decoration:none}
+  nav .links{display:flex;gap:18px;margin-left:8px;font-size:14px;color:var(--mut)}
+  nav .links a{color:var(--mut)}
+  nav .links a:hover{color:var(--tx)}
+  nav .cta{margin-left:auto;display:flex;gap:10px}
+  @media (max-width:820px){nav .links{display:none}}
+
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;font-size:14px;font-weight:600;
+       border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--tx2);transition:all .15s;white-space:nowrap}
+  .btn:hover{background:rgba(255,255,255,.09);text-decoration:none;transform:translateY(-1px)}
+  .btn.cy{background:rgba(76,201,240,.14);border-color:rgba(76,201,240,.45);color:#BFEBFB}
+  .btn.go{background:rgba(255,183,3,.12);border-color:rgba(255,183,3,.45);color:#FFD976}
+  .btn svg{width:16px;height:16px;flex:none}
+  .btn.sm{padding:6px 12px;font-size:13px}
+
+  /* hero */
+  header.hero{padding:64px 0 24px}
+  .eyebrow{display:flex;align-items:center;gap:14px;font-size:13px;letter-spacing:.30em;color:var(--cy2);font-weight:600;text-transform:uppercase}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--cy);box-shadow:0 0 14px var(--cy)}
+  .eyebrow .rule{flex:1;height:1px;background:linear-gradient(90deg,rgba(76,201,240,.65),rgba(76,201,240,0))}
+  h1{margin-top:26px;font-size:clamp(30px,4.6vw,56px);line-height:1.12;font-weight:800;letter-spacing:-.01em;max-width:1040px}
+  h1 .hl{color:var(--go)}
+  .tagline{margin-top:18px;font-size:clamp(16px,1.9vw,20px);line-height:1.55;color:var(--mut);max-width:900px}
+  .ptitle{margin-top:26px;padding-top:22px;border-top:1px solid var(--line2);font-size:clamp(17px,2vw,22px);font-weight:600;color:var(--tx2);line-height:1.4;max-width:940px}
+  .authors{margin-top:14px;font-size:19px;color:var(--tx2)}
+  .authors a{color:var(--tx2)}
+  .authors sup{font-size:11px;color:var(--mut2);margin-left:2px}
+  .affil{margin-top:8px;font-size:14px;color:var(--mut2);line-height:1.6}
+  .affil sup{color:var(--mut3);margin-right:3px}
+  .btnrow{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+
+  /* funnel */
+  .funnel{margin-top:44px;position:relative}
+  .fstats{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:end;gap:14px}
+  .fcol .v{font-size:clamp(28px,4vw,44px);line-height:1}
+  .fcol .v.small{color:var(--mut)}
+  .fcol .v.gold{color:var(--go);font-size:clamp(34px,5vw,54px)}
+  .fcol .k{margin-top:8px;font-size:14px;color:var(--mut2)}
+  .arrow{font-size:22px;color:#3E5480;padding-bottom:10px}
+  @media (max-width:640px){.fstats{grid-template-columns:1fr;gap:10px}.arrow{display:none}}
+  #funnel{display:block;width:100%;height:auto;margin-top:6px}
+  .pills{margin-top:8px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .pill{text-align:center;padding:10px 6px;border-radius:11px;background:rgba(76,201,240,.075);border:1px solid rgba(76,201,240,.26);font-size:13.5px;color:#CFE4F5}
+  @media (max-width:820px){.pills{grid-template-columns:repeat(2,1fr)}.pills .pill:last-child{grid-column:span 2}}
+  .pillcap{margin-top:26px;font-size:13px;letter-spacing:.08em;color:#7C8FB0;text-transform:uppercase}
+
+  /* sections */
+  section{padding:56px 0 8px}
+  .sec-eyebrow{font-size:12.5px;letter-spacing:.26em;color:var(--cy2);font-weight:600;text-transform:uppercase;display:flex;align-items:center;gap:12px}
+  .sec-eyebrow::before{content:"";width:22px;height:2px;background:var(--cy);border-radius:2px}
+  .sec-eyebrow.gold{color:#FFD976}.sec-eyebrow.gold::before{background:var(--go)}
+  .sec-eyebrow.coral{color:#F0A79C}.sec-eyebrow.coral::before{background:var(--coral)}
+  h2{margin-top:12px;font-size:clamp(26px,3.2vw,38px);line-height:1.18;font-weight:800;letter-spacing:-.01em}
+  h2 .hl{color:var(--go)}
+  .lead{margin-top:12px;font-size:17px;line-height:1.6;color:var(--mut);max-width:860px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;position:relative;overflow:hidden}
+  .card.accent::before{content:"";position:absolute;left:0;top:22px;bottom:22px;width:3px;border-radius:0 3px 3px 0;background:var(--cy)}
+  .card.accent.gold::before{background:var(--go)}
+  .card.accent.coral::before{background:var(--coral)}
+  .card .t{font-size:15px;color:var(--mut)}
+  .card .big{margin-top:8px;display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
+  .card .big .n{font-size:clamp(40px,4.4vw,56px);color:var(--cy);line-height:1}
+  .card.gold .big .n{color:var(--go)}
+  .card .big .tail{font-size:14.5px;color:var(--mut2)}
+  .bars{margin-top:14px;display:flex;flex-direction:column;gap:9px}
+  .bar{display:grid;grid-template-columns:minmax(120px,170px) 1fr 62px;align-items:center;gap:10px;font-size:14px;color:var(--mut2)}
+  .bar .track{height:6px;border-radius:4px;background:rgba(140,175,225,.13);overflow:hidden}
+  .bar .fill{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#3BA9D6,#4CC9F0);width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+  .bar .fill.off{background:#4A5D7E}
+  .card.gold .bar .fill.on{background:linear-gradient(90deg,#E09400,#FFB703)}
+  .bar .val{text-align:right;font-variant-numeric:tabular-nums}
+  .bar.on .lab,.bar.on .val{color:var(--tx2)}
+
+  /* KPI strip */
+  .kpis{margin-top:36px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px 18px}
+  .kpi .n{font-size:clamp(34px,3.6vw,46px);line-height:1;color:var(--cy)}
+  .kpi.go .n{color:var(--go)}
+  .kpi .l{margin-top:8px;font-size:14px;color:var(--tx2);line-height:1.4}
+  .kpi .c{margin-top:6px;font-size:13px;color:var(--mut3);line-height:1.45}
+  @media (max-width:980px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:520px){.kpis{grid-template-columns:1fr}}
+
+  /* abstract */
+  .abstract{margin-top:26px;font-size:16.5px;line-height:1.72;color:var(--mut);max-width:980px}
+  .abstract p+p{margin-top:12px}
+
+  /* three-way comparison */
+  .cmp{margin-top:28px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .cmp .card h3{font-size:17px;font-weight:700;color:var(--tx)}
+  .cmp .card .sub{margin-top:4px;font-size:13px;color:var(--mut3)}
+  .cmp .card .stat{margin-top:16px;font-size:34px;line-height:1;color:var(--mut2)}
+  .cmp .card.win .stat{color:var(--cy)}
+  .cmp .card .stat small{display:block;font-size:13px;font-weight:500;color:var(--mut3);margin-top:8px;letter-spacing:0}
+  .cmp .card p{margin-top:12px;font-size:14px;color:var(--mut);line-height:1.55}
+  @media (max-width:880px){.cmp{grid-template-columns:1fr}}
+
+  .icons{margin-top:26px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .ic{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;gap:16px;align-items:center}
+  .ic svg{flex:none;width:96px;height:96px}
+  .ic .icname{font-size:15px;color:var(--tx2);font-weight:600}
+  .ic .icv{display:inline-block;margin-top:8px;font-size:12.5px;padding:3px 9px;border-radius:6px}
+  .icv.ok{color:#35C48E;background:rgba(53,196,142,.12)}.icv.bad{color:#F4796B;background:rgba(244,121,107,.12)}
+  .ic .icx{margin-top:8px;font-size:13px;color:var(--mut3);line-height:1.45}
+  @media (max-width:880px){.icons{grid-template-columns:1fr}}
+  .icnote{margin-top:16px;font-size:14.5px;color:var(--mut);max-width:860px}
+
+  /* laws */
+  .lawlist{margin-top:28px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .law{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;grid-template-columns:38px 1fr;gap:14px;align-items:start;transition:border-color .15s,transform .15s}
+  .law:hover{border-color:rgba(76,201,240,.45);transform:translateY(-2px)}
+  .law i{font-style:normal;width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--bg0);background:var(--cy)}
+  .law.g i{background:var(--go)}
+  .law .f{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14.5px;color:var(--tx);line-height:1.45}
+  .law .d{margin-top:6px;font-size:13.5px;color:var(--mut2);line-height:1.5}
+  .law .m{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+  .tag{font-size:11.5px;letter-spacing:.06em;padding:3px 8px;border-radius:6px;background:rgba(76,201,240,.10);color:#9FE2F8;border:1px solid rgba(76,201,240,.22)}
+  .tag.set{background:rgba(255,255,255,.04);color:var(--mut2);border-color:var(--line2)}
+  @media (max-width:820px){.lawlist{grid-template-columns:1fr}}
+  .lawnote{margin-top:16px;font-size:14px;color:var(--mut3);max-width:960px;line-height:1.55}
+
+  /* sets: scatter + table */
+  .setgrid{margin-top:28px;display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:stretch}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px 16px;display:flex;flex-direction:column}
+  .panel .pt{font-size:16px;color:#C3D2E8;font-weight:600}
+  .panel .ps{margin-top:5px;font-size:13.5px;color:var(--mut3)}
+  .panel svg.scatter{width:100%;height:auto;margin-top:8px}
+  table.sets{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+  table.sets th{font-weight:600;color:var(--mut3);text-align:left;font-size:12.5px;letter-spacing:.04em;padding:8px 6px;border-bottom:1px solid var(--line)}
+  table.sets td{padding:9px 6px;border-bottom:1px solid var(--line2);vertical-align:top;color:var(--mut)}
+  table.sets .s{font-weight:700;margin-right:6px}
+  table.sets td{color:var(--tx2)}
+  table.sets .lw{font-size:13px;color:var(--mut3)}
+  table.sets td.v{font-variant-numeric:tabular-nums;text-align:right;color:var(--tx2);width:1%;white-space:nowrap;padding-left:14px}
+  table.sets th.v{text-align:right}
+  table.sets tr:last-child td{border-bottom:none}
+  .setnote{margin-top:auto;padding-top:12px;font-size:13px;color:var(--mut3);line-height:1.5}
+  @media (max-width:900px){.setgrid{grid-template-columns:1fr}}
+
+  /* loop */
+  .loop{margin-top:28px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;position:relative}
+  .step{border-radius:14px;padding:16px 16px 14px;border:1px solid var(--line);background:var(--card)}
+  .step .h{font-size:12px;letter-spacing:.22em;font-weight:700}
+  .step .b{margin-top:8px;font-size:14px;color:var(--mut);line-height:1.5}
+  .step.p .h{color:#7FDBF5}.step.t .h{color:#8FB8F0}.step.s .h{color:#C9B4FA}.step.e .h{color:#6FE0B5}.step.r .h{color:#F4A092}
+  @media (max-width:980px){.loop{grid-template-columns:repeat(2,1fr)}.loop .step:last-child{grid-column:span 2}}
+  @media (max-width:520px){.loop{grid-template-columns:1fr}.loop .step:last-child{grid-column:auto}}
+  .ledger{margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .ledger .card{padding:18px 20px}
+  .ledger .n{font-size:30px;color:var(--go);line-height:1}
+  .ledger .l{margin-top:6px;font-size:14px;color:var(--mut);line-height:1.5}
+  @media (max-width:820px){.ledger{grid-template-columns:1fr}}
+
+  /* results grid */
+  .grid2{margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media (max-width:880px){.grid2{grid-template-columns:1fr}}
+  .fact{display:flex;gap:12px;align-items:flex-start}
+  .fact .fn{flex:none;width:110px;text-align:right;font-size:26px;line-height:1.15;color:var(--cy);font-variant-numeric:tabular-nums;font-weight:700}
+  .fact .fn.coral{color:var(--coral)}.fact .fn.gold{color:var(--go)}.fact .fn.sm{font-size:19px;padding-top:4px}
+  .fact .ft{font-size:14.5px;line-height:1.5;color:var(--mut)}
+  .cfacts{display:flex;flex-direction:column;gap:14px}
+  .case{margin-top:22px}
+  .chead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .chead .ctag{font-size:12px;letter-spacing:.16em;color:var(--bg0);background:var(--coral);padding:3px 9px;border-radius:6px;font-weight:700;white-space:nowrap}
+  .chead .ctag.c2{background:var(--cy)}
+  .chead .tt{font-size:20px;font-weight:700}
+  .chead .ts{font-size:13.5px;color:var(--mut3);margin-left:auto}
+  .cbody{margin-top:16px;display:grid;grid-template-columns:1.15fr 1fr;gap:26px;align-items:start}
+  .cbody svg{width:100%;height:auto}
+  .cbody .cap{margin-top:4px;font-size:13px;color:var(--mut2)}
+  .cnote{margin-top:16px;padding-top:13px;border-top:1px solid var(--line2);font-size:14px;line-height:1.6;color:var(--mut2)}
+  @media (max-width:880px){.cbody{grid-template-columns:1fr}.chead .ts{margin-left:0;width:100%}}
+
+  .speed{margin-top:22px;display:grid;grid-template-columns:150px 1fr 1px 1fr 1px 1fr;align-items:center;border:1px solid var(--line);border-radius:16px;padding:20px 24px;background:rgba(255,255,255,.03)}
+  .speed .sl{font-size:14px;color:#7C8FB0;line-height:1.45}
+  .speed .si{text-align:center}
+  .speed .si .v{font-size:22px;font-weight:700;color:var(--cy);font-variant-numeric:tabular-nums}
+  .speed .si .v.grey{color:#7C8FB0}
+  .speed .si .k{margin-top:4px;font-size:13px;color:#7C8FB0}
+  .speed .sep{width:1px;height:38px;background:var(--line)}
+  @media (max-width:820px){.speed{grid-template-columns:1fr;gap:14px}.speed .sep{display:none}.speed .si{text-align:left}}
+
+  /* figures */
+  .figs{margin-top:28px;display:flex;flex-direction:column;gap:22px}
+  figure.fig{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;align-items:start}
+  figure.fig .img{background:#fff;border-radius:10px;padding:8px;cursor:zoom-in;overflow:hidden}
+  figure.fig img{display:block;width:100%;height:auto}
+  figure.fig figcaption{font-size:14px;color:var(--mut);line-height:1.6}
+  figure.fig figcaption .fl{display:block;font-size:12.5px;letter-spacing:.16em;color:var(--cy2);font-weight:700;margin-bottom:6px}
+  figure.fig figcaption b{color:var(--tx2)}
+  figure.fig .more{margin-top:10px;font-size:13px}
+  @media (max-width:900px){figure.fig{grid-template-columns:1fr}}
+  dialog#lb{border:none;background:transparent;padding:0;max-width:96vw;max-height:96vh;overflow:auto}
+  dialog#lb::backdrop{background:rgba(6,10,22,.9);backdrop-filter:blur(6px)}
+  dialog#lb img{display:block;max-width:94vw;max-height:92vh;width:auto;height:auto;background:#fff;border-radius:10px;padding:10px;cursor:zoom-out}
+
+  /* code */
+  pre{margin-top:18px;background:#070B17;border:1px solid var(--line);border-radius:14px;padding:18px 20px;overflow-x:auto;font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.6;color:#CFE4F5}
+  pre .c{color:#6E82A4}
+  pre .ok{color:#35C48E}pre .bad{color:#F4796B}pre .g{color:var(--go)}pre .cy{color:var(--cy)}
+  .codegrid{margin-top:8px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+  .codegrid>div,.cbody>div,.grid2>*,figure.fig>*{min-width:0}
+  @media (max-width:900px){.codegrid{grid-template-columns:1fr}}
+  .codegrid h3{margin-top:22px;font-size:15px;font-weight:700;color:var(--tx2)}
+  .tip{margin-top:14px;font-size:14px;color:var(--mut2);line-height:1.55}
+
+  /* posters */
+  .posters{margin-top:28px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .poster{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:12px}
+  .poster img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line2)}
+  .poster .pl{font-size:14px;color:var(--tx2);font-weight:600}
+  .poster .pd{font-size:13px;color:var(--mut3);line-height:1.45}
+  .poster .pa{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap}
+  @media (max-width:900px){.posters{grid-template-columns:1fr}}
+
+  /* cite */
+  .cite{margin-top:24px;position:relative}
+  .cite pre{margin-top:0;padding-right:110px}
+  .cite .copy{position:absolute;top:12px;right:12px}
+  .cite2{margin-top:14px;font-size:14px;color:var(--mut2)}
+
+  footer{margin-top:64px;padding:34px 0 46px;border-top:1px solid var(--line2);font-size:13.5px;color:var(--mut3);line-height:1.7}
+  footer .wrap{display:grid;grid-template-columns:1.3fr 1fr;gap:26px}
+  footer .fb{font-size:22px;letter-spacing:.16em;font-weight:800;color:var(--cy)}
+  footer .links a{display:block}
+  @media (max-width:760px){footer .wrap{grid-template-columns:1fr}}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  @keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+  @keyframes flow{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
+  #funnel .glow{animation:pulse 3.2s ease-in-out infinite}
+  #funnel .cloud{animation:flow 16s ease-in-out infinite alternate}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .reveal{opacity:1;transform:none;transition:none}
+    #funnel .glow,#funnel .cloud{animation:none}
+    .bar .fill{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<svg class="lattice" width="100%" height="100%" preserveAspectRatio="none" aria-hidden="true">
+  <defs>
+    <pattern id="lat" width="86" height="86" patternUnits="userSpaceOnUse">
+      <path d="M0 0 H86 V86" stroke="rgba(140,175,225,.09)" stroke-width="1" fill="none"/>
+      <circle cx="0" cy="0" r="2.1" fill="rgba(76,201,240,.28)"/>
+      <circle cx="43" cy="43" r="1.3" fill="rgba(140,175,225,.18)"/>
+    </pattern>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/>
+    </linearGradient>
+    <mask id="m"><rect width="100%" height="100%" fill="url(#fade)"/></mask>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#lat)" mask="url(#m)"/>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">PRIS</a>
+    <div class="links">
+      <a href="#laws">Laws</a><a href="#discovery">Discovery</a><a href="#results">Results</a>
+      <a href="#cases">Cases</a><a href="#figures">Figures</a><a href="#try">Try it</a><a href="#posters">Posters</a><a href="#cite">Cite</a>
+    </div>
+    <div class="cta">
+      <a class="btn sm cy" href="https://arxiv.org/abs/2609.01209" target="_blank" rel="noopener">arXiv</a>
+      <a class="btn sm" href="https://github.com/AI4QC/PRIS" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span>Autonomous agents<span class="rule"></span>Crystal chemistry</div>
+    <h1>Two million hypotheses refuted.<br><span class="hl">Eight</span> crystal laws left.</h1>
+    <p class="tagline">Agents proposed, implemented and actively refuted their own candidate laws. The eight survivors do not return pass or fail: they <b>name the physicochemical constraint that breaks</b>.</p>
+    <div class="ptitle">Autonomous discovery of new structure-plausibility laws for explainable and rapid crystal diagnosis and screening</div>
+    <div class="authors">
+      Zhilong Song<sup>1,2</sup> &nbsp;·&nbsp; <a href="mailto:lixuecheng@ust.hk">Lixue Cheng</a><sup>1,2,3,&#9993;</sup>
+    </div>
+    <div class="affil">
+      <sup>1</sup>Department of Chemistry, Hong Kong University of Science and Technology &nbsp;·&nbsp;
+      <sup>2</sup>IAS Center for AI for Scientific Discoveries, HKUST &nbsp;·&nbsp;
+      <sup>3</sup>Department of Chemical and Biological Engineering, HKUST
+    </div>
+    <div class="btnrow">
+      <a class="btn cy" href="https://arxiv.org/abs/2609.01209" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v6h6"/></svg>
+        arXiv:2609.01209</a>
+      <a class="btn" href="https://arxiv.org/pdf/2609.01209" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        Paper PDF</a>
+      <a class="btn" href="https://github.com/AI4QC/PRIS/blob/main/manuscript/si.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        Supplementary</a>
+      <a class="btn go" href="https://github.com/AI4QC/PRIS" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 4l-4 16"/></svg>
+        Code &amp; data</a>
+      <a class="btn" href="#cite">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h10M7 16h6"/><rect x="3" y="4" width="18" height="16" rx="2"/></svg>
+        BibTeX</a>
+    </div>
+
+    <div class="funnel">
+      <div class="fstats">
+        <div class="fcol"><div class="v num">2,037,606</div><div class="k">candidate law evaluations</div></div>
+        <div class="arrow">&#10230;</div>
+        <div class="fcol"><div class="v num small">572</div><div class="k">numbered investigations · 11 self-refutations</div></div>
+        <div class="arrow">&#10230;</div>
+        <div class="fcol"><div class="v num gold">8</div><div class="k">surviving one-line laws &nbsp;·&nbsp; <b>PRIS</b></div></div>
+      </div>
+      <svg id="funnel" viewBox="0 0 1100 410" role="img" aria-label="Two million candidate laws converge to eight surviving laws"></svg>
+      <div class="pillcap">Every rejection points to one of five mechanisms</div>
+      <div class="pills">
+        <div class="pill">Short-range repulsion</div><div class="pill">Ionic contact &amp; packing</div>
+        <div class="pill">Electrostatic balance</div><div class="pill">Bond-valence conservation</div><div class="pill">Site complexity</div>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi reveal"><div class="n num">87.9%</div><div class="l">of chemically damaged structures detected by the strictest law set</div><div class="c">the 0.5- and 0.7-Å distance cutoffs used in generative pipelines detect 1.6–3.2%</div></div>
+      <div class="kpi reveal"><div class="n num">82–99%</div><div class="l">of experimental structures satisfy the law sets</div><div class="c">Pauling's rules 2–5 applied jointly are satisfied by only 6.5%</div></div>
+      <div class="kpi reveal"><div class="n num">83.7%</div><div class="l">of hard-to-synthesize structures screened by the PRIS-derived synthesis score</div><div class="c">while retaining 80.7% of experimental structures, and no synthesis label entered the discovery</div></div>
+      <div class="kpi go reveal"><div class="n num">−67.3%</div><div class="l">DFT validation queue in a property-conditioned inverse-design run</div><div class="c">keeping 99.2% of the candidates whose DFT-validated bulk moduli reach the target</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="abstract">
+  <div class="wrap">
+    <div class="sec-eyebrow">Abstract</div>
+    <h2>From a pass-or-fail verdict to a <span class="hl">chemical diagnosis</span></h2>
+    <div class="abstract">
+      <p>Crystal generators and tool-using agents propose structures faster than density functional theory (DFT) energy and phonon calculations or experiments can assess them. Deciding which candidates merit expensive assessment is therefore the bottleneck, yet most screens test little beyond atomic overlap and give no chemical reason for failure. Here, our agents generate, test and actively refute two million candidate laws, leaving eight Plausibility Rules for Inorganic Structures (PRIS). These laws encode five mechanisms: short-range repulsion, ionic contact and packing, electrostatic balance, bond-valence conservation and crystallographic site complexity. Experimental structures satisfy our law sets at 82–99%, but satisfy Pauling's rules 2–5 together at only 6.5%. The strictest set detects 87.9% of damaged crystal structures, whereas distance cutoffs detect only 1.6–3.2%.</p>
+      <p>PRIS plausibility is linearly correlated with synthesizability, so the PRIS-derived synthesis score (PSS) explainably screens 83.7% of hard-to-synthesize structures while retaining 80.7% of experimental structures. In a property-conditioned inverse-design run, PRIS and PSS can reduce the DFT validation queue by up to 67.3% and keep 99.2% of the candidates whose DFT-validated bulk moduli reach the design target. Beyond screening, PRIS explains why GNoME remains enriched in rare low-symmetry structures and reveals how wrong-element assignments in falsified crystal reports hide behind plausible coordinates. PRIS moves screening from a pass-or-fail verdict to a chemical reason for failure, showing that autonomous agents can discover, by active refutation, physicochemical laws that guide calculations and experiments.</p>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <div class="sec-eyebrow">The gap</div>
+    <h2>Distance cutoffs are element-blind. Pauling's rules are too idealised.</h2>
+    <p class="lead">A good plausibility law must keep experimental structures, detect damaged ones at a high rate, and say why a structure is implausible. Measured on both axes at once, the two classical answers err in opposite directions.</p>
+    <div class="cmp">
+      <div class="card reveal">
+        <h3>Minimum-distance cutoff</h3><div class="sub">0.5 Å or 0.7 Å, as deployed in generative pipelines</div>
+        <div class="stat num">1.6–3.2%<small>damage detected</small></div>
+        <p>Inexpensive and almost always satisfied, but it examines neither chemical ordering nor elemental identity. Avoiding gross overlap does not make coordination, electrostatics or bond valence plausible.</p>
+      </div>
+      <div class="card reveal">
+        <h3>Pauling's rules 2–5, jointly</h3><div class="sub">1929 · radius table and formal charges</div>
+        <div class="stat num">6.5%<small>experimental structures satisfied</small></div>
+        <p>Chemically reasoned but too strict when applied together: an earlier audit found 13% of about 5,000 oxides satisfied rules 2–5, and among charge-balanced ionic experimental structures only 6.5% did.</p>
+      </div>
+      <div class="card win reveal">
+        <h3>PRIS, Set 4</h3><div class="sub">eight one-line laws · five mechanisms</div>
+        <div class="stat num">82–99%<small>satisfied · up to 91% detected</small></div>
+        <p>Keeps experimental structures, detects damage, and every failure names the violated law and the mechanism to review. Runs on the structure as given, without relaxation or a phase-hull reference.</p>
+      </div>
+    </div>
+
+    <div class="icons">
+      <div class="ic reveal">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><rect x="1" y="1" width="118" height="118" rx="14" fill="rgba(255,255,255,.035)" stroke="rgba(140,175,225,.18)"/><g stroke="rgba(140,175,225,.22)" stroke-width="1"><path d="M16 16H104M16 45.3H104M16 74.7H104M16 104H104M16 16V104M45.3 16V104M74.7 16V104M104 16V104"/></g><g><circle cx="16" cy="16" r="4.6" fill="#4CC9F0"/><circle cx="45.3" cy="16" r="7" fill="#7E93B5"/><circle cx="74.7" cy="16" r="4.6" fill="#4CC9F0"/><circle cx="104" cy="16" r="7" fill="#7E93B5"/><circle cx="16" cy="45.3" r="7" fill="#7E93B5"/><circle cx="45.3" cy="45.3" r="4.6" fill="#4CC9F0"/><circle cx="74.7" cy="45.3" r="7" fill="#7E93B5"/><circle cx="104" cy="45.3" r="4.6" fill="#4CC9F0"/><circle cx="16" cy="74.7" r="4.6" fill="#4CC9F0"/><circle cx="45.3" cy="74.7" r="7" fill="#7E93B5"/><circle cx="74.7" cy="74.7" r="4.6" fill="#4CC9F0"/><circle cx="104" cy="74.7" r="7" fill="#7E93B5"/><circle cx="16" cy="104" r="7" fill="#7E93B5"/><circle cx="45.3" cy="104" r="4.6" fill="#4CC9F0"/><circle cx="74.7" cy="104" r="7" fill="#7E93B5"/><circle cx="104" cy="104" r="4.6" fill="#4CC9F0"/></g></svg>
+        <div><div class="icname">Experimental structure</div><span class="icv ok">&#10003; All eight laws satisfied</span><div class="icx">Alternating cations and anions on a regular lattice.</div></div>
+      </div>
+      <div class="ic reveal">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><rect x="1" y="1" width="118" height="118" rx="14" fill="rgba(255,255,255,.035)" stroke="rgba(140,175,225,.18)"/><g stroke="rgba(140,175,225,.22)" stroke-width="1"><path d="M16 16H104M16 45.3H104M16 74.7H104M16 104H104M16 16V104M45.3 16V104M74.7 16V104M104 16V104"/></g><g><circle cx="16" cy="16" r="4.6" fill="#4CC9F0"/><circle cx="45.3" cy="16" r="7" fill="#7E93B5"/><circle cx="74.7" cy="16" r="4.6" fill="#4CC9F0"/><circle cx="104" cy="16" r="7" fill="#7E93B5"/><circle cx="16" cy="45.3" r="7" fill="#7E93B5"/><circle cx="45.3" cy="45.3" r="7" fill="#7E93B5"/><circle cx="74.7" cy="45.3" r="7" fill="#7E93B5"/><circle cx="104" cy="45.3" r="4.6" fill="#4CC9F0"/><circle cx="16" cy="74.7" r="4.6" fill="#4CC9F0"/><circle cx="45.3" cy="74.7" r="7" fill="#7E93B5"/><circle cx="74.7" cy="74.7" r="7" fill="#7E93B5"/><circle cx="104" cy="74.7" r="7" fill="#7E93B5"/><circle cx="16" cy="104" r="7" fill="#7E93B5"/><circle cx="45.3" cy="104" r="4.6" fill="#4CC9F0"/><circle cx="74.7" cy="104" r="7" fill="#7E93B5"/><circle cx="104" cy="104" r="4.6" fill="#4CC9F0"/><circle cx="45.3" cy="45.3" r="12" fill="none" stroke="#C084FC" stroke-width="2"/><circle cx="74.7" cy="74.7" r="12" fill="none" stroke="#C084FC" stroke-width="2"/></g></svg>
+        <div><div class="icname">Wrong element</div><span class="icv bad">&#10007; Fails Law 6 · charge topology</span><div class="icx">Same coordinates, one species exchanged. Formal charges, Madelung energies and bond valences all change.</div></div>
+      </div>
+      <div class="ic reveal">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><rect x="1" y="1" width="118" height="118" rx="14" fill="rgba(255,255,255,.035)" stroke="rgba(140,175,225,.18)"/><g stroke="rgba(140,175,225,.22)" stroke-width="1"><path d="M16 16L49.8 10.6L74.7 16L104 16M16 16L11.5 40.8L21.4 80.1L16 104M49.8 10.6L45.3 45.3L45.3 74.7L49.8 98.6M74.7 16L69.3 49.8L74.7 74.7L74.7 104M104 16L99.5 40.8L109.4 80.1L104 104M11.5 40.8L45.3 45.3L69.3 49.8L99.5 40.8M21.4 80.1L45.3 74.7L74.7 74.7L109.4 80.1M16 104L49.8 98.6L74.7 104L104 104"/></g><g><circle cx="16" cy="16" r="4.6" fill="#4CC9F0"/><circle cx="49.8" cy="10.6" r="7" fill="#7E93B5"/><circle cx="74.7" cy="16" r="4.6" fill="#4CC9F0"/><circle cx="104" cy="16" r="7" fill="#7E93B5"/><circle cx="11.5" cy="40.8" r="7" fill="#7E93B5"/><circle cx="45.3" cy="45.3" r="4.6" fill="#4CC9F0"/><circle cx="69.3" cy="49.8" r="7" fill="#7E93B5"/><circle cx="99.5" cy="40.8" r="4.6" fill="#4CC9F0"/><circle cx="21.4" cy="80.1" r="4.6" fill="#4CC9F0"/><circle cx="45.3" cy="74.7" r="7" fill="#7E93B5"/><circle cx="74.7" cy="74.7" r="4.6" fill="#4CC9F0"/><circle cx="109.4" cy="80.1" r="7" fill="#7E93B5"/><circle cx="16" cy="104" r="7" fill="#7E93B5"/><circle cx="49.8" cy="98.6" r="4.6" fill="#4CC9F0"/><circle cx="74.7" cy="104" r="7" fill="#7E93B5"/><circle cx="104" cy="104" r="4.6" fill="#4CC9F0"/></g></svg>
+        <div><div class="icname">All sites split</div><span class="icv bad">&#10007; Fails Law 7 · site complexity</span><div class="icx">Every site made crystallographically distinct, the pattern behind artificial ordering.</div></div>
+      </div>
+    </div>
+    <div class="icnote">All three pass the <b>0.7 Å distance cutoff</b> commonly used in generative pipelines. Geometrically clean does not mean chemically sound.</div>
+  </div>
+</section>
+
+<section id="laws">
+  <div class="wrap">
+    <div class="sec-eyebrow gold">The laws</div>
+    <h2>Eight laws, each a single computable and <span class="hl">refutable</span> statement</h2>
+    <p class="lead">Every law is a one-line predicate over quantities computable from a structure file and a radius table: no relaxation, no training, no synthesis label. A conditional law is satisfied by any structure whose trigger is not met, so the clauses of Law 2, Law 3 and Law 6 confine each law to its domain.</p>
+    <div class="lawlist">
+      <div class="law reveal"><i>L1</i><div><div class="f">ρ ≥ τ &nbsp;<span style="color:#8497B8">(τ = 0.735 permissive, 0.804 strict)</span></div><div class="d">The shortest cation–anion contact, relative to the sum of the two Shannon radii, may not fall below a floor.</div><div class="m"><span class="tag">short-range repulsion</span><span class="tag set">Set 1 · 1′ · 2 · 3 · 4</span></div></div></div>
+      <div class="law reveal"><i>L2</i><div><div class="f">f<sub>i</sub> &gt; 0.50 &nbsp;⇒&nbsp; ρ ≤ 1.05</div><div class="d">An upper bound on contact applied only where the ionic model holds: strongly ionic compounds may not be too loose.</div><div class="m"><span class="tag">ionic contact</span><span class="tag set">Set 1′</span></div></div></div>
+      <div class="law reveal"><i>L3</i><div><div class="f">mean anion CN ≤ 3.333 &nbsp;⇒&nbsp; mean d/(r<sub>cat</sub>+r<sub>an</sub>) ≤ 1.081</div><div class="d">Low-coordination structures may not also be loosely packed on average.</div><div class="m"><span class="tag">packing</span><span class="tag set">Set 2 · 3 · 4</span></div></div></div>
+      <div class="law reveal"><i>L4</i><div><div class="f">range<sub>i</sub> of E<sub>M</sub>(i)/|z<sub>i</sub>| ≤ 31.45 eV</div><div class="d">No site may be electrostatically far out of line with the others, judged by the site Madelung energy per unit charge.</div><div class="m"><span class="tag">electrostatic balance</span><span class="tag set">Set 2 · 3 · 4</span></div></div></div>
+      <div class="law reveal"><i>L5</i><div><div class="f">max<sub>i</sub> E<sub>M</sub>(i) ≤ 15.17 eV</div><div class="d">No single site may have an implausible Madelung energy.</div><div class="m"><span class="tag">electrostatic balance</span><span class="tag set">Set 2 · 3 · 4</span></div></div></div>
+      <div class="law reveal"><i>L6</i><div><div class="f">f<sub>i</sub> &gt; 0.55 &nbsp;⇒&nbsp; no like-charge bonds</div><div class="d">Charge topology: ionic compounds do not bond like to like. This is the law a wrong-element assignment breaks without moving an atom.</div><div class="m"><span class="tag">electrostatic balance</span><span class="tag set">Set 3 · 4</span></div></div></div>
+      <div class="law reveal"><i>L7</i><div><div class="f">inequivalent sites / sites ≤ 2/3</div><div class="d">A distinct-site bound consistent with a preference for simpler structures. Needs no charge assignment, so it can audit a whole catalogue.</div><div class="m"><span class="tag">site complexity</span><span class="tag set">Set 4</span></div></div></div>
+      <div class="law g reveal"><i>L8</i><div><div class="f">mean |BV sum − v<sub>i</sub>| / v<sub>i</sub> ≤ 0.7143</div><div class="d">A permissive tail bound on the bond-valence sum, the quantity of Pauling's rule 2.</div><div class="m"><span class="tag">bond-valence conservation</span><span class="tag set">Set 4</span></div></div></div>
+    </div>
+    <p class="lawnote">ρ is the reduced contact ratio (shortest cation–anion distance over the sum of the Shannon radii), f<sub>i</sub> is Pauling's composition-based estimate of ionic character, E<sub>M</sub>(i) is the site Madelung energy from an Ewald sum over formal charges, z<sub>i</sub> the formal charge at site i, and site complexity is inequivalent sites over sites at spglib symprec 0.01. Charges are formal oxidation states inferred from composition, never from bond lengths, so a bond-length law is never tested on its own conclusion.</p>
+
+    <div class="setgrid">
+      <div class="panel reveal">
+        <div class="pt">Five nested law sets: experimental-structure satisfaction vs damage detection</div>
+        <div class="ps">Held-out benchmark: 5,297 real and 3,612 damaged structures never seen by any fitting step. Pauling's rules 2–5 jointly are satisfied by 6.5% of experimental structures, and distance cutoffs detect almost no damage.</div>
+        <svg class="scatter" viewBox="0 0 590 348" role="img" aria-label="Damage detection versus satisfaction for the five law sets">
+<g stroke="rgba(140,175,225,.11)" stroke-width="1"><path d="M66 278H566M66 215H566M66 152H566M66 89H566M66 26H566"/></g>
+<g stroke="rgba(140,175,225,.07)" stroke-width="1"><path d="M106.8 26V278M208.9 26V278M310.9 26V278M412.9 26V278M515 26V278"/></g>
+<g font-size="13" fill="#6E82A4" font-family="Inter,sans-serif"><text x="54" y="283" text-anchor="end">0.00</text><text x="54" y="220" text-anchor="end">0.25</text><text x="54" y="157" text-anchor="end">0.50</text><text x="54" y="94" text-anchor="end">0.75</text><text x="54" y="31" text-anchor="end">1.00</text>
+<text x="106.8" y="302" text-anchor="middle">0.80</text><text x="208.9" y="302" text-anchor="middle">0.85</text><text x="310.9" y="302" text-anchor="middle">0.90</text><text x="412.9" y="302" text-anchor="middle">0.95</text><text x="515" y="302" text-anchor="middle">1.00</text></g>
+<path d="M66 278H566M66 26V278" stroke="rgba(140,175,225,.35)" stroke-width="1.2" fill="none"/>
+<polyline points="498.4,205.2 493.3,181.3 429.1,123.8 345.8,101.5 143.6,48.4" fill="none" stroke="rgba(140,175,225,.40)" stroke-width="1.6" stroke-dasharray="5 5"/>
+<rect x="502.5" y="268.5" width="11" height="11" rx="2" fill="#54657F" stroke="#8497B8"/><rect x="516.5" y="264.4" width="11" height="11" rx="2" fill="#54657F" stroke="#8497B8"/>
+<text x="489" y="271.7" text-anchor="end" font-size="13.5" fill="#8497B8" font-family="Inter,sans-serif">0.5 / 0.7 Å distance cutoffs</text>
+<g font-family="Inter,sans-serif" font-size="15" font-weight="600">
+<circle cx="498.4" cy="205.2" r="12" fill="#3B7DD8" opacity=".18"/><circle cx="498.4" cy="205.2" r="7" fill="#3B7DD8" stroke="#0A0F1E" stroke-width="1.6"/><text x="486.4" y="227.2" text-anchor="end" fill="#3B7DD8">Set 1</text>
+<circle cx="493.3" cy="181.3" r="12" fill="#4CC9F0" opacity=".18"/><circle cx="493.3" cy="181.3" r="7" fill="#4CC9F0" stroke="#0A0F1E" stroke-width="1.6"/><text x="477.3" y="186.3" text-anchor="end" fill="#4CC9F0">Set 1′</text>
+<circle cx="429.1" cy="123.8" r="12" fill="#A98BF5" opacity=".18"/><circle cx="429.1" cy="123.8" r="7" fill="#A98BF5" stroke="#0A0F1E" stroke-width="1.6"/><text x="429.1" y="150.8" text-anchor="middle" fill="#A98BF5">Set 2</text>
+<circle cx="345.8" cy="101.5" r="12" fill="#F4796B" opacity=".18"/><circle cx="345.8" cy="101.5" r="7" fill="#F4796B" stroke="#0A0F1E" stroke-width="1.6"/><text x="345.8" y="128.5" text-anchor="middle" fill="#F4796B">Set 3</text>
+<circle cx="143.6" cy="48.4" r="12" fill="#35C48E" opacity=".18"/><circle cx="143.6" cy="48.4" r="7" fill="#35C48E" stroke="#0A0F1E" stroke-width="1.6"/><text x="143.6" y="78.4" text-anchor="middle" fill="#35C48E">Set 4</text></g>
+<text x="566" y="42" text-anchor="end" font-size="13" fill="#8497B8" font-family="Inter,sans-serif">&#8598; up and to the left: more complete law sets, higher detection</text>
+<text x="316" y="330" text-anchor="middle" font-size="14" fill="#8497B8" font-family="Inter,sans-serif">Satisfaction of experimental structures (held-out)</text>
+<text transform="translate(20,152) rotate(-90)" text-anchor="middle" font-size="14" fill="#8497B8" font-family="Inter,sans-serif">Damage detection</text>
+        </svg>
+      </div>
+      <div class="panel reveal">
+        <div class="pt">The sets are nested, and each is named for the crystal model it enforces</div>
+        <table class="sets">
+          <thead><tr><th>set · crystal model · laws</th><th class="v">satisfied</th><th class="v">detected</th></tr></thead>
+          <tbody>
+            <tr><td><span class="s" style="color:#3B7DD8">Set 1</span> hard-sphere floor<br><span class="lw">Law 1 (τ = 0.735)</span></td><td class="v">0.9919</td><td class="v">0.2890</td></tr>
+            <tr><td><span class="s" style="color:#4CC9F0">Set 1′</span> two-sided window<br><span class="lw">Law 1 (τ = 0.735) + Law 2</span></td><td class="v">0.9894</td><td class="v">0.3837</td></tr>
+            <tr><td><span class="s" style="color:#A98BF5">Set 2</span> rigid-ion lattice<br><span class="lw">Law 1 (τ = 0.804), Law 3–Law 5</span></td><td class="v">0.9579</td><td class="v">0.6121</td></tr>
+            <tr><td><span class="s" style="color:#F4796B">Set 3</span> ionic network<br><span class="lw">Set 2 + Law 6</span></td><td class="v">0.9171</td><td class="v">0.7004</td></tr>
+            <tr><td><span class="s" style="color:#35C48E">Set 4</span> crystal chemistry<br><span class="lw">Set 3 + Law 7, Law 8</span></td><td class="v">0.8180</td><td class="v">0.9111</td></tr>
+          </tbody>
+        </table>
+        <div class="setnote">Satisfaction and detection are always quoted from one population, and the population is always named. Set 4's worst damage class is still detected at 0.7338. Set 1′ stands beside the chain rather than inside it, which is why the catalogue holds eight laws while Set 4 applies seven.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="discovery">
+  <div class="wrap">
+    <div class="sec-eyebrow">How they were found</div>
+    <h2>Proposed, tested and <span class="hl">actively refuted</span> by the agents themselves</h2>
+    <p class="lead">A pre-registered protocol fixed the criteria, the data split and the vocabulary before any evaluation. The agents then ran 572 numbered investigations over 99,162 experimental crystal structures. Refuted claims re-enter the search, so the cycles form a sequence of falsifiable experiments.</p>
+    <div class="loop">
+      <div class="step p reveal"><div class="h">PROPOSE</div><div class="b">41 literature queries and 14 agent workflows turn crystal-chemical intuition into candidate one-line laws.</div></div>
+      <div class="step t reveal"><div class="h">TABULATE</div><div class="b">84 descriptor tables computed over 99,162 structures: contacts, Madelung energies, bond valences, site counts.</div></div>
+      <div class="step s reveal"><div class="h">SEARCH</div><div class="b">Systematic search over interpretable law combinations and fitted thresholds, benchmarked against provably optimal decision trees.</div></div>
+      <div class="step e reveal"><div class="h">TEST</div><div class="b">Held-out data and negative controls. Thresholds are fitted only on the discovery split and never touched again.</div></div>
+      <div class="step r reveal"><div class="h">REFUTE</div><div class="b">11 claims written down as results were overturned by the agent that produced them, and returned to the search.</div></div>
+    </div>
+    <div class="ledger">
+      <div class="card reveal"><div class="n num">11</div><div class="l">refuted conclusions are published with the surviving results, each paired with the cheap diagnostic that exposed it (Supplementary Figs. S1–S2).</div></div>
+      <div class="card reveal"><div class="n num">72,583</div><div class="l">result files archived and 615 analysis scripts written along the way, all kept as the audit trail of what was actually executed.</div></div>
+      <div class="card reveal"><div class="n num">0</div><div class="l">synthesis labels entered the discovery of the laws, so the correlation between PRIS plausibility and synthesizability is a finding rather than a fitting target.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="wrap">
+    <div class="sec-eyebrow gold">Beyond the benchmark</div>
+    <h2>Plausibility tracks synthesizability, and shortens the <span class="hl">DFT queue</span></h2>
+    <p class="lead">Set 1 to Set 4 are conservative discrete screens that name a violated mechanism. PSS, the PRIS-derived synthesis score, refits the same quantities to the experimental record of what has been made and gives continuously tunable control over how strongly the combined evidence shortens a queue.</p>
+    <div class="grid2">
+      <div class="card accent reveal">
+        <div class="t">Hard-to-synthesize structures screened &nbsp;·&nbsp; no synthesis labels used in discovery</div>
+        <div class="big"><span class="n num">83.7%</span><span class="tail">while retaining 80.7% of experimental structures</span></div>
+        <div class="bars">
+          <div class="bar on"><span class="lab">PSS synthesis score</span><span class="track"><span class="fill" data-w="83.7"></span></span><span class="val">83.7%</span></div>
+          <div class="bar"><span class="lab">E<sub>hull</sub> threshold (needs relaxation)</span><span class="track"><span class="fill off" data-w="72"></span></span><span class="val">72.0%</span></div>
+        </div>
+        <div class="cnote">At matched satisfaction PSS screens 31.8 percentage points more than a MatterSim-computed hull-energy threshold, which additionally requires a relaxation and a phase-hull reference. On the most confident fifth of same-composition pairs PSS reaches 0.944 accuracy against 0.844 for DFT energy above the hull.</div>
+      </div>
+      <div class="card accent gold reveal">
+        <div class="t">DFT validation queue reduced &nbsp;·&nbsp; MatterGen inverse design, target bulk modulus ≥ 400 GPa</div>
+        <div class="big"><span class="n num">−67.3%</span><span class="tail">of the validation queue</span></div>
+        <div class="bars">
+          <div class="bar on"><span class="lab">Queue reduction</span><span class="track"><span class="fill on" data-w="67.3"></span></span><span class="val">67.3%</span></div>
+          <div class="bar on"><span class="lab">On-target candidates retained</span><span class="track"><span class="fill on" data-w="99.2"></span></span><span class="val">99.2%</span></div>
+        </div>
+        <div class="cnote">In a property-conditioned inverse-design run, PRIS and PSS reduce the DFT validation queue by up to 67.3% and keep 99.2% of the candidates whose DFT-validated bulk moduli reach the design target.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="wrap">
+    <div class="sec-eyebrow coral">Ordering artefact · identity failure</div>
+    <h2>The coordinates pass. The <span class="hl">chemistry</span> doesn't.</h2>
+    <p class="lead"><b>Artificial element ordering</b> in generated catalogues and <b>swapped element identities</b> in falsified crystal reports both slip past geometric checks and energy relaxation. Neither slips past the eight laws.</p>
+
+    <div class="card case reveal">
+      <div class="chead"><span class="ctag">CASE 1</span><span class="tt">Why GNoME has so many low-symmetry structures</span><span class="ts">5,000 uniformly drawn entries · pre-fixed audit protocol</span></div>
+      <div class="cbody">
+        <div>
+          <svg viewBox="0 0 584 292" role="img" aria-label="Fraction of GNoME entries failing Law 7 by source space group">
+<line x1="247.7" y1="4" x2="247.7" y2="252" stroke="#6E82A4" stroke-width="1.3" stroke-dasharray="5 4"/>
+<text x="255.7" y="274" font-size="13" fill="#6E82A4" font-family="Inter,sans-serif">whole sample 40.6% (n = 5,000)</text>
+<g font-family="Inter,sans-serif">
+<text x="8" y="41" font-size="15" fill="#C3D2E8">P1</text><rect x="108" y="28" width="344" height="16" rx="8" fill="rgba(140,175,225,.10)"/><rect x="108" y="28" width="344" height="16" rx="8" fill="#F4796B" opacity=".85"/><text x="462" y="41" font-size="14.5" fill="#F4796B">1.000</text><text x="582" y="41" font-size="12" fill="#6E82A4" text-anchor="end">n = 727</text>
+<text x="8" y="81" font-size="15" fill="#C3D2E8">Pm</text><rect x="108" y="68" width="344" height="16" rx="8" fill="rgba(140,175,225,.10)"/><rect x="108" y="68" width="332.3" height="16" rx="8" fill="#F4796B" opacity=".85"/><text x="462" y="81" font-size="14.5" fill="#F4796B">0.966</text><text x="582" y="81" font-size="12" fill="#6E82A4" text-anchor="end">n = 757</text>
+<text x="8" y="121" font-size="15" fill="#C3D2E8">Cm</text><rect x="108" y="108" width="344" height="16" rx="8" fill="rgba(140,175,225,.10)"/><rect x="108" y="108" width="304.1" height="16" rx="8" fill="#F4796B" opacity=".85"/><text x="462" y="121" font-size="14.5" fill="#F4796B">0.884</text><text x="582" y="121" font-size="12" fill="#6E82A4" text-anchor="end">n = 345</text>
+<text x="8" y="161" font-size="15" fill="#C3D2E8">Amm2</text><rect x="108" y="148" width="344" height="16" rx="8" fill="rgba(140,175,225,.10)"/><rect x="108" y="148" width="57.1" height="16" rx="8" fill="#35C48E" opacity=".85"/><text x="462" y="161" font-size="14.5" fill="#35C48E">0.166</text><text x="582" y="161" font-size="12" fill="#6E82A4" text-anchor="end">n = 380</text>
+<text x="8" y="201" font-size="15" fill="#C3D2E8">Others</text><rect x="108" y="188" width="344" height="16" rx="8" fill="rgba(140,175,225,.10)"/><rect x="108" y="188" width="26.5" height="16" rx="8" fill="#35C48E" opacity=".85"/><text x="462" y="201" font-size="14.5" fill="#35C48E">0.077</text><text x="582" y="201" font-size="12" fill="#6E82A4" text-anchor="end">n = 2,653</text>
+<text x="8" y="241" font-size="15" fill="#C3D2E8">C2/m</text><rect x="108" y="228" width="344" height="16" rx="8" fill="rgba(140,175,225,.10)"/><rect x="108" y="228" width="4.8" height="16" rx="8" fill="#35C48E" opacity=".85"/><text x="462" y="241" font-size="14.5" fill="#35C48E">0.014</text><text x="582" y="241" font-size="12" fill="#6E82A4" text-anchor="end">n = 138</text>
+</g></svg>
+          <div class="cap">Fraction not satisfying Law 7 (distinct-site fraction ≤ 2/3), by source space group</div>
+        </div>
+        <div class="cfacts">
+          <div class="fact"><span class="fn">78%</span><span class="ft">Merge chemically similar elements into <b>one label</b> and the failing entries' distinct-site fraction drops back within the Law 7 threshold, <b>not one atom moved</b></span></div>
+          <div class="fact"><span class="fn">79%</span><span class="ft">Space-group symmetry jumps after merging. Of <b>27 equally mergeable experimental entries, not one</b> does this</span></div>
+          <div class="fact"><span class="fn coral sm">0.0001<br>vs 0.036</span><span class="ft">Energy cost of scrambling the ordering (eV per atom), GNoME vs experimental, from DFT over every symmetry-distinct ordering. <b>18 of 23 GNoME entries</b> are interchangeable below 300 K. <b>0 of 10</b> experimental structures are</span></div>
+        </div>
+      </div>
+      <div class="cnote">These structures are not "crushed": unmodified GNoME parents release a median of under <b>0.001 eV per atom</b> on relaxation, while compression and displacement damage release <b>0.22</b> and <b>6.05 eV per atom</b>. A small relaxation energy rules out gross distortion, not electrostatic, bond-valence or site-complexity failures.</div>
+    </div>
+
+    <div class="card case reveal">
+      <div class="chead"><span class="ctag c2">CASE 2</span><span class="tt">Right coordinates, wrong element: the falsifier's trick</span><span class="ts">Lattice and coordinates fixed; only the species exchanged</span></div>
+      <div class="cbody">
+        <div>
+          <svg viewBox="-16 0 536 234" role="img" aria-label="Damage detection for parent-matched element exchanges">
+<g font-family="Inter,sans-serif">
+<text x="0" y="21" font-size="15" fill="#C3D2E8">Cation ↔ cation</text><text x="452" y="21" font-size="12.5" fill="#6E82A4">n = 69</text>
+<text x="112" y="50" font-size="13.5" fill="#8497B8" text-anchor="end">Coordinate checks</text><rect x="122" y="38" width="320" height="16" rx="8" fill="rgba(140,175,225,.10)"/><rect x="122" y="38" width="88" height="16" rx="8" fill="#5B6E8C" opacity=".9"/><text x="452" y="51" font-size="14.5" fill="#5B6E8C">27.5%</text>
+<text x="112" y="84" font-size="13.5" fill="#8497B8" text-anchor="end">PRIS</text><rect x="122" y="72" width="320" height="16" rx="8" fill="rgba(140,175,225,.10)"/><rect x="122" y="72" width="287.7" height="16" rx="8" fill="#4CC9F0" opacity=".9"/><text x="452" y="85" font-size="14.5" fill="#4CC9F0">89.9%</text>
+<text x="0" y="133" font-size="15" fill="#C3D2E8">Cation ↔ anion</text><text x="452" y="133" font-size="12.5" fill="#6E82A4">n = 83</text>
+<text x="112" y="162" font-size="13.5" fill="#8497B8" text-anchor="end">Coordinate checks</text><rect x="122" y="150" width="320" height="16" rx="8" fill="rgba(140,175,225,.10)"/><rect x="122" y="150" width="154.2" height="16" rx="8" fill="#5B6E8C" opacity=".9"/><text x="452" y="163" font-size="14.5" fill="#5B6E8C">48.2%</text>
+<text x="112" y="196" font-size="13.5" fill="#8497B8" text-anchor="end">PRIS</text><rect x="122" y="184" width="320" height="16" rx="8" fill="rgba(140,175,225,.10)"/><rect x="122" y="184" width="316.2" height="16" rx="8" fill="#4CC9F0" opacity=".9"/><text x="452" y="197" font-size="14.5" fill="#4CC9F0">98.8%</text>
+</g></svg>
+          <div class="cap">Damage detection for parent-matched element exchanges</div>
+        </div>
+        <div class="cfacts">
+          <div class="fact"><span class="fn gold">≥70</span><span class="ft"><b>falsified crystal structures</b> on record: genuine diffraction data kept, element identities rewritten (Harrison et al., 2010)</span></div>
+          <div class="fact"><span class="fn coral sm">Hirshfeld</span><span class="ft">Caught only by <b>rigid-bond alerts</b> and odd metal–ligand distances, then pinned down by structure factors: after the fact, not at the gate</span></div>
+          <div class="fact"><span class="fn">L1 + L8</span><span class="ft">Four retracted entries on one M(C<sub>2</sub>H<sub>2</sub>N<sub>3</sub>Cl) framework, M labelled Cu, Ni, Mn or Fe, all give <b>ρ<sub>c</sub> = 0.53 and bond-valence deviations of 0.77–0.78</b>, violating both laws at once</span></div>
+        </div>
+      </div>
+      <div class="cnote">Swap the element and the formal charges, Madelung energies and bond valences change at once, <b>without a single atom moving</b>. Coordinate checks cannot see this. Electrostatic and bond-valence laws can.</div>
+    </div>
+
+    <div class="speed reveal">
+      <div class="sl">CPU time<br>per structure</div>
+      <div class="si"><div class="v">0.05–10.7 ms</div><div class="k">contact law alone, 8 → 216 atoms</div></div>
+      <div class="sep"></div>
+      <div class="si"><div class="v">58 ms – 2.4 s</div><div class="k">all eight laws, reference code</div></div>
+      <div class="sep"></div>
+      <div class="si"><div class="v grey">~10<sup>2</sup> CPU-hours</div><div class="k">one DFT relaxation, literature estimate</div></div>
+    </div>
+    <p class="tip">Law 1 evaluates 10,000 cells of 6–20 atoms in under one second, and all eight laws on the same queue take approximately ten minutes. The same queue would cost approximately one million CPU-hours of DFT relaxation, so a full PRIS evaluation costs under one millionth as much. The eight laws do not replace DFT or experiment. They decide which structures earn them.</p>
+  </div>
+</section>
+
+<section id="figures">
+  <div class="wrap">
+    <div class="sec-eyebrow">Figures</div>
+    <h2>The five main figures</h2>
+    <p class="lead">Click any figure to enlarge. Every figure is drawn from aggregate data committed in the repository, and <code style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#BFEBFB">figures/manifest.json</code> maps each one to the script that draws it.</p>
+    <div class="figs">
+      <figure class="fig reveal">
+        <div class="img" data-full="assets/figs/fig1_agentic_law_learning.png"><picture><source srcset="assets/figs/fig1_agentic_law_learning.webp" type="image/webp"><img loading="lazy" src="assets/figs/fig1_agentic_law_learning.png" alt="Figure 1: autonomous discovery by proposal, testing and refutation"></picture></div>
+        <figcaption><span class="fl">FIG. 1</span><b>Autonomous discovery by proposal, testing and refutation.</b> <b>a</b>, Pre-specified workflow: candidate-law proposal, descriptor tabulation, systematic search, held-out testing and attempted refutation. Refuted claims return to the next cycle. Below, the eight surviving laws judge a candidate structure, and an implausible verdict names the unsatisfied law and the mechanism to review. <b>b</b>, t-SNE projection of the archived one-line candidate-law statements, with red circles locating the statements nearest Law 1–Law 8. <b>c</b>, Counts of candidate evaluations, archived result files, analysis scripts, investigations, refuted claims and surviving laws. <b>d</b>, Law 1–Law 8, their predicates and their membership in the five nested sets, with held-out satisfaction and damage detection for each set. <b>e</b>, Running best held-out performance versus investigation index.</figcaption>
+      </figure>
+      <figure class="fig reveal">
+        <div class="img" data-full="assets/figs/fig2_rules.png"><picture><source srcset="assets/figs/fig2_rules.webp" type="image/webp"><img loading="lazy" src="assets/figs/fig2_rules.png" alt="Figure 2: satisfaction, damage detection and threshold transfer"></picture></div>
+        <figcaption><span class="fl">FIG. 2</span><b>Experimental-structure satisfaction, damage detection and threshold transfer.</b> <b>a</b>, Damage detection versus satisfaction on the discovery split: the depth-limited decision-tree frontier, the systematic search over interpretable law combinations and the five law sets. <b>b</b>, Held-out damage detection by composition-preserving perturbation class and pooled. <b>c</b>, Satisfaction of Pauling rules 2–5, individually and jointly, and of the five law sets on the same held-out structures. <b>d</b>, Law thresholds re-derived at their defining percentiles on held-out data, shown as the ratio to the frozen values, with the percentage of held-out verdicts that change.</figcaption>
+      </figure>
+      <figure class="fig reveal">
+        <div class="img" data-full="assets/figs/fig3_anatomy.png"><picture><source srcset="assets/figs/fig3_anatomy.webp" type="image/webp"><img loading="lazy" src="assets/figs/fig3_anatomy.png" alt="Figure 3: anatomy of the laws"></picture></div>
+        <figcaption><span class="fl">FIG. 3</span><b>Physical basis of the PRIS plausibility laws.</b> <b>a</b>, Experimental MgAl<sub>2</sub>O<sub>4</sub> and its five chemically damaged variants (uniaxial compression, cation–cation exchange, random displacement, isotropic expansion and cation–anion exchange), with the relevant descriptors and law verdicts beneath each structure (green satisfied, red unsatisfied); purple rings mark exchanged atoms. <b>b</b>, Held-out damage detection by perturbation class as laws are added, from Law 1 alone to Set 4; red outlines mark the combinations referenced in the text. <b>c</b>, DFT energy above each compound's own minimum for twenty experimental compounds rigidly scaled along the reduced-contact coordinate ρ<sub>c</sub> (median and interquartile band, logarithmic left axis), together with the experimental distribution (right axis). The two Law 1 floors and the conditional Law 2 ceiling are marked with their domains; the dotted line gives the pre-registered 0.1 eV per atom cost.</figcaption>
+      </figure>
+      <figure class="fig reveal">
+        <div class="img" data-full="assets/figs/fig4_validation_synthesis.png"><picture><source srcset="assets/figs/fig4_validation_synthesis.webp" type="image/webp"><img loading="lazy" src="assets/figs/fig4_validation_synthesis.png" alt="Figure 4: physicochemical screening across validation tasks"></picture></div>
+        <figcaption><span class="fl">FIG. 4</span><b>Physicochemical screening across validation tasks.</b> <b>a</b>, Overall damage detection for fixed-distance, composition-only and successive PRIS criteria. <b>b</b>, Damage detection by perturbation class for baselines, contact laws and law sets. <b>c</b>, Satisfaction versus the fraction of hard-to-synthesize structures screened, for Set 1–Set 4, the PSS threshold sweep, distance cutoffs and a MatterSim-computed hull-energy threshold. <b>d</b>, Set 4 violation and mean PSS across within-model CLscore deciles for CGCNN-PU and MatterSim-1M-MLP-PU. <b>e</b>, Held-out same-composition pair accuracy for PSS and DFT E<sub>hull</sub> against the fraction of most-confident pairs retained. <b>f</b>, DFT-validation queue reduction versus retention of candidates predicted to have bulk modulus ≥ 400 GPa, across PSS thresholds.</figcaption>
+      </figure>
+      <figure class="fig reveal">
+        <div class="img" data-full="assets/figs/fig5_deployment.png"><picture><source srcset="assets/figs/fig5_deployment.webp" type="image/webp"><img loading="lazy" src="assets/figs/fig5_deployment.png" alt="Figure 5: physicochemical screening of generated and database structures"></picture></div>
+        <figcaption><span class="fl">FIG. 5</span><b>Physicochemical screening of generated and database structures.</b> <b>a</b>, Minimum-distance-cutoff satisfaction versus Set 4 satisfaction among charge-assignable outputs from seven generators and from MP-20. <b>b</b>, Fraction of the GNoME sample failing Law 7 by source space group, and DFT order–disorder temperatures for 23 label-merged GNoME entries and 10 experimental structures. <b>c</b>, Energy released on MatterSim relaxation for unmodified GNoME parents and their damaged counterparts, with a DFT curve for twenty parents. <b>d</b>, Law-set verdicts against relaxation energy. <b>e</b>, Damage detection for parent-matched element exchanges: coordinate checks versus PRIS. <b>f</b>, Measured CPU time per structure for Law 1 and for all eight laws, against a literature estimate for one DFT relaxation.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="try">
+  <div class="wrap">
+    <div class="sec-eyebrow gold">Try it</div>
+    <h2>Give it a structure file. It reports every law, the verdict and the <span class="hl">mechanism</span>.</h2>
+    <p class="lead">Thresholds and PSS weights are read from the frozen artefacts in <code style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#BFEBFB">agent_loop/frozen/</code>, so a verdict produced today is the verdict the manuscript reports.</p>
+    <div class="codegrid">
+      <div>
+        <h3>Install and run</h3>
+<pre><span class="c"># Python ≥ 3.10</span>
+git clone https://github.com/AI4QC/PRIS.git
+cd PRIS
+pip install -r requirements.txt
+
+python src/pris_analyze.py mystructure.cif
+python src/pris_analyze.py --quiet *.cif   <span class="c"># one verdict line per file</span>
+python src/pris_analyze.py --json POSCAR   <span class="c"># machine-readable</span></pre>
+        <h3>When a structure fails, the point is the last column</h3>
+<pre>$ python src/pris_analyze.py --quiet damaged/*.cif
+<span class="bad">IMPLAUSIBLE</span>  compressed.cif   bond-valence conservation, short-range repulsion
+<span class="bad">IMPLAUSIBLE</span>  expanded.cif     bond-valence conservation</pre>
+        <p class="tip">Roughly 19% of structures cannot be judged (multiple anions, complex molecular groups, no integer or fractional charge assignment). <b>"Skipped" does not mean "passed."</b></p>
+      </div>
+      <div>
+        <h3>Example: MgAl<sub>2</sub>O<sub>4</sub></h3>
+<pre>MgAl2O4, 14 sites, charges from integer charge balancing, f_i = 0.759
+
+law    quantity                        measured  thresh  verdict  mechanism
+<span class="cy">Law 1</span>  reduced contact rho               0.9865  0.8040   <span class="ok">ok</span>   short-range repulsion
+<span class="cy">Law 2</span>  reduced contact rho               0.9865  1.0500   <span class="ok">ok</span>   ionic contact
+<span class="cy">Law 3</span>  mean reduced cation-anion contact 4.0000  1.0810   --   packing
+<span class="cy">Law 4</span>  range of site Madelung / valence  3.6122 31.4500   <span class="ok">ok</span>   electrostatic balance
+<span class="cy">Law 5</span>  largest site Madelung energy    -20.2144 15.1700   <span class="ok">ok</span>   electrostatic balance
+<span class="cy">Law 6</span>  fraction of like-charge bonds     0.0000  0.0001   <span class="ok">ok</span>   electrostatic balance
+<span class="cy">Law 7</span>  inequivalent sites / sites        0.2143  0.6667   <span class="ok">ok</span>   site complexity
+<span class="g">Law 8</span>  mean |BV sum - v_i| / v_i         0.0384  0.7143   <span class="ok">ok</span>   bond-valence conservation
+
+Set 4  crystal chemistry           <span class="ok">plausible</span>
+PSS  +3.915        VERDICT  <span class="ok">PLAUSIBLE</span></pre>
+        <p class="tip">Law 3's trigger (mean anion CN ≤ 3.333) is not met here, so the law is satisfied by its clause and reported as <b>--</b>. Formal charges come from composition. <code style="font-family:'JetBrains Mono',monospace;font-size:13px">BVAnalyzer</code> is never called, because it infers valence from bond lengths and would make the conclusion the premise.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="posters">
+  <div class="wrap">
+    <div class="sec-eyebrow">Share</div>
+    <h2>Posters and cover</h2>
+    <p class="lead">One-page summaries of the paper, sized for social media. Every number on them is quoted from the manuscript.</p>
+    <div class="posters">
+      <div class="poster reveal">
+        <a href="assets/posters/pris_moment_poster_en.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/posters/pris_moment_poster_en.webp" alt="Poster: Two million hypotheses refuted. Eight crystal laws left." width="1200" height="1600"></a>
+        <div class="pl">Two million hypotheses refuted. Eight crystal laws left.</div>
+        <div class="pd">The discovery funnel, the five nested law sets, the synthesis and inverse-design results, and the eight laws on one page.</div>
+        <div class="pa"><a class="btn sm" href="assets/posters/pris_moment_poster_en.png" download>Download PNG · 3:4</a></div>
+      </div>
+      <div class="poster reveal">
+        <a href="assets/posters/pris_moment_poster2_en.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/posters/pris_moment_poster2_en.webp" alt="Poster: Beyond coordinates, there is chemistry to ask" width="1200" height="1600"></a>
+        <div class="pl">The coordinates pass. The chemistry doesn't.</div>
+        <div class="pd">Why GNoME has so many low-symmetry structures, the falsifier's right-coordinates-wrong-element trick, and the cost of a PRIS check next to a DFT relaxation.</div>
+        <div class="pa"><a class="btn sm" href="assets/posters/pris_moment_poster2_en.png" download>Download PNG · 3:4</a></div>
+      </div>
+      <div class="poster reveal">
+        <a href="assets/posters/pris_cover_1x1_en.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/posters/pris_cover_1x1_en.webp" alt="PRIS cover image" width="1200" height="1200"></a>
+        <div class="pl">Cover</div>
+        <div class="pd">The PRIS wordmark and the refutation funnel, in square and 3:4 formats.</div>
+        <div class="pa"><a class="btn sm" href="assets/posters/pris_cover_1x1_en.png" download>PNG · 1:1</a><a class="btn sm" href="assets/posters/pris_cover_3x4_en.png" download>PNG · 3:4</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cite">
+  <div class="wrap">
+    <div class="sec-eyebrow gold">Citation</div>
+    <h2>Cite the preprint</h2>
+    <div class="cite">
+<pre id="bib">@article{song2026pris,
+  title         = {Autonomous discovery of new structure-plausibility laws for explainable
+                   and rapid crystal diagnosis and screening},
+  author        = {Song, Zhilong and Cheng, Lixue},
+  year          = {2026},
+  eprint        = {2609.01209},
+  archivePrefix = {arXiv},
+  primaryClass  = {cond-mat.mtrl-sci},
+  url           = {https://arxiv.org/abs/2609.01209},
+}</pre>
+      <button class="btn sm copy" id="copybib" type="button">Copy BibTeX</button>
+    </div>
+    <p class="cite2">To cite the software and the frozen law definitions specifically, use the <code style="font-family:'JetBrains Mono',monospace;font-size:13px">@software</code> entry in the repository README, or GitHub's "Cite this repository" button, which reads <code style="font-family:'JetBrains Mono',monospace;font-size:13px">CITATION.cff</code>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="fb">PRIS</div>
+      <div>Plausibility Rules for Inorganic Structures</div>
+      <div style="margin-top:10px">Department of Chemistry · IAS Center for AI for Scientific Discoveries · Department of Chemical and Biological Engineering<br>Hong Kong University of Science and Technology</div>
+      <div style="margin-top:10px">Code and manuscript text are released under the MIT licence. ICSD entries are not redistributable, ELEMENTA is CC-BY-NC-4.0, and the public benchmark released with this work is built on COD (CC0) alone. Only aggregate statistics are committed in the repository.</div>
+    </div>
+    <div class="links">
+      <a href="https://arxiv.org/abs/2609.01209" target="_blank" rel="noopener">arXiv:2609.01209</a>
+      <a href="https://github.com/AI4QC/PRIS" target="_blank" rel="noopener">github.com/AI4QC/PRIS</a>
+      <a href="https://github.com/AI4QC/PRIS/blob/main/PREREG.md" target="_blank" rel="noopener">Pre-registration</a>
+      <a href="https://github.com/AI4QC/PRIS/blob/main/agent_loop/refutation_ledger.csv" target="_blank" rel="noopener">Refutation ledger</a>
+      <a href="https://github.com/AI4QC/PRIS/blob/main/manuscript/si.pdf" target="_blank" rel="noopener">Supplementary information</a>
+      <a href="mailto:lixuecheng@ust.hk">Contact: lixuecheng@ust.hk</a>
+    </div>
+  </div>
+</footer>
+
+<dialog id="lb" aria-label="Enlarged figure"><img src="" alt=""></dialog>
+
+<script>
+(function(){
+  // ---- refutation funnel: 2,037,606 candidates converge on eight laws (port of the cover art) ----
+  var svg=document.getElementById('funnel'); var W=1100,H=410;
+  var GO='#FFB703', CY='#4CC9F0';
+  var seed=20260902; function rnd(){ seed|=0; seed=seed+0x6D2B79F5|0; var t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }
+  var top=6, cy=top+(H-top)/2, xA0=4, xB1=W*0.68, nx=W*0.795, hh=(H-top)*0.44;
+  var o=[];
+  o.push('<defs><radialGradient id="glow"><stop offset="0" stop-color="'+GO+'" stop-opacity=".55"/><stop offset="1" stop-color="'+GO+'" stop-opacity="0"/></radialGradient>'
+        +'<linearGradient id="stream" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="'+CY+'" stop-opacity=".012"/><stop offset=".62" stop-color="'+CY+'" stop-opacity=".025"/><stop offset="1" stop-color="'+GO+'" stop-opacity=".085"/></linearGradient></defs>');
+  o.push('<path d="M'+xA0+' '+(cy-hh).toFixed(1)+' L'+xB1.toFixed(1)+' '+(cy-13).toFixed(1)+' L'+xB1.toFixed(1)+' '+(cy+13).toFixed(1)+' L'+xA0+' '+(cy+hh).toFixed(1)+' Z" fill="url(#stream)"/>');
+  o.push('<g class="cloud">');
+  var n=Math.max(1600,Math.min(4000,Math.floor(W*H/240)));
+  for(var i=0;i<n;i++){
+    var t=Math.pow(rnd(),0.58), x=xA0+t*(xB1-xA0), spread=hh*Math.pow(1-t,1.3)+4;
+    var y=cy+spread*Math.pow(rnd(),0.82)*(rnd()<0.5?1:-1), r=0.8+rnd()*1.4, col, op;
+    if(t<0.72){col='#7E93B5';op=0.13+0.30*t;}else{col=CY;op=0.34+0.5*(t-0.72)/0.28;}
+    o.push('<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+r.toFixed(2)+'" fill="'+col+'" opacity="'+op.toFixed(2)+'"/>');
+  }
+  o.push('</g>');
+  var names=['contact floor','contact ceiling','packing','Madelung range','Madelung cap','charge topology','site complexity','bond valence'];
+  var ys=[]; for(var k=0;k<8;k++) ys.push(cy+(k-3.5)*((H-top)*0.112));
+  ys.forEach(function(y){ o.push('<path d="M'+xB1.toFixed(1)+' '+cy.toFixed(1)+' C '+(xB1+40).toFixed(1)+' '+cy.toFixed(1)+', '+(nx-48).toFixed(1)+' '+y.toFixed(1)+', '+nx.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="'+GO+'" stroke-width="1.1" opacity=".32"/>'); });
+  ys.forEach(function(y,k){
+    o.push('<circle class="glow" style="animation-delay:'+(k*0.35).toFixed(2)+'s" cx="'+nx.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="15" fill="url(#glow)"/>');
+    o.push('<circle cx="'+nx.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="5.6" fill="'+GO+'"/>');
+    o.push('<text x="'+(nx+16).toFixed(1)+'" y="'+(y+5).toFixed(1)+'" font-size="15" font-weight="700" fill="#E4C88A" font-family="Inter,sans-serif">L'+(k+1)+'</text>');
+    o.push('<text x="'+(nx+48).toFixed(1)+'" y="'+(y+5).toFixed(1)+'" font-size="13" fill="#8497B8" font-family="Inter,sans-serif">'+names[k]+'</text>');
+  });
+  svg.innerHTML=o.join('');
+
+  // ---- reveal on scroll, and grow the bars when their card appears ----
+  var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in');
+      e.target.querySelectorAll('.fill[data-w]').forEach(function(f){ f.style.width=f.getAttribute('data-w')+'%'; });
+      io.unobserve(e.target);} });
+  },{threshold:.12}):null;
+  document.querySelectorAll('.reveal').forEach(function(el){ if(io) io.observe(el); else { el.classList.add('in'); el.querySelectorAll('.fill[data-w]').forEach(function(f){ f.style.width=f.getAttribute('data-w')+'%'; }); } });
+
+  // ---- figure lightbox ----
+  var lb=document.getElementById('lb'), lbimg=lb.querySelector('img');
+  document.querySelectorAll('figure.fig .img').forEach(function(d){
+    d.addEventListener('click',function(){ lbimg.src=d.getAttribute('data-full'); lbimg.alt=d.querySelector('img').alt; if(lb.showModal) lb.showModal(); else window.open(lbimg.src,'_blank'); });
+  });
+  lb.addEventListener('click',function(){ lb.close(); });
+
+  // ---- copy bibtex ----
+  var cb=document.getElementById('copybib');
+  cb.addEventListener('click',function(){
+    var txt=document.getElementById('bib').textContent;
+    var done=function(){ cb.textContent='Copied'; setTimeout(function(){cb.textContent='Copy BibTeX';},1600); };
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done); }
+    else { var ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  });
+})();
+</script>
+</body>
+</html>
