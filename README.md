@@ -4,8 +4,10 @@
 
 # PRIS — Plausibility Rules for Inorganic Structures
 
-**Autonomous discovery of new structure plausibility laws for explainable and rapid
+**Autonomous discovery of new structure-plausibility laws for explainable and rapid
 crystal diagnosis and screening**
+
+[![arXiv](https://img.shields.io/badge/arXiv-2609.01209-b31b1b.svg)](https://arxiv.org/abs/2609.01209)
 
 An autonomous agent ran 572 numbered investigations over 99,162 experimental crystal
 structures under a pre-registered protocol, evaluated 2,037,606 candidate laws, and kept
@@ -237,15 +239,19 @@ Where a figure and the text disagree, the text wins; `manuscript/main.pdf` and
 
 ## Citation
 
-If you use PRIS, PSS, or the code in this repository, please cite the manuscript:
+If you use PRIS, PSS, or the code in this repository, please cite the preprint,
+[arXiv:2609.01209](https://arxiv.org/abs/2609.01209):
 
 ```bibtex
-@unpublished{song2026pris,
-  title   = {Autonomous discovery of new structure plausibility laws for explainable
-             and rapid crystal diagnosis and screening},
-  author  = {Song, Zhilong and Cheng, Lixue},
-  year    = {2026},
-  note    = {Manuscript under review},
+@article{song2026pris,
+  title         = {Autonomous discovery of new structure-plausibility laws for explainable
+                   and rapid crystal diagnosis and screening},
+  author        = {Song, Zhilong and Cheng, Lixue},
+  year          = {2026},
+  eprint        = {2609.01209},
+  archivePrefix = {arXiv},
+  primaryClass  = {cond-mat.mtrl-sci},
+  url           = {https://arxiv.org/abs/2609.01209},
 }
 ```
 

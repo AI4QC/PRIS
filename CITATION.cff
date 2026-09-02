@@ -26,9 +26,9 @@ keywords:
   - generative models for materials
   - autonomous scientific discovery
 preferred-citation:
-  type: unpublished
+  type: article
   title: >-
-    Autonomous discovery of new structure plausibility laws for explainable and rapid
+    Autonomous discovery of new structure-plausibility laws for explainable and rapid
     crystal diagnosis and screening
   authors:
     - family-names: Song
@@ -39,4 +39,8 @@ preferred-citation:
       affiliation: "Hong Kong University of Science and Technology"
       email: lixuecheng@ust.hk
   year: 2026
-  notes: "Manuscript under review"
+  url: "https://arxiv.org/abs/2609.01209"
+  identifiers:
+    - type: other
+      value: "arXiv:2609.01209"
+      description: "arXiv preprint identifier"
