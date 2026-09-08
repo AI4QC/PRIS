@@ -1,186 +1,238 @@
-# 预注册:用 AI 搜索取代泡林定律的最小定律集
+# Pre-registration: replacing Pauling's rules with a minimal law set found by AI search
 
-**版本 v1.0 · 2026-07-28**
-**本文件在第一次开启 lockbox 之前提交并打 git tag。tag 的 commit hash 写进论文方法部分。**
-**此后任何修改只能追加"修订记录"一节,不得改写既有条目。**
+**Version v1.0 · 2026-07-28**
+**This file is committed and git-tagged before the lockbox is opened for the first time. The commit hash of that tag goes into the Methods section of the paper.**
+**Any later change may only append a "Revision log" entry; existing entries may not be rewritten.**
 
-对应研究计划:`新泡林定律_AI发现_研究计划.md` v1.3
-数据封条:`$PRIS_ARCHIVE/lockbox/LOCKBOX.sealed.json`
-
----
-
-## 0. 为什么要预注册
-
-在 38,307 个结构上搜规则,必然搜得出伪规律。本项目的全部说服力建立在
-"搜索永远看不到一部分数据,且判据在看数据之前就写死"。事后调整口径就是 HARKing,
-一次就足以让全部结论作废。
+Corresponding research plan: `new-pauling-laws_AI-discovery_research-plan.md` v1.3
+Data seal: `$PRIS_ARCHIVE/lockbox/LOCKBOX.sealed.json`
 
 ---
 
-## 1. 数据与切分(已冻结)
+## 0. Why pre-register
 
-- **分析集**:实验结构(ICSD 73,823 + COD 25,339 中)单一阴离子、无 H 无 C 者,实测 **38,307** 条。
-  阴离子分布 O 19,833 / S 4,783 / F 2,839 / Se 2,745 / N 1,673 / P 1,663 / Te 1,558 / Cl 1,434 / I 909 / Br 870。
-- **严格氧化物子集**:23,728 条。**注意它不是分析集的子集**,差集 3,895 条全部含 P(磷酸盐口径分歧)。
-- **切分**:`split_of(sid, seed) = sha256(f"{seed}:{sid}")[:8] as uint64 / 2**64`,
-  seed = `20260728`,discovery 60% / calibration 25% / lockbox 15%。
-  实测 **22,925 / 9,634 / 5,748**。纯函数,与行序无关。
-- **lockbox 开封配额:3 次。** 每次必须给出 ≥10 字理由并写入 `openings.log`。
-  **论文必须报告实际开封次数与每次的规则集哈希。**
-- **各分区的用途**:discovery 可任意查看与搜索;calibration 可用于定阈值、选 N、模型选择,
-  **不得用于搜索规则**;lockbox 仅用于最终一次性评估。
+Searching for rules over 38,307 structures will inevitably turn up spurious ones. The whole
+persuasive force of this project rests on "the search never sees part of the data, and the
+criteria are fixed in writing before the data are seen". Adjusting the criteria afterwards is
+HARKing, and once is enough to void every conclusion.
 
-## 2. 主假设与主目标(已冻结)
+---
 
-**H1(主)**:存在一个条数 N ≤ 12 的定律集,每条满足 §4.3 的 G1–G8 八条硬门,
-在**匹配覆盖率**下的配位环境预测优于众数查表基线。
+## 1. Data and splits (frozen)
 
-**主目标是 T4**:仅用组成级特征(元素、形式电荷、电负性、半径和、化学计量)预测配位环境。
-**输入等级 ≤ T0**。任何需要先有结构才能求值的量(键长、CSM、BVS)不得进入 Guard 或 Body。
+- **Analysis set**: experimental structures (from ICSD 73,823 + COD 25,339) with a single anion
+  and no H and no C; measured at **38,307** entries.
+  Anion distribution O 19,833 / S 4,783 / F 2,839 / Se 2,745 / N 1,673 / P 1,663 / Te 1,558 / Cl 1,434 / I 909 / Br 870.
+- **Strict oxide subset**: 23,728 entries. **Note that it is not a subset of the analysis set**;
+  the 3,895 entries in the difference all contain P (a disagreement over how phosphates are counted).
+- **Split**: `split_of(sid, seed) = sha256(f"{seed}:{sid}")[:8] as uint64 / 2**64`,
+  seed = `20260728`, discovery 60% / calibration 25% / lockbox 15%.
+  Measured **22,925 / 9,634 / 5,748**. A pure function, independent of row order.
+- **Lockbox opening quota: 3.** Each opening must state a reason of ≥10 characters and record it
+  in `openings.log`.
+  **The paper must report the actual number of openings and the law-set hash at each one.**
+- **What each partition is for**: discovery may be inspected and searched freely; calibration may
+  be used to set thresholds, choose N and select models, **but not to search for laws**; the
+  lockbox is used only for the final one-shot evaluation.
 
-**硬下界**:Waroquiers 2017 的"按 (元素, 氧化态) 查最常见配位环境"约 80%,泡林规则 1 为 66%。
-**打不过众数查表即判定为非定律**,不论显著性如何。
+## 2. Primary hypothesis and primary target (frozen)
 
-**比较必须在匹配覆盖率下做**:只在集合触发的那批实例上与查表比。
-全覆盖轴上的比较对带 guard 的集合是注定输的指标,不得作为判据。
+**H1 (primary)**: there exists a law set of size N ≤ 12, each law passing the eight hard gates
+G1–G8 of §4.3, that predicts coordination environments better than a modal look-up table baseline
+**at matched coverage**.
 
-## 3. 需在看数据前定死的三个自由度
+**The primary target is T4**: predict the coordination environment from composition-level features
+alone (element, formal charge, electronegativity, radius sum, stoichiometry).
+**Input tier ≤ T0.** Any quantity that requires a structure before it can be evaluated (bond
+length, CSM, BVS) may not enter a Guard or a Body.
 
-### 3.1 λ 与 `N_eff`(§13.5 拍板项 1)
+**Hard lower bound**: Waroquiers 2017's "look up the most common coordination environment by
+(element, oxidation state)" reaches about 80%; Pauling's rule 1 reaches 66%.
+**Failing to beat the modal look-up table means it is not a law**, whatever the significance.
 
-对头条数字 N 的杠杆实测是 **12 倍**(59 → 5),是全项目唯一会**静默**毁掉可信度的自由度。
+**Comparisons must be made at matched coverage**: compare against the look-up table only on the
+instances the set actually triggers on. Comparison along the full-coverage axis is a metric a
+guarded set is bound to lose, and may not be used as a criterion.
 
-**冻结决定**:
-- 预注册 **λ = 1**;另报 λ ∈ {3, 10, 30} 三条曲线作敏感性分析,**全部报,不挑**。
-- `N_eff = N_data / deff`,`deff = 1 + (m−1)ρ`,**聚类单位取"结构原型"**,
-  `ρ` 由 MPU-1 在特征表上按 `proto_id` 分组实测得出,**必须在看到任何候选规则之前测完并写入本文件的修订记录**。
-- 若 `ρ` 的置信区间宽到使 `argmin L_total(N)` 跨越 3 条以上,**放弃 argmin**,
-  改用固定判据(累计压缩 ≥90% / ≥80% 两档),**N 报区间**。
+## 3. Three degrees of freedom that must be fixed before looking at the data
 
-### 3.2 词汇表冻结
+### 3.1 λ and `N_eff` (§13.5 decision item 1)
 
-以下三样随 lockbox 一起冻结,冻结后 Tier C 新增的原语只能进入下一轮预注册:
-- 47 个特征原语的词汇表 Σ 与每个原语的 `(tier, locality, cost)` 三列
-- 250 个 Guard selector 词汇表
-- `lewis_base_env` 的组成级实现与它引用的碱强度表
+The measured leverage on the headline number N is **12-fold** (59 → 5), and this is the only
+degree of freedom in the project that can destroy credibility **silently**.
 
-**不冻结的话 G3 是纸门**:新增一个原语只涨 0.03 bit,任何拟合式都能以"它是一个原语"的名义偷渡。
+**Frozen decisions**:
+- Pre-register **λ = 1**; additionally report three curves for λ ∈ {3, 10, 30} as a sensitivity
+  analysis, **all of them, with no cherry-picking**.
+- `N_eff = N_data / deff`, `deff = 1 + (m−1)ρ`, with the **clustering unit taken to be the
+  structure prototype**. `ρ` is measured by MPU-1 on the feature table grouped by `proto_id`, and
+  **must be measured and written into the revision log of this file before any candidate law is
+  seen**.
+- If the confidence interval on `ρ` is wide enough that `argmin L_total(N)` spans more than 3
+  laws, **abandon argmin** and switch to a fixed criterion (cumulative compression ≥90% / ≥80%,
+  two levels), **reporting N as an interval**.
 
-### 3.3 组合语义
+### 3.2 Freezing the vocabulary
 
-**主线用合取**(实例满足集合 ⟺ 满足每一条适用的成员),与 George 的 13% 同语义、直接可比。
-并集/覆盖语义作为次线另报。**代价已知且接受**:合取语义下贪心的 `1−1/e` 保证不成立,
-不得在论文中声称最优性。
+The following three are frozen together with the lockbox; after the freeze, new Tier C primitives
+may only enter the next round of pre-registration:
+- the vocabulary Σ of 47 feature primitives, with the three columns `(tier, locality, cost)` for each
+- the vocabulary of 250 Guard selectors
+- the composition-level implementation of `lewis_base_env` and the base-strength table it references
 
-## 4. 头条数字的形状(已冻结)
+**Without this freeze G3 is a paper gate**: adding one primitive costs only 0.03 bit, so any fitted
+expression can be smuggled in under the name of "it is a primitive".
 
-**主头条是曲线 `L_total(N)`,不是百分比。** 交付九条曲线(3 Tier × 3 压缩靶),
-泡林五条与 Hawthorne 三条各是曲线上的点。
+### 3.3 Combination semantics
 
-**禁止**单独报"N 条同时满足 X%"并与 George 的 13% 并列。理由:
-(a) 量纲不同(他是无 guard、结构粒度、5,000 氧化物;我们是带 guard、位点粒度、38,307 全阴离子);
-(b) 合取语义下 X 关于 N 单调不增,且系统性奖励收窄 guard(实测:20 条 guard 只覆盖 2% 的废规则,
-合取满足率 96.1%),注水方向恰是退化方向;
-(c) `0.13^(1/4) = 0.60`,打赢 13% 只等于"平均单条 60% → 95%",而查表本来就 80%。
+**The main line uses conjunction** (an instance satisfies the set ⟺ it satisfies every applicable
+member), which has the same semantics as George's 13% and is directly comparable. Union/coverage
+semantics is reported as a secondary line. **The cost is known and accepted**: under conjunctive
+semantics the `1−1/e` guarantee for greedy selection does not hold, and optimality may not be
+claimed in the paper.
 
-需要报百分比时,必须在**五个"同一"**下等 N 对比(同一 23,728 氧化物子集、同一近邻算法 ChemEnv、
-同一氧化态来源、同一结构粒度、同一条数 N=4),且用**我们管线重算的 `SET-P25`** 而非 George 的 13%,
-并**成对报 (覆盖率, 限制力)**。
+## 4. The shape of the headline number (frozen)
 
-## 5. 氧化态来源(已冻结)
+**The primary headline is the curve `L_total(N)`, not a percentage.** Nine curves are delivered
+(3 Tiers × 3 compression targets); Pauling's five rules and Hawthorne's three are each points on
+those curves.
 
-**`BVAnalyzer` 派生的氧化态整批排除出规则 2/4 与全部 Hawthorne 量的主统计。**
-理由:它用键长反解价态,再拿去检验关于键价的定律,是用结论推前提;
-且实测失败率 18–35%,失败非随机,集中在混合价、不常见价态、大晶胞——正是最有信息量的样本。
+**It is forbidden** to report "N laws satisfied simultaneously by X%" on its own and set it beside
+George's 13%. Reasons:
+(a) the units differ (his is unguarded, structure-level, 5,000 oxides; ours is guarded, site-level,
+38,307 across all anions);
+(b) under conjunctive semantics X is monotonically non-increasing in N and systematically rewards
+narrowing the guard (measured: 20 guards covering only 2% give a worthless rule with 96.1%
+conjunctive satisfaction), so the direction that inflates the number is exactly the degenerate one;
+(c) `0.13^(1/4) = 0.60`, so beating 13% amounts only to "60% → 95% per law on average", while the
+look-up table is already at 80%.
 
-允许的来源仅两级:`cif`(ICSD 原生)与 `guess`(纯组成推断)。派生条目在特征表中留 `ox_source` 旗标。
+Where a percentage must be reported, it must be an equal-N comparison under the **five "sames"**
+(the same 23,728-oxide subset, the same neighbour algorithm ChemEnv, the same oxidation-state
+source, the same structure granularity, the same law count N=4), and it must use **`SET-P25`
+recomputed through our own pipeline** rather than George's 13%, and it must **report the pair
+(coverage, restrictiveness)**.
 
-## 6. go/no-go 与止损(已冻结)
+## 5. Oxidation-state provenance (frozen)
 
-| 门 | 时点 | 判据 | 不过怎么办 |
+**Oxidation states derived from `BVAnalyzer` are excluded wholesale from the main statistics for
+rules 2/4 and for every Hawthorne quantity.**
+Reason: it back-solves valence from bond lengths and is then used to test laws about bond valence,
+which is deriving the premise from the conclusion. Its measured failure rate is also 18–35%, and
+the failures are not random: they concentrate on mixed valence, uncommon oxidation states and
+large unit cells — exactly the most informative samples.
+
+Only two provenance levels are allowed: `cif` (native to ICSD) and `guess` (pure compositional
+inference). Derived entries carry an `ox_source` flag in the feature table.
+
+## 6. go/no-go and stop-loss (frozen)
+
+| gate | when | criterion | what if it fails |
 |---|---|---|---|
-| G-A | Week 3 | 复现 George 五条命中率 ±3 pt | **停下查 bug,不许继续** |
-| G-B | Week 3 | 同组成多形对的 pairwise AUC 是否 ≈0.5 | 不投 GPU,ΔE 列改报"规则与 0 K 稳定性无关",**但必须报一个数** |
-| **G-C** | Week 6–7 | `L_total(N)` 是否出现拐点(四档 λ 下拐点变动 ≤ ±3 条) | **转向"晶体化学的规律性不是低秩的"**,用固定判据报 N 区间,负结果当主结果 |
-| G-D | Week 8 | 管线能否重新发现泡林第三定律 | **停下查 bug,不许继续** |
-| G-E | Week 9–10 | T0 集合在匹配覆盖率下是否打过众数查表 | 降投 *Sci. Adv.* / *Angew.*,论文仍成立 |
+| G-A | Week 3 | reproduce George's five hit rates to ±3 pt | **stop and hunt the bug; do not continue** |
+| G-B | Week 3 | is the pairwise AUC on same-composition polymorph pairs ≈0.5 | do not spend GPU; the ΔE column becomes "the laws are unrelated to 0 K stability", **but a number must still be reported** |
+| **G-C** | Week 6–7 | does `L_total(N)` show a knee (knee moves ≤ ±3 laws across the four λ levels) | **pivot to "the regularity of crystal chemistry is not low-rank"**, report N as an interval under the fixed criterion, and make the negative result the main result |
+| G-D | Week 8 | can the pipeline rediscover Pauling's third rule | **stop and hunt the bug; do not continue** |
+| G-E | Week 9–10 | does a T0 set beat the modal look-up table at matched coverage | aim lower, at *Sci. Adv.* / *Angew.*; the paper still stands |
 
-## 7. 成功判据分级(已冻结,事后不得上调或下调)
+## 7. Graded success criteria (frozen; may not be raised or lowered afterwards)
 
-| 级 | 内容 | 自评概率 |
+| level | content | self-assessed probability |
 |---|---|---|
-| L0 | 集合级目标函数良定义,`N*` 不是 λ 的产物 | 70% |
-| L1 | 复现 George 五条 + 方法学敏感性 60 个数字 | ≥95% |
-| L2 | 全阴离子统计地图 + Hawthorne 先验键强首次大规模求解 + `L_total` 基线 | 90% |
-| L3 | 第四定律纯 CN 形式 + 第二定律畸变修正 + ΔE 那一列 | 68% |
-| L4 | 一个 Tier-0 定律集打过众数查表 | 35% |
-| L5 | 一条**单一全称** Tier-0 定律打过众数查表 | 12% |
+| L0 | the set-level objective is well defined and `N*` is not an artefact of λ | 70% |
+| L1 | George's five rules reproduced + 60 numbers of methodological sensitivity | ≥95% |
+| L2 | all-anion statistical map + first large-scale solution of Hawthorne's a-priori bond strengths + `L_total` baseline | 90% |
+| L3 | a pure-CN form of the fourth rule + a distortion correction to the second rule + the ΔE column | 68% |
+| L4 | one Tier-0 law set beats the modal look-up table | 35% |
+| L5 | a **single universal** Tier-0 law beats the modal look-up table | 12% |
 
-**L4 口径已从 v1.0 的"一条定律"下调为"一个定律集",旧 L4 降为 L5。此下调写在此处,
-即为预注册的一部分;论文中不得再作调整。**
+**The L4 criterion has been lowered from v1.0's "one law" to "one law set", and the old L4 becomes
+L5. This lowering is recorded here and is therefore part of the pre-registration; no further
+adjustment may be made in the paper.**
 
-## 8. 已知且接受的限制(写入论文 Limitations)
+## 8. Known and accepted limitations (to be written into the paper's Limitations)
 
-1. **无序结构系统性缺失**:建库时丢弃 87,237 条 ICSD 无序条目(约占 ICSD 有效条目 36%)。
-   适用域声明为"有序化学计量相"。固溶体/高熵/A 位混排不在结论范围内。
-2. **正样本 only**:四条负样本通道各有先验污染,其中 ELEMENTA 的组成枚举规则本身是一层先验,
-   且其平坦阴离子分布是人为的,不得当自然频率使用。
-3. **工具循环性**:ChemEnv 的权重与 BVS 的 R0 表都从同批数据拟合,
-   "新定律"有可能只是在重述这些工具的内部假设。三近邻算法一致性(G6)是最强缓解,**没有完全解法**。
-4. **MLIP 噪声底**:实测 ELEMENTA 111,527 个多形对的 ΔE 中位仅 0.0203 eV/atom,
-   仅 32.7% 超过 MLIP 的 0.036 eV/atom MAE。S1/S2/S4/S5 的可检测效应下界因此钉死在 0.036,
-   低于此的效应一律不报。S3-A 改用 DFT 能量,不受此限。
-5. **时间外推的腿很细**:COD post-2019 可分析结构约 700–1,100 条,阴离子严重偏斜
-   (O 750 / S 112 / Se 84 / N 6 / Br 2)。**只有氧化物单族能做有统计力的时间留出**,
-   其余只报趋势不报置信区间。
-6. **ELEMENTA 与 ICSD 均不可再分发**(CC-BY-NC-4.0 / FIZ 版权 + 欧盟数据库特别权)。
-   公开 benchmark 只能建在 COD(CC0)上。
+1. **Disordered structures are systematically absent**: 87,237 disordered ICSD entries (about 36%
+   of valid ICSD entries) were discarded when the database was built. The domain of applicability
+   is declared to be "ordered stoichiometric phases". Solid solutions, high-entropy phases and
+   A-site mixing are outside the scope of the conclusions.
+2. **Positives only**: each of the four negative-sample channels carries its own prior
+   contamination. In particular ELEMENTA's compositional enumeration rules are themselves a layer
+   of prior, and its flat anion distribution is artificial and may not be used as a natural
+   frequency.
+3. **Tool circularity**: ChemEnv's weights and the BVS R0 table are both fitted from the same body
+   of data, so a "new law" may be no more than a restatement of those tools' internal assumptions.
+   Agreement across three neighbour algorithms (G6) is the strongest mitigation; **there is no
+   complete solution**.
+4. **MLIP noise floor**: the measured median ΔE over ELEMENTA's 111,527 polymorph pairs is only
+   0.0203 eV/atom, and only 32.7% exceed the MLIP's MAE of 0.036 eV/atom. The detectable-effect
+   lower bound for S1/S2/S4/S5 is therefore pinned at 0.036, and nothing below it is reported.
+   S3-A switches to DFT energies and is not subject to this limit.
+5. **Time extrapolation stands on a thin leg**: COD post-2019 yields only about 700–1,100
+   analysable structures, with a severely skewed anion distribution
+   (O 750 / S 112 / Se 84 / N 6 / Br 2). **Only the oxide family alone supports a statistically
+   powered temporal hold-out**; for the rest, report the trend but not confidence intervals.
+6. **Neither ELEMENTA nor ICSD may be redistributed** (CC-BY-NC-4.0 / FIZ copyright plus the EU
+   sui generis database right). A public benchmark can only be built on COD (CC0).
 
 ---
 
-## 修订记录
+## Revision log
 
-*(此后只能追加,不能改写上文)*
+*(append only from here; nothing above may be rewritten)*
 
-### 修订 R1 · 2026-07-28 · `deff` / `ρ` 实测(§3.1 要求的"看到候选规则之前"完成)
+### Revision R1 · 2026-07-28 · measurement of `deff` / `ρ` (the §3.1 requirement to finish "before any candidate law is seen")
 
-脚本 `src/measure_deff.py`,B=500 整簇 bootstrap。产物 `features/deff.json`。
+Script `src/measure_deff.py`, B=500 whole-cluster bootstrap. Output `features/deff.json`.
 
-**ρ 是压缩靶依赖的,按靶登记、不取单值**(反正 `L_total` 本来只在同一压缩靶内可比):
+**`ρ` depends on the compression target, so it is registered per target rather than as a single
+value** (which costs nothing, since `L_total` is only comparable within one compression target
+anyway):
 
-| 压缩靶 | K | m(Kish) | ρ [95% CI] | deff | N_eff |
+| compression target | K | m (Kish) | ρ [95% CI] | deff | N_eff |
 |---|---|---|---|---|---|
-| T_CE(ce_symbol 偏离众数) | 7,685 | 73.3 | 0.204 [0.191, 0.216] | 15.7 | 7,658 |
-| T_CONN(位点参与共边/共面) | 8,018 | 72.3 | 0.608 [0.569, 0.647] | 44.3 | 2,897 |
-| T_BV(\|bvs_dev\| > 0.2 vu) | 7,764 | 77.9 | 0.204 [0.194, 0.216] | 16.7 | 7,617 |
+| T_CE (ce_symbol departs from the mode) | 7,685 | 73.3 | 0.204 [0.191, 0.216] | 15.7 | 7,658 |
+| T_CONN (site participates in edge/face sharing) | 8,018 | 72.3 | 0.608 [0.569, 0.647] | 44.3 | 2,897 |
+| T_BV (\|bvs_dev\| > 0.2 vu) | 7,764 | 77.9 | 0.204 [0.194, 0.216] | 16.7 | 7,617 |
 
-`m` 用 Kish 加权均值 `Σm²/Σm`(不等簇下 `deff=1+(m−1)ρ` 里的 m 必须是它;
-用算术均值会把 deff 低估 4 倍)。阴性对照(独立 Bernoulli)ρ = −0.0005、deff = 1.0,估计量无偏。
+`m` uses the Kish weighted mean `Σm²/Σm` (with unequal clusters this is what m must be in
+`deff=1+(m−1)ρ`; the arithmetic mean underestimates deff by a factor of 4). The negative control
+(independent Bernoulli) gives ρ = −0.0005 and deff = 1.0, so the estimator is unbiased.
 
-**§3.1 关键判定:触发备用条款,放弃 argmin 点值,N 报区间。** 三条依据:
-(1) 位点级两个靶的 argmin CI 跨度恰为 3 条(8–11),压在阈值线上,无安全裕度;
-(2) 换一套原型缺失处理,N\* 从 3(typed_only)到 13(strict)——**建模选择比抽样误差挪动 N\* 更多**,
-正是 §3.1 条款要防的"N 由自由度决定";
-(3) λ 从 1 到 30 使 N\* 从 10 掉到 1,跨度远超 ±3。
+**Key §3.1 determination: the fallback clause is triggered, the argmin point estimate is abandoned,
+and N is reported as an interval.** Three grounds:
+(1) for the two site-level targets the argmin CI spans exactly 3 laws (8–11), sitting right on the
+threshold with no safety margin;
+(2) changing how missing prototypes are handled moves N\* from 3 (typed_only) to 13 (strict) —
+**a modelling choice moves N\* more than sampling error does**, which is exactly what the §3.1
+clause is meant to guard against;
+(3) taking λ from 1 to 30 drops N\* from 10 to 1, far more than ±3.
 
-**登记的 N 区间(λ=1,主口径 hybrid)**:T_CE **N ∈ [5, 11]**、T_BV **N ∈ [5, 11]**、T_CONN **N ∈ [3, 5]**。
-下端取固定判据 N80,上端取 argmin CI 上界。
+**Registered N intervals (λ=1, hybrid as the main criterion)**: T_CE **N ∈ [5, 11]**, T_BV
+**N ∈ [5, 11]**, T_CONN **N ∈ [3, 5]**. The lower end is the fixed criterion N80, the upper end is
+the upper bound of the argmin CI.
 
-**对照**:不做聚类修正(deff=1)时 N\* = 101。聚类修正把 N 从三位数压到十位数,
-是四层防御里唯一有统计学正当性的那层,实测确认。
+**Control**: without the clustering correction (deff=1), N\* = 101. The clustering correction is
+what compresses N from three digits to two, and it is the only one of the four layers of defence
+with statistical justification. Confirmed by measurement.
 
-**顺带纠正两个上游数字**:
-- `icsd_meta.structure_type` 在**分析集**上命中 **54.77%**(20,966/38,245),不是 78.13%——
-  后者是对全部 203,830 条算的,口径不同。COD 命中 0%,ICSD 命中 76.50%。唯一值 3,380 而非 9,015。
-- 计划 §4.5.1 假设的 `deff=20.2` 数值上站得住(typed_only 实测 20.1–22.2),
-  **但它是两个错误相消的结果**:ρ 假设高了 4 倍(0.80 vs 0.20),m 假设低了 4 倍(算术 25 vs Kish 99)。
+**Two upstream numbers corrected in passing**:
+- `icsd_meta.structure_type` hits **54.77%** (20,966/38,245) on the **analysis set**, not 78.13% —
+  the latter was computed over all 203,830 entries, a different denominator. COD hits 0%, ICSD hits
+  76.50%. There are 3,380 unique values, not 9,015.
+- The `deff=20.2` assumed in plan §4.5.1 holds up numerically (typed_only measures 20.1–22.2),
+  **but only because two errors cancel**: ρ was assumed 4× too high (0.80 vs 0.20) and m was
+  assumed 4× too low (arithmetic 25 vs Kish 99).
 
-### 修订 R2 · 2026-07-28 · §5 氧化态来源的澄清
+### Revision R2 · 2026-07-28 · clarification of the §5 oxidation-state provenance
 
-实测:ICSD 原始 CIF 的 `_atom_type_oxidation_number` 覆盖 **27,408/27,408 = 100%**,
-且 blob 里的装饰与原始 CIF 位点级 **100.000%** 一致(847,608 个位点比对),混合价逐例保留未被平均。
-但 **COD 只有 1.76% 带装饰,且来源无法核验**(本地无 COD 原始 CIF),可能是上游用 BVAnalyzer 补的
-——PREREG §5 明令排除,**无法证伪即不采信,COD 全部走 `guess`**。
+Measured: `_atom_type_oxidation_number` in the raw ICSD CIFs covers **27,408/27,408 = 100%**, and
+the decoration in the blob agrees with the raw CIF at the site level to **100.000%** (847,608 sites
+compared), with mixed valence preserved case by case rather than averaged away. But **only 1.76% of
+COD entries carry a decoration, and its provenance cannot be verified** (no raw COD CIFs are held
+locally); it may have been filled in upstream with BVAnalyzer — which PREREG §5 explicitly
+excludes, so **what cannot be falsified is not trusted, and all of COD goes through `guess`**.
 
-因此 `cif` 这一级实际只覆盖 **27,374/38,307 = 71.5%**,不是全体。
-`cif + guess` 合计 **96.11%**,高于 §6.2 预期的 85%。**全程未调用 BVAnalyzer。**
+The `cif` level therefore actually covers **27,374/38,307 = 71.5%**, not all of it.
+`cif + guess` together cover **96.11%**, above the 85% expected in §6.2. **BVAnalyzer was never
+called at any point.**
