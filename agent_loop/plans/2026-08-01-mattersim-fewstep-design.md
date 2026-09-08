@@ -1,33 +1,42 @@
-# MatterSim 少步预弛豫筛选设计（冻结稿）
+# MatterSim few-step pre-relaxation screening design (frozen)
 
-日期：2026-08-01  
-状态：在生成任何 next7 测试分区轨迹前冻结  
-范围：只新增 `next7` 代码、测试、输出和独立报告；保留全部既有脚本、结果、报告、论文与 README
+Date: 2026-08-01  
+Status: frozen before any next7 test-partition trajectory is generated  
+Scope: adds only `next7` code, tests, outputs and a standalone report; every existing script,
+result, report, paper and README is preserved
 
-## 1. 问题与证据边界
+## 1. The problem and the evidence boundary
 
-现有 MatterSim x0 同组成能量差是本库最强的 DFT 前筛基线，但在历史 ELEMENTA
-测试集上尚未同时达到 30% DFT 数量节省和 95% exact/near-min retention 下界。
-本阶段检验一个有限、可证伪的新假设：x0 的局部几何误差使单点能量排序失真，固定少量
-力驱动坐标更新可在很小成本下改善排序。
+The existing MatterSim x0 same-composition energy difference is the strongest pre-DFT screening
+baseline in this repository, but on the historical ELEMENTA test set it has not yet reached both
+30% DFT count savings and a 95% lower bound on exact/near-min retention. This stage tests a
+limited, falsifiable new hypothesis: local geometric error in x0 distorts the single-point energy
+ranking, and a fixed small number of force-driven coordinate updates can improve that ranking at
+very little cost.
 
-当前 ELEMENTA 四个分区都已属于 discovery。新结果即使改善，也只能写成
-retrospective mechanism evidence；不能重新切分后称 blind/confirmatory。真正确认必须在
-公式、阈值、代码、checkpoint 和决策全部封存后，用物理隔离的新生成器批次或从未进入
-既有队列的新 composition holdout 完成，并为所有候选计算标签。
+All four ELEMENTA partitions currently count as discovery. Even if the new results improve on the
+baseline, they may only be written up as retrospective mechanism evidence; they may not be called
+blind or confirmatory after a new split. Genuine confirmation requires the formula, thresholds,
+code, checkpoint and decisions all to be sealed first, and must then be done on a physically
+isolated new generator batch, or on a new composition holdout that has never entered the existing
+queue, with labels computed for every candidate.
 
-## 2. 三种路线与选择
+## 2. Three routes, and the choice among them
 
-1. `x0 energy + force diagnostics`：不移动原子，成本最低，是必报控制组。
-2. `fixed-cell few-step FIRE`：固定晶胞，只更新原子位置，推荐为本阶段主实验。
-3. `cell + position relaxation`：更接近完整弛豫，但引入 stress、体积塌缩和模型外推；
-   本阶段不进入候选池，只有路线 2 出现清晰增益后才能另行预注册。
+1. `x0 energy + force diagnostics`: no atom moves, the cheapest option, and a control group that
+   must always be reported.
+2. `fixed-cell few-step FIRE`: the cell is fixed and only atomic positions are updated;
+   recommended as this stage's main experiment.
+3. `cell + position relaxation`: closer to a full relaxation, but it introduces stress, volume
+   collapse and model extrapolation. It does not enter the candidate pool at this stage, and may
+   only be pre-registered separately once route 2 shows a clear gain.
 
-采用路线 2。使用 MatterSim 1.2.3 的同一 5M checkpoint，仅用 species、cell、PBC 和
-x0 coordinates。批量推理与每个结构独立的 ASE FIRE 状态结合，避免逐结构 calculator
-的吞吐瓶颈；不修改安装包中的 `BatchRelaxer`。
+Route 2 is adopted. It uses the same 5M checkpoint of MatterSim 1.2.3 and only the species, cell,
+PBC and x0 coordinates. Batched inference is combined with a per-structure ASE FIRE state, which
+avoids the throughput bottleneck of a per-structure calculator; the `BatchRelaxer` in the
+installed package is not modified.
 
-## 3. 冻结优化轨迹
+## 3. The frozen optimisation trajectory
 
 ```text
 cell=fixed
@@ -44,18 +53,21 @@ fa=0.99
 early_stop=false
 ```
 
-“step”严格定义为一次 FIRE 坐标更新。得到 x8 需要 x0 到 x8 共 9 次能量/力评估和
-8 次坐标更新。每个结构从同一个 x0 出发并沿一条连续轨迹取快照，不把独立的 2、4、8
-步任务串成 2、6、14 步。晶胞不变，坐标可按周期边界回卷但不改变 minimum-image 位移。
+A "step" is strictly one FIRE coordinate update. Reaching x8 therefore takes 9 energy/force
+evaluations from x0 to x8 and 8 coordinate updates. Each structure starts from the same x0 and
+snapshots are taken along one continuous trajectory; independent 2-, 4- and 8-step jobs are never
+chained into 2, 6 and 14 steps. The cell does not change, and coordinates may be wrapped by the
+periodic boundary but the minimum-image displacement must not change.
 
-## 4. 标签自由特征与有限公式
+## 4. Label-free features and a limited set of formulas
 
-每个快照只保存：总能量、每原子能量、`Fmax`、`Frms`、stress Frobenius norm、最大
-主应力、相对 x0 的 minimum-image RMS/max displacement、最短成对距离、单步能量变化、
-运行错误、force-evaluation 数、GPU 时间和峰值显存。raw extxyz 中的 DFT energy、forces、
-stress 和离子终态字段必须在构造 ASE `Atoms` 时清除。
+Each snapshot stores only: total energy, energy per atom, `Fmax`, `Frms`, the Frobenius norm of
+the stress, the largest principal stress, the minimum-image RMS and max displacement relative to
+x0, the shortest pairwise distance, the single-step energy change, run errors, the number of
+force evaluations, GPU time and peak GPU memory. The DFT energy, forces, stress and ionic
+end-state fields in the raw extxyz must be cleared when the ASE `Atoms` object is constructed.
 
-只允许以下六个无拟合权重的同组成坏度分数：
+Only the following six same-composition badness scores, with no fitted weights, are permitted:
 
 ```text
 S0     = gap(E0/N)
@@ -66,52 +78,64 @@ Sbest4 = gap(min(E0,E2,E4)/N)
 Sbest8 = gap(min(E0,E2,E4,E8)/N)
 ```
 
-`gap(x_i)=x_i-min_j(x_j)`，`j` 只遍历同组成且受支持的候选。不得扫描连续 step、连续
-线性权重或把 candidate suffix、sid、rk 顺序作为分数。`rk` 只用于 x0 化学计量相同的
-候选成组，不作为模型输入。
+`gap(x_i)=x_i-min_j(x_j)`, with `j` running only over supported candidates of the same
+composition. Sweeping over a continuous step count or continuous linear weights is forbidden, as
+is using the candidate suffix, the sid or the `rk` order as a score. `rk` is used only to group
+candidates whose x0 stoichiometry matches, never as a model input.
 
-## 5. Fail-open 支持域
+## 5. The fail-open support domain
 
-以下任一情况必须 `ABSTAIN` 并送入 DFT，不能自动 REJECT：
+Any of the following must `ABSTAIN` and go to DFT rather than being automatically REJECTed:
 
-- 非真正 `ionic_step=0`，解析/模型/优化失败，或任一保存量非有限；
-- 同组成受支持候选少于 2；
-- 任一步最短成对距离相对 x0 降到危险短接触区；
-- 单次坐标更新超过强制 `0.05 Angstrom`，或 x8 累计最大位移超过 `0.40 Angstrom`；
-- 相邻保存快照能量上升超过 `0.02 eV/atom`；
-- 任一保存快照 `Fmax > 20 eV/Angstrom`。
+- not a genuine `ionic_step=0`, a parse/model/optimisation failure, or any stored quantity
+  non-finite;
+- fewer than 2 supported candidates of the same composition;
+- the shortest pairwise distance at any step falls into the dangerously short contact region
+  relative to x0;
+- a single coordinate update exceeds the enforced `0.05 Angstrom`, or the cumulative maximum
+  displacement at x8 exceeds `0.40 Angstrom`;
+- the energy rises by more than `0.02 eV/atom` between adjacent stored snapshots;
+- `Fmax > 20 eV/Angstrom` at any stored snapshot.
 
-短接触的工程检查固定为：若 x0 的现有 `geom_min_pair_ratio < 0.45`，或少步轨迹的最短
-绝对距离非有限/不为正，则弃权。力、位移和短接触只控制支持域，不进入加权评分。
+The engineering check for short contacts is fixed as: abstain if x0's existing
+`geom_min_pair_ratio < 0.45`, or if the shortest absolute distance along the few-step trajectory
+is non-finite or non-positive. Forces, displacements and short contacts control only the support
+domain and never enter a weighted score.
 
-## 6. 分区与选择
+## 6. Partitions and selection
 
-先只生成 `search_calibration`、`formula_selection` 和 `threshold_calibration` 的轨迹：
+Generate trajectories first for `search_calibration`, `formula_selection` and
+`threshold_calibration` only:
 
-1. `search_calibration` 只为六个公式建立 conformal 阈值；
-2. `formula_selection` 在固定安全门后，以 DFT 数量节省、成本和较小步数选一个公式；
-3. `threshold_calibration` 为选中公式冻结最终阈值；
-4. 写出包含代码/输入/checkpoint SHA-256 的 `FROZEN_PROTOCOL.json`；
-5. 只有冻结文件存在后，才允许生成历史 `test` 轨迹和读取其标签。
+1. `search_calibration` only establishes conformal thresholds for the six formulas;
+2. `formula_selection`, with the safety gates fixed, chooses one formula by DFT count savings,
+   cost and fewer steps;
+3. `threshold_calibration` freezes the final threshold for the chosen formula;
+4. write `FROZEN_PROTOCOL.json`, containing SHA-256 hashes of the code, inputs and checkpoint;
+5. only once the frozen file exists may the historical `test` trajectories be generated and their
+   labels read.
 
-主轨固定为 `protected=valuable (delta_E <= 0.05 eV/atom)`、`within_group=max`、
-`alpha=0.01`。副轨固定为历史可比的 `protected=near_min (1 meV/atom)`、
-`within_group=min`、`alpha=0.035`，只能解释为机制比较，不能作为部署结论。
+The primary track is fixed at `protected=valuable (delta_E <= 0.05 eV/atom)`, `within_group=max`,
+`alpha=0.01`. The secondary track is fixed at the historically comparable
+`protected=near_min (1 meV/atom)`, `within_group=min`, `alpha=0.035`, and may be read only as a
+mechanistic comparison, never as a deployment conclusion.
 
-## 7. 改善门槛
+## 7. Improvement gates
 
-在当前 ELEMENTA 上，只在 paired composition bootstrap 同时满足下列条件时称“可信的
-回顾性改善”：相对 step0 savings 增加至少 3 个百分点且 95% CI 下界大于 0；valuable
-recall 差的 95% CI 下界不低于 -0.005；abstention 增量不超过 1 个百分点。否则只报告
-方向性或负结果。
+On the current ELEMENTA, a "credible retrospective improvement" may be claimed only when a paired
+composition bootstrap satisfies all of: savings increase over step0 by at least 3 percentage
+points with a 95% CI lower bound above 0; the 95% CI lower bound of the valuable-recall
+difference is not below -0.005; and the increase in abstention is at most 1 percentage point.
+Otherwise, only a directional or negative result is reported.
 
-真正成功仍要求物理隔离的新确认批次同时达到：valuable/stable recall 单侧 95% 下界
-至少 0.99、exact/near-min retention 下界至少 0.99、valuable-all group retention 下界
-至少 0.95、DFT savings 下界至少 0.30、p95 regret 不超过 0.025 eV/atom，并在每个生成器
-单独通过。MLIP GPU 成本还必须低于节省 DFT 成本的 10%。
+Genuine success still requires a physically isolated new confirmation batch to reach all of:
+one-sided 95% lower bounds of at least 0.99 for valuable/stable recall, at least 0.99 for
+exact/near-min retention, at least 0.95 for valuable-all group retention, at least 0.30 for DFT
+savings, and a p95 regret no greater than 0.025 eV/atom -- passing separately for every
+generator. The MLIP GPU cost must additionally be below 10% of the DFT cost saved.
 
-## 8. 产物隔离
+## 8. Artefact isolation
 
-新增代码使用 `src/next7_*`，测试使用 `tests/test_next7_*`，输出使用
-`outputs/20260801_mattersim_fewstep/`，报告使用新的 `reports/2026-08-01-*.md`。不修改
-任何 `next6` 文件、既有报告、论文或规范性文档。
+New code goes in `src/next7_*`, tests in `tests/test_next7_*`, outputs in
+`outputs/20260801_mattersim_fewstep/`, and the report in a new `reports/2026-08-01-*.md`. No
+`next6` file, existing report, paper or normative document is modified.
