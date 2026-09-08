@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""PREREG-F3 §5: dev 审计与 F3 拟合。§6: 一次性 holdout 求值(需显式 --holdout)。
+"""PREREG-F3 section 5: dev audit and the F3 fit. Section 6: the one-shot holdout
+evaluation (requires an explicit --holdout).
 
-程序冻结于 docs/plans/2026-08-14-f3-synthesizability-prereg.md
-(sha256 7e7a9c0b...,见 outputs/20260814_f3_synth/PREREG_SHA256)。
+The procedure is frozen in docs/plans/2026-08-14-f3-synthesizability-prereg.md
+(sha256 7e7a9c0b..., see outputs/20260814_f3_synth/PREREG_SHA256).
 
-子命令:
-  audit    dev 单特征 group-equal 准确率表(两方向)
-  fit      贪心前向选择 + 全 dev 重拟合,冻结系数到 JSON
-  holdout  一次性求值(拒绝在冻结文件缺失时运行;写接触记录)
+Subcommands:
+  audit    single-feature group-equal accuracy table on dev (both directions)
+  fit      greedy forward selection + refit on all of dev, freezing the coefficients to JSON
+  holdout  the one-shot evaluation (refuses to run when the frozen file is missing; writes a
+           contact record)
 """
 from __future__ import annotations
 import argparse, hashlib, json, os, sys, zlib
@@ -48,7 +50,8 @@ def admissible(d: pd.DataFrame) -> list[str]:
 
 
 def prep(dev: pd.DataFrame, cols: list[str]):
-    """dev 中位数插补 + dev 标准化统计(冻结后同样应用于 holdout)。"""
+    """Median imputation on dev + dev standardisation statistics (applied unchanged to the
+    holdout once frozen)."""
     med = dev[cols].median()
     mu = dev[cols].fillna(med).mean()
     sd = dev[cols].fillna(med).std().replace(0, 1.0)
@@ -60,7 +63,7 @@ def zmat(d: pd.DataFrame, cols, med, mu, sd) -> np.ndarray:
 
 
 def make_pairs(d: pd.DataFrame, Z: np.ndarray):
-    """组内 synth1×synth0 全配对,X=z1−z0,权重 1/组内对数。"""
+    """All synth1 x synth0 pairs within a group, X=z1-z0, weighted by 1/(pairs in group)."""
     X, w = [], []
     for _, sub in d.groupby("rk"):
         idx = sub.index.values
@@ -78,7 +81,8 @@ def make_pairs(d: pd.DataFrame, Z: np.ndarray):
 def fit_logistic(X, w, C=1e6):
     from sklearn.linear_model import LogisticRegression
     m = LogisticRegression(fit_intercept=False, C=C, max_iter=2000)
-    # 显式镜像 (X,1)/(−X,0):与单方向无截距 logistic 恒等,满足 sklearn 双类要求。
+    # explicit mirroring (X,1)/(-X,0): identical to a one-directional intercept-free logistic,
+    # and satisfies sklearn's requirement of two classes.
     X2 = np.vstack([X, -X])
     y2 = np.concatenate([np.ones(len(X)), np.zeros(len(X))])
     m.fit(X2, y2, sample_weight=np.concatenate([w, w]))
@@ -86,7 +90,7 @@ def fit_logistic(X, w, C=1e6):
 
 
 def cv_score(d, Z, cols_idx, groups, n_splits=5, seed=20260728):
-    """5 折 GroupKFold;返回验证折 group-equal accuracy 的均值。"""
+    """5-fold GroupKFold; returns the mean group-equal accuracy over the validation folds."""
     from sklearn.model_selection import GroupKFold
     rks = d.rk.values
     accs = []
@@ -134,7 +138,8 @@ def cmd_fit(d, cols):
     from sklearn.model_selection import GroupKFold
     gkf = GroupKFold(n_splits=5)
 
-    # 预计算每折的全宽配对矩阵与验证侧;每个候选只取列子集(等价,快两个量级)。
+    # precompute the full-width pair matrix and the validation side for each fold; each
+    # candidate then takes a column subset (equivalent, and two orders of magnitude faster).
     folds = []
     for tr_g, te_g in gkf.split(Z, groups=glab):
         tr_rk = set(glab[tr_g])
@@ -151,8 +156,9 @@ def cmd_fit(d, cols):
             s = Zte[:, cols_idx] @ beta
             r = evaluate(dte, s, higher_better=True)
             accs.append(r["accuracy"]); covs.append(r["coverage"])
-        # PREREG-F3 修订1:coverage < 0.99 的候选集直接拒绝,堵死
-        # "弃权换准确率"路径(论文 §sec:pauling 诊断过的 Pauling-5 模式)。
+        # PREREG-F3 revision 1: reject any candidate set with coverage < 0.99 outright, closing
+        # off the "trade abstention for accuracy" route (the Pauling-5 pattern diagnosed in
+        # the paper, section sec:pauling).
         if np.mean(covs) < 0.99:
             return -1.0
         return float(np.mean(accs))
@@ -243,7 +249,7 @@ def cmd_holdout(d, cols):
     res["sh_pack"] = evaluate(hold, hold.sh_pack.values, higher_better=True)
     res["bl_min"] = evaluate(hold, hold.bl_min.values, higher_better=True)
 
-    # PREREG-F3 修订2: F3H 混合(同一次接触)
+    # PREREG-F3 revision 2: the F3H hybrid (within the same contact)
     sH = None
     fH = os.path.join(OUT, "F3H_frozen.json")
     if os.path.exists(fH):

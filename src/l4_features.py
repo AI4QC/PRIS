@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""PREREG-L4 §1: 判别矩阵(real + 再生扰动)的增强特征。
+"""PREREG-L4 section 1: augmented features for the discrimination matrix (real +
+regenerated perturbations).
 
-再生配方与 phys_law._bad 逐字一致:seed_of(sid)、S1–S5 固定顺序、共享 rng、
-swapped_val。特征 = f3_features._feats(PREREG-F3 §4 定义)。
-输出:law_real_aug.parquet(source_id 键)/ law_bad_aug.parquet((parent,kind) 键)。
+The regeneration recipe matches phys_law._bad word for word: seed_of(sid), the fixed S1-S5
+order, a shared rng, swapped_val. The features are f3_features._feats (defined in PREREG-F3
+section 4).
+Outputs: law_real_aug.parquet (keyed on source_id) / law_bad_aug.parquet (keyed on
+(parent, kind)).
 """
 from __future__ import annotations
 import os, sys, warnings

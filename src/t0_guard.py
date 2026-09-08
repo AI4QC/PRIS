@@ -1,29 +1,38 @@
 #!/usr/bin/env python3
-"""纯组分(T0)量 —— 不当法则用,当**前提**用。
+"""Pure-composition (T0) quantities -- not used as laws, but as **premises**.
 
-# 为什么
+# Why
 
-本工作先前的结论:T0 量在这两个靶上**恒为零权重**,因为法则的排除力算在同组成的
-破坏样本上、公式在同组成组内配对,组分量两边精确抵消。那是靶设计的必然结果。
+An earlier conclusion of this work: T0 quantities carry **identically zero weight** on these
+two targets, because a law's exclusion power is computed on damaged samples of the same
+composition and the formula pairs within same-composition groups, so compositional terms
+cancel exactly on both sides. That is an inevitable consequence of how the targets are
+designed.
 
-但"当法则无效"不等于"没用"。直接证据来自 `frac_like_bonds`(同号离子成键占比):
+But "useless as a law" is not the same as "useless". The direct evidence is
+`frac_like_bonds` (the fraction of bonds between like-charge ions):
 
-  - 它单独能排除 **96%** 的 S5(阴阳离子互换),是唯一对这一类有效的量
-  - 但它在真实结构上只有 **79.3%** 满足,进不了 0.95 的满足率下限
-  - 而那 20.7% 的违例**不是随机分布的**:磷化物 66.8% / 碲化物 53.0% /
-    硒化物 33.8% / 硫化物 28.1% / 氮化物 25.9%,而氟化物只有 16.0% ——
-    **集中在最不离子的那些化学**,那里阳离子-阳离子成键本来就是真实的
+  - on its own it excludes **96%** of S5 (cation-anion swap), the only quantity that works
+    on that class
+  - but it is satisfied by only **79.3%** of real structures, which does not clear the 0.95
+    satisfaction floor
+  - and those 20.7% of violations are **not randomly distributed**: phosphides 66.8% /
+    tellurides 53.0% / selenides 33.8% / sulfides 28.1% / nitrides 25.9%, against only 16.0%
+    for fluorides -- **concentrated in the least ionic chemistries**, where cation-cation
+    bonding is genuinely real
 
-所以"不得有同号成键"是一条**离子晶体**的定律,它缺的是一个前提:
-**"若该化合物足够离子性"**。而"离子性"恰好是纯组分量。
+So "there must be no like-charge bonds" is a law about **ionic crystals**, and what it lacks
+is a premise: **"if the compound is ionic enough"**. And ionicity is exactly a
+pure-composition quantity.
 
-# 算什么
+# What is computed
 
-  dchi  = 化学计量加权的 (电负性(阴离子) - 电负性(阳离子)) 平均
-  fi    = 1 - exp(-0.25 * dchi^2)      泡林离子性分数
+  dchi  = the stoichiometry-weighted mean of (electronegativity(anion) - electronegativity(cation))
+  fi    = 1 - exp(-0.25 * dchi^2)      the Pauling ionic-character fraction
 
-两者都只需化学式,不需结构 —— 所以对同组成的破坏样本取值完全相同,
-当法则用排除力恒为 0,当前提用则把法则限制到它真正成立的化学域。
+Both need only the chemical formula and no structure -- so they take identical values on
+damaged samples of the same composition. As a law the exclusion power is identically 0; as a
+premise they confine the law to the chemistry where it actually holds.
 """
 from __future__ import annotations
 import os
@@ -69,19 +78,20 @@ def main() -> int:
                      "dchi_min": float(min(X[an] - X[e] for e in cats))})
     d = pd.DataFrame(rows)
     d.to_parquet(F + "t0_guard.parquet", index=False)
-    print(f"写出 {len(d):,} 行")
+    print(f"wrote {len(d):,} rows")
     print(d[["dchi", "fi", "dchi_min"]].describe().round(3).to_string())
 
-    # 与 frac_like_bonds 的关系 —— 验证"离子性越强,同号成键越少"
+    # relation to frac_like_bonds -- checking "the more ionic, the fewer like-charge bonds"
     import os
     if os.path.exists(F + "phys_real.parquet"):
         pr = pd.read_parquet(F + "phys_real.parquet")[["source_id", "frac_like_bonds"]]
         m = d.merge(pr, on="source_id", how="inner").dropna()
-        print(f"\n可对照 {len(m):,} 条。按离子性分数分箱:")
+        print(f"\n{len(m):,} rows comparable. Binned by ionic-character fraction:")
         m["bin"] = pd.qcut(m.fi, 5, duplicates="drop")
         g = m.groupby("bin").agg(n=("fi", "size"),
-                                 fi中位=("fi", "median"),
-                                 无同号键占比=("frac_like_bonds", lambda x: float((x == 0).mean())))
+                                 fi_median=("fi", "median"),
+                                 frac_no_like_bonds=("frac_like_bonds",
+                                                     lambda x: float((x == 0).mean())))
         print(g.round(3).to_string())
     return 0
 

@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
-"""生成模型 validity 基准 —— 把**全部四个法则集**放到与现行阈值同一批结构上。
+"""The generative-model validity benchmark -- putting **all four law sets** on the same
+batch of structures the current thresholds use.
 
-原来的 validity.py 只算了 min pair distance 与 bl_min 两个量,所以主文图 3a/3b
-里只能出现 L1 的地板和 L2 的地板,看不到 L1'、L2、L3。这里把 apply_rules.py 的
-完整特征算出来,四个集合逐条判定,population 与原基准完全一致:
+The original validity.py computed only two quantities, min pair distance and bl_min, so
+main-text Fig. 3a/3b could show only the L1 floor and the L2 floor, with no L1', L2 or L3.
+This computes apply_rules.py's full feature set and judges all four sets law by law, over a
+population identical to the original benchmark:
 
-  同一个 sample(n=900, random_state=5),同样 len(st) <= 50 且 guess_oxi 成功的门槛,
-  取前 440 个通过的母体结构(与已发表的 440 real / 1,964 perturbed 对齐)。
+  the same sample (n=900, random_state=5), the same len(st) <= 50 and guess_oxi-succeeds
+  thresholds, taking the first 440 parent structures that pass (matching the published
+  440 real / 1,964 perturbed).
 
-阈值用 FACTS 规定的发表值 0.735 / 0.804(不是 0.7353 / 0.8044)。
-缺失值按满足处理，这是用于复现论文集合统计的评估口径。公开 CLI
-`apply_rules.judge()` 则对未知特征返回“无法判定”，避免将缺失报成合理。
+The thresholds are the published values 0.735 / 0.804 laid down in FACTS (not 0.7353 /
+0.8044).
+Missing values are treated as satisfied; that is the evaluation convention used to reproduce
+the paper's set statistics. The public CLI `apply_rules.judge()` instead returns
+"undecidable" for unknown features, so that a missing value is never reported as plausible.
 """
 from __future__ import annotations
 import os
@@ -49,7 +54,7 @@ def _ge(v, th):
 
 
 def sets_of(f):
-    """四个法则集的判定。返回 dict[set name] -> bool。"""
+    """Verdicts for the four law sets. Returns dict[set name] -> bool."""
     bl, blm = _get(f, "bl_min"), _get(f, "bl_mean")
     cn, mz = _get(f, "cn_an_mean"), _get(f, "madz_range")
     mx, lk = _get(f, "mad_max"), _get(f, "frac_like_bonds")
@@ -77,7 +82,8 @@ def sets_of(f):
 
 
 def min_pair_dist(st):
-    """任意原子对的最短距离(含周期镜像)—— 生成模型 validity 用的量。"""
+    """Shortest distance between any pair of atoms (including periodic images) -- the
+    quantity generative-model validity uses."""
     try:
         dm = st.distance_matrix.copy()
         np.fill_diagonal(dm, np.inf)
@@ -87,7 +93,7 @@ def min_pair_dist(st):
 
 
 def one_parent(rec):
-    """母体 + 五类扰动,各自算特征并判定。"""
+    """The parent plus the five perturbation classes; compute features and judge each."""
     from pymatgen.core import Structure
     from discriminate import guess_oxi, read_blob_cif
     from make_negatives import perturb, swapped_val
@@ -143,7 +149,8 @@ def one_parent(rec):
 
 
 def parents():
-    """复现原基准的母体集合:同一 sample、同一门槛、前 440 个通过的结构。"""
+    """Reproduce the original benchmark's parent set: same sample, same thresholds, the
+    first 440 structures that pass."""
     from pymatgen.core import Structure
     from discriminate import guess_oxi, read_blob_cif
     prov = pd.read_parquet(F + "provenance.parquet",
