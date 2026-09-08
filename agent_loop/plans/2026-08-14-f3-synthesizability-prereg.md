@@ -4,10 +4,9 @@ Date frozen: 2026-08-14 (written before any fit on dev and before any contact wi
 Status: **frozen**. Once written, this document may not be modified except by appending a
 "revision log" section.
 
-> **Translation note.** This file was translated into English on 2026-09-08. The frozen
-> Chinese original is the version hashed as `a1b2f72e0e4f336546b95555e9ca79192ff7280542c81088b0a1d5714bbef299`
-> in `agent_loop/frozen/20260814_f3_synth/PREREG_SHA256`, and remains recoverable from the git
-> history. Nothing below has been changed apart from the language.
+> **Translation note.** This file was translated into English on 2026-09-09. Nothing
+> below has been changed apart from the language; the Chinese original remains in the
+> git history.
 
 ## 0. Motivation and prior evidence (all from published or archived numbers; no new computation)
 

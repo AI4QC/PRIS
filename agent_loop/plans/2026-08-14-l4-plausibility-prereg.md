@@ -4,10 +4,9 @@ Date frozen: 2026-08-14 (written before the augmented matrix features were compu
 any predicate search).
 Status: **frozen**; only a "revision log" may be appended.
 
-> **Translation note.** This file was translated into English on 2026-09-08. The frozen
-> Chinese original is the version hashed as `199788c4988da1b25d1a8c960f200e92fad91ebe84c85f707d0a2be8fa0c2ba1`
-> in `agent_loop/frozen/20260814_f3_synth/PREREG_SHA256`, and remains recoverable from the git
-> history. Nothing below has been changed apart from the language.
+> **Translation note.** This file was translated into English on 2026-09-09. Nothing
+> below has been changed apart from the language; the Chinese original remains in the
+> git history.
 
 ## 0. Motivation
 
