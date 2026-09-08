@@ -1,36 +1,75 @@
-# NEXT30 无机晶体凸包高能预筛法则设计
+# NEXT30 design: a law for pre-screening high hull energy in inorganic crystals
 
-日期：2026-08-03  
-状态：实施前冻结设计；不修改任何已有脚本、报告或论文
+Date: 2026-08-03  
+Status: design frozen before implementation; no existing script, report or paper is modified
 
-## 目标与边界
+## Objective and boundaries
 
-NEXT30 只回答一个比 NEXT23 更接近总目标的问题：能否仅凭一个未弛豫无机晶体 `x0` 和冻结元素表，安全筛掉 DFT 弛豫后凸包能明显偏高的 WBM 候选。法则执行时不得读取或调用 DFT、形成能、凸包、弛豫结构、轨迹、能量/力/应力代理、MatterSim/MLIP、几何优化或同组成竞争相。WBM 的 DFT 凸包值只在离线开发和确认阶段作为标签。
+NEXT30 answers one question, closer to the overall goal than NEXT23's: can WBM candidates whose
+DFT-relaxed hull energy is clearly high be safely screened out from an unrelaxed inorganic
+crystal `x0` and a frozen element table alone? While the law executes it may not read or call
+DFT, formation energies, the hull, relaxed structures, trajectories, energy/force/stress
+surrogates, MatterSim/MLIP, geometry optimisation, or competing phases of the same composition.
+WBM's DFT hull values serve as labels only during offline development and confirmation.
 
-三个可行方向是：（A）物理定向的少量解析项做稀疏等权和；（B）用凸包标签拟合单调稀疏回归权重；（C）用周期图连通性路由到 NEXT23/NEXT28。B 可能得到更高开发分数，但更像经验模型而非新法则，且在单一暴露来源上过拟合风险最高；C 能处理晶体类型，却没有解决能量稳定性端点。因此选择 A。
+Three directions are workable: (A) a sparse equally weighted sum of a few physically directed
+analytic terms; (B) fitting monotone sparse regression weights against the hull labels; (C)
+routing to NEXT23/NEXT28 by periodic-graph connectivity. B might score higher in development, but
+it looks more like an empirical model than a new law and carries the highest overfitting risk on
+a single exposed source; C handles crystal type but does not address the energetic-stability
+endpoint. A is therefore chosen.
 
-## 数据隔离与证据等级
+## Data isolation and evidence level
 
-使用 NEXT23 已经封存的 8,192 个 WBM `x0` 及其 SIVR、normalized-Madelung、SCBVE 解析特征。先在不读取标签数值的情况下按
+Use the 8,192 WBM `x0` structures NEXT23 already sealed, together with their SIVR,
+normalized-Madelung and SCBVE analytic features. Without reading any label value, order them by
 
 ```text
 sha256("NEXT30-WBM-HULL-v1|" + material_id)
 ```
 
-排序，前 4,096 条作为开发集，后 4,096 条作为确认集，并封存 ID、输入哈希和划分清单。公式、归一化常数和阈值只能使用开发集标签选择；随后在确认集上先封存预测，再读取确认标签。
+taking the first 4,096 as the development set and the last 4,096 as the confirmation set, and
+seal the IDs, input hashes and the split manifest. The formula, normalisation constants and
+thresholds may be chosen using the development labels only; afterwards the predictions on the
+confirmation set are sealed first and only then are the confirmation labels read.
 
-由于同一个 WBM 标签文件早已被仓库旧流程打开，这只能称为“历史来源内的程序化确认”，不能称作新鲜 lockbox 或外部盲测。确认集不得参与候选排序、阈值扫描或失败后的重拟合。
+Because the same WBM label file was opened long ago by an earlier pipeline in this repository,
+this can only be called "a procedural confirmation within a historical source", not a fresh
+lockbox and not an external blind test. The confirmation set may take no part in candidate
+ranking, threshold sweeps, or refitting after a failure.
 
-## 候选公式
+## Candidate formulas
 
-基础项只允许物理上预先确定风险方向的闭式标量：SIVR 边失配、位点失衡和晶胞各向异性取高值为风险；归一化 Madelung 的弱结合/位点离散取高值为风险；SCBVE 键价失配、键价矢量不对称和孤立位点取高值为风险，有效配位数取低值为风险。每项用开发中位数和 IQR 做 robust-z；不拟合连续权重。
+The base terms may only be closed-form scalars whose risk direction is physically determined in
+advance: for SIVR, high edge mismatch, site imbalance and cell anisotropy are risk; for the
+normalized Madelung terms, high weak-binding and site dispersion are risk; for SCBVE, high bond-
+valence mismatch, bond-valence vector asymmetry and isolated sites are risk, and a low effective
+coordination number is risk. Each term is robust-z scored using the development median and IQR;
+no continuous weight is fitted.
 
-候选目录冻结为单项、具有明确机制联系的两项和三项等权和，最多三项。每个公式只扫描开发分数对应的固定拒绝比例 `{0.05, 0.075, 0.10, 0.125, 0.15, 0.20, 0.25, 0.30}`。缺失任一所需项时 fail-open，不拒绝。
+The candidate catalogue is frozen as single terms, and as equally weighted sums of two or three
+terms with a clear mechanistic connection, to a maximum of three. Each formula sweeps only the
+fixed rejection fractions of the development score
+`{0.05, 0.075, 0.10, 0.125, 0.15, 0.20, 0.25, 0.30}`. When any required term is missing it
+fails open and rejects nothing.
 
-开发 promotion gate 同时要求单侧 95% Wilson 下界：解析覆盖率 `>=0.90`，`E_hull<=0.05 eV/atom` 保护召回 `>=0.95`，`E_hull>=0.20` 的拒绝精度 `>=0.90`，总节省率 `>=0.10`。另行报告严格稳定标签召回，但不以样本定义差异较大的 `E_hull<=0` 作为唯一门槛。符合门槛时按节省率最大、公式项数最少、阈值更保守的顺序确定唯一公式。
+The development promotion gate requires all of the following one-sided 95% Wilson lower bounds:
+analytic coverage `>=0.90`, protective recall at `E_hull<=0.05 eV/atom` `>=0.95`, rejection
+precision at `E_hull>=0.20` `>=0.90`, and total savings `>=0.10`. Recall against the strict
+stability label is reported separately, but `E_hull<=0` is not used as the sole gate, since it
+differs considerably in sample definition. Among formulas that clear the gate, the unique formula
+is fixed by largest savings, then fewest terms, then the more conservative threshold.
 
-## 确认与结论规则
+## Confirmation and the rules for concluding
 
-确认集使用同一四门槛；同时计算 AUC、Spearman、不同 WBM step/原子数/价态策略分层，并在相同样本、相同 fail-open 语义下评估泡林 2--5 单项和组合。只有 NEXT30 通过全部主门槛、泡林对照均未通过，才允许写“在该 WBM 确认端点上超越泡林”。
+The confirmation set uses the same four gates; AUC, Spearman and stratifications by WBM step,
+atom count and valence strategy are also computed, and Pauling 2--5 are evaluated individually
+and jointly on the same sample under the same fail-open semantics. Only if NEXT30 clears every
+primary gate and none of the Pauling comparators does may we write "surpasses Pauling on this WBM
+confirmation endpoint".
 
-即使通过，也只能说明凸包高能预筛，不等于形成能回归、动力学稳定性、可合成性或达到 DFT 的完整判别能力。若开发阶段无公式通过，立即停止，不打开确认集；若开发通过而确认失败，保留冻结公式和失败结果，不重调阈值。
+Even if it passes, it demonstrates pre-screening of high hull energy only, which is not formation-
+energy regression, kinetic stability, synthesizability, or the full discriminating power of DFT.
+If no formula clears the development stage, stop immediately and do not open the confirmation
+set; if development passes and confirmation fails, keep the frozen formula and the failing result
+and do not retune the thresholds.
