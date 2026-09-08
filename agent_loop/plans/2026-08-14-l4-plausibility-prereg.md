@@ -1,47 +1,62 @@
-# PREREG-L4: 合理性两轴同时 ≥0.80 的可解释法则集(新物理谓词扩展 L3)
+# PREREG-L4: an interpretable law set reaching >=0.80 on both plausibility axes (extending L3 with new physical predicates)
 
-日期冻结:2026-08-14(在矩阵增强特征计算完成前、任何谓词搜索前写下)。
-状态:**冻结**;仅可追加"修订记录"。
+Date frozen: 2026-08-14 (written before the augmented matrix features were computed and before
+any predicate search).
+Status: **frozen**; only a "revision log" may be appended.
 
-## 0. 动机
+> **Translation note.** This file was translated into English on 2026-09-08. The frozen
+> Chinese original is the version hashed as `199788c4988da1b25d1a8c960f200e92fad91ebe84c85f707d0a2be8fa0c2ba1`
+> in `agent_loop/frozen/20260814_f3_synth/PREREG_SHA256`, and remains recoverable from the git
+> history. Nothing below has been changed apart from the language.
 
-L3 在 calibration 为 0.9171 / 0.7004:排除力低于 0.80。certified depth-3 树证明
-(cost ratio 1.0)satisfaction 0.8895 / exclusion 0.8553 的点位在本特征空间内存在,
-但树是损坏算子的指纹(LOPO 崩塌)且不可作一行式法则。本链条检验:把 PREREG-F3 §4
-的经典 Born / 对称性特征作为**一行式物理谓词**加入 L3,能否在可解释形式下同时达到
-两轴 ≥0.80。
+## 0. Motivation
 
-## 1. 数据(先于本预注册存在)
+L3 stands at 0.9171 / 0.7004 on calibration: its exclusion power is below 0.80. A certified
+depth-3 tree proves (at cost ratio 1.0) that an operating point of satisfaction 0.8895 /
+exclusion 0.8553 exists within this feature space, but the tree is a fingerprint of the damage
+operators (it collapses under LOPO) and cannot be written as a one-line law. This chain tests
+whether adding the classical Born and symmetry features of PREREG-F3 section 4 to L3 as
+**one-line physical predicates** can reach >=0.80 on both axes in an interpretable form.
 
-`next20260801/law_{real,bad}.parquet`(audited isolated,无 lockbox:17,929 real /
-12,202 perturbed,discovery 12,632+8,590,calibration 5,297+3,612)。增强特征由
-`records_{real,bad}.parquet` 的 blob 记录 + `make_negatives.perturb` 确定性再生
-(与 `phys_law._bad` 完全同一配方:`seed_of(sid)`、S1–S5 固定顺序、共享 rng、
-`swapped_val`)计算,定义与 PREREG-F3 §4 逐字相同,写入新文件
-`law_real_aug.parquet` / `law_bad_aug.parquet`。缺失值按论文约定视为满足。
+## 1. Data (in existence before this pre-registration)
 
-## 2. 程序(冻结)
+`next20260801/law_{real,bad}.parquet` (audited isolated, no lockbox: 17,929 real / 12,202
+perturbed; discovery 12,632+8,590, calibration 5,297+3,612). The augmented features are computed
+from the blob records of `records_{real,bad}.parquet` plus a deterministic regeneration through
+`make_negatives.perturb` (exactly the recipe of `phys_law._bad`: `seed_of(sid)`, the fixed S1-S5
+order, a shared rng, `swapped_val`), with definitions word for word those of PREREG-F3 section 4,
+written to the new files `law_real_aug.parquet` / `law_bad_aug.parquet`. Missing values count as
+satisfied, following the paper's convention.
 
-- **L4 = L3(五谓词原样,阈值不动)+ 至多 4 条新谓词。**
-- 候选谓词 = (特征, 方向, 阈值, guard):特征 ∈ 增强特征 ∪ 既有 79 特征;
-  阈值 ∈ 该特征在 discovery **real** 行上的分位网格
-  {0.5,1,2,3,4,5,10,20,...,90,95,96,97,98,99,99.5}%;guard ∈ {无, fi>0.50, fi>0.55}。
-- 贪心:每步在"discovery satisfaction ≥ 0.81"约束内选 pooled exclusion 增益最大的
-  候选;增益 < +0.005 或已加 4 条即停。选定即冻结,记录 SHA-256。
-- 同时报告(不入选择):从零开始的同规则数 beam 对照、certified 树 frontier 点。
+## 2. Procedure (frozen)
 
-## 3. 门(calibration,冻结的一次求值;calibration 复用按论文口径披露)
+- **L4 = L3 (the five predicates unchanged, thresholds untouched) + at most 4 new predicates.**
+- A candidate predicate is (feature, direction, threshold, guard): the feature is drawn from the
+  augmented features together with the existing 79; the threshold from that feature's quantile
+  grid over the discovery **real** rows
+  {0.5,1,2,3,4,5,10,20,...,90,95,96,97,98,99,99.5}%; and the guard from {none, fi>0.50, fi>0.55}.
+- Greedy: at each step take the candidate with the largest gain in pooled exclusion, subject to
+  discovery satisfaction >= 0.81; stop when the gain falls below +0.005 or 4 predicates have been
+  added. Once selected it is frozen and its SHA-256 recorded.
+- Also reported (but not used for selection): a beam-search comparison with the same number of
+  rules starting from scratch, and the frontier points of the certified trees.
 
-- **C1**:satisfaction ≥ 0.80
-- **C2**:pooled exclusion ≥ 0.80
-- **C3**:五类各自 exclusion ≥ 0.55(保持"无盲区"性质)
-- **C4(披露)**:新谓词逐条 LOPO:删除其目标类重选后在该类上的排除力;
-  连同各类分母一并报告
-- 失败则如实报告达到的点位;禁止事后微调阈值再评。
+## 3. Gates (calibration, one frozen evaluation; any reuse of calibration is disclosed on the paper's convention)
 
-## 4. 边界声明(冻结)
+- **C1**: satisfaction >= 0.80
+- **C2**: pooled exclusion >= 0.80
+- **C3**: exclusion >= 0.55 on each of the five classes (preserving the "no blind spot" property)
+- **C4 (disclosure)**: LOPO for each new predicate: reselect with its target class removed and
+  measure exclusion on that class; report it together with the denominator of each class
+- On failure, report the operating point actually reached; adjusting a threshold afterwards and
+  re-evaluating is forbidden.
 
-- 本链条针对合成扰动的排除力;LOPO 披露透明化"算子指纹"风险,不宣称跨算子普适。
-- 新谓词必须可写成一行物理陈述(Born 同号排斥和、接触壁、弹性应变、Wyckoff 简约度);
-  不可解释特征即使增益更高也不入选(此为模型类定义,非事后选择)。
-- lockbox 不接触。
+## 4. Boundary statements (frozen)
+
+- This chain addresses exclusion power against synthetic perturbations; the LOPO disclosure makes
+  the "operator fingerprint" risk transparent, and no claim of generality across operators is
+  made.
+- A new predicate must be expressible as a one-line physical statement (Born like-charge
+  repulsion sum, contact wall, elastic strain, Wyckoff parsimony); an uninterpretable feature is
+  not selected even at a higher gain (this defines the model class and is not a post-hoc choice).
+- The lockbox is not touched.
