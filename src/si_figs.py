@@ -15,13 +15,14 @@ SI = DATA.parent / "si_data"
 
 
 def _split(split="calibration"):
-    """与 paper_figs 同名助手一致:按划分取法则集逐行指标。"""
+    """Same as the identically named helper in paper_figs: per-row law-set metrics by split."""
     d = pd.read_csv(SI / "s5_split_consistency.csv")
     return d[d.split == split].set_index("ruleset")
 
 
 def si1_chemistry():
-    """Set 1 与 Set 1' 按阴离子族分层 —— 守卫恰好在离子域内起作用。"""
+    """Set 1 and Set 1' stratified by anion family -- the guard works exactly inside the
+    ionic domain."""
     d = pd.read_csv(SI / "s1_chemistry.csv")
     fig, axes = plt.subplots(1, 2, figsize=(W2, 8.6 * CM))
     fig.subplots_adjust(left=0.092, right=0.985, top=0.905, bottom=0.155, wspace=0.24)
@@ -51,10 +52,11 @@ def si1_chemistry():
 
 
 def si2_threshold():
-    """阈值敏感性:为什么是 0.735,以及膨胀类恒为零。"""
+    """Threshold sensitivity: why 0.735, and why the expansion class is identically zero."""
     d = pd.read_csv(SI / "s2_threshold.csv")
     fig, axes = plt.subplots(1, 2, figsize=(W2, 8.8 * CM))
-    # 顶部留出一条带:b 的五行图例移到数据区之外,两个面板因此共用 0-1 的纵轴
+    # leave a strip at the top: b's five-row legend moves outside the data area, so both
+    # panels can share the 0-1 y-axis
     fig.subplots_adjust(left=0.088, right=0.985, top=0.815, bottom=0.135, wspace=0.26)
 
     ax = axes[0]
@@ -67,7 +69,8 @@ def si2_threshold():
     ax.set_xlim(0.55, 1.0); ax.set_ylim(0, 1.0)
     ax.set_xlabel(r"Threshold $\tau$ in $\rho \geq \tau$")
     ax.set_ylabel("Fraction")
-    # 放大后图例挡住上升的红曲线,移到两条曲线之间的空白带
+    # once enlarged the legend covers the rising red curve, so move it into the blank band
+    # between the two curves
     ax.legend(frameon=False, fontsize=8.0, loc="center left",
               bbox_to_anchor=(0.02, 0.70))
 
@@ -90,7 +93,8 @@ def si2_threshold():
 
 
 def si3_band_grid():
-    """(tau_lo, tau_hi) 二维扫描:上界的价值只在低满足率处出现。"""
+    """A two-dimensional (tau_lo, tau_hi) sweep: the upper bound is only worth anything at
+    low satisfaction rates."""
     z = np.load(SI / "s3_band_grid.npz")
     lo, hi, sat, exc = z["lo"], z["hi"], z["sat"], z["excl"]
     fig, axes = plt.subplots(1, 2, figsize=(W2, 9.2 * CM))
@@ -132,7 +136,7 @@ def si3_band_grid():
 
 
 def si4_split():
-    """discovery 与留出集逐条对照 —— 无过拟合的直接证据。"""
+    """Discovery against the held-out set, law by law -- direct evidence of no overfitting."""
     d = pd.read_csv(SI / "s5_split_consistency.csv")
     fig, axes = plt.subplots(1, 2, figsize=(W2, 8.6 * CM))
     fig.subplots_adjust(left=0.095, right=0.940, top=0.885, bottom=0.135, wspace=0.34)
@@ -146,14 +150,14 @@ def si4_split():
         ax.bar(x - w / 2, dv, w, color=cols, lw=0, alpha=0.42)
         ax.bar(x + w / 2, cv, w, color=cols, lw=0, alpha=0.95)
         ax.set_xticks(x)
-        # 归档表以 L1--L4 为键;图内用正文的 Set 1--Set 4
+        # the archived tables are keyed on L1--L4; the figure uses the main text's Set 1--Set 4
         ax.set_xticklabels([setlab(v) for v in sets], fontsize=8.5)
         ax.set_ylabel(lab)
         for i in range(len(sets)):
             ax.text(x[i], max(dv[i], cv[i]) + 0.014, f"{cv[i]-dv[i]:+.4f}", ha="center",
                     fontsize=7.5, color="#424446")
-        ax.set_ylim(0, 1.06)          # 两个面板同为 0-1 的比率:同刻度同上限
-    # 一个图例,不是每个面板一份:两行都放在整幅图的顶端居中
+        ax.set_ylim(0, 1.06)          # both panels are 0-1 ratios: same scale, same ceiling
+    # one legend, not one per panel: both rows go centred at the top of the whole figure
     fig.text(0.5175, 0.972, "pale: discovery (thresholds fitted here)      "
                             "solid: held-out split      "
                             "bar labels: held-out minus discovery",
@@ -163,7 +167,8 @@ def si4_split():
 
 
 def si5_perclass():
-    """四个法则集的分类排除力矩阵,两个划分并排 —— 主文图 1c 的完整版。"""
+    """The per-class exclusion matrix for the four law sets, the two splits side by side --
+    the full version of main-text Fig. 1c."""
     d = pd.read_csv(SI / "s5_split_consistency.csv")
     KS = ["S1", "S2", "S3", "S4", "S5"]
     sets = ["L1", "L1'", "L2", "L3", "L4"]
@@ -196,7 +201,8 @@ def si5_perclass():
 
 
 def si6_loko():
-    """留一扰动类:认证最优树 vs 单阈值 vs 守卫带。"""
+    """Leave-one-perturbation-class-out: the certified-optimal tree vs a single threshold vs
+    a guarded band."""
     lk = pd.read_csv(DATA / "fig3_loko.csv")
     bl = pd.read_csv(DATA / "fig4_band_loko.csv")
     fig, axes = plt.subplots(1, 2, figsize=(W2, 8.8 * CM))
@@ -290,10 +296,12 @@ def si9_ranking_data():
 
 
 def si10_unguarded_band():
-    """整条法则阶梯对上"无守卫的最优双侧带",以及膨胀类的分解。
+    """The whole law staircase against the "best unguarded two-sided band", plus the
+    breakdown of the expansion class.
 
-    整体搬自主图原 Fig. 3c;无守卫双侧带的三个数字取自 fig4_band.csv 的
-    0.99 满足率行(two_excl / two_S4 / two_sat),与原面板逐位一致。
+    Carried over wholesale from the original main-text Fig. 3c; the three numbers for the
+    unguarded two-sided band come from the 0.99-satisfaction row of fig4_band.csv
+    (two_excl / two_S4 / two_sat) and match the original panel digit for digit.
     """
     # every other \textwidth SI figure is ~17.8 cm native and is therefore reduced by
     # LaTeX; at 12.6 cm this one was enlarged 1.23x and printed larger than its neighbours
@@ -324,7 +332,8 @@ def si10_unguarded_band():
     ax.set_ylabel("Damage detection (discovery split)")
     ax.set_ylim(0, 1.30)
     for i in range(6):
-        # 两个数值标签横向必然相碰(组内间距 < 标签宽),因此靠得近时强制错层
+        # the two value labels are bound to collide horizontally (the within-group spacing is
+        # narrower than a label), so stagger them when they get close
         ytot = tot[i] + 0.014
         ys4 = s4v[i] + 0.014
         if abs(ys4 - ytot) < 0.100:
@@ -335,7 +344,7 @@ def si10_unguarded_band():
                 fontsize=7.5, color=cc[i])
         ax.text(x[i], 1.120, f"satisfaction\n{sat[i]:.4f}", ha="center", fontsize=7.5,
                 color="#757779", linespacing=1.30)
-    # 实心/斜纹此前在图内没有任何说明
+    # solid vs hatched was previously unexplained anywhere in the figure
     hs = [mp.Patch(fc="#757779", alpha=0.92, lw=0),
           mp.Patch(fc="#757779", alpha=0.42, hatch="////", ec="w", lw=0)]
     ax.legend(hs, ["all five classes pooled", "D4 isotropic expansion"],
@@ -345,16 +354,18 @@ def si10_unguarded_band():
 
 
 def si12_ranking_extras():
-    """主图排序图(Fig. 5)合并时被降级的两块面板。
+    """The two panels demoted when the main ranking figure (Fig. 5) was merged.
 
-    a  原 Fig. 4c:top-1 命中率减去随机基线(1,508 个同成分组)。规则以"能不能
-       挑出唯一结构"计分,弃权按随机记账,因此本图与 Fig. 5b 的弃权率同源。
-    b  原 Fig. 6c:F2R 的组等权稳定性准确率随 |ΔE_hull| 下限抬升,以及在
-       ≥25 meV/atom 对上重新拟合的 F2RG 单点(菱形)。
+    a  formerly Fig. 4c: top-1 hit rate minus the random baseline (1,508 same-composition
+       groups). A rule scores on whether it can single out one structure, and abstentions are
+       charged as random, so this panel shares its origin with the abstention rate in Fig. 5b.
+    b  formerly Fig. 6c: F2R's group-equal stability accuracy as the |dE_hull| floor is
+       raised, plus the single F2RG point (diamond) refitted on pairs at >=25 meV/atom.
 
-    两块面板的数值、配色、刻度与文字均逐字搬自原面板,只是换了版面。
-    数据:paper/data/fig7_top1.csv,outputs/20260814_f2r_stability/resolve_f2r.json,
-    outputs/20260814_f2rg_gap25/calib_result.json。
+    The values, colours, ticks and text of both panels are carried over verbatim from the
+    originals; only the layout changed.
+    Data: paper/data/fig7_top1.csv, outputs/20260814_f2r_stability/resolve_f2r.json,
+    outputs/20260814_f2rg_gap25/calib_result.json.
     """
     t1 = pd.read_csv(DATA / "fig7_top1.csv")
     t1["s"] = t1.rule.map(SHORT); t1["c"] = t1.s.map(CMAP)
@@ -363,15 +374,16 @@ def si12_ranking_extras():
     fg = json.load(open(ROOT / "outputs" / "20260814_f2rg_gap25" /
                         "calib_result.json"))
 
-    # 版面(cm):左栏留 3.05 cm 给长行标签,右栏留 2.6 cm 给两行 y 轴标题,
-    # 两个面板同上沿同高,面板字母因此落在两条竖线上。
+    # layout (cm): 3.05 cm in the left column for the long row labels, 2.6 cm in the right
+    # column for the two-line y-axis title; both panels share a top edge and a height, so the
+    # panel letters fall on two vertical lines.
     _W, _H = 18.3, 8.60
     fig = plt.figure(figsize=(W2, _H * CM))
 
     def _rect(x0, w, ytop, h):
         return [x0 / _W, (_H - ytop - h) / _H, w / _W, h / _H]
 
-    # ---- (a) top-1 lift over random  (原 Fig. 4c)
+    # ---- (a) top-1 lift over random  (formerly Fig. 4c)
     axa = fig.add_axes(_rect(3.05, 5.60, 0.50, 6.45))
     o = t1.sort_values("lift")
     axa.axvline(0, color="#646668", lw=0.7)
@@ -383,7 +395,7 @@ def si12_ranking_extras():
         axa.text(val + (0.012 if val >= 0 else -0.012), i, f"{val:+.3f}", va="center",
                  ha="left" if val >= 0 else "right", fontsize=7.5, color=c)
 
-    # ---- (b) stability accuracy vs energy-gap floor  (原 Fig. 6c)
+    # ---- (b) stability accuracy vs energy-gap floor  (formerly Fig. 6c)
     axb = fig.add_axes(_rect(11.55, 6.30, 0.50, 6.45))
     thr = [0, 10, 25, 50, 100]
     gb = [r2["gap_bins"][f"{t/1000:.3f}"] for t in thr]
@@ -411,7 +423,8 @@ def si12_ranking_extras():
 
 
 def si13_failure_modes():
-    """图 S13:反驳账本按失败模式分组(原主文图 1d,按作者决定移入 SI)。"""
+    """Fig. S13: the refutation ledger grouped by failure mode (formerly main-text Fig. 1d,
+    moved to the SI by the authors' decision)."""
     _W, _H = 12.0, 5.20
     fig = plt.figure(figsize=(_W * CM, _H * CM))
     GUT = 3.05
