@@ -11,6 +11,8 @@ crystal diagnosis and screening**
 [![Project page](https://img.shields.io/badge/project%20page-ai4qc.github.io%2FPRIS-4CC9F0.svg)](https://ai4qc.github.io/PRIS/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg)](LICENSE)
 
+**English** · [简体中文](README.zh-CN.md)
+
 **Project page:** <https://ai4qc.github.io/PRIS/> — the eight laws, the headline results, the five
 main figures, a worked example of the analyser, and one-page posters of the paper.
 
