@@ -1,86 +1,106 @@
-# Next10 LRRC 固定门探索诊断设计
+# Next10 LRRC fixed-gate exploratory diagnostic design
 
-## 1. 目标与证据等级
+## 1. Objective and evidence level
 
-next8 的 `AGREE995` 在 formula-selection 有 `+1.26325` 个百分点信号，但在已打开的
-development gate 只剩 `+0.18425` 个百分点，paired CI 跨零且 comparator safety 失败。
-next9 因此冻结了一个与同源 checkpoint 分歧正交的局部二阶响应 `LRRC-v0`。
+next8's `AGREE995` carries a `+1.26325` percentage-point signal at formula selection, but only
+`+0.18425` percentage points on the already-opened development gate, where the paired CI crosses
+zero and comparator safety fails. next9 therefore froze `LRRC-v0`, a local second-order response
+orthogonal to the disagreement of the same checkpoint.
 
-本轮只回答一个窄问题：在**不重拟合 next8 阈值、不扫描 LRRC 参数**的前提下，LRRC 负曲率
-能否在已暴露的 development gate 上给强 M5 基线增加有价值的拒绝信号。这个 gate 已被旧工作
-打开，因此结果只能称为 `posthoc exploratory diagnostic`，不能称为独立验证、科学成功或新法则。
+This round answers one narrow question: **without refitting the next8 thresholds and without
+sweeping the LRRC parameters**, can LRRC negative curvature add worthwhile rejection signal to a
+strong M5 baseline on the already-exposed development gate? That gate was opened by earlier work,
+so the result can only be called a `posthoc exploratory diagnostic` -- not an independent
+validation, not a scientific success, and not a new law.
 
-历史 test、OMat24、论文、旧报告、README 与 PREREG 全部保持关闭或不变。
+The historical test set, OMat24, the paper, the old reports, the README and PREREG all stay
+closed or unchanged.
 
-## 2. 两阶段 opening 顺序
+## 2. The two-stage opening order
 
-### 2.1 标签自由特征阶段
+### 2.1 Label-free feature stage
 
-只读取并哈希：
+Read and hash only:
 
-1. next8 development feature manifest 与 feature parquet；
-2. next8 threshold-role assignment；
-3. 原始 x0 frame zip；
-4. 固定 MatterSim 5M checkpoint；
-5. next9 LRRC 与 next10 runner 源码。
+1. the next8 development feature manifest and feature parquet;
+2. the next8 threshold-role assignment;
+3. the raw x0 frame zip;
+4. the fixed MatterSim 5M checkpoint;
+5. the next9 LRRC and next10 runner source.
 
-只选 `threshold_role == development_gate` 的 sid，并验证该选择与 next8 feature 行一一对应。
-这一阶段不得接受 label path，也不得导入协议评价代码。输出只含 LRRC 数值诊断、状态、输入哈希、
-checkpoint 哈希和运行遥测。发布完成并重新哈希后，才允许评价阶段读取旧 development labels。
+Select only the sids with `threshold_role == development_gate`, and verify that this selection
+corresponds one to one with the next8 feature rows.
+This stage may not accept a label path and may not import the protocol evaluation code. Its
+output contains only the LRRC numerical diagnostics, statuses, input hashes, checkpoint hash and
+run telemetry. Only once it has been published and rehashed may the evaluation stage read the old
+development labels.
 
-### 2.2 后验评价阶段
+### 2.2 Post-hoc evaluation stage
 
-评价器先验证 sealed LRRC feature manifest、next8 frozen protocol、next8 development-gate metric
-artifact 与所有输入哈希。然后必须逐项重现旧 M5/AGREE995 的 development-gate 决策和核心指标；
-重现失败则在候选评价前 fail closed。
+The evaluator first verifies the sealed LRRC feature manifest, the next8 frozen protocol, the
+next8 development-gate metric artefact and every input hash. It must then reproduce the old
+M5/AGREE995 development-gate decision and core metrics item by item; if the reproduction fails it
+fails closed before any candidate is evaluated.
 
-## 3. 固定 LRRC 计算
+## 3. The fixed LRRC computation
 
-对每个支持结构只使用 MatterSim 5M：
+For each supported structure, use only MatterSim 5M:
 
-- 1 次未扰动力批预测；
-- 由 next9 `translation_projected_direction` 与 MIC `d_star` 构造固定方向和步长；
-- 4 次扰动力批预测：`+h`、`-h`、`+h/2`、`-h/2`；
-- 用一个固定顺序的 replay oracle 调用 next9 `evaluate_lrrc`，使标量实现成为唯一公式实现；
-- 每个非驻点成功结构必须恰有 5 份力，驻点只使用 1 份力。
+- 1 unperturbed force batch prediction;
+- a fixed direction and step size constructed from next9's `translation_projected_direction` and
+  the MIC `d_star`;
+- 4 perturbed force batch predictions: `+h`, `-h`, `+h/2`, `-h/2`;
+- a call to next9 `evaluate_lrrc` through a fixed-order replay oracle, so that the scalar
+  implementation is the only implementation of the formula;
+- exactly 5 force sets per successful non-stationary structure; stationary points use 1 force set
+  only.
 
-任何 checkpoint 变化、sid/frame 不一致、批输出错位、非有限力或发布前输入变化均整体 fail closed。
-不把失败行悄悄丢弃；可归因的几何/数值状态显式写入 feature parquet。
+Any checkpoint change, sid/frame mismatch, misaligned batch output, non-finite force, or change
+of an input before publication fails closed as a whole.
+Failed rows are not quietly discarded; the attributable geometric or numerical state is written
+explicitly into the feature parquet.
 
-## 4. 冻结候选目录
+## 4. The frozen candidate catalogue
 
-两条 next8 track 均沿用原 M5/AGREE995 最终阈值和严格 `score > threshold` 规则：
+Both next8 tracks keep the original M5/AGREE995 final thresholds and the strict
+`score > threshold` rule:
 
-| formula | 固定决策 |
+| formula | fixed decision |
 |---|---|
-| `M5` | next8 M5 基线，仅用于精确重现 |
-| `AGREE995` | next8 已选公式，仅作为弱信号参考 |
+| `M5` | the next8 M5 baseline, used only for exact reproduction |
+| `AGREE995` | the formula next8 selected, used only as a weak-signal reference |
 | `M5_LRRC_OR` | `M5 REJECT or LRRC_negative` |
-| `M5_LRRC_QCRC` | 先 `M5_LRRC_OR`，再按 M5 score 应用 next9 Quota-CRC |
-| `AGREE995_LRRC_QCRC` | 先 `AGREE995 REJECT or LRRC_negative`，再按 AGREE995 score 应用 Quota-CRC |
+| `M5_LRRC_QCRC` | `M5_LRRC_OR` first, then next9's Quota-CRC applied by M5 score |
+| `AGREE995_LRRC_QCRC` | `AGREE995 REJECT or LRRC_negative` first, then Quota-CRC applied by AGREE995 score |
 
-`LRRC OK/nonnegative` 与 `STATIONARY_FALLBACK` 沿用基础决策；LRRC 几何、模型或数值失败为
-ABSTAIN。Quota-CRC 是最后一层，只能把 REJECT 改回 KEEP，ABSTAIN 不变。配额固定为
-`ceil(sqrt(n))` 且边界并列全部 KEEP。
+`LRRC OK/nonnegative` and `STATIONARY_FALLBACK` keep the base decision; a geometric, model or
+numerical failure of LRRC is ABSTAIN. Quota-CRC is the last layer and can only turn a REJECT back
+into a KEEP, leaving ABSTAIN unchanged. The quota is fixed at `ceil(sqrt(n))` and all boundary
+ties are KEEP.
 
-目录在打开 labels 前冻结，不根据负曲率比例、逐行标签或结果再增加公式。
+The catalogue is frozen before the labels are opened; no formula is added afterwards on the basis
+of the negative-curvature fraction, of individual labels, or of the results.
 
-## 5. 评价与停止规则
+## 5. Evaluation and stopping rules
 
-每个候选同时报告 primary/comparator：
+Each candidate reports both primary and comparator quantities:
 
-- DFT savings 与 macro savings；
-- exact/near/valuable retention；
-- high-energy removal recall 与 reject precision；
-- abstention、全拒组与 regret；
-- 相对相应基础公式的 20,000 次 `rk` paired bootstrap。
+- DFT savings and macro savings;
+- exact/near/valuable retention;
+- high-energy removal recall and reject precision;
+- abstention, all-reject groups and regret;
+- a 20,000-draw `rk` paired bootstrap against the corresponding base formula.
 
-复用门上的结果只作方向筛选：
+Results on a reused gate serve only to screen for direction:
 
-- 若所有 LRRC 候选 savings 不增，或任何点估计增益都伴随 valuable recall 明显越界，停止该路线；
-- 若至少一个 Quota-CRC 版本同时出现 savings 正增、valuable recall 点估计非劣、无全拒组，才把它
-  带到 WBM 回顾性审计或 Alexandria 2025 时间外 cohort；
-- 无论点估计多好，本轮都写 `scientific_improvement_claim=false`，不得打开历史 test 或 OMat24。
+- if no LRRC candidate increases savings, or if any point-estimate gain comes with valuable
+  recall clearly out of bounds, stop this line;
+- only if at least one Quota-CRC version simultaneously shows a positive gain in savings, a
+  non-inferior point estimate of valuable recall, and no all-reject group, does it go on to the
+  WBM retrospective audit or the Alexandria 2025 out-of-time cohort;
+- however good the point estimates, this round records
+  `scientific_improvement_claim=false` and may not open the historical test set or OMat24.
 
-只有后续新物理 cohort 通过预先冻结的科学门，才另写独立成功报告并等待用户确认后修改论文或旧报告。
-
+Only if a subsequent new physical cohort passes a pre-frozen scientific gate is a separate success
+report written, and only then, after the user confirms, may the paper or the old reports be
+modified.

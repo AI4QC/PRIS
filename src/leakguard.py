@@ -1,28 +1,33 @@
 # -*- coding: utf-8 -*-
-"""LeakGuard:可证明无泄漏的特征白名单 + 非退化集合打分器。
+"""LeakGuard: a provably leak-free feature whitelist + a non-degenerate set scorer.
 
-背景
-----
-上一轮对抗复核证明:**人工判断"这个特征算不算泄漏"不可靠**。
-`search_t1.univ_conn` 的作者在注释里写明了 `tgt = 1 <=> an_link > deg` 这条恒等式,
-禁掉了 `deg` 却保留了 `an_link` —— 禁错了一半。`T_P5` 的 `cn_span_st<=0 => tgt=0`
-是逻辑恒真,同样没被任何门拦住。
+Background
+----------
+The previous round of adversarial review proved that **human judgement of "is this feature a
+leak" is unreliable**. The author of `search_t1.univ_conn` wrote the identity
+`tgt = 1 <=> an_link > deg` into a comment, then banned `deg` while keeping `an_link` --
+banning half of it. `T_P5`'s `cn_span_st<=0 => tgt=0` is a logical tautology, and no gate
+caught that either.
 
-所以泄漏判定必须**机检**。本模块实现三级检测:
+So leak detection has to be **done by machine**. This module implements three levels:
 
-  A 经验确定性   : t 是否是单个 f 的确定性函数 / 是否存在零错分的单侧纯区
-  B 单特征天花板 : 单个 f 喂无约束决策树,按 proto_id 分组 CV 的准确率
-  C 构造溯源     : features.yaml 里每个特征声明 (atoms, op, scope, base),
-                   与靶的声明做传递闭包 + 三条硬规则
+  A empirical determinism : is t a deterministic function of a single f, or is there a
+                            zero-error one-sided pure region
+  B single-feature ceiling: accuracy of an unconstrained decision tree on a single f, under
+                            CV grouped by proto_id
+  C construction provenance: each feature in features.yaml declares (atoms, op, scope, base);
+                            take the transitive closure against the target's declaration and
+                            apply three hard rules
 
-验收标准(检测器自己的):必须复现上一轮的两个已知泄漏
+Acceptance criterion (for the detector itself): it must reproduce the two known leaks from
+the previous round
   an_link  vs T_CONN
   cn_span_st vs T_P5
 
-用法
-----
-  python leakguard.py prep      # 构建并缓存三个论域(只读 discovery)
-  python leakguard.py audit     # 跑三级检测,写 report + whitelist
+Usage
+-----
+  python leakguard.py prep      # build and cache the three domains (reads discovery only)
+  python leakguard.py audit     # run the three levels, write the report + whitelist
   python leakguard.py all
 """
 from __future__ import annotations
@@ -49,24 +54,26 @@ YAML_SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)), "features.ya
 
 TARGETS = ("T_CONN", "T_P2", "T_P5")
 
-# ---- 判定阈值(在看检测结果之前定死)-------------------------------------
-EPS_DET = 1e-6          # 确定性函数的容错比例
-PURE_MIN_COV = 0.005    # 单侧纯区的最小覆盖率(低于此不算泄漏,只是稀有子群)
-TAIL_PURITY = 0.99      # 单侧"近纯"区的纯度阈值(cov >= TAIL_MIN_COV)
+# ---- decision thresholds (fixed before any detection result was seen) -------------------
+EPS_DET = 1e-6          # error tolerance for a deterministic function
+PURE_MIN_COV = 0.005    # minimum coverage of a one-sided pure region (below this it is not a
+                        # leak, just a rare subgroup)
+TAIL_PURITY = 0.99      # purity threshold for a one-sided "near-pure" region (cov >= TAIL_MIN_COV)
 TAIL_MIN_COV = 0.01
-CEIL_BLOCK = 0.98       # 单特征分组 CV 天花板 >= 此值 -> 泄漏
+CEIL_BLOCK = 0.98       # single-feature grouped-CV ceiling at or above this -> a leak
 CEIL_REVIEW = 0.95
 
 
-# ================================================================== 论域缓存
+# ================================================================== domain cache
 
 def prep(force=False):
-    """构建三个 T1 论域并缓存到 scratchpad。只读 discovery(由 search_t1 保证)。"""
+    """Build the three T1 domains and cache them in the scratchpad. Reads discovery only
+    (guaranteed by search_t1)."""
     import search_t1 as st
     todo = [t for t in TARGETS
             if force or not os.path.exists(os.path.join(SCRATCH, f"lg_{t}.parquet"))]
     if not todo:
-        print("[prep] 缓存已存在,跳过")
+        print("[prep] cache already exists, skipping")
         return
     t0 = time.time()
     X0, meta0, feat0, rnd0, orb, U = st.build_universes()
@@ -82,7 +89,7 @@ def prep(force=False):
         X.to_parquet(os.path.join(SCRATCH, f"lg_{tag}.parquet"), index=False)
         json.dump({"feat": uni["feat"], "rnd": uni["rnd"]},
                   open(os.path.join(SCRATCH, f"lg_{tag}_cols.json"), "w"))
-        print(f"[prep] {tag}: {len(X)} 行 / {len(uni['feat'])} 特征 "
+        print(f"[prep] {tag}: {len(X)} rows / {len(uni['feat'])} features "
               f"/ ok={int(X['__ok'].sum())} ({time.time()-t0:.0f}s)", flush=True)
 
     import gc
@@ -106,17 +113,20 @@ def load(tag):
     return F, y, ok, meta, cols["feat"], [c for c in cols["rnd"] if c in X.columns]
 
 
-# ============================================== A 级:经验确定性 / 单侧纯区
+# ================================ level A: empirical determinism / one-sided pure region
 
 def level_a(v, y, ok):
-    """单特征经验确定性检测。
+    """Empirical determinism detection for a single feature.
 
-    返回
-      err_thresh   : min over (θ, 极性) 的错分比例。== 0 -> t 是 f 的阈值函数
-      err_value    : 按 f 的精确取值分组后的最小错分比例。== 0 -> t 是 f 的确定性函数
-      pure_side    : 存在零错分单侧区(cov >= PURE_MIN_COV)时的 (侧, cov, 方向标签)
-      tail_purity  : cov >= TAIL_MIN_COV 的单侧区能达到的最高纯度
-    与 search_t1.tierA 同口径:NaN -> -1e18(落到低侧)。
+    Returns
+      err_thresh   : the misclassification rate minimised over (theta, polarity). == 0 means
+                     t is a threshold function of f
+      err_value    : the minimum misclassification rate after grouping by the exact values of
+                     f. == 0 means t is a deterministic function of f
+      pure_side    : when a zero-error one-sided region exists (cov >= PURE_MIN_COV), its
+                     (side, cov, direction label)
+      tail_purity  : the highest purity attainable by a one-sided region with cov >= TAIL_MIN_COV
+    Same convention as search_t1.tierA: NaN -> -1e18 (falls to the low side).
     """
     v = np.nan_to_num(np.asarray(v, dtype=np.float64), nan=-1e18,
                       posinf=1e18, neginf=-1e18)[ok]
@@ -126,11 +136,11 @@ def level_a(v, y, ok):
         return None
     o = np.argsort(v, kind="stable")
     vs, ys = v[o], y[o]
-    # 切点:相邻不同值之间
-    cut = np.flatnonzero(vs[1:] != vs[:-1]) + 1          # 低侧样本数
+    # cut points: between adjacent distinct values
+    cut = np.flatnonzero(vs[1:] != vs[:-1]) + 1          # sample count on the low side
     c1 = np.cumsum(ys)
     n_lo = cut.astype(np.float64)
-    k1_lo = c1[cut - 1].astype(np.float64)               # 低侧的 y=1 个数
+    k1_lo = c1[cut - 1].astype(np.float64)               # count of y=1 on the low side
     tot1 = float(c1[-1])
     n_hi = n - n_lo
     k1_hi = tot1 - k1_lo
@@ -144,15 +154,16 @@ def level_a(v, y, ok):
                    tail_cov=1.0)
         return res
 
-    # --- 阈值确定性:低侧预测 b、高侧预测 1-b
-    err_a = k1_lo + k0_hi          # b=0 低侧 / b=1 高侧
+    # --- threshold determinism: predict b on the low side and 1-b on the high side
+    err_a = k1_lo + k0_hi          # b=0 low side / b=1 high side
     err_b = k0_lo + k1_hi
     res["err_thresh"] = float(np.minimum(err_a, err_b).min() / n)
 
-    # --- 取值级确定性(t 是 f 的任意确定性函数)
-    # 注意:近连续特征几乎每行一个取值,err_value 平凡地等于 0(每个取值一个样本
-    # 当然纯)。负对照 rnd_u0/rnd_u3 就是这样被误判 BLOCK 的。因此本判据只在
-    # 每个取值平均至少 MIN_PER_VALUE 个样本时才可用,否则置 NaN 弃用。
+    # --- value-level determinism (t as any deterministic function of f)
+    # Note: a near-continuous feature has almost one value per row, and err_value is then
+    # trivially 0 (one sample per value is of course pure). That is how the negative controls
+    # rnd_u0/rnd_u3 were wrongly BLOCKed. So this criterion is only usable when there are at
+    # least MIN_PER_VALUE samples per value on average; otherwise it is set to NaN and dropped.
     MIN_PER_VALUE = 20
     _, inv = np.unique(vs, return_inverse=True)
     nv = inv.max() + 1
@@ -163,7 +174,7 @@ def level_a(v, y, ok):
     res["err_value"] = ev if (n / nv) >= MIN_PER_VALUE else float("nan")
     res["err_value_raw"] = ev
 
-    # --- 零错分单侧区(恒真蕴含):某一侧全 0 或全 1
+    # --- zero-error one-sided region (a tautological implication): one side is all 0 or all 1
     best = None
     for side, nn, kk1, kk0, lab in (("lo", n_lo, k1_lo, k0_lo, "f<=theta"),
                                     ("hi", n_hi, k1_hi, k0_hi, "f>theta")):
@@ -171,7 +182,8 @@ def level_a(v, y, ok):
         if pure.any():
             j = int(np.flatnonzero(pure)[np.argmax(nn[pure])])
             cov = float(nn[j] / n)
-            # 偶然纯的概率:纯区大小为 m 时 = max(p0,1-p0)^m,必须 < 1e-6
+            # probability of being pure by chance: max(p0,1-p0)^m for a pure region of size m;
+            # must be < 1e-6
             p = max(res["base_rate"], 1 - res["base_rate"])
             log_p_chance = float(nn[j]) * math.log10(max(p, 1e-12))
             if log_p_chance < -6 and (best is None or cov > best["cov"]):
@@ -180,7 +192,7 @@ def level_a(v, y, ok):
                         "log10_p_chance": round(log_p_chance, 1)}
     res["pure_side"] = best
 
-    # --- 近纯单侧区(cov >= TAIL_MIN_COV 时可达的最高纯度)
+    # --- near-pure one-sided region (the highest purity attainable at cov >= TAIL_MIN_COV)
     tp, tc = 0.0, 0.0
     for nn, kk1 in ((n_lo, k1_lo), (n_hi, k1_hi)):
         m = nn >= TAIL_MIN_COV * n
@@ -193,10 +205,10 @@ def level_a(v, y, ok):
     return res
 
 
-# ====================================== B 级:单特征分组 CV 天花板(无约束树)
+# ================== level B: single-feature grouped-CV ceiling (unconstrained tree)
 
 def level_b(v, y, ok, groups, n_folds=5, seed=20260728):
-    """单个特征喂深度不限的决策树,按 proto_id 分组 K 折 CV。"""
+    """Feed a single feature to a depth-unlimited decision tree, K-fold CV grouped by proto_id."""
     from sklearn.tree import DecisionTreeClassifier
     from sklearn.model_selection import GroupKFold
     x = np.nan_to_num(np.asarray(v, dtype=np.float64), nan=-1e18,
@@ -219,7 +231,8 @@ def level_b(v, y, ok, groups, n_folds=5, seed=20260728):
 
 
 def joint_ceiling(F, cols, y, ok, groups, n_folds=3, seed=20260728):
-    """一组特征联合的分组 CV 天花板(用来量化"公式项集合"能重建多少目标)。"""
+    """The grouped-CV ceiling of a set of features jointly (to quantify how much of the target
+    a "set of formula terms" can reconstruct)."""
     from sklearn.ensemble import HistGradientBoostingClassifier
     from sklearn.model_selection import GroupKFold
     cols = [c for c in cols if c in F.columns]
@@ -244,14 +257,15 @@ def joint_ceiling(F, cols, y, ok, groups, n_folds=3, seed=20260728):
             "cv_gain": float(np.mean(acc) - np.mean(maj))}
 
 
-# ================================================== C 级:构造溯源(features.yaml)
+# ============================== level C: construction provenance (features.yaml)
 
 ENVELOPE_OPS = {"span", "range", "ptp", "nunique", "std", "max", "min",
                 "argmax", "argmin", "any", "all"}
 
 
 def _closure(name, spec, atoms):
-    """特征的原子传递闭包:atoms 字段 + 每个原子在 atoms 表里声明的上游。"""
+    """Transitive atom closure of a feature: the atoms field plus each atom's declared
+    upstream in the atoms table."""
     seen, stack = set(), list(spec.get("atoms", []))
     while stack:
         a = stack.pop()
@@ -263,15 +277,17 @@ def _closure(name, spec, atoms):
 
 
 def level_c(cfg, tag):
-    """按 features.yaml 的声明跑三条硬规则。返回 {feature: verdict_dict}。"""
+    """Run the three hard rules against the features.yaml declarations. Returns
+    {feature: verdict_dict}."""
     atoms = cfg["atoms"]
-    rank = cfg["scope_rank"]             # 数字越小 = 聚合域越粗(包含更多个体)
+    rank = cfg["scope_rank"]             # a smaller number means a coarser aggregation domain
+                                         # (containing more individuals)
     tspec = cfg["targets"][tag]
     tclos = set(tspec["forbidden_atoms"])
     tscope, tbase = tspec["scope"], tspec["base"]
 
     def contains(s_outer, s_inner):
-        """s_outer 的聚合域是否包含 s_inner(靶的域)。"""
+        """Does s_outer's aggregation domain contain s_inner (the target's domain)."""
         if s_outer not in rank or s_inner not in rank:
             return False
         return rank[s_outer] <= rank[s_inner]
@@ -289,18 +305,22 @@ def level_c(cfg, tag):
              "scope": spec.get("scope"), "base": spec.get("base"),
              "R1_atom_hit": hits,
              "R2_envelope": False, "R3_same_object": False, "note": spec.get("note")}
-        # R1:特征的原子闭包碰到靶的禁用原子 -> 构造级泄漏
+        # R1: the feature's atom closure touches a forbidden atom of the target -> a
+        # construction-level leak
         r["R1"] = bool(hits)
-        # 信息位:命中发生在比靶更粗的聚合域上(泄漏机制更弱,但仍不进白名单)
+        # informational: the hit occurs on an aggregation domain coarser than the target's
+        # (a weaker leak mechanism, but still not whitelisted)
         r["R1_coarse"] = bool(hits and rank.get(spec.get("scope"), 9)
                               < rank.get(tscope, 9))
-        # R2:包络算子 + 同底量 + 聚合域包含靶域 -> 恒真蕴含入口
+        # R2: envelope operator + same base + aggregation domain containing the target domain
+        # -> an entry point for a tautological implication
         if (spec.get("base") == tbase and spec.get("op") in ENVELOPE_OPS
                 and contains(spec.get("scope"), tscope)):
             r["R2"] = r["R2_envelope"] = True
         else:
             r["R2"] = False
-        # R3:与靶同域同底量的任何统计量 -> 靶的充分统计量族,需经验清场
+        # R3: any statistic with the same domain and base as the target -> the target's
+        # sufficient-statistic family, which needs to be cleared empirically
         r["R3"] = bool(spec.get("base") == tbase and spec.get("scope") == tscope
                        and not r["R2"])
         r["R3_same_object"] = r["R3"]
@@ -310,38 +330,40 @@ def level_c(cfg, tag):
     return out
 
 
-# ================================================================== 汇总判定
+# ================================================================== combined verdict
 
 def combine(a, b, c):
-    """三级结果 -> 最终判定。任一级 BLOCK 即 BLOCK。"""
+    """The three levels -> a final verdict. BLOCK at any level means BLOCK."""
     reasons = []
     if c is not None and c["R1"]:
-        reasons.append("C.R1构造溯源:原子闭包命中靶的禁用原子 " + ",".join(c["R1_atom_hit"]))
+        reasons.append("C.R1 construction provenance: atom closure hits a forbidden atom of "
+                       "the target: " + ",".join(c["R1_atom_hit"]))
     if c is not None and c["R2"]:
-        reasons.append("C.R2包络恒真:同底量的包络算子聚合域包含靶域")
+        reasons.append("C.R2 envelope tautology: an envelope operator on the same base "
+                       "aggregates over a domain containing the target domain")
     if a is not None:
         ev = a.get("err_value")
         ev = 1.0 if (ev is None or ev != ev) else ev
         if ev <= EPS_DET:
-            reasons.append(f"A.取值级恒等式 err={ev:.2e}"
-                           f"(每取值 {a.get('mean_per_value', 0):.0f} 样本)")
+            reasons.append(f"A. value-level identity, err={ev:.2e} "
+                           f"({a.get('mean_per_value', 0):.0f} samples per value)")
         elif a.get("err_thresh", 1.0) <= EPS_DET:
-            reasons.append(f"A.阈值级恒等式 err={a['err_thresh']:.2e}")
+            reasons.append(f"A. threshold-level identity, err={a['err_thresh']:.2e}")
         if a.get("pure_side"):
             ps = a["pure_side"]
-            reasons.append(f"A.零错分单侧区 {ps['pred']} theta={ps['theta']:.4g} "
+            reasons.append(f"A. zero-error one-sided region {ps['pred']} theta={ps['theta']:.4g} "
                            f"=> tgt={ps['body']} cov={ps['cov']:.4f}")
     if b is not None and b["cv_acc"] >= CEIL_BLOCK:
-        reasons.append(f"B.单特征分组CV天花板 {b['cv_acc']:.4f}")
+        reasons.append(f"B. single-feature grouped-CV ceiling {b['cv_acc']:.4f}")
     if reasons:
         return "BLOCK", reasons
     soft = []
     if c is not None and c["R3"]:
-        soft.append("C.R3与靶同域同底量(靶的充分统计量族)")
+        soft.append("C.R3 same domain and base as the target (its sufficient-statistic family)")
     if a is not None and a.get("tail_purity", 0) >= TAIL_PURITY:
-        soft.append(f"A.近纯单侧区 purity={a['tail_purity']:.4f} cov={a['tail_cov']:.4f}")
+        soft.append(f"A. near-pure one-sided region, purity={a['tail_purity']:.4f} cov={a['tail_cov']:.4f}")
     if b is not None and b["cv_acc"] >= CEIL_REVIEW:
-        soft.append(f"B.单特征CV {b['cv_acc']:.4f} >= {CEIL_REVIEW}")
+        soft.append(f"B. single-feature CV {b['cv_acc']:.4f} >= {CEIL_REVIEW}")
     return ("REVIEW", soft) if soft else ("PASS", [])
 
 
@@ -367,7 +389,7 @@ def audit():
             c = cres.get(f)
             v, why = combine(a, b, c)
             if c is None:
-                v, why = "BLOCK", ["C.未在 features.yaml 声明(默认拒绝)"]
+                v, why = "BLOCK", ["C. not declared in features.yaml (deny by default)"]
             rows[f] = {"A": a, "B": b, "C": c, "verdict": v, "reasons": why}
             if a and b:
                 msg = (f"  [{tag}] {f:22s} {v:6s} "
@@ -375,9 +397,9 @@ def audit():
                        f"pure={'Y' if a['pure_side'] else '-'} "
                        f"tail={a['tail_purity']:.4f} cv={b['cv_acc']:.4f}")
             else:
-                msg = f"  [{tag}] {f:22s} {v:6s} (A/B 不可算)"
+                msg = f"  [{tag}] {f:22s} {v:6s} (A/B not computable)"
             print(msg + ("  <- " + "; ".join(why) if why else ""), flush=True)
-        # 负对照:随机特征必须全部 PASS,否则检测器本身有问题
+        # negative control: every random feature must PASS, or the detector itself is wrong
         neg = {}
         for f in rnds[:8]:
             a = level_a(F[f].values, y, ok)
@@ -388,7 +410,8 @@ def audit():
         passed = [f for f, r in rows.items() if r["verdict"] == "PASS"]
         review = [f for f, r in rows.items() if r["verdict"] == "REVIEW"]
         block = [f for f, r in rows.items() if r["verdict"] == "BLOCK"]
-        # 公式项集合的联合天花板(量化"靶的定义式自身能重建多少")
+        # the joint ceiling of a set of formula terms (quantifying how much the target's own
+        # defining expression can reconstruct)
         formula = [f for f in block if rows[f]["C"] and rows[f]["C"]["R1"]]
         jc = {"formula_terms": joint_ceiling(F, formula, y, ok, grp),
               "whitelist": joint_ceiling(F, passed, y, ok, grp)}
@@ -405,7 +428,7 @@ def audit():
         print(f"[{tag}] PASS {len(passed)} / REVIEW {len(review)} / BLOCK {len(block)}"
               f"  ({time.time()-t0:.0f}s)", flush=True)
 
-    # ---- 验收:必须复现两个已知泄漏
+    # ---- acceptance: the two known leaks must be reproduced
     acc = {}
     for tag, f in (("T_CONN", "an_link"), ("T_P5", "cn_span_st")):
         r = report["targets"][tag]["features"].get(f)
@@ -419,25 +442,29 @@ def audit():
                     "source": "leakguard.py", "split": "discovery",
                     "targets": clean}, open(YAML_OUT, "w"),
                    allow_unicode=True, sort_keys=False)
-    print("\n验收:", json.dumps(acc, ensure_ascii=False, indent=1, default=str))
-    print("写出", REPORT_OUT, "\n写出", YAML_OUT)
+    print("\nacceptance:", json.dumps(acc, ensure_ascii=False, indent=1, default=str))
+    print("wrote", REPORT_OUT, "\nwrote", YAML_OUT)
     return report
 
 
-# ================================================== 修好的打分器(可被 search_t1 导入)
+# ================================ the fixed scorer (importable from search_t1)
 
 class AuditScorerV2:
-    """合取语义下的非退化集合打分器。
+    """A non-degenerate set scorer under conjunctive semantics.
 
-    旧 `AuditScorer.matched()` 的病:所有触发成员里只按 `bits` 最短的那条给预测,
-    成员 body 同极性时集合在覆盖域上退化成常数预测器,`acc_set` 恒等于 `maj_matched`。
+    What was wrong with the old `AuditScorer.matched()`: among all triggered members it took
+    the prediction of whichever had the shortest `bits`, so when the member bodies share a
+    polarity the set degenerates into a constant predictor over its coverage and `acc_set` is
+    identically `maj_matched`.
 
-    新语义(与 PREREG §3.3 的合取组合一致):
-      * 每个成员在**自己的 guard 内**各自给出预测;
-      * 覆盖域内若各成员预测**一致** -> 集合预测 = 该值;
-      * **冲突则弃权**(abstain),弃权样本不计入 acc_set,但计入 `abstain` 率;
-      * 报 `acc_set`(仅表决一致者)、`acc_set_all`(弃权按错算,保守口径)、
-        `abstain`、以及**与 B1 和 B2 在同一批表决一致样本上的对比**。
+    The new semantics (matching the conjunctive combination of PREREG section 3.3):
+      * each member predicts **within its own guard**;
+      * where the members **agree** within the coverage -> the set predicts that value;
+      * **a conflict is an abstention**; abstained samples do not count towards acc_set but do
+        count towards the `abstain` rate;
+      * report `acc_set` (agreeing samples only), `acc_set_all` (abstentions counted as errors,
+        the conservative convention), `abstain`, and **the comparison against B1 and B2 over
+        the same set of agreeing samples**.
     """
 
     def __init__(self, y, ok, masks, bodies, bits, deff):
@@ -450,7 +477,7 @@ class AuditScorerV2:
         self.trig = [np.asarray(m).astype(bool) & self.ok for m in masks]
         self._cache = {}
 
-    # ---- MDL 部分与旧类逐位一致(不动记账口径)
+    # ---- the MDL part matches the old class digit for digit (the accounting convention is untouched)
     def cells(self, S):
         pat = np.zeros(len(self.y), np.int64)
         cell = np.zeros(len(self.y), np.int64)
@@ -488,11 +515,12 @@ class AuditScorerV2:
         d, p = self.data_cost(S)
         return self.model_cost(S, M, lam) + p[par_mode] + d, d, p
 
-    # ---- 修好的匹配覆盖率评估
+    # ---- the fixed matched-coverage evaluation
     def vote(self, S):
-        """返回 (cov, pred, abstain)。合取语义:成员各自预测,冲突弃权。"""
+        """Returns (cov, pred, abstain). Conjunctive semantics: each member predicts, and a
+        conflict abstains."""
         n = len(self.y)
-        n0 = np.zeros(n, np.int32)      # 预测 0 的成员数
+        n0 = np.zeros(n, np.int32)      # number of members predicting 0
         n1 = np.zeros(n, np.int32)
         for i in S:
             t = self.trig[i]
@@ -509,17 +537,20 @@ class AuditScorerV2:
         cov, pred, abst = self.vote(S)
         if not cov.any():
             return None
-        dec = cov & ~abst                       # 表决一致(集合真正给出预测)的样本
+        dec = cov & ~abst                       # samples where the members agree (the set
+                                                # actually predicts)
         y = self.y
         r = {"cov": float(cov.sum() / self.n), "n_cov": int(cov.sum()),
              "abstain": float(abst.sum() / max(int(cov.sum()), 1)),
              "n_decided": int(dec.sum()),
              "cov_decided": float(dec.sum() / self.n)}
         r["acc_set"] = float((pred[dec] == y[dec]).mean()) if dec.any() else float("nan")
-        # 保守口径:弃权按错算,分母仍是整个覆盖域
+        # the conservative convention: abstentions count as errors and the denominator is still
+        # the whole coverage
         r["acc_set_all"] = float((pred[cov] == y[cov]).mean() * 0
                                  + (pred[dec] == y[dec]).sum() / cov.sum())
-        # 基线必须在**同一批已决样本**上比,否则分母不同,比较无效
+        # the baseline has to be compared over **the same decided samples**, otherwise the
+        # denominators differ and the comparison is meaningless
         for nm, base in (("B1", base1), ("B2", base2)):
             if base is None:
                 continue
@@ -527,7 +558,7 @@ class AuditScorerV2:
             r[f"acc_{nm}_matched"] = float((base[dec] == y[dec]).mean()) if dec.any() else float("nan")
             r[f"gain_vs_{nm}"] = r["acc_set"] - r[f"acc_{nm}_matched"]
             r[f"acc_{nm}_cov"] = float((base[cov] == y[cov]).mean())
-        # 退化诊断:集合在已决域上是不是常数预测器
+        # degeneracy diagnostic: is the set a constant predictor over the decided region
         r["maj_matched"] = float(max(y[dec].mean(), 1 - y[dec].mean())) if dec.any() else float("nan")
         r["pred_entropy"] = float(_H(pred[dec].mean())) if dec.any() else 0.0
         r["is_constant_predictor"] = bool(dec.any() and len(np.unique(pred[dec])) == 1)
@@ -551,7 +582,8 @@ def _H(p):
 
 
 def gate_G5(perm_z, gain_vs_B1, gain_vs_B2, z_min=5.0):
-    """修好的 G5:必须同时打赢 B1 **和** B2。上一轮只比 B1,导致 vs B2 为负的规则混进来。"""
+    """The fixed G5: the rule must beat **both** B1 and B2. The previous round compared only
+    against B1, which let rules that were negative against B2 through."""
     return bool(perm_z >= z_min and gain_vs_B1 > 0 and gain_vs_B2 > 0)
 
 

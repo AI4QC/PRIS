@@ -355,7 +355,7 @@ def panel_c(fig, ax, ladder):
         ax.text(value * 0.86, 4.30, f"{name}\nmedian", linespacing=1.15,
                 fontsize=FS - 0.8, color=colr, ha="right", va="top")
     ax.set_yticks(range(len(levels)))
-    # 归档表的列名仍是 L1--L4;图内一律用正文的 Set 1--Set 4。
+    # the archived tables still key on L1--L4; the figure always uses the main text's Set 1--Set 4.
     ax.set_yticklabels(["Set " + lv[1:] for lv in levels[::-1]])
     ax.set_xscale("log")
     ax.set_xlim(E_LO, E_HI_D)

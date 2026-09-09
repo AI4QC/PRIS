@@ -4,13 +4,13 @@ VASP task packages that replace four of the manuscript's learned yardsticks with
 first-principles calculations. What each experiment tests, what it predicts and how it may
 fail is fixed in `PREREG-DFT.md`, written before any job was submitted.
 
-Start with `GUIDE-zh.md` for the scientific background, what each experiment computes and
+Start with `GUIDE.md` for the scientific background, what each experiment computes and
 how the results come out; this file covers operations. `CONNECT-zh.md` covers getting onto
 the cluster from this machine, where a local proxy has to be bypassed per connection.
 
 ```
 dft/
-  GUIDE-zh.md          background, contents and the data-extraction workflow
+  GUIDE.md             background, contents and the data-extraction workflow
   CONNECT-zh.md        reaching the cluster past the local proxy; what is installed there
   PREREG-DFT.md        frozen predictions, protocol and decision rules
   build_tasks.py       deterministic builder for all four packages
@@ -94,7 +94,7 @@ name or POTCAR path ruins 28 tasks instead of 617:
 2. `E2_ordering` + `E3_crosscheck` (328 tasks, 1–4 days). Relaxation and stage chaining.
 3. `E4_design` stage A, then `make_stage_b.py`, then stage B (261 + ~1,305 tasks).
 
-`GUIDE-zh.md` section 4 lists what to check when each batch returns, and the failure rules
+`GUIDE.md` section 4 lists what to check when each batch returns, and the failure rules
 fixed in `PREREG-DFT.md`: only a wall-clock timeout may be re-run, once, with identical
 inputs. Nothing else is retried with different settings.
 
@@ -169,7 +169,7 @@ rsync -am --include='*/' --include='collected.json' --include='collected.csv' --
 python dft/analyze.py                                # locally; writes RESULTS.md
 ```
 
-`GUIDE-zh.md` section 3 documents every field and the status codes. `selftest.py` exercises
+`GUIDE.md` section 3 documents every field and the status codes. `selftest.py` exercises
 the chain on synthetic VASP output with known answers and currently passes, including a
 Birch-Murnaghan fit that recovers an injected bulk modulus to 0.00%.
 

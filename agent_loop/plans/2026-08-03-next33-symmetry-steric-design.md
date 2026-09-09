@@ -1,132 +1,157 @@
-# NEXT33 近似对称恢复与方向性拥挤法则设计
+# NEXT33 design: approximate symmetry recovery and directional crowding laws
 
-日期：2026-08-03  
-状态：特征计算及标签关联前冻结；新增文件，不修改 NEXT32、旧报告或论文
+Date: 2026-08-03  
+Status: frozen before the features are computed and before any association with labels; new files
+only, with no modification to NEXT32, the old reports or the paper
 
-## 目标与边界
+## Objective and boundaries
 
-NEXT32 的绝对接触分位数、SIVR、normalized Madelung 和 SCBVE 在 4,096 个
-OMat24 `rattled-relax` 开发结构上的最高 AUC 只有 0.6751。NEXT33 检验两个未被
-充分表达的、仍完全基于一个未弛豫 `x0` 的物理假设：
+NEXT32's absolute contact quantiles, SIVR, normalized Madelung and SCBVE reach a maximum AUC of
+only 0.6751 over the 4,096 OMat24 `rattled-relax` development structures. NEXT33 tests two
+physical hypotheses that are not yet adequately expressed and that still rest entirely on a
+single unrelaxed `x0`:
 
-1. 高 DFT 初始响应可能来自对原本协调环境的方向性破坏，而不仅是标量键长失配；
-2. 随机位移后的结构可能保留可由宽容差识别的近似对称操作，其恢复所需位移可
-   作为几何破缺尺度。
+1. a high initial DFT response may come from directional disruption of an originally coordinated
+   environment, not merely from scalar bond-length mismatch;
+2. a structure that has been randomly displaced may retain approximate symmetry operations
+   identifiable at a loose tolerance, and the displacement needed to recover them can serve as a
+   scale of geometric breaking.
 
-执行允许元素、晶胞、分数坐标、周期边界、冻结共价半径、spglib 对称操作、
-确定性周期距离和线性代数。执行禁止 DFT 数值、弛豫结构/轨迹、MatterSim 或
-MLIP、学习的能量/力/应力代理、同组成候选和任何结构修改。DFT 力/应力只作
-开发和冻结预测后的确认标签。
+Execution may use elements, the cell, fractional coordinates, periodic boundaries, frozen
+covalent radii, spglib symmetry operations, deterministic periodic distances and linear algebra.
+Execution may not use DFT numbers, relaxed structures or trajectories, MatterSim or any MLIP,
+learned energy/force/stress surrogates, same-composition candidates, or any structural
+modification. DFT forces and stresses serve only as confirmation labels, during development and
+after the predictions are frozen.
 
-OMat24 的 `sid` 含原始空间群等生成元数据；NEXT33 **禁止解析或使用这些字符串**。
-对称性必须仅由 `x0` 的晶胞、元素和坐标重新计算。
+OMat24's `sid` carries generation metadata including the original space group; NEXT33 **may not
+parse or use those strings**. Symmetry must be recomputed from `x0`'s cell, elements and
+coordinates alone.
 
-## 方案比较
+## Comparison of the options
 
-### A. 多容差对称恢复 + 方向性拥挤，采用
+### A. Multi-tolerance symmetry recovery + directional crowding -- adopted
 
-OMat24 论文说明，其结构生成包括对 Alexandria 平衡结构的随机高斯位移、
-rattled relaxation 和 Boltzmann rattling。多容差恢复量直接测量 `x0` 内部的
-近似结构关系；方向性拥挤量则补充 NEXT32 只统计标量重叠的缺口。两者都不需要
-参考结构或 DFT。
+The OMat24 paper states that its structure generation includes random Gaussian displacements of
+Alexandria equilibrium structures, rattled relaxation and Boltzmann rattling. A multi-tolerance
+recovery quantity measures approximate structural relations directly within `x0`, while
+directional crowding quantities fill the gap left by NEXT32, which counts only scalar overlap.
+Neither needs a reference structure or DFT.
 
-风险是对称项可能只识别“被人为扰动过”。仓库既有 `sym_feat.py` 已明确记录该
-失败模式。因此对称单项只作诊断，不得单独晋级；可晋级公式必须含至少一个独立
-的方向性拥挤或既有解析物理项，并继续通过低响应保护门。
+The risk is that the symmetry terms may recognise nothing more than "this has been artificially
+perturbed". The repository's existing `sym_feat.py` records that failure mode explicitly. Symmetry
+terms alone are therefore diagnostic only and may not be promoted on their own; a promotable
+formula must contain at least one independent directional-crowding or existing analytic physical
+term, and must still clear the low-response protection gate.
 
-### B. 局域电子计数和键序不满足度，后续
+### B. Local electron counting and bond-order dissatisfaction -- later
 
-它更接近普适化学稳定性，但与现有键价/SCBVE 重叠，且需要更复杂的冻结元素与
-价态策略，会降低覆盖率。本轮不同时扩大两个机制族。
+This is closer to general chemical stability, but it overlaps the existing bond-valence/SCBVE
+terms and needs a more elaborate frozen element and valence strategy, which would lower coverage.
+Two mechanism families are not enlarged in the same round.
 
-### C. 重新以凸包/形成能为主端点，暂缓
+### C. Returning to the hull or formation energy as the primary endpoint -- deferred
 
-热力学端点更接近最终目标，但 NEXT30 已显示当前解析量不足；本轮先补结构层缺失
-机制，避免同时更换特征和端点后无法归因。
+The thermodynamic endpoint is closer to the ultimate goal, but NEXT30 already showed the current
+analytic quantities to be insufficient; this round first fills the missing structural-level
+mechanism, so that changing features and endpoint at once does not make attribution impossible.
 
-## 对称恢复特征
+## The symmetry-recovery features
 
-定义表示无关的特征长度
+Define the representation-independent characteristic length
 
 \[
 \ell=(V/N)^{1/3}.
 \]
 
-spglib 容差使用相对网格
+The spglib tolerances use the relative grid
 
 ```text
 tau = {0.003, 0.01, 0.02, 0.04, 0.08, 0.12} * ell
 ```
 
-从最严格容差开始，记录扣除超胞平移倍数后的点群操作数和轨道分数。若某一容差
-第一次使点操作数高于严格值，定义 `sym_recovery_onset_rel` 为该相对容差；没有
-恢复则为 0。最宽容差发布：
+Starting from the strictest tolerance, record the number of point-group operations after
+deducting supercell translation multiples, and the orbit fraction. If some tolerance is the first
+to raise the point-operation count above the strict value, define
+`sym_recovery_onset_rel` as that relative tolerance; if there is no recovery it is 0. At the
+loosest tolerance, emit:
 
-- `sym_recovery_gain_log2`：归一化点操作数增益的 log2；
-- `sym_orbit_collapse`：严格轨道分数减宽容差轨道分数；
-- `sym_recovery_residual_rms_rel`；
-- `sym_recovery_residual_q95_rel`；
-- `sym_recovery_residual_max_rel`。
+- `sym_recovery_gain_log2`: log2 of the normalised gain in point operations;
+- `sym_orbit_collapse`: the strict orbit fraction minus the loose-tolerance orbit fraction;
+- `sym_recovery_residual_rms_rel`;
+- `sym_recovery_residual_q95_rel`;
+- `sym_recovery_residual_max_rel`.
 
-残差只对宽容差新识别、且操作 RMS 位移超过严格相对容差的操作计算。对每个操作，
-按元素用 Hungarian assignment 将变换后的分数坐标与原坐标一一匹配，使用周期最短
-笛卡尔距离并除以 `ell`。算法不输出、保存或评估 symmetrized/refined 结构。
+Residuals are computed only for operations newly identified at the loose tolerance whose RMS
+displacement exceeds the strict relative tolerance. For each operation, match the transformed
+fractional coordinates one to one against the originals by element with a Hungarian assignment,
+using the shortest periodic Cartesian distance divided by `ell`. The algorithm does not emit,
+store or evaluate any symmetrized or refined structure.
 
-对平移、原子顺序、刚体旋转和整数超胞表示，特征必须数值不变。没有近似恢复的
-真实 P1 结构取全零而不是高风险，避免把低对称本身判为不合理。
+The features must be numerically invariant under translation, atom ordering, rigid rotation and
+integer supercell representation. A genuine P1 structure with no approximate recovery takes all
+zeros rather than high risk, so that low symmetry is not itself judged implausible.
 
-## 方向性拥挤特征
+## The directional-crowding features
 
-复用冻结共价半径，枚举 `q=d/(r_i+r_j)<=1.6` 的唯一周期原子对。定义两个固定、
-无量纲几何核：
+Reusing the frozen covalent radii, enumerate the unique periodic atom pairs with
+`q=d/(r_i+r_j)<=1.6`. Define two fixed, dimensionless geometric kernels:
 
 \[
 w_{12}(q)=\max(0,\max(q,0.45)^{-12}-1),\qquad
 w_2(q)=\max(0,1-q)^2.
 \]
 
-它们不拟合指数，不具有能量或力单位。对每条边的单位方向 `u_ij`，在两个端点
-累加相反符号的 `w*u`，得到位点方向性负荷；另累加标量负荷与
-`w u\otimes u`。发布：
+They fit no exponent and carry no units of energy or force. For each edge's unit direction
+`u_ij`, accumulate `w*u` with opposite signs at the two endpoints to obtain a site directional
+load; also accumulate the scalar load and `w u\otimes u`. Emit:
 
-- `steric_rep12_pa`、`steric_rep12_site_q95`、`steric_rep12_site_max`；
-- `steric_rep12_vector_rms`、`steric_rep12_vector_q95`、
-  `steric_rep12_vector_max`；
-- `steric_rep12_tensor_deviator`；
-- `steric_overlap2_vector_rms`、`steric_overlap2_vector_q95`；
-- `steric_overlap2_tensor_deviator`。
+- `steric_rep12_pa`, `steric_rep12_site_q95`, `steric_rep12_site_max`;
+- `steric_rep12_vector_rms`, `steric_rep12_vector_q95`, `steric_rep12_vector_max`;
+- `steric_rep12_tensor_deviator`;
+- `steric_overlap2_vector_rms`, `steric_overlap2_vector_q95`;
+- `steric_overlap2_tensor_deviator`.
 
-每原子量和分位数必须超胞不变；均匀压缩必须单调增大排斥负荷。方向性量是几何
-向量抵消残差，不校准或预测任何 DFT 力。
+The per-atom quantities and quantiles must be supercell invariant, and uniform compression must
+increase the repulsive load monotonically. The directional quantities are residuals of geometric
+vector cancellation; they neither calibrate nor predict any DFT force.
 
-## 开发候选与晋级门
+## Development candidates and the promotion gate
 
-沿用已暴露的 4,096 个 `rattled-relax` parent-unique cohort 和已封存 DFT 端点；
-整个来源仍只称暴露开发。新特征先封存，再与端点关联。
+Continue with the already-exposed 4,096-structure `rattled-relax` parent-unique cohort and its
+sealed DFT endpoints; the whole source is still described as exposed development only. The new
+features are sealed first and only then associated with the endpoints.
 
-候选项为上述 16 个新量，以及 NEXT32 中信号最强的冻结旧项：`cov_q01_low`、
-`cov_q05_low`、`sivr_edge_mismatch_high`、`sivr_site_imbalance_high`。每项只用
-开发中位数和 IQR 形成 robust-z，风险方向预先固定。候选包括：
+The candidates are the 16 new quantities above, plus the strongest-signal frozen terms from
+NEXT32: `cov_q01_low`, `cov_q05_low`, `sivr_edge_mismatch_high`, `sivr_site_imbalance_high`. Each
+term is robust-z scored using the development median and IQR, with its risk direction fixed in
+advance. The candidates comprise:
 
-- 所有非对称单项；
-- 机制明确的二项等权和；
-- 对称项仅允许与至少一个非对称物理项配对晋级；
-- 对称单项仍输出诊断行，但 `promotion_eligible=false`。
+- every non-symmetry single term;
+- equally weighted two-term sums with a clear mechanism;
+- symmetry terms are promotable only when paired with at least one non-symmetry physical term;
+- symmetry single terms still emit a diagnostic row, but with `promotion_eligible=false`.
 
-拒绝比例仍固定为 `{0.025, 0.05, 0.075, 0.10, 0.15}`。候选必须同时达到 NEXT32
-的六个开发门：覆盖下界 0.95、保护召回下界 0.98、严重响应精度下界 0.90、
-节省下界 0.05、AUC 0.85、精度下界减严重基率上界 0.20。不得因 NEXT32 失败而
-降低门槛。
+The rejection fractions remain fixed at `{0.025, 0.05, 0.075, 0.10, 0.15}`. A candidate must meet
+all six NEXT32 development gates simultaneously: coverage lower bound 0.95, protective recall
+lower bound 0.98, severe-response precision lower bound 0.90, savings lower bound 0.05, AUC 0.85,
+and the precision lower bound minus the severe base-rate upper bound at least 0.20. The gates may
+not be lowered because NEXT32 failed.
 
-若多个候选通过，仍按精度下界、节省下界、AUC、项数、拒绝比例和字典序唯一选择。
-若没有候选通过，停止并写独立负结果，三套确认归档继续不下载。
+If several candidates pass, the unique choice is still made by precision lower bound, then savings
+lower bound, then AUC, then term count, then rejection fraction, then lexicographic order. If no
+candidate passes, stop and write an independent negative result, and continue not downloading the
+three confirmation archives.
 
-## 确认与声明边界
+## Confirmation and the limits of any claim
 
-只有开发通过才按 NEXT32 已冻结协议下载并同时处理 `rattled-300/500/1000`，
-每源 2,048 个 parent-disjoint 结构；全部预测和 Pauling 对照封存后才开 DFT 标签。
-总体和逐来源门槛保持不变，不允许 refit。
+Only if development passes are `rattled-300/500/1000` downloaded and processed together under the
+protocol already frozen in NEXT32, at 2,048 parent-disjoint structures per source; the DFT labels
+are opened only after every prediction and the Pauling comparators are sealed. The overall and
+per-source gates are unchanged and no refit is permitted.
 
-即使成功，也只允许声明在 OMat24 三种独立 rattled 来源的严重初始 DFT 响应端点
-上超过本项目固定 Pauling 2--5 对照；不能声明凸包稳定、动力学稳定、可合成性或
-全面替代 DFT。用户确认前不修改论文、README、PREREG 或旧报告。
+Even on success, the only permissible claim is that the fixed Pauling 2--5 comparators of this
+project are surpassed on the severe-initial-DFT-response endpoint across OMat24's three
+independent rattled sources; no claim may be made about hull stability, kinetic stability,
+synthesizability, or replacing DFT in general. The paper, README, PREREG and old reports are not
+modified before the user confirms.

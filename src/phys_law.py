@@ -1,31 +1,44 @@
 #!/usr/bin/env python3
-"""有物理含义的合理性特征 —— 用来替掉法则集里那条纯经验的 `vol_per_atom`。
+"""Physically meaningful plausibility features -- to replace the purely empirical
+`vol_per_atom` in the law set.
 
-# 为什么要换
+# Why it had to go
 
-上一版推荐的 3 条法则里,"每原子体积 <= 50.8 A^3"扛了很大一部分排除力,
-但它是纯标定阈值:没有化学含义,阈值随数据库组成漂移,也没法推广到新体系。
+Among the three laws recommended in the previous version, "volume per atom <= 50.8 A^3"
+carried a large share of the exclusion power, but it is a purely calibrated threshold: no
+chemical meaning, a threshold that drifts with the composition of the database, and no way to
+generalise to a new system.
 
-# 换成什么
+# What replaces it
 
-全部基于 Shannon 配位相关半径 r(元素, 氧化态, CN):
+Everything here is built on the Shannon coordination-dependent radius r(element, oxidation
+state, CN):
 
-  sh_pack     = sum(4/3 pi r^3) / V_cell        堆积分数 —— 离子当硬球,不能互相穿透
-  bl_min      = min over 阳-阴键 of d/(r_c+r_a) 最短键相对半径和 —— **Born 排斥**
-  bl_cat_max  = max over 阳离子 of (它自己最短的 d/(r_c+r_a))  最"悬空"的阳离子
-  bl_rsd_max  = max over 多面体 of 键长相对标准差              多面体畸变
+  sh_pack     = sum(4/3 pi r^3) / V_cell         packing fraction -- ions as hard spheres,
+                                                 which may not interpenetrate
+  bl_min      = min over cation-anion bonds of d/(r_c+r_a)
+                                                 shortest bond relative to the radius sum --
+                                                 **Born repulsion**
+  bl_cat_max  = max over cations of (that cation's own shortest d/(r_c+r_a))
+                                                 the most "dangling" cation
+  bl_rsd_max  = max over polyhedra of the relative standard deviation of bond length
+                                                 polyhedron distortion
 
-`bl_min` 这一条特别重要:**泡林的静电框架里没有短程排斥项**,所以它在原理上
-论证不了"压缩后不合理"(实测 S1 单轴压缩的马德隆能反而更低,见结果总结 5.2b)。
-d/(r_c+r_a) 正是把 Born 排斥显式写进判据 —— 也正是 Hawthorne 2026 提出的
-"用半径**和**而非半径**比**"那条替代规则的可计算形式。
+`bl_min` matters particularly: **Pauling's electrostatic framework contains no short-range
+repulsion term**, so in principle it cannot argue that a compressed structure is implausible
+(measured, the Madelung energy of S1 uniaxial compression is actually lower; see the results
+summary, 5.2b).
+d/(r_c+r_a) writes Born repulsion into the criterion explicitly -- and it is the computable
+form of the replacement rule Hawthorne 2026 proposes, "use the **sum** of the radii rather
+than their **ratio**".
 
-# 复现性
+# Reproducibility
 
-make_negatives.py 原本用 `abs(hash(sid))` 播种。Python 的字符串 hash 受
-PYTHONHASHSEED 随机化,**跨进程不同** —— 意味着此前的 negatives.parquet 无法重建,
-新算的特征按 sid 合并会配到"同一母体、同一类型、但不同随机实现"的另一个结构上。
-这里统一改用 crc32,确定性播种。
+make_negatives.py originally seeded from `abs(hash(sid))`. Python's string hash is randomised
+by PYTHONHASHSEED and **differs across processes** -- which means the earlier
+negatives.parquet cannot be rebuilt, and merging newly computed features on sid would match
+them to a different structure with "the same parent and the same class but a different random
+realisation". Everything here uses crc32 instead, for deterministic seeding.
 """
 from __future__ import annotations
 import os
@@ -49,14 +62,17 @@ _CACHE = {}
 
 
 def seed_of(sid: str) -> int:
-    """确定性种子。不用 hash() —— 它被 PYTHONHASHSEED 随机化,跨进程不可复现。"""
+    """A deterministic seed. Not hash() -- that is randomised by PYTHONHASHSEED and is not
+    reproducible across processes."""
     return zlib.crc32(sid.encode()) & 0x7FFFFFFF
 
 
 def shannon(sym, ox, cn):
-    """Shannon 半径,按 (元素, 氧化态, 配位数) 查表;邻近 CN 回退,再回退代表值。"""
-    # 符号必须进 key:回退半径按 ox 的原始符号取值,而 int(round(ox)) 会把
-    # ±0.5 这类分数电荷都折到 0,两者共用缓存项后 ρ 就依赖于进程内的处理顺序。
+    """Shannon radius, looked up by (element, oxidation state, coordination number); falls
+    back to a neighbouring CN, then to a representative value."""
+    # The sign has to be part of the key: the fallback radius depends on the sign of the
+    # original ox, while int(round(ox)) folds fractional charges such as +/-0.5 to 0. If the
+    # two share a cache entry, rho comes to depend on the processing order within the process.
     key = (sym, int(round(ox)), int(round(cn)), ox > 0)
     if key in _CACHE:
         return _CACHE[key]
@@ -81,7 +97,7 @@ def shannon(sym, ox, cn):
 
 
 def phys_feats(st, val, nn=None):
-    """Shannon 半径类物理特征。nn 可传入以复用 CrystalNN 的一次计算。"""
+    """Shannon-radius physical features. Pass nn to reuse a single CrystalNN computation."""
     if nn is None:
         from pymatgen.analysis.local_env import CrystalNN
         cnn = CrystalNN(weighted_cn=False, x_diff_weight=0.0)
@@ -96,9 +112,10 @@ def phys_feats(st, val, nn=None):
     for i in range(len(st)):
         vol += 4 / 3 * np.pi * shannon(st[i].specie.symbol, val[i], max(cn[i], 1)) ** 3
 
-    # 同号离子成键的比例。真实离子晶体里阳离子周围应当是阴离子,反之亦然;
-    # 这个量对"电荷放错位点"(S5 阴阳离子互换)直接敏感,而且是 T1 级、100% 可算,
-    # 不像 GII 那样受键价参数表覆盖(仅 85%)限制。
+    # Fraction of bonds between like-charge ions. In a real ionic crystal a cation should be
+    # surrounded by anions and vice versa; this quantity is directly sensitive to "charge on
+    # the wrong site" (S5, cation-anion swap), and it is T1 and 100% computable, unlike GII,
+    # which is limited by the coverage of the bond-valence parameter table (only 85%).
     like = tot_b = 0
     worst_op = 1.0
     for i in range(len(st)):
@@ -135,23 +152,25 @@ def phys_feats(st, val, nn=None):
         if not rt:
             continue
         ratios_all.extend(rt)
-        cat_short.append(min(rt))       # 该阳离子最近的阴离子有多近
+        cat_short.append(min(rt))       # how close that cation's nearest anion is
         if len(ds) > 1:
             rsd.append(float(np.std(ds) / np.mean(ds)))
     if not ratios_all:
         return None
     return {
-        "frac_like_bonds": float(out_like),   # 同号成键占比,真实离子晶体应接近 0
-        "min_opp_frac": float(worst_op),      # 最"不合群"的离子:异号邻居占比
+        "frac_like_bonds": float(out_like),   # like-charge bond fraction; should be near 0
+                                              # in a real ionic crystal
+        "min_opp_frac": float(worst_op),      # the most out-of-place ion: its fraction of
+                                              # opposite-charge neighbours
         "sh_pack": float(vol / st.volume),
-        "bl_min": float(min(ratios_all)),        # 全局最短键 —— Born 排斥
-        "bl_cat_max": float(max(cat_short)),     # 最悬空的阳离子
+        "bl_min": float(min(ratios_all)),        # globally shortest bond -- Born repulsion
+        "bl_cat_max": float(max(cat_short)),     # the most dangling cation
         "bl_mean": float(np.mean(ratios_all)),
         "bl_rsd_max": float(max(rsd)) if rsd else 0.0,
     }
 
 
-# ---------------------------------------------------------------- 驱动
+# ---------------------------------------------------------------- driver
 
 def _real(r):
     from pymatgen.core import Structure
@@ -172,7 +191,8 @@ def _real(r):
 
 
 def _bad(r):
-    """重造 4 类扰动(确定性种子),同时算 criteria + 物理特征,保证两者同源。"""
+    """Rebuild the 4 perturbation classes (deterministic seed) and compute criteria and the
+    physical features in the same pass, so the two share an origin."""
     from pymatgen.core import Structure
     from make_negatives import perturb, swapped_val
     out = []
@@ -209,7 +229,8 @@ def _bad(r):
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("mode", choices=["real", "bad"])
-    ap.add_argument("--n", type=int, default=6000, help="bad 模式的母体数")
+    ap.add_argument("--n", type=int, default=6000,
+                    help="number of parent structures in bad mode")
     ap.add_argument("--workers", type=int, default=18)
     a = ap.parse_args()
 
@@ -220,13 +241,13 @@ def main() -> int:
         d = prov[prov.n_elements >= 2]
         fn, outf = _real, F + "phys_real.parquet"
     else:
-        # 与 make_negatives.py 完全相同的母体抽样(random_state=0),便于对照
+        # exactly the same parent sample as make_negatives.py (random_state=0), for comparison
         d = prov[prov.in_analysis_set & (prov.n_elements >= 2)].sample(
             n=min(a.n, len(prov)), random_state=0)
         fn, outf = _bad, F + "phys_bad.parquet"
     recs = [{"sid": t.source_id, "off": int(t.blob_offset), "ln": int(t.blob_length)}
             for t in d.itertuples()]
-    print(f"{a.mode}: {len(recs):,} 条", flush=True)
+    print(f"{a.mode}: {len(recs):,} entries", flush=True)
 
     from concurrent.futures import ProcessPoolExecutor
     rows = []
@@ -240,7 +261,7 @@ def main() -> int:
             if (i + 1) % 5000 == 0:
                 print(f"  {i+1:,}/{len(recs):,} -> {len(rows):,}", flush=True)
     pd.DataFrame(rows).to_parquet(outf, index=False)
-    print(f"写出 {outf} {len(rows):,} 行")
+    print(f"wrote {outf}, {len(rows):,} rows")
     return 0
 
 

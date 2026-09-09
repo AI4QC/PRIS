@@ -1,20 +1,26 @@
 #!/usr/bin/env python3
-"""ELEMENTA 内部多形体排序 v2:先在组成层面筛电荷可平衡的离子化合物。
+"""Ranking polymorphs within ELEMENTA, v2: filter for charge-balanceable ionic compounds at
+the composition level first.
 
-# v1 的瓶颈
+# The bottleneck in v1
 
-v1 对每个结构调 oxi_state_guesses,成功率只有 7%。诊断发现**不是 bug**:
-ELEMENTA 是"全部一元二元 + 系数<=4 的三元"的系统扫描,绝大多数组成
-根本配不平电荷(如 Li2BeBr:+4 vs -1),不是离子化合物,泡林规则无定义。
+v1 called oxi_state_guesses on every structure and succeeded only 7% of the time. Diagnosis:
+**not a bug**. ELEMENTA is a systematic scan of "all unaries and binaries + ternaries with
+coefficients <=4", and the great majority of those compositions cannot balance charge at all
+(Li2BeBr, say: +4 against -1). They are not ionic compounds and Pauling's rules are
+undefined on them.
 
-修法:**电荷平衡是组成的性质,不是结构的性质**。同一组成的 5 个多形体
-共享同一套价态。所以在组成层面判一次、缓存,而不是每个结构判一次。
-吞吐因此提高一个量级,可用组从 633 扩到数千。
+The fix: **charge balance is a property of the composition, not of the structure**. The five
+polymorphs of one composition share one set of valences. So decide once per composition and
+cache it, rather than once per structure. Throughput rises by an order of magnitude and the
+usable group count goes from 633 to several thousand.
 
-# 任务(与 v1 相同,零指纹)
+# The task (unchanged from v1, and fingerprint-free)
 
-同一组成、同一生成器、同一套 DFT 设置下的多形体组内排序:
-判据要把能量更低的排在前面。生成器/组成/DFT 设置在组内恒定,指纹在构造上不存在。
+Rank within groups of polymorphs sharing a composition, a generator and a set of DFT
+settings: the criterion has to put the lower-energy structure first. Generator, composition
+and DFT settings are constant within a group, so a fingerprint cannot exist by
+construction.
 """
 from __future__ import annotations
 import os
@@ -39,10 +45,12 @@ RE_F = re.compile(r"\bformula=(\S+)")
 RE_LAT = re.compile(r'Lattice="([^"]+)"')
 RE_E = re.compile(r"\benergy=(\S+)")
 
-# 阴离子的标准电荷。ELEMENTA 都是简单二元三元,不考虑过氧/多硫等异常价态。
+# standard anion charges. ELEMENTA is all simple binaries and ternaries, so unusual valences
+# such as peroxide or polysulfide are not considered.
 AN_Z = {"O": -2, "S": -2, "Se": -2, "Te": -2, "N": -3, "P": -3,
         "F": -1, "Cl": -1, "Br": -1, "I": -1}
-# 常见阳离子价态。取正值,按常见度排序 —— 平衡解不唯一时取第一个可行组合。
+# common cation valences. Positive, ordered by how common they are -- when the balance has
+# more than one solution, the first workable combination is taken.
 CAT_Z = {
     "Li": [1], "Na": [1], "K": [1], "Rb": [1], "Cs": [1], "Ag": [1], "Tl": [1, 3],
     "Be": [2], "Mg": [2], "Ca": [2], "Sr": [2], "Ba": [2], "Zn": [2], "Cd": [2],
@@ -59,9 +67,10 @@ CAT_Z = {
 
 
 def balance(formula: str):
-    """组成层面解电荷平衡。返回 {元素: 价态} 或 None。
+    """Solve charge balance at the composition level. Returns {element: valence} or None.
 
-    只解一次并缓存 —— 同组成的多形体共享同一套价态,这是 v2 提速的关键。
+    Solved once and cached -- polymorphs of the same composition share one set of valences,
+    which is where v2's speed-up comes from.
     """
     d = collections.Counter()
     for el, n in re.findall(r"([A-Z][a-z]?)(\d*)", formula):
@@ -74,7 +83,7 @@ def balance(formula: str):
     cats = [e for e in d if e != an]
     if not cats or any(c not in CAT_Z for c in cats):
         return None
-    need = -AN_Z[an] * d[an]                    # 阳离子总正电荷必须等于这个
+    need = -AN_Z[an] * d[an]                    # the total cation charge has to equal this
     for combo in itertools.product(*[CAT_Z[c] for c in cats]):
         if sum(z * d[c] for z, c in zip(combo, cats)) == need:
             out = {c: z for c, z in zip(cats, combo)}
@@ -84,7 +93,8 @@ def balance(formula: str):
 
 
 def scan(max_groups: int, verbose=True):
-    """流式扫全库。组成层面先判平衡(带缓存),不平衡的整组跳过。"""
+    """Stream through the whole database. Test balance at the composition level first (with
+    a cache) and skip the whole group when it does not balance."""
     bal_cache: dict[str, dict | None] = {}
     groups = collections.defaultdict(list)
     n_seen = n_bal = 0
@@ -135,7 +145,8 @@ def scan(max_groups: int, verbose=True):
             if len(groups) >= max_groups * 2 and n_bal > max_groups * 8:
                 break
     if verbose:
-        print(f"扫描 {n_seen:,} 个端点,电荷可平衡 {n_bal:,} ({100*n_bal/max(n_seen,1):.1f}%)")
+        print(f"scanned {n_seen:,} endpoints, {n_bal:,} charge-balanceable "
+              f"({100*n_bal/max(n_seen,1):.1f}%)")
     out = {k: v for k, v in groups.items() if len(v) >= 2}
     keys = sorted(out, key=lambda k: -len(out[k]))[:max_groups]
     return {k: out[k] for k in keys}
@@ -157,8 +168,9 @@ def one(rec):
 
 
 def rank_eval(d, crits, tag):
-    """组内配对:判据能否把能量更低的排在前面。整簇自助给 CI。"""
-    print(f"\n=== {tag}(随机=0.5)===")
+    """Within-group pairing: can the criterion put the lower-energy structure first?
+    Whole-cluster bootstrap for the CI."""
+    print(f"\n=== {tag} (chance = 0.5) ===")
     res = {}
     for name, col, sgn in crits:
         w = t = n = 0
@@ -178,15 +190,15 @@ def rank_eval(d, crits, tag):
                         w += s
                     per[rk].append(s)
         if n < 200:
-            print(f"  {name:20s} 配对不足 ({n})"); continue
+            print(f"  {name:20s} too few pairs ({n})"); continue
         wr = (w + 0.5 * t) / n
         rng = np.random.default_rng(0); ks = list(per); bs = []
         for _ in range(2000):
             pick = rng.choice(len(ks), len(ks), replace=True)
             bs.append(np.mean([x for i in pick for x in per[ks[i]]]))
         lo, hi = float(np.percentile(bs, 2.5)), float(np.percentile(bs, 97.5))
-        sig = "★" if lo > 0.5 else ("✗反向" if hi < 0.5 else "")
-        print(f"  {name:20s} 胜率={wr:.4f} [{lo:.4f},{hi:.4f}] 平局={t/n:.3f} n={n:,} {sig}")
+        sig = "*" if lo > 0.5 else ("x reversed" if hi < 0.5 else "")
+        print(f"  {name:20s} win rate={wr:.4f} [{lo:.4f},{hi:.4f}] ties={t/n:.3f} n={n:,} {sig}")
         res[name] = {"winrate": wr, "ci": [lo, hi], "tie": t / n, "n": n}
     return res
 
@@ -199,7 +211,8 @@ def main() -> int:
 
     g = scan(a.groups)
     recs = [r for v in g.values() for r in v]
-    print(f"多形体组 {len(g):,},端点 {len(recs):,}(每组均 {len(recs)/max(len(g),1):.1f})")
+    print(f"polymorph groups {len(g):,}, endpoints {len(recs):,} "
+          f"({len(recs)/max(len(g),1):.1f} per group)")
 
     from concurrent.futures import ProcessPoolExecutor
     rows = []
@@ -214,34 +227,34 @@ def main() -> int:
     gs = d.groupby("rk")
     keep = [k for k, gg in gs if len(gg) >= 2 and gg.e_per_atom.nunique() > 1]
     d = d[d.rk.isin(keep)]
-    print(f"特征化成功 {len(rows):,};可用组 {len(keep):,},端点 {len(d):,}")
+    print(f"featurised {len(rows):,}; usable groups {len(keep):,}, endpoints {len(d):,}")
 
-    PAUL = [("泡林2 键强偏差", "p2_mean_dev", -1),
-            ("泡林3 共边共面", "p3_frac_edge_face", -1),
-            ("泡林3 共面", "p3_frac_face", -1),
-            ("泡林4 违例", "p4_violate", -1),
-            ("泡林5 CN种类数", "p5_n_distinct", -1)]
-    POOL = [("每原子体积", "vol_per_atom", -1), ("平均阳离子CN", "mean_cn_cat", +1),
-            ("平均阴离子CN", "cn_an_mean", +1), ("最大阳离子CN", "cn_cat_max", +1),
-            ("最小阳离子CN", "cn_cat_min", +1), ("CN跨度", "cn_cat_span", -1),
-            ("阴离子CN离散度", "cn_an_std", -1), ("多面体度均值", "poly_deg_mean", +1),
-            ("多面体度最大", "poly_deg_max", +1), ("孤立多面体比例", "frac_isolated", -1),
-            ("共角比例", "frac_corner", +1), ("每阳离子连接对数", "pair_per_cat", +1),
-            ("阳离子CN标准差", "cn_cat_std", -1), ("阴阳离子数比", "cat_an_ratio", +1)]
+    PAUL = [("Pauling 2 bond-strength dev", "p2_mean_dev", -1),
+            ("Pauling 3 edge+face sharing", "p3_frac_edge_face", -1),
+            ("Pauling 3 face sharing", "p3_frac_face", -1),
+            ("Pauling 4 violations", "p4_violate", -1),
+            ("Pauling 5 distinct CN count", "p5_n_distinct", -1)]
+    POOL = [("volume per atom", "vol_per_atom", -1), ("mean cation CN", "mean_cn_cat", +1),
+            ("mean anion CN", "cn_an_mean", +1), ("max cation CN", "cn_cat_max", +1),
+            ("min cation CN", "cn_cat_min", +1), ("CN span", "cn_cat_span", -1),
+            ("anion CN dispersion", "cn_an_std", -1), ("mean polyhedron degree", "poly_deg_mean", +1),
+            ("max polyhedron degree", "poly_deg_max", +1), ("isolated polyhedron fraction", "frac_isolated", -1),
+            ("corner-sharing fraction", "frac_corner", +1), ("pairs per cation", "pair_per_cat", +1),
+            ("cation CN std", "cn_cat_std", -1), ("cation/anion count ratio", "cat_an_ratio", +1)]
 
     res = {"n_groups": len(keep), "n_endpoints": len(d)}
-    res["pauling"] = rank_eval(d, PAUL, "泡林五条作为判据")
-    res["pool"] = rank_eval(d, POOL, "候选判据池")
+    res["pauling"] = rank_eval(d, PAUL, "Pauling's five rules as criteria")
+    res["pool"] = rank_eval(d, POOL, "the candidate criterion pool")
     best_p = max((v["winrate"] for v in res["pauling"].values()), default=0.5)
-    print(f"\n泡林最好:{best_p:.4f}")
+    print(f"\nbest Pauling rule: {best_p:.4f}")
     win = {k: v for k, v in res["pool"].items() if v["ci"][0] > max(0.5, best_p)}
-    print(f"显著打过泡林全部五条的候选:{len(win)} 条")
+    print(f"candidates significantly beating all five Pauling rules: {len(win)}")
     for k, v in sorted(win.items(), key=lambda x: -x[1]["winrate"]):
         print(f"  ★ {k:16s} {v['winrate']:.4f} [{v['ci'][0]:.4f},{v['ci'][1]:.4f}]")
     res["winners"] = win
     with open(F + "polymorph_rank2.json", "w") as fh:
         json.dump(res, fh, ensure_ascii=False, indent=2, default=float)
-    print(f"\n写出 {F}polymorph_rank2.json")
+    print(f"\nwrote {F}polymorph_rank2.json")
     return 0
 
 
