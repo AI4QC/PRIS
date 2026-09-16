@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
-"""生成论文全部主图所需的数据表 —— 一次算齐,存 CSV,图从 CSV 画。
+"""Build every data table the paper's main figures need -- computed once, stored as CSV,
+with the figures drawn from the CSVs.
 
-论文主线(经三次自我推翻后定下的):
-  泡林规则的失效主要不是**精度**问题,而是**适用性**问题 ——
-  它们在四分之三的情形下不表态。本文给出覆盖率 100% 的替代判据。
+The paper's main line (settled after three self-refutations):
+  Pauling's rules fail mainly not on **accuracy** but on **applicability** -- they decline
+  to commit in three cases out of four. This work gives replacement criteria with 100%
+  coverage.
 
-图 1  泡林规则在 9.9 万实验结构上的满足率 + 对"键"定义的敏感性
-图 2  满足率-排除力前沿:本文法则 vs 泡林,含分化学层
-图 3  覆盖率-准确率平面:泡林各条 vs bl_min vs DFT 能量(合成靶)
-图 4  四库同能量区间对照 + 组大小集中度诊断
-图 5  自我推翻清单:九个看似成立的结论及其证伪检验
+Fig. 1  satisfaction of Pauling's rules over 99,000 experimental structures + sensitivity
+        to the definition of a "bond"
+Fig. 2  the satisfaction-exclusion frontier: this work's laws vs Pauling's, stratified by
+        chemistry
+Fig. 3  the coverage-accuracy plane: each Pauling rule vs bl_min vs DFT energy (synthesis
+        target)
+Fig. 4  the four databases compared over the same energy window + a group-size
+        concentration diagnostic
+Fig. 5  the self-refutation ledger: nine conclusions that looked sound, and the tests that
+        falsified them
 """
 from __future__ import annotations
 import os
@@ -26,14 +33,15 @@ OUT = ROOT / "paper" / "data"
 
 
 def feature_file(name):
-    """返回外部特征文件路径；只有需要结构级数据的函数才调用。"""
+    """Return the path to the external feature files; called only by functions that need
+    structure-level data."""
     if not FEATURES:
-        raise RuntimeError("请先设置 PRIS_FEATURES=/path/to/features")
+        raise RuntimeError("set PRIS_FEATURES=/path/to/features first")
     return pathlib.Path(FEATURES) / name
 
 
 def fig3_coverage_accuracy():
-    """图 3:覆盖率-准确率平面。每个判据一个点。"""
+    """Fig. 3: the coverage-accuracy plane, one point per criterion."""
     d = pd.read_parquet(feature_file("synth_rank.parquet")).reset_index(drop=True)
     ok = d.groupby("rk").synth.agg(["size", "sum"])
     ok = ok[(ok["sum"] >= 1) & (ok["size"] - ok["sum"] >= 1)].index
@@ -69,7 +77,7 @@ def fig3_coverage_accuracy():
                         tie += 1
                         continue
                     w += int(dv < 0)
-                    if E[p] >= E[q]:            # 能量判错的配对
+                    if E[p] >= E[q]:            # pairs the energy gets wrong
                         nw += 1
                         ww += int(dv < 0)
             if n:
@@ -82,13 +90,14 @@ def fig3_coverage_accuracy():
     out = pd.DataFrame(rows)
     path = OUT / "fig3_coverage_accuracy.csv"
     out.to_csv(path, index=False)
-    print("图3:", path)
+    print("Fig. 3:", path)
     print(out.round(4).to_string(index=False))
     return out
 
 
 def fig4_db_concentration():
-    """图 4b:组大小集中度 —— 每库最大组占配对的比例。"""
+    """Fig. 4b: group-size concentration -- each database's largest group as a fraction of
+    its pairs."""
     rows = []
     for f, nm, ec in [("real_rank.parquet", "MP experimental", "e_hull"),
                       ("alex_rank.parquet", "Alexandria", "epa"),
@@ -122,15 +131,17 @@ def fig4_db_concentration():
     out = pd.DataFrame(rows)
     path = OUT / "fig4_db_concentration.csv"
     out.to_csv(path, index=False)
-    print("\n图4b:", path)
+    print("\nFig. 4b:", path)
     print(out.round(4).to_string(index=False))
     return out
 
 
 def fig1_pauling_audit():
-    """图 1:泡林规则在实验结构上的满足率 + 对"键"定义的敏感性。
+    """Fig. 1: satisfaction of Pauling's rules on experimental structures + sensitivity to
+    the definition of a "bond".
 
-    数据来自本工作的 George 复现(4.1)与 G6 算法敏感性分析(4.2)。
+    The data come from this work's George reproduction (4.1) and the G6 algorithm
+    sensitivity analysis (4.2).
     """
     rows = [
         dict(rule="Pauling 1 (radius ratio)", satisfaction=0.617, sat_hi=0.648,
@@ -151,13 +162,14 @@ def fig1_pauling_audit():
     out = pd.DataFrame(rows)
     path = OUT / "fig1_pauling_audit.csv"
     out.to_csv(path, index=False)
-    print("图1:", path)
+    print("Fig. 1:", path)
     print(out.round(4).to_string(index=False))
     return out
 
 
 def fig2_frontier():
-    """图 2:满足率-排除力前沿。discovery 值，与 FACTS §16 口径一致。"""
+    """Fig. 2: the satisfaction-exclusion frontier. Discovery values, on the same convention
+    as FACTS section 16."""
     rows = [
         dict(setting="Pauling rules 2-5 (joint)", n_rules=4, satisfaction=0.0651,
              exclusion=float("nan"), worst_chem=float("nan")),
@@ -177,13 +189,14 @@ def fig2_frontier():
     out = pd.DataFrame(rows)
     path = OUT / "fig2_frontier.csv"
     out.to_csv(path, index=False)
-    print("\n图2:", path)
+    print("\nFig. 2:", path)
     print(out.round(4).to_string(index=False))
     return out
 
 
 def main():
-    # 先验证外部数据，避免前两张硬编码表已覆盖、到第三张才失败的半成品状态。
+    # validate the external data first, so we do not overwrite the two hard-coded tables and
+    # only then fail on the third, leaving a half-built state.
     feature_file("synth_rank.parquet")
     OUT.mkdir(parents=True, exist_ok=True)
     fig1_pauling_audit()

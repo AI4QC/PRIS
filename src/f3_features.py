@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""PREREG-F3 §4: 对称性 + 经典 Born 项特征,写入 synth_rank_aug.parquet(新文件)。
+"""PREREG-F3 section 4: symmetry and classical Born-term features, written to
+synth_rank_aug.parquet (a new file).
 
-定义冻结于 docs/plans/2026-08-14-f3-synthesizability-prereg.md。
-计算不读取 synth 标签;对 dev/holdout 全部 6,878 行统一计算。
+The definitions are frozen in docs/plans/2026-08-14-f3-synthesizability-prereg.md.
+The computation never reads the synth labels; it runs identically over all 6,878 dev and
+holdout rows.
 """
 from __future__ import annotations
 import os

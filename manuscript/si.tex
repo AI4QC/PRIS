@@ -37,8 +37,9 @@
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\theequation}{S\arabic{equation}}
 
-% --- 目录里 section 号框继承自基类的 1.5em,装不下 S15 这类两位编号,
-%     结果编号和标题挤在一起。只加宽这个盒子,其余排版保持基类原样。
+% --- the contents section-number box inherits 1.5em from the base class, too narrow
+%     for two-digit numbers such as S15, so number and title collide. Widen only this
+%     box; everything else stays as the base class sets it.
 \makeatletter
 \renewcommand*\l@section[2]{%
   \ifnum \c@tocdepth >\z@
@@ -61,8 +62,9 @@
 
 \begin{document}
 
-% \centering:类里 Titlefont 用的是"有限拉伸"的 titraggedcenter,短行(第一行)
-% 拉伸量不够,会比其余各行左偏约 49 pt;\centering 换成完全拉伸,逐行精确居中。
+% \centering: the class Titlefont uses titraggedcenter, a "limited stretch" centring.
+% Short lines (here the first) do not stretch enough and sit about 49 pt left of the
+% rest. \centering restores full stretch, so every line is centred exactly.
 \title[Supplementary Information]{\centering Supplementary Information for\\
 Autonomous discovery of new structure-plausibility laws for explainable and rapid
 crystal diagnosis and screening}

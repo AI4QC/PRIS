@@ -1,49 +1,63 @@
 #!/usr/bin/env python3
-"""把法则集应用到任意结构 —— 交付给使用者的入口。
+"""Apply a law set to an arbitrary structure -- the entry point for users.
 
-用法:
-    python src/apply_rules.py POSCAR CONTCAR foo.cif ...        # 默认五条
-    python src/apply_rules.py --set core4 *.cif                 # 可信核心四条
-    python src/apply_rules.py --set single *.cif                # 只用核心单条
-    python src/apply_rules.py --verbose foo.cif                 # 逐条给出判定与实测值
+Usage:
+    python src/apply_rules.py POSCAR CONTCAR foo.cif ...        # the five by default
+    python src/apply_rules.py --set core4 *.cif                 # the trusted core of four
+    python src/apply_rules.py --set single *.cif                # the single core law only
+    python src/apply_rules.py --verbose foo.cif                 # verdict and measured value, law by law
 
-法则集(全部在 discovery 上搜出、calibration 上验证、lockbox 未触碰):
+Law sets (all searched on discovery, verified on calibration, lockbox untouched):
 
-留出 calibration 集(5,297 真实 / 3,612 扰动)上的表现,取自 paper/FACTS.md §16:
+Performance on the held-out calibration set (5,297 real / 3,612 perturbed), from
+paper/FACTS.md section 16:
 
-  single  核心单条        满足 0.9919 / 排除 0.2890   (LeMat DFT 弛豫假阳性差 -0.2 pt)
-  core4   可信核心四条    满足 0.9579 / 排除 0.6121
-  five    推荐五条(默认) 满足 0.9171 / 排除 0.7004
+  single  the single core law   satisfaction 0.9919 / exclusion 0.2890
+                                (false-positive gap on LeMat DFT-relaxed: -0.2 pt)
+  core4   the trusted core      satisfaction 0.9579 / exclusion 0.6121
+  five    the recommended five  satisfaction 0.9171 / exclusion 0.7004
+          (default)
 
-对照:泡林第 2-5 条同时满足率 0.0651。
+For reference: Pauling's rules 2-5 are jointly satisfied at 0.0651.
 
-阈值用 FACTS §16 规定的发表值 0.735 / 0.804。早先版本这里写的是 0.7353 /
-0.8044——与规则描述里印出来的数字不一致,且按 FACTS 会让 calibration 满足率
-偏移 0.0019。
+The thresholds are the published values 0.735 / 0.804 laid down in FACTS section 16.
+An earlier version had 0.7353 / 0.8044 here, which disagreed with the numbers printed
+in the rule descriptions and, against FACTS, shifted the calibration satisfaction rate
+by 0.0019.
 
-选哪一套:
-  - 复核已有的实验/计算结构      -> core4
-  - 筛生成模型的输出(失效模式未知)-> five(第 5 条专抓"电荷放错位点",
-                                    那是键长类判据完全看不见的一类)
-  - 只要一条最稳的               -> single
+Which set to use:
+  - rechecking existing experimental or computed structures -> core4
+  - screening generative-model output (failure mode unknown) -> five (the fifth law
+                                    targets charge placed on the wrong site, a class
+                                    the bond-length criteria cannot see at all)
+  - just the single most robust law                          -> single
 
-**价态从组成的形式电荷推定(guess_oxi),不用 BVAnalyzer** ——
-后者从键长反推价态再去检验键价定律,是循环论证。
+**Valences are inferred from the composition's formal charges (guess_oxi), not from
+BVAnalyzer** -- the latter back-solves valence from bond lengths and then tests laws
+about bond valence, which is circular.
 
-# 适用范围
+# Scope
 
-整数价态定不出来时,自动回退到**非整数平均价态**(如 Fe3O4 的 Fe^2.67+):
-阴离子取常见价,余下电荷按化学计量分给变价阳离子。
+When integer valences cannot be determined, it falls back automatically to
+**non-integer mean valences** (e.g. Fe^2.67+ in Fe3O4): anions take their common
+valence and the remaining charge is distributed over the variable-valence cations by
+stoichiometry.
 
-实测(calibration,737 条):
-  仅整数价态       覆盖 64.5%
-  加非整数回退     覆盖 **80.9%**,新人群上四条合取满足率 0.9256
-                  (整数人群 0.9577,121 条样本 95% CI 约 ±4.7 pt,差异不显著)
+Measured (calibration, 737 entries):
+  integer valences only     coverage 64.5%
+  with the non-integer      coverage **80.9%**, and the four-law conjunction is
+  fallback                  satisfied at 0.9256 on the new population
+                            (0.9577 on the integer population; with 121 samples the
+                            95% CI is about +/-4.7 pt, so the difference is not
+                            significant)
 
-**阈值一个都没改就迁移过去了** —— 因为它们是物理量的分位数,不是拟合参数。
+**Not one threshold had to change to carry them over** -- because they are quantiles of
+physical quantities, not fitted parameters.
 
-仍有约 19% 判不了(多阴离子、含复杂分子基团、无变价元素而整数组合无解)。
-它们不是"不合理",是本方法**判不了**。**不要把"跳过"读成"通过"。**
+About 19% still cannot be judged (several anions, complex molecular groups, or no
+variable-valence element and no integer combination that balances). Those are not
+"implausible", they are structures this method **cannot judge**. **Do not read
+"skipped" as "passed".**
 """
 from __future__ import annotations
 import argparse
@@ -61,20 +75,22 @@ from elec_feat import elec_feats            # noqa: E402
 from geom_feat import geom_feats            # noqa: E402
 from t0_guard import parse                  # noqa: E402
 
-# (描述, 特征, 方向, 阈值, 前提or None)
-R_SINGLE = [("最短阳-阴键 >= 0.735 x (Shannon 半径和)",
+# (description, feature, direction, threshold, premise or None)
+R_SINGLE = [("shortest cation-anion bond >= 0.735 x (sum of Shannon radii)",
              "bl_min", "lo", 0.735, None)]
 
 R_CORE4 = [
-    ("最短阳-阴键 >= 0.804 x (Shannon 半径和)", "bl_min", "lo", 0.804, None),
-    ("若 平均阴离子CN <= 3.33,则 平均键长比 <= 1.081",
+    ("shortest cation-anion bond >= 0.804 x (sum of Shannon radii)",
+     "bl_min", "lo", 0.804, None),
+    ("if mean anion CN <= 3.333, then mean bond-length ratio <= 1.081",
      "bl_mean", "hi", 1.081, ("cn_an_mean", "lo", 3.333)),
-    ("位点马德隆能/电荷 的极差 <= 31.45", "madz_range", "hi", 31.45, None),
-    ("最高位点马德隆能 <= 15.17", "mad_max", "hi", 15.17, None),
+    ("range of site Madelung energy per unit charge <= 31.45 eV",
+     "madz_range", "hi", 31.45, None),
+    ("highest site Madelung energy <= 15.17 eV", "mad_max", "hi", 15.17, None),
 ]
 
 R_FIVE = R_CORE4 + [
-    ("若 离子性分数 fi > 0.55,则 不得存在同号离子成键",
+    ("if ionic-character fraction fi > 0.55, then no like-charge bonds",
      "frac_like_bonds", "hi", 1e-4, ("fi", "hi", 0.55)),
 ]
 
@@ -83,7 +99,7 @@ ANI = {"O", "S", "Se", "Te", "F", "Cl", "Br", "I", "N", "P", "As", "H", "C"}
 
 
 def ionicity(st, X):
-    """泡林离子性分数 fi = 1 - exp(-0.25 dchi^2)。纯组成量。"""
+    """Pauling ionic-character fraction fi = 1 - exp(-0.25 dchi^2). Composition only."""
     c = parse(st.composition.reduced_formula.replace(" ", ""))
     cand = [e for e in c if e in ANI and e in X and np.isfinite(X[e])]
     if not cand:
@@ -105,11 +121,14 @@ ANI_Q = {"O": -2, "S": -2, "Se": -2, "Te": -2, "F": -1, "Cl": -1,
 
 
 def frac_oxi(st):
-    """非整数平均价态回退。阴离子取常见价,余下电荷分给变价阳离子。
+    """Non-integer mean-valence fallback: anions take their common valence and the
+    remaining charge goes to the variable-valence cations.
 
-    整数价态组合无解的结构里,约七成是混合价态(Fe3O4 的 Fe^2.67+ 之类)。
-    Ewald 原生支持分数电荷,Shannon 半径查表时取整即可。
-    实测:覆盖率 64.5% -> 80.9%,而**阈值一个都不用改**(新人群满足率 0.9256)。
+    About seven in ten of the structures with no integer valence solution are mixed
+    valence (Fe^2.67+ in Fe3O4 and the like). Ewald supports fractional charges
+    natively, and the Shannon radius lookup only needs the rounded value.
+    Measured: coverage 64.5% -> 80.9%, and **not one threshold has to change**
+    (satisfaction 0.9256 on the new population).
     """
     from collections import Counter
     syms = [s.specie.symbol for s in st]
@@ -128,7 +147,8 @@ def frac_oxi(st):
             val[i] = q
         return val
     var = [e for e in cc if e not in COMMON]
-    if len(var) != 1:          # 两个以上变价元素时分配不唯一,不猜
+    if len(var) != 1:          # with two or more variable-valence elements the
+                               # assignment is not unique, so do not guess
         return None
     qf = sum(COMMON[e] * cc[e] for e in cc if e in COMMON)
     qv = (-qa - qf) / cc[var[0]]
@@ -140,12 +160,13 @@ def frac_oxi(st):
 
 
 def features(st):
-    """算出法则集需要的全部量。返回 (dict, 错误原因)。"""
+    """Compute every quantity the law sets need. Returns (dict, reason for failure)."""
     val, ok = guess_oxi(st)
     if not ok:
-        val = frac_oxi(st)     # 回退到非整数平均价态
+        val = frac_oxi(st)     # fall back to non-integer mean valences
         if val is None:
-            return None, "无法给出电荷平衡的价态(整数与非整数回退都失败)"
+            return None, ("no charge-balanced valences could be assigned "
+                          "(both the integer and the non-integer fallback failed)")
     f, errors = {}, []
     for fn in (phys_feats, elec_feats, geom_feats):
         try:
@@ -154,7 +175,7 @@ def features(st):
                 f.update(g)
         except Exception as exc:
             errors.append(f"{fn.__name__}: {type(exc).__name__}: {exc}")
-    # 平均阴离子配位数(前提用),与 criteria() 同口径
+    # mean anion coordination number (used as a premise), same convention as criteria()
     try:
         from discriminate import criteria
         c = criteria(st, val)
@@ -163,8 +184,9 @@ def features(st):
     except Exception as exc:
         errors.append(f"criteria: {type(exc).__name__}: {exc}")
 
-    # fi 是纯组成量，直接从 pymatgen 元素表取电负性。公开判定入口
-    # 不应为这一个量依赖外部数 GB 特征库中的 _elem_props.parquet。
+    # fi depends only on composition, so take electronegativities straight from the
+    # pymatgen element table. The public entry point should not depend on
+    # _elem_props.parquet from the multi-GB external feature store for this one value.
     try:
         from pymatgen.core.periodic_table import Element
         comp = parse(st.composition.reduced_formula.replace(" ", ""))
@@ -180,10 +202,11 @@ def features(st):
 
 
 def judge(f, rules, verbose=False):
-    """逐条判定，返回 True / False / None(信息不足)。
+    """Judge law by law; returns True / False / None (not enough information).
 
-    一条已计算的违例足以判为 False；若没有违例但任一适用性或目标量
-    算不出，必须返回 None，不得把“未知”报成“合理”。
+    One computed violation is enough to return False. If there is no violation but
+    some applicability or target quantity cannot be computed, this must return None
+    -- "unknown" must never be reported as "plausible".
     """
     lines, failed, unknown = [], False, False
     for desc, col, side, th, g in rules:
@@ -194,16 +217,18 @@ def judge(f, rules, verbose=False):
             gv = f.get(gc, np.nan)
             if not np.isfinite(gv):
                 unknown = True
-                lines.append(("?", desc, f"前提 {gc} 算不出，无法判定是否适用"))
+                lines.append(("?", desc,
+                              f"premise {gc} cannot be computed, so applicability is undecided"))
                 continue
             else:
                 applies = (gv > gt) if gs == "hi" else (gv <= gt)
         if not applies:
-            lines.append(("—", desc, f"前提不成立({g[0]}={f.get(g[0], float('nan')):.3f})"))
+            lines.append(("-", desc,
+                          f"premise not met ({g[0]}={f.get(g[0], float('nan')):.3f})"))
             continue
         if not np.isfinite(v):
             unknown = True
-            lines.append(("?", desc, f"{col} 算不出，无法判定"))
+            lines.append(("?", desc, f"{col} cannot be computed, so this law is undecided"))
             continue
         ok = bool((v <= th) if side == "hi" else (v >= th))
         failed |= not ok
@@ -219,8 +244,10 @@ def judge(f, rules, verbose=False):
     return True
 
 
-# F2 实验域紧凑公式(7 项)。z 用 real_all+各特征表的全样本均值/标准差,
-# 与拟合时的折内标准化略有差别 —— **S 只在同组成候选之间比较,绝对值无意义**。
+# The compact F2 formula over the experimental domain (7 terms). The z-scores use the
+# whole-sample mean and standard deviation from real_all plus each feature table, which
+# differs slightly from the within-fold standardisation used when fitting -- **S is only
+# comparable between candidates of the same composition; its absolute value is meaningless**.
 F2 = [("min_opp_frac", -0.3222), ("econ_mean", +0.1491), ("mef_mean", +0.1369),
       ("angvar_mean", +0.0599), ("econ_max", +0.0390), ("dist_rsd", -0.0300),
       ("p5_n_distinct", +0.0016)]
@@ -228,7 +255,7 @@ _STAT = {}
 
 
 def f2_score(f):
-    """F2 判据分。S 小者更稳定;缺任一项则返回 nan。"""
+    """The F2 score. Smaller S is more stable; returns nan if any term is missing."""
     import os
     import pandas as pd
     if not _STAT:
@@ -256,16 +283,19 @@ def f2_score(f):
 
 def main() -> int:
     ap = argparse.ArgumentParser(
-        description="用 PRIS 法则判定离子晶体结构是否合理")
-    ap.add_argument("files", nargs="+", help="结构文件(CIF / POSCAR / 任何 pymatgen 能读的格式)")
+        description="Judge whether an ionic crystal structure is plausible, using the PRIS laws")
+    ap.add_argument("files", nargs="+",
+                    help="structure files (CIF / POSCAR / anything pymatgen can read)")
     ap.add_argument("--set", choices=list(SETS), default="five",
-                    help="法则集:single / core4 / five(默认)")
-    ap.add_argument("--verbose", action="store_true", help="逐条给出判定与实测值")
+                    help="law set: single / core4 / five (default)")
+    ap.add_argument("--verbose", action="store_true",
+                    help="give the verdict and the measured value law by law")
     ap.add_argument("--formula", action="store_true",
-                    help="同时给出 F2 判据分 S(**只在同组成候选之间可比**,S 小者更稳定)")
+                    help="also report the F2 score S (**only comparable between candidates "
+                         "of the same composition**; smaller S is more stable)")
     a = ap.parse_args()
     rules = SETS[a.set]
-    print(f"法则集 [{a.set}],共 {len(rules)} 条\n")
+    print(f"Law set [{a.set}], {len(rules)} laws\n")
 
     from pymatgen.core import Structure
     npass = nfail = nskip = 0
@@ -273,31 +303,32 @@ def main() -> int:
         try:
             st = Structure.from_file(path)
         except Exception as e:
-            print(f"[跳过] {path}: 读不出结构({e})")
+            print(f"[skip] {path}: could not read the structure ({e})")
             nskip += 1
             continue
         f, err = features(st)
         if f is None:
-            print(f"[跳过] {path}: {err}")
+            print(f"[skip] {path}: {err}")
             nskip += 1
             continue
         verdict = judge(f, rules, a.verbose)
         if err and a.verbose:
-            print(f"    ! 部分特征计算失败: {err}")
+            print(f"    ! some features failed to compute: {err}")
         if verdict is None:
             detail = f" ({err})" if err else ""
-            print(f"[跳过] {path}: 法则所需特征不完整，无法判定{detail}")
+            print(f"[skip] {path}: the features the laws need are incomplete, "
+                  f"so no verdict{detail}")
             nskip += 1
             continue
         extra = ""
         if a.formula:
             sv = f2_score(f)
-            extra = f"   S = {sv:+.3f}" if np.isfinite(sv) else "   S = 算不出"
-        print(f"[{'合理' if verdict else '不合理'}] {path}  "
-              f"({st.composition.reduced_formula}, {len(st)} 原子){extra}")
+            extra = f"   S = {sv:+.3f}" if np.isfinite(sv) else "   S = not computable"
+        print(f"[{'plausible' if verdict else 'implausible'}] {path}  "
+              f"({st.composition.reduced_formula}, {len(st)} atoms){extra}")
         npass += verdict
         nfail += (not verdict)
-    print(f"\n合理 {npass} / 不合理 {nfail} / 跳过 {nskip}")
+    print(f"\nplausible {npass} / implausible {nfail} / skipped {nskip}")
     return 0
 
 

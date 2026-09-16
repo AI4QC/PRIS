@@ -51,7 +51,8 @@ SHORT = {"Pauling 2 (bond-strength dev.)": "Pauling 2",
          "DFT E_hull (baseline)": "DFT energy"}
 SLATE = "#41556B"
 RSET = ["L1", "L1'", "L2", "L3", "L4"]
-# 归档表仍以 L1--L4 为键;图内显示名与正文一致(Set 1--Set 4)。
+# the archived tables are still keyed on L1--L4; the display names match the main text
+# (Set 1--Set 4).
 RLAB = {"L1": "Set 1", "L1'": "Set 1′", "L2": "Set 2", "L3": "Set 3",
         "L4": "Set 4"}
 SETC = {"L1": BLU, "L1'": PUR, "L2": ORA, "L3": RED, "L4": "#1B7837"}
@@ -180,7 +181,7 @@ def panel_c(ax, ca):
             color="#666666", va="bottom", ha="center")
     for i, (val, c) in enumerate(zip(o.acc_energy_wrong, o.c)):
         xp = val + 0.007
-        if xp < 0.5 < xp + 0.072:      # 别让 chance 虚线穿过数值标签
+        if xp < 0.5 < xp + 0.072:      # keep the chance line from crossing the value label
             xp = 0.506
         ax.text(xp, i, f"{val:.3f}", va="center", fontsize=7.5, color=c)
 
@@ -206,8 +207,9 @@ def panel_d(ax, r3, ci3):
                                 mutation_scale=6))
     ax.set_xticks(x)
     ax.set_xticklabels(["all", "1/2", "3/10", "1/5", "1/10"], fontsize=8.0)
-    # 单行刻度 + 小 labelpad:两行刻度加两行标签会把 x 轴标签推到面板 f 的
-    # 字母同一高度,读起来像 f 的标题。"most confident first" 的口径在图注里。
+    # single-line ticks + a small labelpad: two lines of ticks plus two lines of label would
+    # push the x-axis label level with panel f's letter and read as f's title. The
+    # "most confident first" convention is stated in the caption.
     ax.set_xlabel("fraction of held-out pairs retained", labelpad=2)
     ax.set_ylabel("accuracy")
     ax.set_ylim(0.70, 1.01)

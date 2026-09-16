@@ -232,7 +232,7 @@ def main():
                  color="#212224")
         v = verdicts(readings[m], m)
         if not v:
-            # 无谓词触发:同样写出三个读数,并写明触发数为零
+            # no predicate fires: still write all three readings, and state that the trigger count is zero
             lines = ["satisfies all laws",
                      (f"$\\rho$ = {readings[m]['rho']:.2f}  ·  sites = "
                       f"{readings[m]['econ']:.2f}  ·  BV = "
@@ -285,7 +285,8 @@ def main():
     M = np.vstack([r[1] for r in rows] + [l4])
     im = axb.imshow(M, cmap="palseq2", vmin=0, vmax=1, aspect="auto")
     axb.set_xticks(range(5))
-    # 归档列名仍是 S1--S5;图内显示 D1--D5,避免与正文的 Set 1--Set 5 混读
+    # the archived columns are still S1--S5; the figure shows D1--D5 so they are not misread
+    # as the main text's Set 1--Set 5
     axb.set_xticklabels(["D" + k[1:] for k in SC], fontsize=8)
     axb.set_xlabel("Damage type")
     axb.set_yticks(range(7))
@@ -376,8 +377,10 @@ def main():
     fig.text(x_c, y_bc, "c", fontsize=10, fontweight="bold",
              va="bottom", ha="left")
 
-    # 物种色键:三种球色此前在图内没有任何标识。放在字母列的左页边,和第一
-    # 行晶胞同高;这一列本来就是空的,因此不占任何图面预算,也不压任何图元。
+    # species colour key: the three sphere colours were previously unlabelled anywhere in
+    # the figure. Put it in the left margin of the panel-letter column, level with the first
+    # row of cells; that column is empty anyway, so it costs no figure budget and covers
+    # nothing.
     key_y = rows_top[0] - (TITLE_B + SQ / 2) * fy
     for ki, el in enumerate(("Mg", "Al", "O")):
         y = key_y + (1 - ki) * 0.185 * fy

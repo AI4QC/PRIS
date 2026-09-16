@@ -495,7 +495,7 @@ def draw_design_panel(
             markerfacecolor=to_rgba(rule_colors[name], rule_face_alpha),
             markeredgecolor=edge(rule_colors[name]),
             markeredgewidth=marker_edge_width,
-            # 归档的 verdict 列名仍是 L1--L4;图例用正文的 Set 1--Set 4
+            # the archived verdict columns are still L1--L4; the legend uses the main text's Set 1--Set 4
             label="Set " + name[1:],
         )
         # only the operating points actually plotted: a key entry for a marker that is not

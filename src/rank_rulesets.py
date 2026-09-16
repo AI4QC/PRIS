@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
-"""把四个法则集当作**二值判据**放到同组成排序任务上。
+"""Put all four law sets on the same-composition ranking task as **binary criteria**.
 
-主文图 4a/4c/4d 原来只有 rho 一个连续量。读者会问:L1–L3 呢?
-答案本身是结果:法则集作为二值判据在这个任务上大量弃权,和泡林规则一样 ——
-rho 之所以从不弃权,是因为它被当作**连续量**用,而不是被当作阈值用。
+Main-text Fig. 4a/4c/4d originally carried only one continuous quantity, rho. A reader will
+ask: what about L1-L3? The answer is itself a result -- as binary criteria the law sets
+abstain heavily on this task, just as Pauling's rules do. The reason rho never abstains is
+that it is used as a **continuous quantity**, not as a threshold.
 
-口径与已发表的行完全一致(本脚本先复现 Pauling 5 / bl_min / vol_per_atom /
-e_hull 四行到小数点后四位再输出新行):
-  commit  = 组内一对结构被赋予**不同**取值
-  accuracy= 只在 commit 的对上算,按组等权
-  top-1   = 判据最优集合中已合成相的期望占比,基线为该组已合成占比
-  tie     = 判据无法挑出单一结构的组占比
+The conventions match the published rows exactly (this script first reproduces the four
+Pauling 5 / bl_min / vol_per_atom / e_hull rows to four decimal places before emitting the
+new ones):
+  commit   = a pair of structures within a group is assigned **different** values
+  accuracy = computed only over committed pairs, weighting groups equally
+  top-1    = expected fraction of already-synthesised phases in the criterion-optimal set,
+             with the group's synthesised fraction as the baseline
+  tie      = fraction of groups where the criterion cannot single out one structure
 """
 from __future__ import annotations
 import os
@@ -81,9 +84,11 @@ def _ge(v, th):
 
 
 def rulesets(d):
-    """四个集合的论文评估口径。缺失值按满足处理，以复现已发表统计。
+    """The four sets under the paper's evaluation convention. Missing values are treated as
+    satisfied, so as to reproduce the published statistics.
 
-    公开 CLI 不沿用这个二值缺失约定；`apply_rules.judge()` 会返回“无法判定”。
+    The public CLI does not follow this binary missing-value convention; `apply_rules.judge()`
+    returns "undecidable" instead.
     """
     bl, blm = d.bl_min.values, d.bl_mean.values
     cn, mz, mx = d.cn_an_mean.values, d.madz_range.values, d.mad_max.values

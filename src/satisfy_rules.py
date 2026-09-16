@@ -1,25 +1,29 @@
 import os
 #!/usr/bin/env python3
-"""满足性法则搜索:N 条真实离子晶体几乎全部满足、同时对未实现候选有排除力的法则。
+"""Satisfiability law search: N laws that nearly every real ionic crystal satisfies while
+still excluding unrealised candidates.
 
-# 与前面所有工作的区别
+# How this differs from everything before it
 
-前面做的是**排序**(同组成两个结构哪个更稳),这里做的是**满足性**——
-George 2020 的口径:泡林 2-5 条只有 13% 的结构同时满足(CN<=8 时 21%)。
-目标是把这个数推到接近 100%,同时保住排除力。
+Everything before this did **ranking** (of two same-composition structures, which is more
+stable); this does **satisfiability** -- George 2020's convention, under which only 13% of
+structures satisfy Pauling 2-5 jointly (21% at CN<=8). The goal is to push that number
+towards 100% while keeping the exclusion power.
 
-# 判据必须是两个数,缺一不可
+# The criterion must be two numbers; neither alone will do
 
-  满足率 = 真实离子晶体中满足该法则的比例        -> 要 >=99%
-  排除率 = 未实现候选中**不**满足的比例          -> 越高越好
+  satisfaction = fraction of real ionic crystals that satisfy the law   -> want >=99%
+  exclusion    = fraction of unrealised candidates that do **not**      -> the higher the better
 
-只报满足率会让恒真规则得满分(满足率 100%、排除率 0),那毫无内容。
-泡林五条的毛病不是太松是太紧;走到另一个极端同样没用。
+Reporting satisfaction alone gives a tautology full marks (satisfaction 100%, exclusion 0),
+which says nothing at all. What is wrong with Pauling's five rules is not that they are too
+loose but that they are too tight; going to the opposite extreme is no more useful.
 
-# 法则形态
+# The form of a law
 
-单侧区间约束:feature <= hi 或 feature >= lo,阈值取真实结构的 (1-alpha) 分位。
-双侧:lo <= feature <= hi。全部只用结构量,阈值有明确物理含义。
+One-sided interval constraints: feature <= hi or feature >= lo, with the threshold at the
+(1-alpha) quantile of the real structures. Two-sided: lo <= feature <= hi. Structural
+quantities only, and every threshold has a definite physical meaning.
 """
 import sys, json, itertools, warnings
 import numpy as np, pandas as pd
@@ -40,8 +44,8 @@ def main():
     real,neg=load()
     cols=[c for c in real.columns if real[c].dtype.kind=='f']
     cols=[c for c in cols if c in neg.columns and real[c].notna().mean()>0.9 and neg[c].notna().mean()>0.9]
-    print(f'真实 {len(real):,} | 候选 {len(neg):,} | 共同特征 {len(cols)}')
-    print(f'真实侧阴离子: {dict(real.anion.value_counts().head(8))}' if 'anion' in real else '')
+    print(f'real {len(real):,} | candidates {len(neg):,} | shared features {len(cols)}')
+    print(f'anions on the real side: {dict(real.anion.value_counts().head(8))}' if 'anion' in real else '')
     rows=[]
     for c in cols:
         rv=real[c].dropna().values; nv=neg[c].dropna().values
@@ -59,11 +63,11 @@ def main():
             if sat<0.98: continue
             rows.append(dict(col=c,side=side,alpha=alpha,desc=desc,sat=sat,rej=rej))
     r=pd.DataFrame(rows).sort_values('rej',ascending=False)
-    print(f'\n=== 满足率>=98% 的候选法则:{len(r)} 条,按排除率排序 Top 15 ===')
+    print(f'\n=== candidate laws with satisfaction >=98%: {len(r)}; top 15 by exclusion ===')
     for t in r.head(15).itertuples():
-        print(f'  满足={t.sat:.4f} 排除={t.rej:.4f}  {t.desc}')
-    # 贪心组集合:最大化联合排除率,同时保持联合满足率
-    print(f'\n=== 组装法则集(每步选联合排除率增量最大的)===')
+        print(f'  sat={t.sat:.4f} excl={t.rej:.4f}  {t.desc}')
+    # greedy assembly: maximise joint exclusion while holding joint satisfaction up
+    print(f'\n=== assembling the law set (each step takes the largest gain in joint exclusion) ===')
     R=real[cols].values; N=neg[cols].values; ci={c:i for i,c in enumerate(cols)}
     def mask(t,M):
         v=M[:,ci[t.col]]
@@ -83,13 +87,13 @@ def main():
             if best is None or gain>best[0]: best=(gain,t,nsR,nsN)
         if best is None or best[0]<0.005: break
         _,t,nsR,nsN=best; chosen.append(t); satR,satN=nsR,nsN
-        print(f'  {len(chosen)}. {t.desc:44s} 联合满足={satR.mean():.4f} 联合排除={1-satN.mean():.4f}')
-    print(f'\n=== 法则集 N={len(chosen)} ===')
-    print(f'  真实离子晶体满足率 = {satR.mean():.4f}   (泡林 2-5 条: 0.13,CN<=8 时 0.21)')
-    print(f'  未实现候选排除率   = {1-satN.mean():.4f}')
+        print(f'  {len(chosen)}. {t.desc:44s} joint sat={satR.mean():.4f} joint excl={1-satN.mean():.4f}')
+    print(f'\n=== law set N={len(chosen)} ===')
+    print(f'  satisfaction on real ionic crystals = {satR.mean():.4f}   (Pauling 2-5: 0.13, 0.21 at CN<=8)')
+    print(f'  exclusion on unrealised candidates  = {1-satN.mean():.4f}')
     json.dump({'N':len(chosen),'sat':float(satR.mean()),'rej':float(1-satN.mean()),
       'rules':[{'desc':t.desc,'sat':float(t.sat),'rej':float(t.rej)} for t in chosen]},
       open(F+'satisfy_rules.json','w'),ensure_ascii=False,indent=2)
-    print(f'\n写出 {F}satisfy_rules.json')
+    print(f'\nwrote {F}satisfy_rules.json')
     return 0
 if __name__=='__main__': raise SystemExit(main())

@@ -1,65 +1,75 @@
-# NEXT32 OMat24 无机 DFT 响应预筛法则设计
+# NEXT32 design: a law for pre-screening the inorganic DFT response on OMat24
 
-日期：2026-08-03  
-状态：实施前冻结；新增文件，不修改已有脚本、报告或论文
+Date: 2026-08-03  
+Status: frozen before implementation; new files only, with no modification to existing scripts,
+reports or the paper
 
-## 目标
+## Objective
 
-NEXT32 直接补 NEXT31 尚未覆盖的无机晶体域：只给一个生成或理论预测的
-未弛豫周期结构 `x0`，能否在任何 DFT 计算之前，高精度筛掉会产生严重 DFT
-初始力或应力的结构。
+NEXT32 goes straight for the inorganic crystal domain NEXT31 does not yet cover: given only a
+generated or theoretically predicted unrelaxed periodic structure `x0`, can structures that would
+produce a severe initial DFT force or stress be screened out with high precision before any DFT
+calculation?
 
-法则执行时只允许元素、晶胞、坐标、周期边界、冻结元素表以及确定性的几何、
-Voronoi、键价、静电和线性代数。禁止读取或调用 DFT 数值、弛豫结构、轨迹、
-同组成候选、MatterSim/MLIP，以及任何学习得到的能量、力或应力代理。DFT
-力与应力只在法则开发或预测冻结后的评估阶段作为标签。
+While the law executes it may use only the elements, the cell, the coordinates, the periodic
+boundaries, the frozen element table, and deterministic geometry, Voronoi, bond-valence,
+electrostatic and linear-algebra operations. It may not read or call DFT numbers, relaxed
+structures, trajectories, same-composition candidates, MatterSim/MLIP, or any learned energy,
+force or stress surrogate. DFT forces and stresses serve as labels only during development of the
+law, or in the evaluation stage after the predictions are frozen.
 
-NEXT32 即使通过，也只证明 DFT 单点严重响应预筛，不等同于形成能、凸包、
-动力学稳定性、可合成性或替代 DFT。
+Even if NEXT32 passes, it demonstrates only pre-screening of severe DFT single-point response;
+that is not formation energy, the hull, kinetic stability, synthesizability, or a replacement for
+DFT.
 
-## 数据选择
+## Choice of data
 
-官方 [OMat24 数据卡](https://huggingface.co/datasets/facebook/OMAT24/blob/main/README.md)
-说明，该数据包含无机非平衡结构的 DFT 总能、力和应力，采用 ASE-compatible
-LMDB；论文为 [Barroso-Luque 等，OMat24](https://arxiv.org/abs/2410.12771)。
-数据许可为 CC BY 4.0。
+The official [OMat24 data card](https://huggingface.co/datasets/facebook/OMAT24/blob/main/README.md)
+states that the dataset contains DFT total energies, forces and stresses for inorganic
+non-equilibrium structures in an ASE-compatible LMDB; the paper is
+[Barroso-Luque et al., OMat24](https://arxiv.org/abs/2410.12771). The data licence is CC BY 4.0.
 
-三条路线比较如下。
+The three routes compare as follows.
 
-1. **OMat24 独立扰动来源，采用。** `rattled-relax` 只作暴露开发，
-   `rattled-300/500/1000` 作三个确认来源。它们端点一致、材料域为无机体相，
-   且归档可独立封存。
-2. **Alexandria/MP 完整弛豫对，后续。** 能量下降更接近目标，但下载、轨迹
-   身份和初终态完整性成本更高，不应与当前单点任务混在同一轮。
-3. **NEXT23+NEXT31 路由级联，不采用为科学确认。** 它可形成工程预筛器，
-   但没有增加无机 DFT 响应证据。
+1. **Independent perturbation sources within OMat24 -- adopted.** `rattled-relax` serves as
+   exposed development only, and `rattled-300/500/1000` as three confirmation sources. Their
+   endpoints agree, their material domain is inorganic bulk, and the archives can be sealed
+   independently.
+2. **Complete Alexandria/MP relaxation pairs -- later.** Energy descent is closer to the goal,
+   but the download, trajectory identity and initial/final-state completeness cost more, and
+   should not be mixed into the same round as the present single-point task.
+3. **A NEXT23+NEXT31 routing cascade -- not adopted as scientific confirmation.** It can form an
+   engineering pre-screener, but it adds no evidence about inorganic DFT response.
 
-`rattled-relax` 验证源有 95,206 条记录，已为模式审计打开，因此整个来源只
-能称作暴露开发源。它是抽样的非平衡帧，不保留每条完整弛豫轨迹；NEXT32
-不得从不完整帧首尾构造能量下降主端点。
+The `rattled-relax` validation source has 95,206 records and has already been opened for a schema
+audit, so the whole source can only be called an exposed development source. It is a sample of
+non-equilibrium frames and does not retain each complete relaxation trajectory; NEXT32 may not
+construct an energy-descent primary endpoint from the first and last of incomplete frames.
 
-开发 cohort 从 `rattled-relax` 中按
+The development cohort is drawn from `rattled-relax` by ordering on
 
 ```text
 sha256("NEXT32-DEV-v1|" + parent_id + "|" + sid)
 ```
 
-排序，每个 `parent_id` 最多保留一条，取前 4,096 条。选择只读身份与几何，
-不使用 DFT 标签。
+keeping at most one record per `parent_id` and taking the first 4,096. The selection reads
+identity and geometry only, and uses no DFT label.
 
-确认归档为尚未打开的 `rattled-300`、`rattled-500` 和 `rattled-1000`。每个
-来源先用只投影几何的解析器读取 `sid`、`parent_id`、原子序数、坐标、晶胞和
-PBC，跳过顶层 `energy/forces/stress` 数值。排除全部开发 `parent_id`，并在
-三个确认源间累计排除先前已选 parent；每个来源按固定盐取 2,048 个唯一 parent，
-合计 6,144 条。三个来源必须在标签开启前一起完成特征、Pauling 对照和预测
-封存。
+The confirmation archives are the as-yet-unopened `rattled-300`, `rattled-500` and
+`rattled-1000`. Each source is first read with a geometry-only projecting parser for `sid`,
+`parent_id`, atomic numbers, coordinates, cell and PBC, skipping the top-level
+`energy/forces/stress` values. Every development `parent_id` is excluded, and previously selected
+parents are excluded cumulatively across the three confirmation sources; each source takes 2,048
+unique parents under a fixed salt, 6,144 in total. All three sources must complete their
+features, Pauling comparators and prediction sealing together before any label is opened.
 
-原始 LMDB 同时包含几何与标签，所以这仍是程序性隔离，清单必须记录
-`physical_never_read_lockbox=false`；不得声称物理 never-read lockbox。
+The raw LMDB holds geometry and labels together, so this remains a procedural isolation and the
+manifest must record `physical_never_read_lockbox=false`; no physical never-read lockbox may be
+claimed.
 
-## 离线端点
+## The offline endpoint
 
-对一个 DFT 单点记录定义
+For one DFT single-point record, define
 
 \[
 F_{\max}=\max_i\|\mathbf F_i\|,\qquad
@@ -67,7 +77,7 @@ F_{\rm rms}=\sqrt{N^{-1}\sum_i\|\mathbf F_i\|^2},\qquad
 S=\|\boldsymbol\sigma\|_2.
 \]
 
-严重响应标签固定为
+The severe-response label is fixed as
 
 \[
 y_+=1\quad\Longleftrightarrow\quad
@@ -76,87 +86,99 @@ F_{\max}\ge1.0\ {\rm eV/\AA}
 \;\lor\;S\ge0.030\ {\rm eV/\AA^3}.
 \]
 
-需要保护的低响应结构固定为同时满足
+The low-response structures to be protected are fixed as those satisfying all of
 
 \[
-F_{\max}\le0.50,qquad F_{\rm rms}\le0.20,qquad S\le0.015.
+F_{\max}\le0.50,\qquad F_{\rm rms}\le0.20,\qquad S\le0.015.
 \]
 
-这些阈值沿用 NEXT26–NEXT28 的严重响应量级，并在确认标签开启前冻结。能量
-只作开封后的诊断，不进入公式、选择或主门槛。
+These thresholds follow the severe-response magnitudes of NEXT26-NEXT28 and are frozen before the
+confirmation labels are opened. Energy is a post-opening diagnostic only and enters neither the
+formula, the selection, nor the primary gates.
 
-## 解析候选
+## Analytic candidates
 
-### 绝对周期接触项
+### Absolute periodic contact terms
 
-为每个原子取冻结表列共价半径 (r_i)。枚举满足
-(d_{ij\mathbf n}/(r_i+r_j)\le1.60) 的唯一周期原子对，不做分子 1–4 路径
-排除。定义
+Take the frozen tabulated covalent radius \(r_i\) for each atom. Enumerate the unique periodic
+atom pairs satisfying \(d_{ij\mathbf n}/(r_i+r_j)\le1.60\), with no molecular 1-4 path exclusion.
+Define
 
 \[
 q_{ij\mathbf n}=\frac{d_{ij\mathbf n}}{r_i+r_j},\qquad
 \delta_{ij\mathbf n}=\max(0,1-q_{ij\mathbf n}).
 \]
 
-只发布无量纲几何量：`cov_q01`、`cov_q05`、每原子 `q<0.85` 接触数、每原子
-平方重叠量，以及位点重叠负荷的 95 分位和最大值。它们是几何拥挤度，不计算
-势能、解析力或虚拟弛豫。
+Emit dimensionless geometric quantities only: `cov_q01`, `cov_q05`, the per-atom count of
+contacts with `q<0.85`, the per-atom squared overlap, and the 95th percentile and maximum of the
+site overlap load. They are measures of geometric crowding; no potential energy is computed, no
+force is derived and no virtual relaxation is performed.
 
-### 已验证解析项
+### Already-validated analytic terms
 
-复用但不修改 NEXT20–NEXT22：
+Reused without modification from NEXT20-NEXT22:
 
-- SIVR：`sivr_edge_mismatch_q95`、`sivr_site_imbalance_rms`、
-  `sivr_cell_anisotropy`；
-- normalized Madelung：`nm_total_reduced` 的弱结合方向与 `nm_site_spread`；
-- SCBVE：`scbv_mismatch_q95`、`scbv_vector_asymmetry_rms`；
-- `abs(log(scbv_global_scale / median_dev))` 作为闭式双侧尺度失配。
+- SIVR: `sivr_edge_mismatch_q95`, `sivr_site_imbalance_rms`, `sivr_cell_anisotropy`;
+- normalized Madelung: the weak-binding direction of `nm_total_reduced`, and `nm_site_spread`;
+- SCBVE: `scbv_mismatch_q95`, `scbv_vector_asymmetry_rms`;
+- `abs(log(scbv_global_scale / median_dev))` as a closed-form two-sided scale mismatch.
 
-任一项只用开发中位数和 IQR 做 robust-z。风险方向在候选表中预先写死；
-不拟合任意连续权重，不使用树、神经网络或核模型。
+Each term is robust-z scored using the development median and IQR alone. The risk direction is
+written into the candidate table in advance; no arbitrary continuous weight is fitted, and no
+tree, neural network or kernel model is used.
 
-候选只包括单项以及机制明确的二项等权和，最多两项。拒绝比例只允许
-`{0.025, 0.05, 0.075, 0.10, 0.15}`；缺失所需项时 fail-open，不拒绝。
+The candidates comprise single terms and equally weighted two-term sums with a clear mechanism,
+at most two terms. The rejection fractions permitted are only
+`{0.025, 0.05, 0.075, 0.10, 0.15}`; a missing required term fails open and rejects nothing.
 
-## 开发晋级门槛
+## The development promotion gate
 
-开发集上唯一公式必须同时满足单侧 95% Wilson 下界：
+On the development set, the unique formula must satisfy all of these one-sided 95% Wilson lower
+bounds:
 
-- 解析覆盖率 `>=0.95`；
-- 低响应保护召回 `>=0.98`；
-- 严重响应拒绝精度 `>=0.90`；
-- DFT 节省率 `>=0.05`；
-- 连续风险对严重响应的 ROC AUC `>=0.85`；
-- 拒绝精度下界减严重响应总体基率的单侧 95% 上界 `>=0.20`。
+- analytic coverage `>=0.95`;
+- protective recall on low-response structures `>=0.98`;
+- rejection precision on severe response `>=0.90`;
+- DFT savings `>=0.05`;
+- ROC AUC of the continuous risk against severe response `>=0.85`;
+- the rejection-precision lower bound minus the one-sided 95% upper bound of the overall
+  severe-response base rate `>=0.20`.
 
-若多个候选通过，依次按精度下界、节省下界、AUC、项数少、拒绝比例小和
-字典序确定唯一公式。若无候选通过，停止；不下载或打开确认标签来寻找第二次
-机会。
+If several candidates pass, the unique formula is fixed in order by precision lower bound,
+savings lower bound, AUC, fewer terms, smaller rejection fraction, and lexicographic order. If no
+candidate passes, stop; do not download or open the confirmation labels in search of a second
+chance.
 
-## 确认与 Pauling 比较
+## Confirmation and the comparison with Pauling
 
-唯一公式晋级后，冻结公式、归一化常数、阈值、缺失策略、确认 ID 和评估协议。
-三个确认来源先同时生成不可覆盖的预测和 Pauling 2–5 固定控制，再打开 DFT
-力/应力。
+Once the unique formula is promoted, freeze the formula, the normalisation constants, the
+thresholds, the missing-value policy, the confirmation IDs and the evaluation protocol. The three
+confirmation sources first generate non-overwritable predictions and the fixed Pauling 2-5
+controls together, and only then are the DFT forces and stresses opened.
 
-总体确认沿用开发六门槛；另外每个来源必须满足：覆盖下界 `>=0.90`、低响应
-保护召回下界 `>=0.95`、拒绝精度下界 `>=0.75`、节省下界 `>=0.02`、AUC
-`>=0.75`。逐来源门防止某一个高阳性率来源掩盖迁移失败。
+Overall confirmation uses the same six development gates; in addition, each source must satisfy:
+coverage lower bound `>=0.90`, protective recall on low response lower bound `>=0.95`, rejection
+precision lower bound `>=0.75`, savings lower bound `>=0.02`, and AUC `>=0.75`. The per-source
+gates prevent one high-positive-rate source from masking a transfer failure.
 
-只有 NEXT32 通过总体及全部来源门槛，且 Pauling 2、3、4、5 与联合控制在同一
-cohort、同一 fail-open 语义下都未通过总体主门槛，才允许写：
+Only if NEXT32 clears the overall gates and every per-source gate, and Pauling 2, 3, 4 and 5 and
+the joint control all fail the overall primary gate on the same cohort under the same fail-open
+semantics, may we write:
 
-> 在 OMat24 三种无机扰动来源的严重 DFT 初始响应端点上，NEXT32 超越本项目
-> 的固定 Pauling 2–5 操作性对照。
+> On the severe-initial-DFT-response endpoint across three inorganic perturbation sources in
+> OMat24, NEXT32 surpasses this project's fixed operational Pauling 2-5 comparators.
 
-即使满足，也不得写成全面超越 Pauling、预测凸包稳定性或达到/超过 DFT 能量。
+Even then, it may not be written as surpassing Pauling across the board, as predicting hull
+stability, or as reaching or exceeding DFT energies.
 
-## 失败处理与产物
+## Handling failure, and the artefacts
 
-- 所有目录只发布一次，不覆盖；输入、代码、规则、预测和端点均保存 SHA-256。
-- 标签开启前失败可修工程缺陷并重新生成新版本目录；标签开启后不得改公式、
-  阈值、确认 cohort 或门槛。
-- 开发失败保留扫描结果；确认失败保留冻结公式和失败证据，不重拟合。
-- 最终只新增 NEXT32 代码、测试、外部数据产物和独立报告；用户确认前不修改
-  论文、README、PREREG 或旧报告。
-
+- Every directory is published once and never overwritten; SHA-256 hashes are stored for the
+  inputs, code, rules, predictions and endpoints.
+- A failure before the labels are opened may be fixed as an engineering defect and a new version
+  directory regenerated; after the labels are opened, the formula, thresholds, confirmation
+  cohort and gates may not be changed.
+- A development failure keeps the sweep results; a confirmation failure keeps the frozen formula
+  and the evidence of failure, with no refitting.
+- In the end only NEXT32 code, tests, external data artefacts and a standalone report are added;
+  the paper, README, PREREG and old reports are not modified before the user confirms.

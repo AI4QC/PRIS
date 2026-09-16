@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
-"""在 calibration 上一次性确认唯一一条过完 G1-G8 的 T0 候选。
+"""One-shot confirmation on calibration of the single T0 candidate that clears G1-G8.
 
-候选(来自扩搜 A1-ext,PREREG §3.2 冻结词汇表**之外**的两两交互原语):
+The candidate (from the extended search A1-ext, a pairwise interaction primitive **outside**
+the vocabulary frozen in PREREG section 3.2):
 
     IF  acid_str / charge_per_an > theta   THEN  cn_chemenv = 6
 
-discovery 上:cov 1.80%、acc 0.7857、众数查表 0.6931、增益 +9.25 pt、
-tau 0.952、perm_z 19.4、G6 spread 2.08。
+On discovery: cov 1.80%, acc 0.7857, modal look-up 0.6931, gain +9.25 pt,
+tau 0.952, perm_z 19.4, G6 spread 2.08.
 
-本脚本三段,顺序不可换:
-  S1  泄漏检测(leakguard A/B/C 三级)—— 只读 discovery
-  S2  多重比较校正(Bonferroni + Benjamini-Hochberg)—— 只读 discovery
-  S3  calibration 一次性确认 —— 评估对象在读 calibration **之前**已打印冻结
+The script has three stages and their order may not change:
+  S1  leak detection (leakguard levels A/B/C) -- reads discovery only
+  S2  multiple-comparison correction (Bonferroni + Benjamini-Hochberg) -- reads discovery only
+  S3  one-shot confirmation on calibration -- what is being evaluated is printed and frozen
+      **before** calibration is read
 
-纪律:
-  * 阈值、body、指标、基线口径全部在 S3 之前写死并 print,S3 不得回改。
-  * lockbox 一个字节不碰。全程禁用 BVAnalyzer。
+Discipline:
+  * thresholds, body, metric and baseline convention are all fixed in code and printed before
+    S3, and S3 may not go back and change them.
+  * not one byte of the lockbox is touched. BVAnalyzer is disabled throughout.
 """
 from __future__ import annotations
 
@@ -41,22 +44,24 @@ SCRATCH = ("/tmp/claude-1000/-home-zhilong-workspace-newpauling/"
            "6021b5d8-e7ef-4fa5-8416-1361cb973e90/scratchpad")
 OUT = os.path.join(FEAT, "confirm_t0_candidate.json")
 
-# ============================================================ 冻结的评估协议
-FEATURE_NUM = "acid_str"          # = ox / (r_uni + r_uni_an)      Lewis 酸强度代理
+# ============================================================ the frozen evaluation protocol
+FEATURE_NUM = "acid_str"          # = ox / (r_uni + r_uni_an)      Lewis acid-strength proxy
 FEATURE_DEN = "charge_per_an"     # = n_cat_at * ox_mean_cat / n_an_at
 IX_NAME = f"IX_{FEATURE_NUM}/{FEATURE_DEN}"
 OP = ">"
 BODY_CN = 6
-THETA_PRINTED = 1.69097           # desc 里的 %g 打印值,S1 用分位网格精确复原
+THETA_PRINTED = 1.69097           # the %g value printed in desc; S1 recovers it exactly from
+                                  # the quantile grid
 ALGO_MAIN = "chemenv"
 ALGOS = ("chemenv", "crystalnn", "brunner")
-BASELINE_KEY = ["element", "ox"]  # 众数查表基线的键(Waroquiers 口径)
-DEFF = 15.7                       # PREREG 修订 R1,T_CE 压缩靶
-N_HYP_A1 = None                   # S2 实测填入
-N_HYP_TOTAL_DECLARED = 66198      # A1-ext 56,198 + 束搜索/A2 族 ~10,000
+BASELINE_KEY = ["element", "ox"]  # key of the modal look-up baseline (Waroquiers convention)
+DEFF = 15.7                       # PREREG revision R1, T_CE compression target
+N_HYP_A1 = None                   # filled in from measurement in S2
+N_HYP_TOTAL_DECLARED = 66198      # A1-ext 56,198 + beam search / A2 family, about 10,000
 ALPHA = 0.05
 
-DISCOVERY_REF = {                 # 上一轮扩搜报出的数,S1 必须逐项复现
+DISCOVERY_REF = {                 # the numbers the previous extended search reported; S1 must
+                                  # reproduce every one of them
     "n_trig": 1297, "cov": 0.017992, "acc": 0.785659,
     "acc_mode_matched": 0.6931, "gain_vs_mode": 0.0925,
     "perm_z": 19.414115, "tau": 0.952, "G6_spread": 2.081727,
@@ -67,15 +72,16 @@ def banner(s):
     print("\n" + "=" * 78 + f"\n{s}\n" + "=" * 78, flush=True)
 
 
-# ============================================================ 数据准备(按 split)
+# ============================================================ data preparation (by split)
 def prep_split(split):
-    """search_rules.prep() 的 split 参数化版本。除 split 外逐行等同。"""
+    """A split-parameterised version of search_rules.prep(). Identical line for line apart
+    from the split."""
     site = pd.read_parquet(os.path.join(FEAT, "site.parquet"), columns=[
         "source_id", "element", "ox_state", "ox_source", "cn_chemenv",
         "cn_crystalnn", "cn_brunner", "orbit_id_s01", "mult_s01",
         "proto_id", "split"])
     site = site[site.split == split]
-    assert set(site.split.unique()) == {split}, f"越界:非 {split} 行"
+    assert set(site.split.unique()) == {split}, f"out of bounds: rows outside {split}"
     assert "lockbox" not in set(site.split.unique())
     site = site[site.ox_state.notna() & site.orbit_id_s01.notna()]
     site = site[site.ox_state > 0]
@@ -114,7 +120,7 @@ def rule_mask(v, theta):
     return m & np.isfinite(v)
 
 
-# ============================================================ 众数查表基线
+# ============================================================ the modal look-up baseline
 def mode_table(meta, key_cols, cn_col):
     tab = (meta.groupby(key_cols)[cn_col]
                .agg(lambda s: s.value_counts().idxmax()))
@@ -127,9 +133,10 @@ def apply_mode_table(meta, tab, glob, key_cols):
     return pd.Series(pred, index=meta.index).fillna(glob).astype(int).values
 
 
-# ============================================================ 统计量
+# ============================================================ statistics
 def mcnemar_exact(b, c):
-    """精确二项 McNemar(双侧)。b = 规则对/基线错,c = 规则错/基线对。"""
+    """Exact binomial McNemar (two-sided). b = rule right / baseline wrong, c = rule wrong /
+    baseline right."""
     from scipy.stats import binomtest
     n = b + c
     if n == 0:
@@ -138,7 +145,8 @@ def mcnemar_exact(b, c):
 
 
 def mcnemar_cluster(b, c, deff):
-    """簇修正:把不一致对数按 deff 缩水后再做二项检验(保守)。"""
+    """Cluster correction: shrink the number of discordant pairs by deff before the binomial
+    test (conservative)."""
     from scipy.stats import binomtest
     n_eff = int(round((b + c) / deff))
     if n_eff < 1:
@@ -150,7 +158,7 @@ def mcnemar_cluster(b, c, deff):
 
 
 def bh_reject(pvals, alpha):
-    """Benjamini-Hochberg:返回 (临界 p, 拒绝个数, 每个 p 的 q 值数组)。"""
+    """Benjamini-Hochberg: returns (critical p, number rejected, array of q values)."""
     p = np.asarray(pvals, dtype=np.float64)
     m = len(p)
     o = np.argsort(p)
@@ -167,7 +175,8 @@ def bh_reject(pvals, alpha):
 
 
 def block_perm_z(y, pred, mask, block, n_perm=2000, seed=20260728):
-    """proto 块内置换标签的零分布 z(与 search_rules 同口径,B 加大到 2000)。"""
+    """z against the null distribution from permuting labels within proto blocks (same
+    convention as search_rules, with B raised to 2000)."""
     rng = np.random.default_rng(seed)
     n = len(y)
     order0 = np.argsort(block, kind="stable")
@@ -230,58 +239,62 @@ def eval_rule(v, theta, meta, y3, mode_pred3, block, tag, n_perm=2000):
     }
 
 
-# ============================================================ S0 冻结协议
+# ============================================================ S0 freeze the protocol
 def stage0():
-    banner("S0  冻结的评估协议(在读 calibration 之前打印,此后不得回改)")
+    banner("S0  the frozen evaluation protocol (printed before calibration is read; not "
+          "revisable afterwards)")
     proto = {
         "rule": f"IF ({FEATURE_NUM}) / ({FEATURE_DEN}) {OP} theta  THEN cn_{ALGO_MAIN} = {BODY_CN}",
         "feature_def": {
-            FEATURE_NUM: "ox / (r_uni + r_uni_an)   —— 组成级 Lewis 酸强度代理",
-            FEATURE_DEN: "n_cat_at * ox_mean_cat / n_an_at  —— 每阴离子摊到的阳离子电荷",
+            FEATURE_NUM: "ox / (r_uni + r_uni_an)   -- composition-level Lewis acid-strength proxy",
+            FEATURE_DEN: "n_cat_at * ox_mean_cat / n_an_at  -- cation charge shared per anion",
         },
-        "theta": "S1 由 discovery 的 60 点分位网格精确复原,复原后冻结,S3 原样套用",
+        "theta": ("recovered exactly by S1 from discovery's 60-point quantile grid, then "
+                  "frozen and applied unchanged in S3"),
         "theta_printed": THETA_PRINTED,
-        "body": f"cn = {BODY_CN}(常数 body,无自由参数)",
-        "primary_metric": "匹配覆盖率下的 top-1 准确率 acc,对手是众数查表",
+        "body": f"cn = {BODY_CN} (a constant body, no free parameters)",
+        "primary_metric": "top-1 accuracy at matched coverage, against the modal look-up table",
         "baseline": {
-            "name": "mode_lookup(element, ox) -> 最常见 cn_chemenv",
-            "fit_split": "discovery(冻结查表),S3 原样套到 calibration",
-            "secondary": "calibration 自拟合的查表(对基线更有利,作敏感性)",
+            "name": "mode_lookup(element, ox) -> the most common cn_chemenv",
+            "fit_split": "discovery (the frozen look-up), applied unchanged to calibration in S3",
+            "secondary": ("a look-up refitted on calibration (more favourable to the "
+                          "baseline; a sensitivity check)"),
         },
         "decision_rule": (
-            "calibration 上 gain_pt > 0 且 McNemar(簇修正) p < 0.05 "
-            "=> 确认;否则记为 discovery 上的搜索乐观偏差"),
-        "gates_rechecked_on_calibration": ["G4 tau>=0.90", "G5 gain>0 且 perm_z>=5",
-                                           "G6 spread<3.0 pt", "G8 >=2 元素/>=2 阴离子族"],
-        "one_shot": "本脚本对 calibration 只求值一次,不做任何阈值/口径调整后重跑",
-        "lockbox": "不读取",
+            "gain_pt > 0 on calibration and cluster-corrected McNemar p < 0.05 "
+            "=> confirmed; otherwise recorded as search-optimism bias on discovery"),
+        "gates_rechecked_on_calibration": ["G4 tau>=0.90", "G5 gain>0 and perm_z>=5",
+                                           "G6 spread<3.0 pt", "G8 >=2 elements / >=2 anion families"],
+        "one_shot": ("this script evaluates calibration exactly once and never reruns after "
+                     "adjusting a threshold or a convention"),
+        "lockbox": "not read",
     }
     print(json.dumps(proto, ensure_ascii=False, indent=2))
     return proto
 
 
-# ============================================================ S1 泄漏检测
+# ============================================================ S1 leak detection
 def stage1():
-    banner("S1  discovery:复现候选 + 三级泄漏检测")
+    banner("S1  discovery: reproduce the candidate + three levels of leak detection")
     orb = pd.read_parquet(os.path.join(FEAT, "_t4_orbits_raw.parquet"))
     orb["comp"] = orb.formula.map(sr.parse_formula)
     X, meta, feat_cols, rnd_cols = sr.build_features(orb)
     v = ix_values(X)
     y3 = {a: meta["cn_" + a].values.astype(int) for a in ALGOS}
     N = len(X)
-    print(f"[S1] discovery 轨道 {N},结构 {meta.source_id.nunique()}")
+    print(f"[S1] discovery orbits {N}, structures {meta.source_id.nunique()}")
 
-    # ---- 精确复原 theta(A1-ext 用的 60 点分位网格,round 到 6 位小数)
+    # ---- recover theta exactly (the 60-point quantile grid A1-ext used, rounded to 6 dp)
     ok = np.isfinite(v)
     qs = np.unique(np.round(np.nanquantile(v[ok], np.linspace(0.02, 0.98, 60)), 6))
     theta = float(qs[np.argmin(np.abs(qs - THETA_PRINTED))])
-    print(f"[S1] theta 复原 = {theta!r}  (打印值 {THETA_PRINTED})")
+    print(f"[S1] theta recovered = {theta!r}  (printed value {THETA_PRINTED})")
 
     tab, glob = mode_table(meta, BASELINE_KEY, "cn_" + ALGO_MAIN)
     mode3 = {a: sr.mode_lookup(meta, BASELINE_KEY, "cn_" + a) for a in ALGOS}
     block = pd.factorize(meta.proto_id.values)[0]
     res = eval_rule(v, theta, meta, y3, mode3, block, "discovery")
-    print("[S1] 复现结果:")
+    print("[S1] reproduction:")
     print(json.dumps(res, ensure_ascii=False, indent=2))
     chk = {k: (res[{"cov": "cov", "acc": "acc", "n_trig": "n_trig",
                     "acc_mode_matched": "acc_mode_matched"}.get(k, k)]
@@ -289,75 +302,79 @@ def stage1():
     ok_rep = (res["n_trig"] == DISCOVERY_REF["n_trig"]
               and abs(res["acc"] - DISCOVERY_REF["acc"]) < 1e-5
               and abs(res["gain_pt"] / 100 - DISCOVERY_REF["gain_vs_mode"]) < 5e-4)
-    print(f"[S1] 与扩搜报数一致: {ok_rep}   (n_trig {res['n_trig']} vs "
+    print(f"[S1] matches the extended search: {ok_rep}   (n_trig {res['n_trig']} vs "
           f"{DISCOVERY_REF['n_trig']}, acc {res['acc']:.6f} vs {DISCOVERY_REF['acc']:.6f})")
 
-    # ---------------------------------------------------------- A 级
-    banner("S1-A  经验确定性 / 零错分单侧区")
-    tgt = (y3[ALGO_MAIN] == BODY_CN).astype(np.int64)   # 靶 = 1[cn == 6]
+    # ---------------------------------------------------------- level A
+    banner("S1-A  empirical determinism / zero-error one-sided region")
+    tgt = (y3[ALGO_MAIN] == BODY_CN).astype(np.int64)   # target = 1[cn == 6]
     okall = np.ones(N, bool)
     a_ix = lg.level_a(v, tgt, okall)
     a_num = lg.level_a(X[FEATURE_NUM].values, tgt, okall)
     a_den = lg.level_a(X[FEATURE_DEN].values, tgt, okall)
-    for nm, a in (("IX(候选)", a_ix), (FEATURE_NUM, a_num), (FEATURE_DEN, a_den)):
+    for nm, a in (("IX (candidate)", a_ix), (FEATURE_NUM, a_num), (FEATURE_DEN, a_den)):
         print(f"  {nm:16s} err_thresh={a['err_thresh']:.4f} "
-              f"err_value={a['err_value']}  (每取值 {a.get('mean_per_value',0):.1f} 样本) "
+              f"err_value={a['err_value']}  ({a.get('mean_per_value',0):.1f} samples per value) "
               f"tail_purity={a['tail_purity']:.4f}@cov={a['tail_cov']:.3f} "
               f"pure_side={a['pure_side']}")
-    # 反向:cn 是否决定 IX(恒等式的另一半)
+    # the reverse: does cn determine IX (the other half of an identity)
     dfv = pd.DataFrame({"cn": y3[ALGO_MAIN], "v": np.round(v, 6)})
     g = dfv.groupby("cn").v.nunique()
-    print(f"  反向检查 |{{IX}} | cn| 取值数 = {dict(g)}  "
-          f"(若某 cn 只对应 1 个 IX 取值即为恒等式)")
-    # 负对照:随机特征走同一条路
+    print(f"  reverse check, |{{IX}} | cn| distinct values = {dict(g)}  "
+          f"(a cn matching exactly 1 IX value would be an identity)")
+    # negative control: run the random features down the same path
     negs = {}
     for c in rnd_cols[:6]:
         an = lg.level_a(X[c].values, tgt, okall)
         negs[c] = lg.combine(an, None, None)[0]
-    print(f"  负对照(6 个随机特征)A 级判定: {negs}")
+    print(f"  negative control (6 random features), level-A verdicts: {negs}")
 
-    # ---------------------------------------------------------- B 级
-    banner("S1-B  单特征分组 CV 天花板(按 proto_id)")
+    # ---------------------------------------------------------- level B
+    banner("S1-B  single-feature grouped-CV ceiling (grouped by proto_id)")
     b_ix = lg.level_b(v, tgt, okall, meta.proto_id.values)
     print(f"  IX: cv_acc={b_ix['cv_acc']:.4f} (±{b_ix['cv_sd']:.4f}) "
-          f"多数类={b_ix['cv_maj']:.4f} gain={b_ix['cv_gain']:+.4f}  "
-          f"[BLOCK 阈值 {lg.CEIL_BLOCK} / REVIEW 阈值 {lg.CEIL_REVIEW}]")
+          f"majority class={b_ix['cv_maj']:.4f} gain={b_ix['cv_gain']:+.4f}  "
+          f"[BLOCK threshold {lg.CEIL_BLOCK} / REVIEW threshold {lg.CEIL_REVIEW}]")
 
-    # ---------------------------------------------------------- C 级
-    banner("S1-C  构造溯源(features.yaml 声明 + 新增 T0 靶 T_CN)")
+    # ---------------------------------------------------------- level C
+    banner("S1-C  construction provenance (the features.yaml declarations + a new T0 target T_CN)")
     import yaml
     cfg = yaml.safe_load(open(lg.YAML_SRC))
-    # 新靶:cn 本身。定义式输入 = 阳离子位点的成键关联表。
+    # the new target: cn itself. The inputs of its defining expression are the bond incidence
+    # table of the cation sites.
     cfg["targets"]["T_CN"] = {
-        "desc": "阳离子轨道的配位数 cn_chemenv(T0 主目标)",
+        "desc": "coordination number cn_chemenv of a cation orbit (the primary T0 target)",
         "scope": "cation_orbit", "base": "cn",
         "forbidden_atoms": ["bond_inc_cat", "cn_orbit", "bond_inc_an",
                             "an_cn_site", "pair_graph", "s_prior",
                             "ox_bonded_cat"],
         "inherit": ["t0"],
     }
-    # 候选交互项的声明:两个已声明 T0 特征的商,原子取并、域取粗者
+    # declaring the candidate interaction term: the ratio of two already-declared T0 features;
+    # take the union of their atoms and the coarser of their domains
     cfg["features"]["T_CN"] = {
         IX_NAME: {"atoms": ["elem_const", "ox_formal", "comp"], "op": "ratio",
                   "scope": "structure", "base": "elem_over_ox",
-                  "note": "acid_str / charge_per_an,PREREG §3.2 词汇表外的交互原语"},
+                  "note": ("acid_str / charge_per_an, an interaction primitive outside the "
+                           "PREREG section 3.2 vocabulary")},
     }
     c_all = lg.level_c(cfg, "T_CN")
     c_ix = c_all[IX_NAME]
     print(f"  {IX_NAME}")
-    print(f"    原子闭包 = {c_ix['atoms']}")
-    print(f"    R1(命中靶禁用原子) = {c_ix['R1']}  hits={c_ix['R1_atom_hit']}")
-    print(f"    R2(同底量+包络算子+域包含) = {c_ix['R2']}")
-    print(f"    R3(同域同底量)          = {c_ix['R3']}")
+    print(f"    atom closure = {c_ix['atoms']}")
+    print(f"    R1 (hits a forbidden atom of the target) = {c_ix['R1']}  hits={c_ix['R1_atom_hit']}")
+    print(f"    R2 (same base + envelope operator + domain containment) = {c_ix['R2']}")
+    print(f"    R3 (same domain, same base)                             = {c_ix['R3']}")
     print(f"    verdict_C = {c_ix['verdict_c']}")
     for f in (FEATURE_NUM, FEATURE_DEN):
         print(f"  {f:16s} verdict_C={c_all[f]['verdict_c']} "
               f"atoms={c_all[f]['atoms']}")
     n_block = sum(1 for r in c_all.values() if r["verdict_c"] == "BLOCK")
-    print(f"  T_CN 靶下 41 个 T0 底座特征 C 级 BLOCK 数 = {n_block}(应为 0:全是组成级)")
+    print(f"  under target T_CN, {n_block} of the 41 T0 base features are BLOCKed at level C "
+          f"(should be 0: they are all composition level)")
 
     verdict, reasons = lg.combine(a_ix, b_ix, c_ix)
-    print(f"\n  >>> LeakGuard 三级合并判定:{verdict}   理由={reasons}")
+    print(f"\n  >>> combined LeakGuard verdict across the three levels: {verdict}   reasons={reasons}")
 
     return dict(orb=orb, X=X, meta=meta, v=v, y3=y3, theta=theta,
                 tab=tab, glob=glob, block=block, feat_cols=feat_cols,
@@ -372,14 +389,15 @@ def stage1():
                       "negctl": negs})
 
 
-# ============================================================ S2 多重比较
+# ============================================================ S2 multiple comparisons
 def stage2(S):
-    banner("S2  多重比较校正:Bonferroni + Benjamini-Hochberg")
+    banner("S2  multiple-comparison correction: Bonferroni + Benjamini-Hochberg")
     import itertools
     X, meta, y3 = S["X"], S["meta"], S["y3"]
     y = y3[ALGO_MAIN]
     N = len(X)
-    # 重建扩搜的 A1-ext 假设族(与 v5_t0_expand.py 逐行同口径)
+    # rebuild the extended search's A1-ext hypothesis family (line for line the same
+    # convention as v5_t0_expand.py)
     CORE = ["ox", "ratio_uni", "ratio_calc", "r_uni", "r_uni_an", "X", "dX",
             "ion_pot", "ion_pot2", "acid_str", "ionicity", "x_in_cat",
             "cat_an_ratio", "ox_mean_cat", "n_cat_species", "bv_budget", "ie1",
@@ -423,13 +441,13 @@ def stage2(S):
                              float(hb.mean()), bb, cc))
     A = pd.DataFrame(rows, columns=["feature", "op", "theta", "n", "acc",
                                     "acc_mode", "b", "c"])
-    print(f"[S2] A1-ext 假设族重建 {len(A)} 条 ({time.time()-t0:.0f}s);"
-          f"扩搜日志记录 56198")
+    print(f"[S2] rebuilt the A1-ext hypothesis family: {len(A)} entries "
+          f"({time.time()-t0:.0f}s); the extended-search log records 56198")
     A["gain_pt"] = (A.acc - A.acc_mode) * 100
-    # 单边(规则优于基线)精确 McNemar
+    # one-sided exact McNemar (rule better than baseline)
     A["p_raw"] = [binomtest(int(c_), int(b_ + c_), 0.5, alternative="less").pvalue
                   if (b_ + c_) > 0 else 1.0 for b_, c_ in zip(A.b, A.c)]
-    # 簇修正版
+    # the cluster-corrected version
     pd_eff = []
     for b_, c_ in zip(A.b, A.c):
         ne = int(round((b_ + c_) / DEFF))
@@ -440,7 +458,7 @@ def stage2(S):
 
     sel = A[(A.feature == IX_NAME) & (A.op == OP)
             & (np.abs(A.theta - S["theta"]) < 1e-9)]
-    assert len(sel) == 1, f"候选未在假设族中唯一定位: {len(sel)}"
+    assert len(sel) == 1, f"the candidate is not uniquely located in the family: {len(sel)}"
     r0 = sel.iloc[0]
     m_a1 = len(A)
     m_tot = N_HYP_TOTAL_DECLARED
@@ -460,18 +478,20 @@ def stage2(S):
                    "BH_q_candidate": q0, "BH_sig": bool(q0 < ALPHA)}
         print(f"[S2/{nm}] p_raw={p0:.3e}  Bonferroni(m={m_a1})={bonf_a1:.3e}  "
               f"Bonferroni(m={m_tot})={bonf_tot:.3e}  "
-              f"BH q={q0:.3e} (拒绝 {k}/{m_a1}, p_crit={pcrit:.3e})")
-    # perm_z 的 Bonferroni:z=19.41 对应的双侧正态 p
+              f"BH q={q0:.3e} ({k}/{m_a1} rejected, p_crit={pcrit:.3e})")
+    # Bonferroni on perm_z: the two-sided normal p corresponding to z=19.41
     from scipy.stats import norm
     z = S["res_disc"]["perm_z"]
     p_perm = float(2 * norm.sf(abs(z)))
     out["perm_z"] = {"z": z, "p_two_sided": p_perm,
                      "bonferroni_total": min(1.0, p_perm * m_tot),
-                     "note": "perm 检验的零假设是'标签与规则无关',不是'不优于查表';"
-                             "它过 Bonferroni 不等于打赢基线"}
-    print(f"[S2] perm_z={z} -> p={p_perm:.3e},Bonferroni(m={m_tot}) = "
+                     "note": ("the null of the permutation test is 'the labels are unrelated "
+                              "to the rule', not 'the rule is no better than the look-up "
+                              "table'; clearing Bonferroni here is not the same as beating "
+                              "the baseline")}
+    print(f"[S2] perm_z={z} -> p={p_perm:.3e}, Bonferroni(m={m_tot}) = "
           f"{out['perm_z']['bonferroni_total']:.3e}")
-    # 假设族里增益超过候选的有几条
+    # how many members of the family have a larger gain than the candidate
     out["n_gain_ge_candidate"] = int((A.gain_pt >= r0.gain_pt).sum())
     out["n_gain_gt_0"] = int((A.gain_pt > 0).sum())
     out["candidate_gain_rank"] = int((A.gain_pt > r0.gain_pt).sum() + 1)
@@ -481,29 +501,30 @@ def stage2(S):
                             & (bh_reject(A["p_deff"].values, ALPHA)[2] < ALPHA)).sum()),
         "max_gain_pt": float(A[A.feature.str.startswith("rnd_")].gain_pt.max()),
     }
-    print(f"[S2] 候选增益 {r0.gain_pt:.2f} pt 在 {m_a1} 条假设里排名 "
-          f"{out['candidate_gain_rank']};增益>0 的有 {out['n_gain_gt_0']} 条")
-    print(f"[S2] 负对照随机特征族:{out['rnd_family']}")
+    print(f"[S2] the candidate gain of {r0.gain_pt:.2f} pt ranks "
+          f"{out['candidate_gain_rank']} of {m_a1} hypotheses; {out['n_gain_gt_0']} have a "
+          f"gain above 0")
+    print(f"[S2] negative-control random-feature family: {out['rnd_family']}")
     return out
 
 
 # ============================================================ S3 calibration
 def stage3(S, proto):
-    banner("S3  *** 首次且唯一一次读取 calibration ***")
-    print(f"[S3] 冻结的 theta = {S['theta']!r},body cn = {BODY_CN},"
-          f"基线 = discovery 拟合的 mode_lookup{BASELINE_KEY}")
+    banner("S3  *** the first and only read of calibration ***")
+    print(f"[S3] frozen theta = {S['theta']!r}, body cn = {BODY_CN}, "
+          f"baseline = mode_lookup{BASELINE_KEY} fitted on discovery")
     orbc = prep_split("calibration")
     Xc, metac, _, _ = sr.build_features(orbc)
     vc = ix_values(Xc)
     y3c = {a: metac["cn_" + a].values.astype(int) for a in ALGOS}
-    print(f"[S3] calibration 轨道 {len(Xc)},结构 {metac.source_id.nunique()}")
+    print(f"[S3] calibration orbits {len(Xc)}, structures {metac.source_id.nunique()}")
 
-    # 基线一:discovery 冻结查表(主口径)
+    # baseline one: the look-up frozen on discovery (the main convention)
     frozen3 = {}
     for a in ALGOS:
         tab, glob = mode_table(S["meta"], BASELINE_KEY, "cn_" + a)
         frozen3[a] = apply_mode_table(metac, tab, glob, BASELINE_KEY)
-    # 基线二:calibration 自拟合(对基线更有利)
+    # baseline two: refitted on calibration (more favourable to the baseline)
     self3 = {a: sr.mode_lookup(metac, BASELINE_KEY, "cn_" + a) for a in ALGOS}
 
     blockc = pd.factorize(metac.proto_id.values)[0]
@@ -515,16 +536,16 @@ def stage3(S, proto):
         print("\n" + json.dumps(r, ensure_ascii=False, indent=2))
 
     d = S["res_disc"]
-    print(f"\n[S3] discovery -> calibration 对照")
+    print(f"\n[S3] discovery -> calibration comparison")
     print(f"     cov      {d['cov']*100:6.2f}%  ->  {r_frozen['cov']*100:6.2f}%")
     print(f"     acc      {d['acc']:.4f}  ->  {r_frozen['acc']:.4f}")
-    print(f"     查表     {d['acc_mode_matched']:.4f}  ->  "
-          f"{r_frozen['acc_mode_matched']:.4f}(冻结) / "
-          f"{r_self['acc_mode_matched']:.4f}(自拟合)")
-    print(f"     增益     {d['gain_pt']:+.2f} pt  ->  {r_frozen['gain_pt']:+.2f} pt"
-          f"(冻结) / {r_self['gain_pt']:+.2f} pt(自拟合)")
+    print(f"     look-up  {d['acc_mode_matched']:.4f}  ->  "
+          f"{r_frozen['acc_mode_matched']:.4f} (frozen) / "
+          f"{r_self['acc_mode_matched']:.4f} (refitted)")
+    print(f"     gain     {d['gain_pt']:+.2f} pt  ->  {r_frozen['gain_pt']:+.2f} pt"
+          f" (frozen) / {r_self['gain_pt']:+.2f} pt (refitted)")
     shrink = (r_frozen["gain_pt"] / d["gain_pt"]) if d["gain_pt"] else float("nan")
-    print(f"     增益保留率 {shrink:.2%}")
+    print(f"     gain retained {shrink:.2%}")
 
     gates = {
         "G4_tau>=0.90": (r_frozen["tau_worst"] is not None
@@ -534,20 +555,20 @@ def stage3(S, proto):
         "G6_spread<3pt": r_frozen["G6_spread_pt"] < 3.0,
         "G8_elem>=2&anion>=2": (r_frozen["n_cat_elem"] >= 2
                                 and r_frozen["n_anion_fam"] >= 2),
-        "决策_p_deff<0.05": r_frozen["p_mcnemar_deff"] < ALPHA,
+        "decision_p_deff<0.05": r_frozen["p_mcnemar_deff"] < ALPHA,
     }
-    print("\n[S3] calibration 上重跑的门:")
+    print("\n[S3] gates rerun on calibration:")
     for k, v in gates.items():
         print(f"     {k:24s} {v}")
-    confirmed = bool(gates["G5_gain>0"] and gates["决策_p_deff<0.05"])
-    print(f"\n[S3] >>> 确认结论(冻结决策规则):"
+    confirmed = bool(gates["G5_gain>0"] and gates["decision_p_deff<0.05"])
+    print(f"\n[S3] >>> verdict under the frozen decision rule: "
           f"{'CONFIRMED' if confirmed else 'NOT CONFIRMED'}")
     S["_cal"] = (Xc, metac, vc)
     return {"frozen": r_frozen, "self_fit": r_self, "gates": gates,
             "gain_retention": shrink, "confirmed": confirmed}
 
 
-# ==================================================== S3b 附录:整簇 bootstrap
+# ============================================ S3b appendix: whole-cluster bootstrap
 def cluster_boot(meta, m, pred_rule, pred_base, y, key, B=4000, seed=20260728):
     sub = pd.DataFrame({"k": meta[key].values[m].astype(str),
                         "r": (pred_rule[m] == y[m]).astype(float),
@@ -563,7 +584,8 @@ def cluster_boot(meta, m, pred_rule, pred_base, y, key, B=4000, seed=20260728):
         s = rng.integers(0, K, K)
         g[i] = (r_in[s].sum() - b_in[s].sum()) / n_in[s].sum()
     obs = (sub.r.sum() - sub.b.sum()) / len(sub)
-    # 匹配区实测 deff(对差值指示量 d = 1[规则对] - 1[基线对])
+    # deff measured over the matched region (on the difference indicator
+    # d = 1[rule right] - 1[baseline right])
     d = sub.r.values - sub.b.values
     nk = n_in
     mk = float((nk ** 2).sum() / nk.sum())
@@ -585,9 +607,11 @@ def cluster_boot(meta, m, pred_rule, pred_base, y, key, B=4000, seed=20260728):
 
 
 def stage3b(S):
-    banner("S3b  附录:整簇 bootstrap 标准误(不改规则/阈值/基线,只换 SE 估计法)")
-    print("  S3 决策用的 `不一致对数 / deff=15.7` 是全库 T_CE 的整体 deff,"
-          "用在 1.8% 的窄触发区上过度保守;此处直接整簇重抽。")
+    banner("S3b  appendix: whole-cluster bootstrap standard errors (the rule, threshold and "
+          "baseline are unchanged; only the SE estimator differs)")
+    print("  The `discordant pairs / deff=15.7` S3 decides on is the overall deff of T_CE\n"
+          "  across the whole store, which is over-conservative on a narrow 1.8% trigger\n"
+          "  region; this resamples whole clusters directly.")
     out = {}
     # discovery
     y = S["meta"].cn_chemenv.values.astype(int)
@@ -596,7 +620,7 @@ def stage3b(S):
     out["discovery"] = {k: cluster_boot(S["meta"], m, np.where(m, BODY_CN, -1),
                                         pb, y, k)
                         for k in ("proto_id", "source_id")}
-    # calibration(用 S3 已建好的对象)
+    # calibration (using the objects S3 already built)
     Xc, metac, vc = S["_cal"]
     mc = rule_mask(vc, S["theta"])
     yc = metac.cn_chemenv.values.astype(int)
@@ -608,7 +632,7 @@ def stage3b(S):
     print(json.dumps(out, ensure_ascii=False, indent=2))
     ok = all(out["calibration"][k]["p_one_sided"] < ALPHA
              for k in ("proto_id", "source_id"))
-    print(f"\n[S3b] >>> 整簇 bootstrap 下 calibration 确认:"
+    print(f"\n[S3b] >>> calibration verdict under the whole-cluster bootstrap: "
           f"{'CONFIRMED (alpha=0.05)' if ok else 'NOT CONFIRMED'}")
     out["confirmed_bootstrap"] = bool(ok)
     return out
@@ -626,7 +650,7 @@ def main():
            "calibration_cluster_bootstrap": cal_b,
            "runtime_s": round(time.time() - t0, 1)}
     json.dump(out, open(OUT, "w"), ensure_ascii=False, indent=2, default=str)
-    print(f"\n[done] 写入 {OUT}  ({out['runtime_s']}s)")
+    print(f"\n[done] wrote {OUT}  ({out['runtime_s']}s)")
 
 
 if __name__ == "__main__":

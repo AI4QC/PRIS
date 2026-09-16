@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-"""F2R-G: 能隙 ≥25 meV 配对上的稳定性公式(PREREG-F2R 追加链条)。
+"""F2R-G: the stability formula on pairs with a gap of at least 25 meV (an added chain
+under PREREG-F2R).
 
-与 f2r_fit 同一机器,仅配对限制 |dE|>=0.025 eV;fit 与 calib 两个子命令。
+The same machinery as f2r_fit, with the pairing restricted to |dE|>=0.025 eV; two
+subcommands, fit and calib.
 """
 from __future__ import annotations
 import argparse, hashlib, json, os, sys

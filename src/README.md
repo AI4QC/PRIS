@@ -1,862 +1,1049 @@
-# PRIS/src —— Week 1 数据脚本
+# PRIS/src — Week 1 data scripts
 
-统一环境:`python`(不新建 conda 环境)。
-并行前必须 `export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1`。
-产物目录:`$PRIS_FEATURES/`。
+Single environment: `python` (no new conda environment).
+Before running anything in parallel: `export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1`.
+Output directory: `$PRIS_FEATURES/`.
 
 ---
 
 ## build_energetics.py
 
-补 `materials.sqlite` 里全为 NULL 的能量字段的主路径。
+The main path for filling in the energy fields of `materials.sqlite`, which are all NULL.
 
 ```bash
-python src/build_energetics.py --limit 2   # 冒烟
-python src/build_energetics.py             # 全量,实测 41 s
-python src/build_energetics.py --force     # 忽略幂等跳过
+python src/build_energetics.py --limit 2   # smoke test
+python src/build_energetics.py             # full run, measured at 41 s
+python src/build_energetics.py --force     # ignore the idempotence skip
 ```
 
-产物:
-| 文件 | 行数 | 大小 | 粒度 |
+Outputs:
+| file | rows | size | granularity |
 |---|---|---|---|
-| `energetics_mp.parquet` | 154,377 | 14.0 MB | 一个 MP 材料一行(25 列) |
-| `icsd_mp_link.parquet` | 73,823 | 6.6 MB | 一个 ICSD 实验结构一行,带回填的 E_hull |
+| `energetics_mp.parquet` | 154,377 | 14.0 MB | one row per MP material (25 columns) |
+| `icsd_mp_link.parquet` | 73,823 | 6.6 MB | one row per ICSD experimental structure, with E_hull backfilled |
 
-### 实测 schema 要点(与计划 §14 骨架的差异)
+### Measured schema notes (differences from the plan's §14 skeleton)
 
-- MP summary 每页 69 个顶层字段,`{"data": [...1000 条...], "meta": {...}}`。
-- `material_id` 是 **字母 hash**(`mp-aaahikie`),不再是老版的 `mp-1234`。任何按数字解析 mp-id
-  的下游代码都会挂。
-- `database_IDs` 对绝大多数条目是 **`null`**(不是空 dict)。计划里写的
-  `d.get("database_IDs").get("icsd")` 会 `AttributeError`,必须写
-  `(d.get("database_IDs") or {}).get("icsd") or []`。
-- `database_IDs["icsd"]` 的元素实测 **100% 带 `icsd-` 前缀**(`exp004`),与
-  `synth_meta.tsv` 的 `source_id` 同形。但连接键仍统一转成整数 collection code,
-  对将来混入 `ICSD-xxx` / 纯数字的写法更鲁棒。
-- 另有 `database_IDs["pauling"]`(15,765 条,Pauling File)——项目同名,但不是 Pauling 五定律,
-  别混淆。当前未使用。
-- `symmetry` 是 dict,空间群号在 `symmetry.number`,不是顶层 `spacegroup_number`。
-- `deprecated == True` 的条目实测为 0 条,快照已经是清洗过的。
+- Each page of the MP summary has 69 top-level fields, `{"data": [...1000 entries...], "meta": {...}}`.
+- `material_id` is an **alphabetic hash** (`mp-aaahikie`), no longer the old `mp-1234`. Any
+  downstream code that parses mp-ids as numbers will break.
+- `database_IDs` is **`null`** for the great majority of entries (not an empty dict). The plan's
+  `d.get("database_IDs").get("icsd")` raises `AttributeError`; it has to be written
+  `(d.get("database_IDs") or {}).get("icsd") or []`.
+- Elements of `database_IDs["icsd"]` measured **100% with an `icsd-` prefix** (`exp004`), the same
+  shape as `source_id` in `synth_meta.tsv`. The join key is still normalised to an integer
+  collection code, which is more robust to `ICSD-xxx` or bare-number forms appearing later.
+- There is also `database_IDs["pauling"]` (15,765 entries, the Pauling File) — same name as the
+  project, but nothing to do with Pauling's five rules. Not currently used.
+- `symmetry` is a dict; the space-group number is at `symmetry.number`, not at top-level
+  `spacegroup_number`.
+- `deprecated == True` measures 0 entries; the snapshot is already cleaned.
 
-### 已知数据坑
+### Known data pitfalls
 
-- **4 条 `energy_above_hull` / `formation_energy_per_atom` / `band_gap` 为 NULL**,全是单质 `Yb`
-  (mp-aaacdikq / mp-aaacppfn / mp-aaaaaact / mp-aaaaaagg)。MP 的 Yb 赝势有已知问题。
-  其中两条带 ICSD ID(exp005、exp003),导致「按 ID 连上 58,246 条」但
-  「拿到 E_hull 只有 58,244 条」。
-- **`theoretical=True` 却带 ICSD ID:2,333 条**(占带 ICSD ID 条目的 4.52%)。ICSD 是实验库,
-  这在语义上是矛盾的。这些条目 e_hull 中位 0.110 eV/atom(远高于全实验集的 0.0034),
-  推测是 MP 对高能多形体/歧义匹配打的保守标签,或 ICSD 收录的假想结构。
-  **下游筛"实验已知"时不要只信 `theoretical` 字段,要 `theoretical==False OR n_icsd>0` 并记录旗标。**
-- 一个 ICSD code 可能被多个 MP 条目引用(实测 481 个)。`build_icsd_link` 取 **e_hull 最小**
-  的那条作代表,并在 `n_mp_matches` 列保留匹配数供下游判断歧义。
+- **4 entries have NULL `energy_above_hull` / `formation_energy_per_atom` / `band_gap`**, all
+  elemental `Yb` (mp-aaacdikq / mp-aaacppfn / mp-aaaaaact / mp-aaaaaagg). MP's Yb pseudopotential
+  has a known problem. Two of them carry ICSD IDs (exp005, exp003), which is why "58,246 joined by
+  ID" but "only 58,244 got an E_hull".
+- **2,333 entries are `theoretical=True` yet carry an ICSD ID** (4.52% of entries with an ICSD ID).
+  ICSD is an experimental database, so this is semantically contradictory. The median e_hull of
+  these entries is 0.110 eV/atom (far above the 0.0034 of the full experimental set); they are
+  probably conservative labels MP applied to high-energy polymorphs or ambiguous matches, or
+  hypothetical structures deposited in ICSD.
+  **Downstream, do not trust the `theoretical` field alone when selecting "experimentally known";
+  use `theoretical==False OR n_icsd>0` and record the flag.**
+- One ICSD code may be referenced by several MP entries (481 measured). `build_icsd_link` takes the
+  one with the **smallest e_hull** as representative and keeps the match count in the
+  `n_mp_matches` column so downstream code can judge the ambiguity.
 
-### 幂等
+### Idempotence
 
-产物存在且 mtime 晚于所有输入(155 个 gz + synth_meta.tsv)时直接跳过重算,
-但仍会重新读 parquet 并打印完整报告。
+If the outputs exist and their mtime is later than every input (155 gz files + synth_meta.tsv), the
+computation is skipped, but the parquet files are still re-read and the full report printed.
 
 ---
 
 ## build_provenance.py
 
-实验集溯源表。输入 `materials.sqlite`(只读)+ `synth_meta.tsv`,输出
-`features/provenance.parquet`(99,162 行 × 46 列,11.1 MB zstd,全量 ~3 s)。
+The provenance table for the experimental set. Input `materials.sqlite` (read-only) +
+`synth_meta.tsv`, output `features/provenance.parquet` (99,162 rows × 46 columns, 11.1 MB zstd,
+about 3 s for a full run).
 
 ```bash
-python src/build_provenance.py --limit 200 --dry-run   # 冒烟
-python src/build_provenance.py                         # 全量
+python src/build_provenance.py --limit 200 --dry-run   # smoke test
+python src/build_provenance.py                         # full run
 python src/build_provenance.py --force
 ```
 
-### 实测 vs 预期
+### Measured vs expected
 
-| 项 | 实测 | 预期 | |
+| item | measured | expected | |
 |---|---|---|---|
-| 行数 | 99,162 | — | sqlite `dataset='experimental'` 全量 |
-| join 命中率 | **100.0000%** | 主 agent 未验证过 | 见下 |
-| `n_sites == n_atoms` | 100% | — | join 正确性的独立佐证 |
-| `orig_spg` 缺失 | 394(0.40%) | — | bawl_hash 中段为空 |
-| `orig_spg == spacegroup_number` | **98.9446%**(98,727 可比,1,042 不一致) | — | 见下 |
-| `in_analysis_set` | **38,307**(icsd 27,408 + cod 10,899) | 38,307 | 完全复现 |
-| `oxide_strict` | **23,728**(icsd 16,414 + cod 7,314) | 23,728 | 完全复现 |
+| rows | 99,162 | — | all of sqlite `dataset='experimental'` |
+| join hit rate | **100.0000%** | never verified by the main agent | see below |
+| `n_sites == n_atoms` | 100% | — | independent corroboration that the join is right |
+| `orig_spg` missing | 394 (0.40%) | — | the middle segment of bawl_hash is empty |
+| `orig_spg == spacegroup_number` | **98.9446%** (98,727 comparable, 1,042 disagree) | — | see below |
+| `in_analysis_set` | **38,307** (icsd 27,408 + cod 10,899) | 38,307 | reproduced exactly |
+| `oxide_strict` | **23,728** (icsd 16,414 + cod 7,314) | 23,728 | reproduced exactly |
 
-### 连接键(已验证)
+### The join key (verified)
 
-`materials.source_index` 是 TEXT 存的整数行号,实验集内 0..99161 连续且唯一;
-`synth_meta.index` 同样 0..99161 唯一。二者是严格双射,100% 命中,零缺失。
-`source_split`(train 94,204 / val 4,958)**不**参与编号,不需要按 split 分段偏移。
-计划 §14 里写的 SYN 路径是 CSAgent 下的旧副本,现役副本在
-`matdata/data/sources/experimental/synth_meta.tsv`,脚本以后者为准。
+`materials.source_index` is an integer row number stored as TEXT; within the experimental set it
+runs 0..99161, contiguous and unique. `synth_meta.index` is likewise 0..99161 and unique. The two
+are a strict bijection: 100% hit, nothing missing.
+`source_split` (train 94,204 / val 4,958) does **not** participate in the numbering, so no per-split
+offset is needed.
+The SYN path written in plan §14 is an old copy under CSAgent; the live copy is at
+`matdata/data/sources/experimental/synth_meta.tsv`, and the script uses that one.
 
 ### orig_spg vs spacegroup_number
 
-`bawl_hash` = `<md5 32位>_<原始空间群号>_<还原式>`,例如
-`f5e701d27fce4666407370fabff735f6_14_Cr4Te8O22`。
+`bawl_hash` = `<32-char md5>_<original space-group number>_<reduced formula>`, e.g.
+`f5e701d27fce4666407370fabff735f6_14_Cr4Te8O22`.
 
-1,042 条不一致中 **100% 是 sqlite 的号 > bawl 的原始号**,零反向。即 sqlite 侧用了更宽松的
-symprec,把结构判进了更高对称的群。高频迁移:14→62、123→221、139→225、11→63、2→12、
-47→123、69→139、160→215——都是标准的「容差放宽后子群升母群」路径,不是数据错乱。
-不一致按来源:exp008 / cod 256。
+Of the 1,042 disagreements, **100% have sqlite's number > bawl's original**, none the other way.
+That is, the sqlite side used a looser symprec and assigned the structure to a higher-symmetry
+group. Frequent transitions: 14→62, 123→221, 139→225, 11→63, 2→12, 47→123, 69→139, 160→215 — all
+standard "subgroup rises to supergroup once the tolerance is loosened" paths, not corrupted data.
+By source: exp008 / cod 256.
 
-空值:sqlite `spacegroup_number` NULL 435 条,`orig_spg` NA 394 条,后者是前者的**真子集**
-(394 条两边都判不出,另有 41 条 bawl 判得出而 sqlite 判不出)。
+Nulls: sqlite `spacegroup_number` is NULL for 435 entries and `orig_spg` is NA for 394; the latter
+is a **strict subset** of the former (394 entries where neither can decide, plus 41 where bawl can
+and sqlite cannot).
 
-**用途**:`spg_agree` 列(nullable boolean)是 symprec 敏感性的现成代理变量。
-那 1,042 条处在对称性判定边界上,做定律检验时应单独看,免得把 symprec 伪影读成物理规律。
+**Use**: the `spg_agree` column (nullable boolean) is a ready-made proxy for symprec sensitivity.
+Those 1,042 entries sit on the boundary of the symmetry determination and should be looked at
+separately when testing laws, so that a symprec artefact is not read as a physical regularity.
 
-### 两个分析集口径 —— 注意它们不是包含关系
+### The two analysis-set definitions — note that neither contains the other
 
-- `in_analysis_set`:{O,S,Se,Te,N,P,F,Cl,Br,I} **恰好含一种**,且不含 H、不含 C。
-  阴离子分布:O 19,833 / S 4,783 / F 2,839 / Se 2,745 / N 1,673 / P 1,663 / Te 1,558 /
-  Cl 1,434 / I 909 / Br 870。
-- `oxide_strict`:含 O 且不含 H/C/N/F/Cl/Br/I/S/Se/Te。**P 不在排除列表里。**
+- `in_analysis_set`: **exactly one** of {O,S,Se,Te,N,P,F,Cl,Br,I}, and no H and no C.
+  Anion distribution: O 19,833 / S 4,783 / F 2,839 / Se 2,745 / N 1,673 / P 1,663 / Te 1,558 /
+  Cl 1,434 / I 909 / Br 870.
+- `oxide_strict`: contains O and none of H/C/N/F/Cl/Br/I/S/Se/Te. **P is not on the exclusion list.**
 
-交叉:`ox ∩ set` = 19,833(= 单一阴离子且该阴离子是 O);`ox \ set` = 3,895,
-**这 3,895 条全部含 P**(磷酸盐被 `in_analysis_set` 当成双阴离子剔除,却被 `oxide_strict` 保留);
-`set \ ox` = 18,474(非氧的单一阴离子体系)。下游选样本必须明确挑哪一个。
+Intersections: `ox ∩ set` = 19,833 (single anion, and that anion is O); `ox \ set` = 3,895, and
+**all 3,895 contain P** (phosphates are rejected by `in_analysis_set` as two-anion systems but kept
+by `oxide_strict`); `set \ ox` = 18,474 (single-anion non-oxide systems). Downstream sampling must
+say explicitly which one it uses.
 
-### 输出列
+### Output columns
 
 `pk, material_id, source, source_id, bawl_hash, bawl_md5, bawl_formula, orig_spg,
 spacegroup_number, spacegroup_symbol, crystal_system, spg_agree, formula, chemical_system,
 elements, n_elements, n_atoms, n_sites, anion, n_anion_kinds, in_analysis_set, oxide_strict,
 blob_offset, blob_length, dataset, source_split, source_index, is_experimental, lattice_*`,
-外加 12 个 `has_<元素>` 布尔列(O/S/Se/Te/N/P/F/Cl/Br/I/H/C)。
-`blob_offset`/`blob_length` 直接指向 `structures.blob`,下游取 CIF 不必再回 sqlite。
+plus 12 boolean `has_<element>` columns (O/S/Se/Te/N/P/F/Cl/Br/I/H/C).
+`blob_offset`/`blob_length` point straight into `structures.blob`, so downstream code can fetch a
+CIF without going back to sqlite.
 
-### 内置断言(改口径时会响)
+### Built-in assertions (they fire when a definition changes)
 
-join 命中率 < 99.9%、`n_sites`/`n_atoms` 一致率 < 99%、`source_index` 非数字或重复、
-`bawl_hash` 不是 3 段 → 抛异常;全量跑时 `in_analysis_set != 38307` 或
-`oxide_strict != 23728` → 抛 AssertionError。`--limit` 时跳过后两条。
+Join hit rate < 99.9%, `n_sites`/`n_atoms` agreement < 99%, non-numeric or duplicated
+`source_index`, or a `bawl_hash` that is not three segments → raises. On a full run,
+`in_analysis_set != 38307` or `oxide_strict != 23728` → AssertionError. Both of the latter are
+skipped under `--limit`.
 
 ---
 
 ## build_icsd_meta.py
 
-从 203,830 个 ICSD 原始 CIF(`<other-repo>/data/icsd_extracted/cif/*.cif`,1.1 GB,CRLF 行尾)
-纯正则抽元数据,产出 `features/icsd_meta.parquet`(203,830 行 × 15 列,3.7 MB)。§10.1 年代自指分析的输入。
+Extracts metadata by pure regex from 203,830 raw ICSD CIFs
+(`<other-repo>/data/icsd_extracted/cif/*.cif`, 1.1 GB, CRLF line endings) into
+`features/icsd_meta.parquet` (203,830 rows × 15 columns, 3.7 MB). This is the input to the §10.1
+self-reference-over-time analysis.
 
 ```bash
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 PY=python
-$PY src/build_icsd_meta.py --limit 4000        # 冒烟(等距 stride 抽样,~1 s)
-$PY src/build_icsd_meta.py --workers 16        # 全量,实测 27 s
-$PY src/build_icsd_meta.py --force             # 产物已最新时强制重算
+$PY src/build_icsd_meta.py --limit 4000        # smoke test (evenly spaced stride sample, ~1 s)
+$PY src/build_icsd_meta.py --workers 16        # full run, measured at 27 s
+$PY src/build_icsd_meta.py --force             # force a recompute even when the output is current
 ```
 
-幂等判据:产物 mtime > max(CIF 目录 mtime, 本脚本 mtime) 就跳过(不逐个 stat 20 万个文件)。
+Idempotence criterion: skip if the output's mtime > max(CIF directory mtime, this script's mtime)
+(rather than stat-ing 200,000 files individually).
 
-### 列说明与下游陷阱
+### Column notes and downstream traps
 
-| 列 | 说明 |
+| column | note |
 |---|---|
-| `source_id` | `icsd-<N>`,与 `synth_meta.tsv` 的 `source_id` 同口径,可直接 join |
-| `pub_year` | **文献发表年**,来自 citation loop 的 `_citation_year`。时间轴只能用这一列 |
-| `audit_year` | **FIZ 录入年**,来自 `_audit_creation_date`。**唯一合法用途是录入批次固定效应** |
-| `lag_years` | `audit_year - pub_year`,只为复核 §10.1.2 的分位;**不要**用它补 `pub_year` 空缺 |
-| `temperature` | 单位 **K** |
-| `pressure_kpa` | 单位 **kPa**。要 GPa 必须 **除 1e6** |
-| `R_factor` | `_refine_ls_R_factor_all`,正常 0–1;实测有 50 条 >1(按百分数录入),建模前自己截断 |
-| `n_reflns` / `n_params` | **实测全空**,见下 |
-| `n_year_cand` | 诊断列,该文件命中的不同年份数;实测全语料恒为 0 或 1 |
+| `source_id` | `icsd-<N>`, same convention as `source_id` in `synth_meta.tsv`, so it joins directly |
+| `pub_year` | **year of publication**, from `_citation_year` in the citation loop. Only this column may be used for a time axis |
+| `audit_year` | **year of FIZ entry**, from `_audit_creation_date`. **Its only legitimate use is as an entry-batch fixed effect** |
+| `lag_years` | `audit_year - pub_year`, only for checking the §10.1.2 quantiles; **do not** use it to fill gaps in `pub_year` |
+| `temperature` | in **K** |
+| `pressure_kpa` | in **kPa**. For GPa you must **divide by 1e6** |
+| `R_factor` | `_refine_ls_R_factor_all`, normally 0–1; 50 entries measure >1 (entered as a percentage), so clip before modelling |
+| `n_reflns` / `n_params` | **measured entirely empty**, see below |
+| `n_year_cand` | diagnostic column, the number of distinct years matched in that file; measured as 0 or 1 throughout the corpus |
 
-### 实测 vs 计划预期(全量 203,830,2026-07-28)
+### Measured vs the plan's expectations (full run of 203,830, 2026-07-28)
 
-命中率 6 项全部与计划 §14 逐位吻合(pub_year 96.73% / audit_year 100% / R_factor 64.73% /
-temperature 35.02% / pressure_kpa 3.64% / structure_type 78.13%);lag 分位 p5/p25/p50/p75/p95/p99/max
-= 0/1/2/17/44/57/95 与 §10.1.2 完全一致;pub_year 与 audit_year 的十年分桶亦逐桶一致。
+All six hit rates agree digit for digit with plan §14 (pub_year 96.73% / audit_year 100% /
+R_factor 64.73% / temperature 35.02% / pressure_kpa 3.64% / structure_type 78.13%); the lag
+quantiles p5/p25/p50/p75/p95/p99/max = 0/1/2/17/44/57/95 match §10.1.2 exactly; and the
+decade-by-decade histograms of pub_year and audit_year agree bucket for bucket.
 
-### 三处与计划不符的地方
+### Three places where reality differs from the plan
 
-1. **`n_reflns` / `n_params` 全空。** 计划 §14 的 PAT 字典里写了
-   `_refine_ls_number_reflns` / `_refine_ls_number_parameters`,但本机 ICSD 语料**根本没有这两个字段**
-   (5,000 文件随机抽样 grep 0 命中;整个语料里 `^_refine*` 只存在 `_refine_ls_R_factor_all` 一种)。
-   两列保留只为 schema 兼容,脚本会打 warning,**下游不要用**。§10.1.3 的 quality 协变量只能靠
-   `R_factor` + `has_aniso_adp` + `is_powder`。
-2. **`--limit` 默认是等距 stride 抽样,不是取前 N 个。** ICSD 编号与年代强相关(前 500 号全是
-   1970 年代、audit 全是 1980),`--limit 500 --limit-mode head` 会给出 temperature 5.8% 这种
-   完全误导的命中率。冒烟必须用 stride(默认)。
-3. **"citation loop 多条时取最早"这条规则在本语料里从不触发**(`n_year_cand > 1` 恒为 0 条)。
-   代码里的 `min(yrs)` 保留,但它没有实际作用。
+1. **`n_reflns` / `n_params` are entirely empty.** The PAT dictionary in plan §14 lists
+   `_refine_ls_number_reflns` / `_refine_ls_number_parameters`, but the local ICSD corpus **does not
+   contain these fields at all** (0 hits when grepping a random sample of 5,000 files; across the
+   whole corpus the only `^_refine*` that exists is `_refine_ls_R_factor_all`). Both columns are
+   kept only for schema compatibility, the script emits a warning, and **downstream code must not
+   use them**. The §10.1.3 quality covariates have to rest on `R_factor` + `has_aniso_adp` +
+   `is_powder`.
+2. **`--limit` defaults to an evenly spaced stride sample, not the first N.** ICSD numbering
+   correlates strongly with date (the first 500 are all 1970s, all audited in 1980), so
+   `--limit 500 --limit-mode head` gives thoroughly misleading hit rates such as 5.8% for
+   temperature. Smoke tests must use the stride (the default).
+3. **The rule "take the earliest when the citation loop has several" never fires in this corpus**
+   (`n_year_cand > 1` is 0 throughout). The `min(yrs)` in the code stays, but it does nothing.
 
-### 已知脏数据(脚本只报告不清洗,保持与原始 CIF 一一对应)
+### Known dirty data (the script reports and does not clean, so rows stay one-to-one with the raw CIFs)
 
-- `lag_years < 0` 114 条(0.058%),其中 104 条是 −1(多半是 in-press 录入,非正则错误),
-  少数 −14/−19 是正则抓错卷号。占比可忽略,建模时按 `lag_years >= -2` 过滤即可。
-- `temperature` 上限 7,493 K、`pressure_kpa` 上限 1.7e9 kPa(=1,700 GPa)均为 ICSD 原始录入错误。
-- `pub_year` 空缺 6,672 条(3.27%),这些条目的 citation loop 排版不属于已知两种。
+- `lag_years < 0` in 114 entries (0.058%), of which 104 are −1 (most likely in-press entries, not a
+  regex error); the handful at −14/−19 are the regex catching a volume number. Negligible; filter
+  with `lag_years >= -2` when modelling.
+- `temperature` up to 7,493 K and `pressure_kpa` up to 1.7e9 kPa (= 1,700 GPa) are both raw ICSD
+  entry errors.
+- `pub_year` is missing for 6,672 entries (3.27%); the citation loop in those entries is laid out in
+  neither of the two known ways.
 
 ---
 
 ## build_cod_delta.py
 
-§8.3 L3 时间外推留出的唯一救命路径:从 COD 全库里筛出 matdata 尚未收录的干净无碳 post-2019 条目。
+The one lifeline for the §8.3 L3 temporal-extrapolation hold-out: pick out of the full COD the clean
+carbon-free post-2019 entries that matdata does not yet hold.
 
 ```bash
-python src/build_cod_delta.py --limit 3000 --min-year 2004   # 冒烟(会真的走一遍 cif 抓取)
-python src/build_cod_delta.py                                # 全量,实测 151 s / 峰值 RSS 6.0 GB
-python src/build_cod_delta.py --no-cif                       # 只出计数和直方图,秒级
+python src/build_cod_delta.py --limit 3000 --min-year 2004   # smoke test (really does fetch cifs)
+python src/build_cod_delta.py                                # full run, measured 151 s / peak RSS 6.0 GB
+python src/build_cod_delta.py --no-cif                       # counts and histograms only, seconds
 ```
 
-产物:
+Outputs:
 
-| 文件 | 行数 | 大小 | 内容 |
+| file | rows | size | contents |
 |---|---|---|---|
-| `cod_delta.parquet` | 2,439 | 386 MB | post-2019 增量,26 列 + `cif_text` |
-| `cod_delta_meta_all.parquet` | 50,122 | 3.2 MB | 全部"clean 无 C 且不在 matdata",**不含 cif_text**,给 §8.3 数据源留出用 |
-| `cod_year_hist.csv` | 39 | 1.2 KB | 5 个筛选级 × year(1990–2026,外加 `-1`=<1990、`-2`=year 缺失两行) |
-| `cod_delta_stats.json` | — | — | 各级计数 / 耗时 / 峰值 RSS / 计划预期值,便于逐轮对账 |
+| `cod_delta.parquet` | 2,439 | 386 MB | the post-2019 delta, 26 columns + `cif_text` |
+| `cod_delta_meta_all.parquet` | 50,122 | 3.2 MB | everything "clean, carbon-free and not in matdata", **without cif_text**, for the §8.3 data-source hold-out |
+| `cod_year_hist.csv` | 39 | 1.2 KB | 5 filter levels × year (1990–2026, plus rows `-1` = <1990 and `-2` = year missing) |
+| `cod_delta_stats.json` | — | — | per-level counts / runtime / peak RSS / the plan's expected values, for reconciling round by round |
 
-### 30 GB 文件的内存策略(本脚本的头号风险)
+### Memory strategy for a 30 GB file (this script's chief risk)
 
-实测:压缩 30.4 GB 里 `cif_text` 一列独占 **30.3 GB(99.7%)**,其余 74 列合计仅 0.1 GB;
-解压后全表 **117 GB**,54 个 row group 大小极不均匀(rg0 = 0.08 GB,rg51 = 9.4 GB)。
+Measured: of the 30.4 GB compressed, the `cif_text` column alone is **30.3 GB (99.7%)** and the
+other 74 columns come to 0.1 GB; decompressed the whole table is **117 GB**, and the 54 row groups
+are wildly uneven (rg0 = 0.08 GB, rg51 = 9.4 GB).
 
-- **Stage 1(筛选)**:duckdb `SELECT * EXCLUDE (cif_text)`,整表拉进 pandas 只占 0.19 GB,**1.0 s**。
-- **Stage 2(取 CIF)**:pyarrow `iter_batches(batch_size=256, use_threads=False)`,
-  `ParquetFile(..., pre_buffer=False)`。**144 s,峰值 RSS 6.0 GB。**
-- **为什么 Stage 2 不用 duckdb**:duckdb 靠页级索引能把这步压到 ~12 s,但它对大字符串页做的是
-  不可 spill 的裸分配,`memory_limit` 给 8 GB 和 12 GB 都实测抛
-  `failed to allocate data of size 512.0 MiB`;给到能跑通的 10 GB 时峰值 RSS 已到 8.2 GB。
-  在一台非独占的 23 GB 机器上不值得。
-- **pyarrow 也要关 `pre_buffer`**:开着全量流式读峰值 RSS 8.3 GB,关掉后最大 row group 只到 4.2 GB。
-- `file` 列在 row group 间**不有序**(rg0 min/max = 1000000/7206032,rg53 = 1576311/7720906),
-  统计量剪枝无效;改为先只读 `file` 列(<10 MB)预扫一遍定位需要的 row group。
-  全量时命中 **17/54**(post-2019 条目集中在后段),冒烟时常常只需 1 个。
+- **Stage 1 (filtering)**: duckdb `SELECT * EXCLUDE (cif_text)` pulls the whole table into pandas
+  for 0.19 GB in **1.0 s**.
+- **Stage 2 (fetching CIFs)**: pyarrow `iter_batches(batch_size=256, use_threads=False)` with
+  `ParquetFile(..., pre_buffer=False)`. **144 s, peak RSS 6.0 GB.**
+- **Why stage 2 does not use duckdb**: page-level indexing would take this step down to about 12 s,
+  but duckdb makes non-spillable raw allocations for large string pages, and a `memory_limit` of
+  both 8 GB and 12 GB measured `failed to allocate data of size 512.0 MiB`; at the 10 GB that does
+  work, peak RSS is already 8.2 GB. Not worth it on a shared 23 GB machine.
+- **pyarrow also needs `pre_buffer` off**: streaming the full table with it on peaks at 8.3 GB RSS;
+  off, the largest row group only reaches 4.2 GB.
+- The `file` column is **not ordered** across row groups (rg0 min/max = 1000000/7206032,
+  rg53 = 1576311/7720906), so statistics-based pruning does nothing. Instead, pre-scan by reading
+  only the `file` column (<10 MB) to locate the row groups needed. A full run hits **17/54**
+  (post-2019 entries cluster in the later groups); a smoke test often needs just one.
 
-### 无碳判据:与计划正则的差异
+### The carbon-free criterion: how it differs from the plan's regex
 
-`formula` 实测格式是 `- C5 H17 Al N2 O8 P2 -`(前后各一个 `-`,元素按 Hill 序、空白分隔),
-533,486 行里 **532,993 行**符合,余下 **493 行是字面量 `?`**。
+The measured `formula` format is `- C5 H17 Al N2 O8 P2 -` (a `-` at each end, elements in Hill
+order, whitespace separated); **532,993** of 533,486 rows match it, and the remaining **493 rows are
+the literal `?`**.
 
-计划写的 `~formula.str.contains(" C[0-9 ]")` 在这个格式上其实**没有失效**——本脚本改用的
-token 化判据(trim 掉 `- ` → 按空白切 → 每个 token 取 `^[A-Z][a-z]?` 作元素符号 → 判是否 `== "C"`)
-与它**逐行一致**(74,029 == 74,029)。两者唯一的差异是 **`formula = "?"` 的 493 行**:
-正则把它们当"无碳"收进来,token 判据用额外的 `formula_ok` 标记把它们剔掉(成分未知 ≠ 无碳)。
-所以 `clean_noC` = 73,536(token)vs 74,029(计划正则),差 493 全部来自这一条,且**全在 2019 年以前**,
-对 post-2019 分母没有影响。
+The plan's `~formula.str.contains(" C[0-9 ]")` does **not** actually fail on this format — the
+tokenising criterion this script uses instead (trim the `- ` → split on whitespace → take
+`^[A-Z][a-z]?` from each token as the element symbol → test `== "C"`) agrees with it **row for row**
+(74,029 == 74,029). The only difference is the **493 rows with `formula = "?"`**: the regex admits
+them as "carbon-free", while the token criterion excludes them with an extra `formula_ok` flag
+(unknown composition ≠ carbon-free).
+So `clean_noC` = 73,536 (token) vs 74,029 (the plan's regex), and the difference of 493 comes
+entirely from this one point, and is **entirely pre-2019**, so it does not affect the post-2019
+denominator.
 
-token 判据更稳的地方在于:它不依赖 "C 后面必须紧跟数字或空格" 这个位置假设,
-formula 若哪天不带首尾 `-`、或元素与计数之间加了空格,正则会静默漏判而 token 判据不会。
+Where the token criterion is more robust: it does not depend on the positional assumption that "C
+must be followed by a digit or a space". If `formula` ever loses its leading and trailing `-`, or
+gains a space between element and count, the regex fails silently and the token criterion does not.
 
-### 实测 vs 计划预期(全量,2026-07-28)
+### Measured vs the plan's expectations (full run, 2026-07-28)
 
-| 筛选级 | 计划【实测】预期 | 本次实测 | 差 |
+| filter level | plan's [measured] expectation | measured here | Δ |
 |---|---|---|---|
-| 总行数 | 533,486 | 533,486 | 0 |
-| clean(`status` 空) | 526,854 | **533,284** | +6,430 |
-| clean 且无 C | 72,197 | **73,536**(计划正则口径 74,029) | +1,339 / +1,832 |
-| 且不在 matdata | 48,782 | **50,122** | +1,340 |
-| **且 post-2019** | **2,454** | **2,439** | **−15** |
+| total rows | 533,486 | 533,486 | 0 |
+| clean (`status` empty) | 526,854 | **533,284** | +6,430 |
+| clean and carbon-free | 72,197 | **73,536** (74,029 on the plan's regex) | +1,339 / +1,832 |
+| and not in matdata | 48,782 | **50,122** | +1,340 |
+| **and post-2019** | **2,454** | **2,439** | **−15** |
 
-**差异归因(未能完全复现,如实记录)**:`status` 只有四种取值,`''` 533,284 / `retracted` 151 /
-`warnings` 41 / `errors` 10,且**从不为 NULL**,所以按计划代码 `status.isna() | (status=="")`
-字面执行只能得到 533,284。穷举了 `duplicateof IS NULL` / `optimal IS NULL` / `onhold` /
-`year IS NOT NULL` / `formula<>'?'` / `flags LIKE '%has coordinates%'` 的全部 64 种组合,
-**没有任何一种同时给出 (526,854, 72,197)**,最接近的是 `nodup+noopt+hasyear` → (527,213, 72,065)。
-判断:计划里那两个数多半来自更早的快照或一次带额外过滤的临时统计,不是本快照可复现的口径。
-**关键数字 post-2019 = 2,439 与预期 2,454 只差 15(0.6%),且对判据变体极不敏感**
-(去掉 status 过滤仍是 2,439,再去掉 `duplicateof` 重复条目是 2,438),结论不受影响。
+**Attribution of the difference (not fully reproduced; recorded as it is)**: `status` takes only
+four values, `''` 533,284 / `retracted` 151 / `warnings` 41 / `errors` 10, and is **never NULL**, so
+executing the plan's `status.isna() | (status=="")` literally can only give 533,284. All 64
+combinations of `duplicateof IS NULL` / `optimal IS NULL` / `onhold` / `year IS NOT NULL` /
+`formula<>'?'` / `flags LIKE '%has coordinates%'` were enumerated and **none gives (526,854, 72,197)
+simultaneously**; the closest is `nodup+noopt+hasyear` → (527,213, 72,065).
+Judgement: those two numbers in the plan most likely came from an earlier snapshot or a one-off
+count with an extra filter, and are not reproducible against this snapshot.
+**The number that matters, post-2019 = 2,439, is only 15 (0.6%) off the expected 2,454 and is
+extremely insensitive to variations of the criterion** (dropping the status filter still gives
+2,439; dropping `duplicateof` duplicates as well gives 2,438), so the conclusion is unaffected.
 
-### year 直方图要点
+### Notes on the year histogram
 
-2019+ 的 5 个筛选级小计:all 98,448 → clean 98,442 → clean 无 C **3,864** → 不在 matdata **2,439**
-(其中 1,703 条 2019+ 已经在 matdata 里了)。逐年:
-2019 411 / 2020 466 / 2021 507 / 2022 316 / 2023 224 / 2024 186 / 2025 277 / 2026 52。
-COD 的无机(无 C)条目占比从 1990 年代的 ~50% 一路跌到 2020 年代的 ~3%,**COD 越来越是有机/MOF 库**,
-这是 2,439 这个分母上不去的根本原因,不是筛选写错了。
+Subtotals for 2019+ across the 5 filter levels: all 98,448 → clean 98,442 → clean carbon-free
+**3,864** → not in matdata **2,439** (1,703 of the 2019+ entries are already in matdata). Year by
+year: 2019 411 / 2020 466 / 2021 507 / 2022 316 / 2023 224 / 2024 186 / 2025 277 / 2026 52.
+The inorganic (carbon-free) share of COD falls from about 50% in the 1990s to about 3% in the 2020s
+— **COD is increasingly an organic/MOF database**, and that, not a mistake in the filter, is the
+fundamental reason the 2,439 denominator cannot be raised.
 
-组成级的可分析子集(无 H/D 且恰好一种阴离子,**尚未过无序过滤**):**1,072 条**,
-落在计划 §14【外推】的 700–1,100 区间上沿。阴离子构成 O 750 / S 112 / Se 84 / P 31 / F 27 /
-I 21 / Te 20 / Cl 19 / N 6 / Br 2。脚本把 `has_H` / `n_anion_kinds` 两列直接写进两个 parquet。
+The composition-level analysable subset (no H/D and exactly one anion, **not yet through the
+disorder filter**): **1,072 entries**, at the top of the 700–1,100 range given in plan §14
+[extrapolation]. Anion composition O 750 / S 112 / Se 84 / P 31 / F 27 / I 21 / Te 20 / Cl 19 /
+N 6 / Br 2. The script writes the `has_H` and `n_anion_kinds` columns straight into both parquets.
 
-### 其他实测细节
+### Other measured details
 
-- `year` 范围 1915–2026,空 619 条(0.12%);2026 年已有 3,059 条(快照收录至 2025-08-21 之后仍有回填)。
-- matdata 的 25,339 条 COD **全部**能在 `cod_full.parquet` 里按 `file` 对上,匹配率 100%。
-- 2,439 条 delta 的 `cif_text` **100% 含 `_atom_site_fract_x`**,可直接建结构;
-  中位长 33.8 KB、均值 356 KB、最大 47 MB(含 Fobs 表的条目)。
-- `--limit N` 是取**前 N 行**(不是抽样),而 COD 的 `file` 编号与年代相关,所以冒烟时计数无意义,
-  只用来验证代码路径;冒烟要触发 Stage 2 需要配合调低 `--min-year`。
+- `year` spans 1915–2026, empty for 619 entries (0.12%); 2026 already has 3,059 entries (the
+  snapshot goes to 2025-08-21 and backfilling continues after that).
+- **All** 25,339 COD entries in matdata match into `cod_full.parquet` by `file`: a 100% match rate.
+- The `cif_text` of all 2,439 delta entries **contains `_atom_site_fract_x` 100% of the time**, so
+  structures can be built directly; median length 33.8 KB, mean 356 KB, max 47 MB (entries with an
+  Fobs table).
+- `--limit N` takes the **first N rows** (it is not a sample), and COD's `file` numbering correlates
+  with date, so counts from a smoke test are meaningless and only exercise the code path. To reach
+  stage 2 in a smoke test, lower `--min-year` as well.
 
 ---
 
-## build_features.py —— MPU-1 特征库(site / pair / struct)
+## build_features.py — the MPU-1 feature store (site / pair / struct)
 
-**环境:`python`**(不是本文件开头那个 csagent 环境;
-newpauling 环境才有 pymatgen + spglib 2.7.0 + pyfixest)。
+**Environment: `python`** (not the csagent environment named at the top of this file; only the
+newpauling environment has pymatgen + spglib 2.7.0 + pyfixest).
 
 ```bash
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 
-python src/build_features.py --extract-icsd-ox --force   # 0. 一次性,11 s
-python src/build_features.py --limit 400 --workers 20 --chunk 10 --force   # 1. 冒烟,1.4 min
+python src/build_features.py --extract-icsd-ox --force   # 0. one-off, 11 s
+python src/build_features.py --limit 400 --workers 20 --chunk 10 --force   # 1. smoke test, 1.4 min
 nohup python src/build_features.py --workers 20 --chunk 20 --force \
-      > $PRIS_FEATURES/build_features.log 2>&1 &   # 2. 全量
-tail -f $PRIS_FEATURES/build_features.log          # 查进度
+      > $PRIS_FEATURES/build_features.log 2>&1 &   # 2. full run
+tail -f $PRIS_FEATURES/build_features.log          # watch progress
 ```
 
-输入:`provenance.parquet` 的 `in_analysis_set==True` 共 38,307 条(ICSD 27,408 / COD 10,899);
-CIF 按 `blob_offset`/`blob_length` 从 `structures.blob` seek+read 再 **zlib** 解压(不是 zstd)。
+Input: the 38,307 rows of `provenance.parquet` with `in_analysis_set==True` (ICSD 27,408 /
+COD 10,899); CIFs are seek+read out of `structures.blob` by `blob_offset`/`blob_length` and then
+decompressed with **zlib** (not zstd).
 
-### 氧化态前置问题:实测结论(本节是本脚本最重要的产出)
+### The oxidation-state prerequisite: measured conclusions (the most important output of this script)
 
-PREREG §5 冻结"只允许 `cif`(ICSD 原生)与 `guess`(纯组成推断)两级,BVAnalyzer 派生整批排除"。
-`icsd_meta.parquet` 里没有氧化态,所以先查了原始 CIF。四条实测:
+PREREG §5 freezes "only two levels are allowed, `cif` (native to ICSD) and `guess` (pure
+compositional inference); BVAnalyzer-derived states are excluded wholesale".
+`icsd_meta.parquet` carries no oxidation states, so the raw CIFs were checked first. Four
+measurements:
 
-| 问题 | 实测 | 口径 |
+| question | measured | scope |
 |---|---|---|
-| ICSD 原始 CIF 有 `_atom_type_oxidation_number` 吗 | **27,408 / 27,408 = 100.00%** | 分析集全部 ICSD 条目,CIF 缺失 0、无氧化态 loop 0 |
-| blob 里的 CIF 保留氧化态装饰吗(ICSD) | **27,408 / 27,408 = 100.00%** | 同上 |
-| blob 装饰 vs 原始 CIF 一致吗 | **847,608 / 847,608 = 100.000%** | 按 `_atom_site_label` 对齐的位点级比对,容差 0.005 |
-| blob 里的 CIF 保留氧化态装饰吗(**COD**) | **192 / 10,899 = 1.76%** | — |
+| do the raw ICSD CIFs have `_atom_type_oxidation_number` | **27,408 / 27,408 = 100.00%** | all ICSD entries in the analysis set; 0 missing CIFs, 0 missing oxidation loops |
+| do the CIFs in the blob keep the oxidation-state decoration (ICSD) | **27,408 / 27,408 = 100.00%** | as above |
+| does the blob decoration agree with the raw CIF | **847,608 / 847,608 = 100.000%** | site-level comparison aligned by `_atom_site_label`, tolerance 0.005 |
+| do the CIFs in the blob keep the decoration (**COD**) | **192 / 10,899 = 1.76%** | — |
 
-结论:
+Conclusions:
 
-1. **`cif` 这一级存在,但只覆盖 ICSD。** PREREG §5 不需要推翻,但需要一处**澄清**:
-   `cif` 实际只到分析集的 **27,408/38,307 = 71.5%**,COD 的 28.5% 拿不到原生氧化态。
-   建议写进 PREREG 修订记录(只追加,不改写)。
-2. **直接用 blob 的装饰当 `ox_source='cif'`,不回原始 CIF。** 位点级 100.000% 一致,
-   且位点级混合价(Fe2+/Fe3+、Bi3+/Bi5+、Se⁻¹/Se⁻²、Au+/Au3+ 等)**逐例保留、未被平均**,
-   分数价(如 `Ru4.33+ 4.333`)也带全精度。回原始 CIF 只多一层 label 对齐风险,零收益。
-   `icsd_ox.parquet`(239,756 行)保留为这条结论的证据与审计入口,不是主链路输入。
-3. **COD 的 1.76% 装饰不可采信为 `cif`。** 本地没有 COD 原始 CIF
-   (`matdata/data/raw/acquired/` 下无 cod 目录,只有 tcod),来源无法核验——
-   可能是 COD 沉积自带的,也可能是上游 matdata 管线用 BVAnalyzer 补的。
-   PREREG §5 明令 BVAnalyzer 派生整批排除,**无法证伪即不得使用**。
-   → COD 全部走 `guess`,同时留 `blob_ox_present` 一等列供事后审计。
-4. **全程不调用 BVAnalyzer**(PREREG §5 冻结项)。定不出价的结构 `ox_source='none'`,
-   位点仍入库、`ox_state` 留 NaN,**不删**(§6.2 tier 4 口径)。
+1. **The `cif` level exists, but it only covers ICSD.** PREREG §5 does not need overturning, but it
+   does need a **clarification**: `cif` actually reaches only **27,408/38,307 = 71.5%** of the
+   analysis set, and the 28.5% from COD has no native oxidation states.
+   This should go into the PREREG revision log (append only, no rewriting).
+2. **Use the blob decoration directly as `ox_source='cif'` rather than going back to the raw CIF.**
+   Site-level agreement is 100.000%, and site-level mixed valence (Fe2+/Fe3+, Bi3+/Bi5+, Se⁻¹/Se⁻²,
+   Au+/Au3+ and so on) is **preserved case by case rather than averaged**, with fractional valences
+   (e.g. `Ru4.33+ 4.333`) kept at full precision. Going back to the raw CIF only adds a layer of
+   label-alignment risk for no gain.
+   `icsd_ox.parquet` (239,756 rows) is kept as the evidence for and audit entry point to this
+   conclusion, not as an input to the main path.
+3. **COD's 1.76% decoration cannot be trusted as `cif`.** There are no raw COD CIFs locally (no cod
+   directory under `matdata/data/raw/acquired/`, only tcod), so the provenance cannot be verified —
+   it may have come with the COD deposition, or it may have been filled in upstream by the matdata
+   pipeline using BVAnalyzer. PREREG §5 excludes BVAnalyzer-derived states outright, and **what
+   cannot be falsified may not be used**.
+   → All of COD goes through `guess`, with `blob_ox_present` kept as a first-class column for later
+   audit.
+4. **BVAnalyzer is never called** (a PREREG §5 frozen item). Structures whose valences cannot be
+   determined get `ox_source='none'`; their sites still enter the store with `ox_state` left NaN and
+   are **not dropped** (the §6.2 tier-4 convention).
 
-`guess` 用 `Composition.oxi_state_guesses(max_sites=-1)`(先约化到最简式再枚举,提速)。
-返回多解时取 ICSD 频率打分最高的一解,并记 `n_guess_sol` / `guess_unique`
-——§6.2 要求的"唯一解"口径可由下游用 `guess_unique==True` 还原,不必重跑。
+`guess` uses `Composition.oxi_state_guesses(max_sites=-1)` (reduce to the simplest formula first,
+then enumerate, which is faster). When several solutions come back, the one scoring highest on ICSD
+frequency is taken, and `n_guess_sol` / `guess_unique` are recorded — the "unique solution"
+convention that §6.2 asks for can be recovered downstream with `guess_unique==True` without
+rerunning.
 
-### 三张主表
+### The three main tables
 
-| 文件 | 粒度 | 说明 |
+| file | granularity | note |
 |---|---|---|
-| `site.parquet` | 每个**阳离子**位点一行 | 三算法 CN 并列(宽表) |
-| `pair.parquet` | 每对相连多面体一行 | 仅 ChemEnv 路线 |
-| `struct.parquet` | 每个结构一行 | 汇总量 + `status` + `wall_ms` |
-| `failure.parquet` | 每个失败结构一行 | `err_type` / `err` / 截断 traceback |
+| `site.parquet` | one row per **cation** site | three algorithms' CN side by side (wide table) |
+| `pair.parquet` | one row per connected polyhedron pair | ChemEnv route only |
+| `struct.parquet` | one row per structure | aggregates + `status` + `wall_ms` |
+| `failure.parquet` | one row per failed structure | `err_type` / `err` / truncated traceback |
 
-**关于 `nn_algo` 这一列**:`pair.parquet` 里它真实取值(目前恒为 `chemenv`,§9.1 指定用
-`sc.environment_subgraph()` 的 `len(d['ligands'])`,CrystalNN 路线以后要加就再追加一批行)。
-`site.parquet` 是**宽表**,`nn_algo` 恒为 `'multi'`,分层请用 `cn_chemenv` / `cn_crystalnn` /
-`cn_brunner` 与 `ok_chemenv` / `ok_crystalnn` / `ok_brunner` 三对列。
-选宽表不选长表的理由:G6(键定义鲁棒性)要的是**同一位点上三个算法的一致性**,
-宽表可以直接 `df.cn_chemenv == df.cn_crystalnn`,长表还得自己 pivot 回去。
+**About the `nn_algo` column**: in `pair.parquet` it takes real values (currently always `chemenv`;
+§9.1 specifies `len(d['ligands'])` from `sc.environment_subgraph()`, and a CrystalNN route would be
+appended as extra rows later). `site.parquet` is a **wide** table where `nn_algo` is always
+`'multi'`; to stratify, use the three pairs of columns `cn_chemenv` / `cn_crystalnn` / `cn_brunner`
+and `ok_chemenv` / `ok_crystalnn` / `ok_brunner`.
+Why wide and not long: G6 (robustness of the bond definition) needs **agreement between three
+algorithms at the same site**, and a wide table lets you write `df.cn_chemenv == df.cn_crystalnn`
+directly, where a long table would have to be pivoted back.
 
-`ox_source` 在三张表里都是一等列。
+`ox_source` is a first-class column in all three tables.
 
-### 算法参数(每个都注明来源)
+### Algorithm parameters (each with its source)
 
-- ChemEnv:`MultiWeightsChemenvStrategy.stats_article_weights_parameters()`,
-  `maximum_distance_factor=1.41`,`only_cations=True` 且**显式传 `valences=`**(§6.3 **坑 A**:
-  不传 valences 时 `only_cations=True` 返回垃圾)。`ox_source='none'` 的结构没有 valences 可传,
-  退化为 `only_cations=False`(全位点跑,更慢),事后按"非该结构阴离子元素"筛阳离子位点。
-- CrystalNN:`weighted_cn=False`,`x_diff_weight=3.0`(§6.3 **坑 B**:pymatgen 默认是 3.0 不是 1.5)。
-- BrunnerNN_relative:默认参数。
-- BVS:Brown-Altermatt `Σ exp((R0−R)/b)`,IUCr `bvparm2020.cif`(已固化到
-  `<repo>/data/`)。**§6.3 坑 C:loop 头行有前导空格,解析前必须
-  `strip()`**,否则整表解析为空、静默回退到 Brown 元素级通用式,GII 从 0.168 虚高到 0.479。
-  脚本里加了哨兵:解析出 <1000 条直接 `RuntimeError`,不静默降级。
-  截断固定 **3.5 Å**,与 CN 解耦(§6.3:用 CrystalNN 的离散邻居集会系统性截断长弱键)。
-  只累加异号(阳-阴)对。GII 只对阳离子位点求和(Brown 原始定义)。
-- `bvs_dev` 用 `n_bvs_bonds > 0` 判定有效,**不是** `if bvs`(§6.5-1 falsy bug:
-  BVS 恰为 0 的位点会被判 nan,恰好掩盖最严重的违例)。
-- 对称性:`SpacegroupAnalyzer` 两档 `symprec=0.1` / `0.01`,各给 `orbit_id` / `wyckoff` / `mult`。
-- `I_G = −Σ pᵢ log₂ pᵢ`,`pᵢ = mᵢ/N` 按 Wyckoff 轨道(Krivovichev 结构复杂度信息熵,
-  §8.1 用作"复杂结构位点多 → 机械性更易违规"这个混杂的控制变量),两档 symprec 各一份。
+- ChemEnv: `MultiWeightsChemenvStrategy.stats_article_weights_parameters()`,
+  `maximum_distance_factor=1.41`, `only_cations=True` and **`valences=` passed explicitly**
+  (§6.3 **pitfall A**: without valences, `only_cations=True` returns garbage). Structures with
+  `ox_source='none'` have no valences to pass and fall back to `only_cations=False` (running all
+  sites, which is slower), after which cation sites are selected by "not the anion element of that
+  structure".
+- CrystalNN: `weighted_cn=False`, `x_diff_weight=3.0` (§6.3 **pitfall B**: the pymatgen default is
+  3.0, not 1.5).
+- BrunnerNN_relative: default parameters.
+- BVS: Brown–Altermatt `Σ exp((R0−R)/b)`, IUCr `bvparm2020.cif` (vendored into `<repo>/data/`).
+  **§6.3 pitfall C: the loop header line has leading whitespace and must be `strip()`ed before
+  parsing**, otherwise the whole table parses as empty and it silently falls back to Brown's
+  element-level generic formula, inflating GII from 0.168 to 0.479.
+  A sentinel was added to the script: parsing fewer than 1000 entries raises `RuntimeError` rather
+  than degrading silently.
+  The cutoff is fixed at **3.5 Å**, decoupled from CN (§6.3: using CrystalNN's discrete neighbour
+  set systematically truncates long weak bonds).
+  Only opposite-sign (cation–anion) pairs are summed. GII is summed over cation sites only (Brown's
+  original definition).
+- `bvs_dev` uses `n_bvs_bonds > 0` to decide validity, **not** `if bvs` (the §6.5-1 falsy bug: a site
+  whose BVS is exactly 0 would be judged nan, which happens to mask the most serious violations).
+- Symmetry: `SpacegroupAnalyzer` at two levels, `symprec=0.1` and `0.01`, each giving `orbit_id` /
+  `wyckoff` / `mult`.
+- `I_G = −Σ pᵢ log₂ pᵢ` with `pᵢ = mᵢ/N` over Wyckoff orbits (Krivovichev's structural-complexity
+  information entropy, used in §8.1 as the control for the confounder "complex structures have more
+  sites, so they violate mechanically more easily"), one copy per symprec level.
 
-### 工程
+### Engineering
 
-- `ProcessPoolExecutor`,20 进程(§6.5-4:**不是 28**,每进程 300–500 MB,ChemEnv 高配位结构飙到 1.5 GB)。
-- 每个 worker 自己开 blob 句柄读 CIF、自己写 parquet 分片,主进程只收计数
-  (§6.5-2:pilot 的 `p.map` 把全部 dict 收回主进程再 `pd.DataFrame`,差几个数量级)。
-- 分片合并用 `pq.ParquetWriter` 逐片流式写,不把全部行读进内存。
-- **幂等**:已存在 `struct_<k>.parquet` 的分片直接跳过,断了重跑即续;`--force` 清空分片目录重来。
-- **单结构超时 300 s**(`signal.setitimer`)。§6.5-3 原定 60 s,实测 ChemEnv 在 >200 原子胞上
-  常态超 60 s,收紧到 60 s 会把大胞系统性剔除,那是 §6.4 式的选择偏倚。分析集 `n_atoms` 最大 300、
-  >200 原子的只有 290 条,300 s 足够。超时/异常写 `failure.parquet` 并继续,整批不崩。
-- `--limit N` 冒烟走**分层抽样**(按 ICSD/COD 比例),产物带 `_smoke` 后缀,不污染全量表。
+- `ProcessPoolExecutor` with 20 processes (§6.5-4: **not 28** — each process takes 300–500 MB, and
+  ChemEnv on high-coordination structures spikes to 1.5 GB).
+- Each worker opens its own blob handle to read CIFs and writes its own parquet shard; the main
+  process only collects counts (§6.5-2: the pilot's `p.map` returned every dict to the main process
+  and then called `pd.DataFrame`, which is orders of magnitude worse).
+- Shards are merged by streaming them one at a time through `pq.ParquetWriter`, never reading all
+  rows into memory.
+- **Idempotent**: shards for which `struct_<k>.parquet` already exists are skipped, so an
+  interrupted run resumes on restart; `--force` empties the shard directory and starts over.
+- **300 s timeout per structure** (`signal.setitimer`). §6.5-3 originally said 60 s, but ChemEnv
+  routinely exceeds 60 s on cells above 200 atoms, and tightening to 60 s would systematically drop
+  large cells — the kind of selection bias §6.4 is about. The analysis set's maximum `n_atoms` is
+  300 and only 290 entries exceed 200 atoms, so 300 s is enough. Timeouts and exceptions are written
+  to `failure.parquet` and the run continues; the batch does not die.
+- `--limit N` smoke tests use a **stratified sample** (in the ICSD/COD proportion) and write outputs
+  with a `_smoke` suffix, so they do not contaminate the full tables.
 
-### 全量实测(2026-07-28,20 进程,机器非独占)
+### Full run measured (2026-07-28, 20 processes, shared machine)
 
-**98.5 min 墙钟 / 32.4 核-时**,38,307 条全跑完。产物:
+**98.5 min wall clock / 32.4 core-hours** for all 38,307 entries. Outputs:
 
-| 表 | 行数 | 大小 |
+| table | rows | size |
 |---|---|---|
 | `site.parquet` | **458,940** | 20.0 MB |
 | `pair.parquet` | **338,135** | 7.8 MB |
 | `struct.parquet` | **38,307** | 16.7 MB |
 | `failure.parquet` | **62** | 0.2 MB |
-| `icsd_ox.parquet`(审计用) | 239,756 | 0.7 MB |
+| `icsd_ox.parquet` (for audit) | 239,756 | 0.7 MB |
 
-分片 `_shards/`(110 MB)保留,断点续跑靠它;确认无误后可删。
+The `_shards/` directory (110 MB) is kept for resuming; it can be deleted once the results check out.
 
-**与 §6.6 预期的对比**
+**Against the §6.6 expectations**
 
-| 项 | §6.6 规划 | 实测 | 说明 |
+| item | §6.6 plan | measured | note |
 |---|---|---|---|
-| 单结构耗时 | 保守 2.0 s | **均值 3.05 s / 中位 1.19 s** | 均值被长尾拉高:P95 11.8 s、P99 27.8 s、max 320 s(1 条撞 300 s 超时上限) |
-| 20 进程墙钟 | 2.3 h | **1.64 h** | 比规划**快 29%** |
-| 核-时 | 45 | **32.4** | 比规划省 28% |
-| 产物体积 | 1.0 GB | **45 MB** | 规划把 bonds 表算进去了,本轮三张表不含 bond 级 |
+| time per structure | 2.0 s, conservatively | **mean 3.05 s / median 1.19 s** | the mean is pulled up by the tail: P95 11.8 s, P99 27.8 s, max 320 s (one entry hit the 300 s cap) |
+| wall clock on 20 processes | 2.3 h | **1.64 h** | **29% faster** than planned |
+| core-hours | 45 | **32.4** | 28% below plan |
+| output size | 1.0 GB | **45 MB** | the plan counted a bonds table; these three tables have nothing at bond level |
 
-吞吐从起步的 9.5 struct/s 衰减到收尾的 6.5 struct/s——分片按 source_id 顺序切,
-大胞结构在 ICSD 编号后段更密集,不是内存或竞争问题(全程 available ≥ 18 GB)。
+Throughput decays from 9.5 struct/s at the start to 6.5 struct/s at the end — shards are cut in
+`source_id` order and large cells are denser in the later part of the ICSD numbering. It is not
+memory or contention (available memory stayed ≥ 18 GB throughout).
 
-**失败率**
+**Failure rates**
 
-- 结构级整体失败 **62 / 38,307 = 0.162%**(ICSD 34 / COD 28),**全部**是同一个原因:
-  `ValueError: Invalid CIF file with no structures!` —— blob 里那 62 条 CIF 本身坏了,
-  不是算法失败。已全部记入 `failure.parquet`,批次未中断。
-- 算法级(在 38,245 条成功结构上):**ChemEnv 0.060% / CrystalNN 0.000% / BrunnerNN 0.000%**。
-  §6.3 坑 A 说"不传 valences 时 ~17% IndexError 硬失败",显式传入后实测 **0.06%**,坑 A 的修复确认有效。
-- 位点级 CN 缺失:`cn_chemenv` **7.45%** / `cn_crystalnn` 0.02% / `cn_brunner` 0.00%。
-  ChemEnv 那 7.45% 是它在 `max_dist_factor=1.41` 内判不出环境(**不是异常**),
-  三个 `ox_source` 层上分别是 7.61% / 7.75% / 4.11%,**与氧化态来源基本无关**,可视为随机缺失。
-- CE 符号分配率 **92.56%**(424,772 / 458,940 阳离子位点)。
+- Structure-level failures overall: **62 / 38,307 = 0.162%** (ICSD 34 / COD 28), **all** from the
+  same cause: `ValueError: Invalid CIF file with no structures!` — those 62 CIFs in the blob are
+  themselves corrupt, and this is not an algorithm failure. All are recorded in `failure.parquet`
+  and the batch was not interrupted.
+- Algorithm-level (over the 38,245 successful structures): **ChemEnv 0.060% / CrystalNN 0.000% /
+  BrunnerNN 0.000%**. §6.3 pitfall A says "about 17% hard IndexError failures when valences are not
+  passed"; passing them explicitly measures **0.06%**, confirming the fix works.
+- Site-level missing CN: `cn_chemenv` **7.45%** / `cn_crystalnn` 0.02% / `cn_brunner` 0.00%.
+  ChemEnv's 7.45% is it failing to identify an environment within `max_dist_factor=1.41` (**not an
+  exception**); across the three `ox_source` levels it is 7.61% / 7.75% / 4.11%, so it is **largely
+  independent of oxidation-state provenance** and can be treated as missing at random.
+- CE symbol assignment rate **92.56%** (424,772 / 458,940 cation sites).
 
-**氧化态覆盖(主统计的分母)**
+**Oxidation-state coverage (the denominator of the main statistics)**
 
-| | cif | guess | none | 合计 |
+| | cif | guess | none | total |
 |---|---|---|---|---|
 | ICSD | 27,374 | 0 | 0 | 27,374 |
 | COD | 0 | 9,382 | 1,489 | 10,871 |
-| 合计 | **27,374 (71.6%)** | **9,382 (24.5%)** | 1,489 (3.9%) | 38,245 |
+| total | **27,374 (71.6%)** | **9,382 (24.5%)** | 1,489 (3.9%) | 38,245 |
 
-`cif+guess` 覆盖 **96.11%**,高于 §6.2 预期的"tier0+tier1 在实验氧化物上约 85%"。
-`guess` 里唯一解占 **63.8%**(5,985 条),恰好落在 §6.2 说的"覆盖率约 63%"上——
-但那 63% 在 §6.2 是指 `guess` 的**总**覆盖率,实测是 `guess` 内部的**唯一解**比例,
-两者数值巧合、口径不同,**不要当成互相验证**。
-混合价结构 1,087 条(2.84%),分数价 3,153 条——§6.2 担心的"FIZ 把混合价整数化导致漏报"
-在本库里可用 `mixed_valence` / `frac_ox` 两列直接分层。
+`cif+guess` covers **96.11%**, above the §6.2 expectation of "tier0+tier1 around 85% on experimental
+oxides".
+Unique solutions make up **63.8%** of `guess` (5,985 entries), which lands exactly on the "coverage
+about 63%" quoted in §6.2 — but that 63% in §6.2 refers to the **total** coverage of `guess`,
+whereas what is measured here is the **unique-solution** share within `guess`. The numbers coincide
+but the definitions differ; **do not read this as mutual confirmation.**
+There are 1,087 mixed-valence structures (2.84%) and 3,153 with fractional valences — the §6.2
+concern that "FIZ integerises mixed valence and causes under-reporting" can be stratified directly
+in this store with the `mixed_valence` and `frac_ox` columns.
 
-**三项交叉验证(§6.6 推全量前的闸门)**
+**Three cross-validations (the §6.6 gate before going to a full run)**
 
-| 指标 | 本轮实测 | 对照 | 判定 |
+| metric | measured here | reference | verdict |
 |---|---|---|---|
-| 共角/共边/共面(**氧化物 CN≤8**,n=154,435 对) | **73.7 / 25.2 / 1.1 %** | George 2020 (ChemEnv) 73.3 / 25.0 / 1.6 | **几乎完全吻合** |
-| 同上,限 `ox_source='cif'`(n=112,378) | 73.7 / 25.1 / 1.2 % | 同上 | 对氧化态来源不敏感 |
-| 全分析集 CN≤8(n=316,698) | 72.7 / 25.8 / 1.6 % | — | 全阴离子集首次给出 |
-| 全分析集 全 CN(n=338,135) | 70.6 / 25.5 / 3.9 % | — | 高配位把共面推高 |
-| GII 中位(氧化物 + `ox_source='cif'`) | **0.229**(RMS)/ 0.194(mean\|dev\|) | §6.3 pilot 报 0.168 | **不吻合,见下** |
+| corner/edge/face sharing (**oxides, CN≤8**, n=154,435 pairs) | **73.7 / 25.2 / 1.1 %** | George 2020 (ChemEnv) 73.3 / 25.0 / 1.6 | **almost exact agreement** |
+| same, restricted to `ox_source='cif'` (n=112,378) | 73.7 / 25.1 / 1.2 % | as above | insensitive to oxidation-state provenance |
+| full analysis set, CN≤8 (n=316,698) | 72.7 / 25.8 / 1.6 % | — | first figures for the all-anion set |
+| full analysis set, all CN (n=338,135) | 70.6 / 25.5 / 3.9 % | — | high coordination pushes face sharing up |
+| median GII (oxides + `ox_source='cif'`) | **0.229** (RMS) / 0.194 (mean\|dev\|) | the §6.3 pilot reports 0.168 | **does not agree, see below** |
 
-**GII 对不上 0.168,原因已查清一半,如实记录,不改预期:**
+**GII does not match 0.168; half the reason is understood, recorded as it is, and the expectation is not adjusted:**
 
-1. 阴离子是主因。逐阴离子中位:O 0.223 / F 0.191 / Cl 0.230 / I 0.262 / S 0.268 /
-   Se 0.315 / Br 0.333 / N 0.384 / Te 0.475 / P 0.481。
-   **IUCr 键价参数对氧化物之外的体系明显更差**,全分析集 0.246 就是被 Te/P/N/Se 拉上去的。
-   §6.3 的 0.168 是**氧化物口径**的数,拿它当全阴离子集的预期本身就是错配。
-2. 氧化态来源次之:`cif` 层 GII 中位 0.203,`guess` 层 0.363(400 条冒烟样本上的数)。
-3. 剩下的 0.229 vs 0.168 差距**没有查清**。已排除两个假设:
-   (a) 不是 §6.5-1 的 falsy bug —— `exp((R0−d)/b) > 0` 恒成立,BVS 实测**没有一个位点等于 0**
-       (`n_bvs_bonds==0` 的 35,702 个位点走 NaN 分支,占 7.78%),那个 bug 在本口径下无从触发;
-   (b) 不是 RMS/MAD 定义之差 —— 换成 `mean|dev|` 只降到 0.194,仍高于 0.168。
-   最可能的残余原因是**样本population 不同**:pilot 的 `exp_oxide` 是"含 O 的全部实验结构"
-   (走 sqlite `dataset='experimental'`,含多阴离子体系),本轮是分析集(单一阴离子、无 H 无 C);
-   且 pilot 的氧化态走 `cif → bva → guess` 级联,本轮禁用了 bva。**待 P3 全实验库跑完再定论。**
+1. The anion is the main factor. Median by anion: O 0.223 / F 0.191 / Cl 0.230 / I 0.262 / S 0.268 /
+   Se 0.315 / Br 0.333 / N 0.384 / Te 0.475 / P 0.481.
+   **IUCr bond-valence parameters are markedly worse outside the oxides**, and the 0.246 of the full
+   analysis set is pulled up by Te/P/N/Se.
+   The 0.168 of §6.3 is an **oxide-scope** number; using it as the expectation for the all-anion set
+   is itself a mismatch.
+2. Oxidation-state provenance comes second: median GII is 0.203 at the `cif` level and 0.363 at the
+   `guess` level (from a 400-entry smoke sample).
+3. The remaining gap of 0.229 vs 0.168 is **not explained**. Two hypotheses are ruled out:
+   (a) it is not the §6.5-1 falsy bug — `exp((R0−d)/b) > 0` always holds and **not a single site
+       measures a BVS of exactly 0** (the 35,702 sites with `n_bvs_bonds==0`, 7.78%, take the NaN
+       branch), so that bug cannot fire under this definition;
+   (b) it is not the RMS/MAD definition — switching to `mean|dev|` only brings it to 0.194, still
+       above 0.168.
+   The most likely remaining cause is a **different sample population**: the pilot's `exp_oxide` is
+   "all experimental structures containing O" (via sqlite `dataset='experimental'`, including
+   multi-anion systems), whereas this round uses the analysis set (single anion, no H, no C); and
+   the pilot's oxidation states cascade `cif → bva → guess`, while bva is disabled here.
+   **Settle it once P3 has run over the full experimental store.**
 
-**三算法一致性(G6 的输入)**:位点级,三者都有值的 424,681 个位点上——
-ChemEnv==CrystalNN **82.1%**、ChemEnv==Brunner 72.9%、CrystalNN==Brunner 79.5%、
-**三者全同 70.5%**。§6.3 说"pilot 已证在 CN≤8 下连接性统计与 ChemEnv 差 <1.5 pt",
-那是**聚合统计**的差;**位点级**一致率只有 82%,两者不矛盾但含义完全不同,
-G6 要用的是后者,**不要拿 <1.5 pt 当 G6 已经过关的依据**。
+**Three-algorithm agreement (the input to G6)**: at site level, over the 424,681 sites where all
+three have a value — ChemEnv==CrystalNN **82.1%**, ChemEnv==Brunner 72.9%, CrystalNN==Brunner 79.5%,
+**all three equal 70.5%**. §6.3 says "the pilot already showed connectivity statistics differ from
+ChemEnv by <1.5 pt at CN≤8", but that is a difference in **aggregate statistics**; the **site-level**
+agreement is only 82%. The two are not contradictory but they mean entirely different things, G6
+needs the latter, and **the <1.5 pt figure must not be treated as evidence that G6 has passed**.
 
-**其他**:`I_G` 中位 2.503(symprec 0.01),Wyckoff 轨道数中位 6;
-两档 symprec 给出不同空间群的结构占 **1.73%**;
-规则 5 的 `max_distinct_ce` 分布 1→23,371 / 2→7,815 / 0→4,264(无 CE) / 3→1,720 / 4→658 / 5→224。
+**Other**: median `I_G` 2.503 (symprec 0.01) and median Wyckoff orbit count 6; **1.73%** of
+structures get a different space group at the two symprec levels; and rule 5's `max_distinct_ce`
+distributes as 1→23,371 / 2→7,815 / 0→4,264 (no CE) / 3→1,720 / 4→658 / 5→224.
 
-### 已知缺口(下一轮补)
+### Known gaps (to be filled next round)
 
-1. **没有 bond 级表(cation–anion)。** 泡林第二定律要的是**阴离子位点**上的 Σs = Σ(z/CN),
-   本轮三张表只到阳离子位点与多面体连接对,**算不了 §6.6 那个 18.3% 的交叉验证项**。
-   `struct.parquet` 里的 `gii` 是内部用 3.5 Å 邻居即时算的,没有落盘 bond 明细。
-2. `pair.parquet` 只有 ChemEnv 路线。§9.1 要的 CrystalNN 版(标记商图配体集合交集)未实现。
-3. `splits.parquet` 尚不存在,`proto_id` / `w_debias` / `split_id` 三列未进表,
-   PREREG §3.1 要的 `ρ` / `deff` 还没法测。
-4. 62 条坏 CIF 未回原始 ICSD CIF 重救(ICSD 那 34 条原则上可救)。
-
----
-
-## `measure_deff.py` —— PREREG §3.1 的 ρ / deff / N_eff 实测
-
-产物:`features/deff.json`(全部数字)、`features/deff_prereg_block.md`(可直接追加进 PREREG 修订记录)。
-跑法:`python src/measure_deff.py --boot 500 --force`;全量 71 s 单核,`--limit N` 冒烟。
-sha256[:16] = `fca0821bf32e0413`(**本仓库目前没有 .git,PREREG 与计划 §12 要求的 git tag 无法执行 —— 需要
-先 `git init` 再打 tag,在那之前 sha256 是唯一的版本锚点**)。
-
-三个必须论证的选择,详见脚本头部 §A/§B/§C:
-
-- **§A 对哪个变量算 ρ**:对残差指示变量,不对连续特征。deff 只通过 `N_eff·H(残差|S)` 进入 `L_total`。
-  用三个压缩靶各一个文献先验残差(众数查表残差 / 泡林 3 违例 / BVS 超窗),不含任何搜索产物,
-  满足"看到候选规则之前测完"。实证:连续 `bvs_dev` 的 ICC 在四套原型方案下取 0.001–0.717,不可用。
-- **§B 原型缺失**:`structure_type` 在分析集上只命中 **54.77%**(不是 78.13%,那是全 icsd_meta 口径),
-  COD 全缺。主口径 hybrid = 命中者用 `structure_type`,缺失者用代理 `spg_s01|匿名约化式`;
-  另报 strict / proxy_all / typed_only 三套。**这个选择比 bootstrap 抽样误差更能挪动 N\***(3 → 13)。
-- **§C m 的取法**:主报 Kish 加权均值 `Σm²/Σm`(不等簇的正确取法),算术均值并列。
-  两者差 4–6 倍(15.7 vs 73.3),计划 §4.5.1 表里的 m=25 是算术口径。
-
-主结果(hybrid,轨道加权,N_data = 138,668):
-ρ = 0.204 / 0.608 / 0.204(T_CE / T_CONN / T_BV),deff = 15.7 / 44.3 / 16.7,N_eff = 7,658 / 2,897 / 7,617。
-阴性对照 ρ = −0.0005、deff = 1.0(估计量无偏)。
-
-**判定**:触发 §3.1 备用条款,N 报区间不报 argmin(理由三条见 `deff_prereg_block.md`)。
-λ=1 主口径登记区间:T_CE / T_BV **N ∈ [5, 11]**、T_CONN **N ∈ [3, 5]**。
-
-已知局限:
-1. Zipf 映射是反标定的 —— 计划 §4.5.3 只给了 argmin 结果、没给准确率衰减律,五个锚点在单一
-   (theta, p0) 族里无法同时拟合(log-RMSE 0.337)。第二套独立映射(幂律)在同一 N_eff 上给 15 而非 10。
-   **N 的区间对模型设定的敏感度大于对抽样误差的敏感度。**
-2. `splits.parquet` 仍不存在,ρ 在全分析集上测,未按 discovery/calibration/lockbox 分开。
-   §8.1 的双向聚类必须复用本文件的 `proto_hybrid` 定义,两处不许各定各的。
-3. T_CONN 只有 ChemEnv 路线(pair 表限制);阴离子位点 Σs 仍缺,泡林 2 的阴离子端残差测不了。
+1. **There is no bond-level (cation–anion) table.** Pauling's second rule needs Σs = Σ(z/CN) at
+   **anion sites**, and these three tables only reach cation sites and polyhedron connection pairs,
+   so **the 18.3% cross-validation item of §6.6 cannot be computed**. The `gii` in `struct.parquet`
+   is computed on the fly from 3.5 Å neighbours internally, with no bond detail written out.
+2. `pair.parquet` has only the ChemEnv route. The CrystalNN version §9.1 asks for (intersection of
+   labelled quotient-graph ligand sets) is not implemented.
+3. `splits.parquet` does not exist yet, the three columns `proto_id` / `w_debias` / `split_id` are
+   not in the tables, and the `ρ` / `deff` that PREREG §3.1 requires cannot yet be measured.
+4. The 62 corrupt CIFs have not been rescued from the raw ICSD CIFs (34 of them, the ICSD ones,
+   should in principle be recoverable).
 
 ---
 
-## `reproduce_george.py` + `george_table.py` + `pauling_radii.py` —— 复现 George 2020(PREREG 门 G-A)
+## `measure_deff.py` — measuring PREREG §3.1's ρ / deff / N_eff
+
+Outputs: `features/deff.json` (all the numbers) and `features/deff_prereg_block.md` (ready to append
+to the PREREG revision log).
+Usage: `python src/measure_deff.py --boot 500 --force`; a full run is 71 s single-core, `--limit N`
+for a smoke test.
+sha256[:16] = `fca0821bf32e0413` (**this repository currently has no .git, so the git tag PREREG and
+plan §12 require cannot be applied — a `git init` has to come first; until then the sha256 is the
+only version anchor**).
+
+Three choices that have to be argued for, detailed in §A/§B/§C at the head of the script:
+
+- **§A which variable ρ is computed on**: on residual indicator variables, not on continuous
+  features. deff enters `L_total` only through `N_eff·H(residual|S)`. One literature-prior residual
+  per compression target is used (modal-look-up residual / Pauling 3 violation / BVS out of window),
+  none of which involves any product of the search, satisfying "measured before any candidate law is
+  seen". Empirically, the ICC of the continuous `bvs_dev` ranges over 0.001–0.717 across the four
+  prototype schemes and is unusable.
+- **§B missing prototypes**: `structure_type` hits only **54.77%** on the analysis set (not 78.13%,
+  which is the whole-icsd_meta figure), and is entirely absent for COD. The main convention, hybrid,
+  uses `structure_type` where it hits and the proxy `spg_s01|anonymised formula` where it does not;
+  strict / proxy_all / typed_only are reported alongside. **This choice moves N\* more than
+  bootstrap sampling error does** (3 → 13).
+- **§C how m is taken**: the Kish weighted mean `Σm²/Σm` is the headline (the correct form for
+  unequal clusters), with the arithmetic mean reported beside it. The two differ by a factor of 4–6
+  (15.7 vs 73.3); the m=25 in the plan's §4.5.1 table is the arithmetic one.
+
+Main results (hybrid, orbit-weighted, N_data = 138,668):
+ρ = 0.204 / 0.608 / 0.204 (T_CE / T_CONN / T_BV), deff = 15.7 / 44.3 / 16.7,
+N_eff = 7,658 / 2,897 / 7,617.
+Negative control ρ = −0.0005, deff = 1.0 (the estimator is unbiased).
+
+**Determination**: the §3.1 fallback clause is triggered, so N is reported as an interval rather
+than an argmin (three grounds, in `deff_prereg_block.md`).
+Registered intervals under the λ=1 main convention: T_CE / T_BV **N ∈ [5, 11]**,
+T_CONN **N ∈ [3, 5]**.
+
+Known limitations:
+1. The Zipf mapping is inverse-calibrated — plan §4.5.3 gives only the argmin result, not the
+   accuracy decay law, and the five anchors cannot be fitted simultaneously within a single
+   (theta, p0) family (log-RMSE 0.337). A second independent mapping (a power law) gives 15 rather
+   than 10 at the same N_eff.
+   **The interval on N is more sensitive to model specification than to sampling error.**
+2. `splits.parquet` still does not exist, so ρ is measured over the whole analysis set rather than
+   separately by discovery/calibration/lockbox. The two-way clustering of §8.1 must reuse the
+   `proto_hybrid` definition in this file; the two places may not each define their own.
+3. T_CONN has only the ChemEnv route (a limitation of the pair table); anion-site Σs is still
+   missing, so the anion-side residual of Pauling 2 cannot be measured.
+
+---
+
+## `reproduce_george.py` + `george_table.py` + `pauling_radii.py` — reproducing George 2020 (PREREG gate G-A)
 
 ```bash
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
-python src/reproduce_george.py --stage compute --limit 200 --workers 20 --chunk 5 --force   # 冒烟 0.7 min
+python src/reproduce_george.py --stage compute --limit 200 --workers 20 --chunk 5 --force   # smoke test, 0.7 min
 nohup python src/reproduce_george.py --stage compute --workers 20 --chunk 20 --force \
-      > $PRIS_FEATURES/reproduce_george.log 2>&1 &    # 全量
-python src/reproduce_george.py --stage table            # 出 Table S1(读全量产物)
-python src/reproduce_george.py --stage table --smoke    # 读 _smoke 产物
+      > $PRIS_FEATURES/reproduce_george.log 2>&1 &    # full run
+python src/reproduce_george.py --stage table            # emit Table S1 (reads the full outputs)
+python src/reproduce_george.py --stage table --smoke    # read the _smoke outputs
 ```
 
-产物:`george_site / george_anion / george_pair / george_struct / george_fail .parquet`
-与 `george_tableS1.csv`;分片在 `_gshards/`(断点续跑靠它,重跑不加 `--force` 即续)。
+Outputs: `george_site / george_anion / george_pair / george_struct / george_fail .parquet` and
+`george_tableS1.csv`; shards live in `_gshards/` (that is what resuming relies on — rerun without
+`--force` to continue).
 
-### 为什么不复用 `site/pair/struct.parquet`(必须重算的三条理由)
+### Why `site/pair/struct.parquet` cannot be reused (three reasons it must be recomputed)
 
-1. **论域不对**。George 的论域是氧化物,我们的可比子集是 `provenance.oxide_strict` = 23,728;
-   而那三张表建在 `in_analysis_set` 上。**两者不是包含关系**:`oxide_strict \ in_analysis_set`
-   = 3,895 条**全部含 P** —— `in_analysis_set` 把 P 记作阴离子候选,磷酸盐于是
-   `n_anion_kinds==2` 被排除。George 恰恰用 InPO4 当第二定律的主例,**磷酸盐必须在论域内**。
-2. **没有阳离子–阴离子键级表**,阴离子位点的 Σs 算不出来 → 泡林第二定律做不了。
-3. **`pair.parquet` 只有 ChemEnv 一条路线**,G6 要的三算法连接性拿不到。
+1. **Wrong domain.** George's domain is oxides, and our comparable subset is
+   `provenance.oxide_strict` = 23,728, whereas those three tables are built on `in_analysis_set`.
+   **Neither contains the other**: `oxide_strict \ in_analysis_set` = 3,895 entries that **all
+   contain P** — `in_analysis_set` counts P as an anion candidate, so phosphates are excluded with
+   `n_anion_kinds==2`. George uses InPO4 as his main example for the second rule, so **phosphates
+   must be inside the domain**.
+2. **There is no cation–anion bond-strength table**, so Σs at anion sites cannot be computed and
+   Pauling's second rule cannot be done at all.
+3. **`pair.parquet` has only the ChemEnv route**, so the three-algorithm connectivity G6 needs is
+   unavailable.
 
-### 实测发现的一个上游 bug:`cif` 氧化态全 0 的结构被静默掏空
+### An upstream bug found by measurement: structures whose `cif` oxidation states are all zero are silently emptied
 
-`build_features.assign_oxi` 用 `blob_ox_present = all(x is not None)` 判 `cif` 级,
-但 ICSD 有一批条目的 `_atom_type_oxidation_number` **全是 0**(例:`exp007` 的 ZnO
-装饰成 `Zn0+ O0-`)。这些结构 `ox_source` 被记为 `cif`,而 `is_cat = [v>0]` 全 False,
-于是 **`n_cation_sites == 0`,site 行一条不出**;更糟的是 ChemEnv 拿到全 0 的 valences 后
-`only_cations=True` 退化,`pair.parquet` 里出现 **O–O 多面体对**(逐例核对 `exp006`
-`Mn0+ Au0+ O0+`:旧表 23 对里有 14 对是 O–O)。
+`build_features.assign_oxi` decides the `cif` level with `blob_ox_present = all(x is not None)`, but
+a batch of ICSD entries have `_atom_type_oxidation_number` **all zero** (e.g. `exp007`'s ZnO
+decorated as `Zn0+ O0-`). Those structures get `ox_source` recorded as `cif` while `is_cat = [v>0]`
+is all False, so **`n_cation_sites == 0` and not one site row is emitted**. Worse, ChemEnv given
+all-zero valences degrades under `only_cations=True` and **O–O polyhedron pairs** appear in
+`pair.parquet` (checked case by case on `exp006` `Mn0+ Au0+ O0+`: 14 of the old table's 23 pairs
+were O–O).
 
-- 影响面:`struct.parquet` 里 `n_cation_sites==0` 共 **3,658 / 38,307 = 9.55%**,其中 3,637 条 `ox_source='cif'`。
-- 修法(`reproduce_george.assign_oxi_fixed`):`cif` 只在"阴离子 ox<0 **且** 至少一个位点 ox>0"
-  时采信,否则降级到 `guess` → `none`,并留 `cif_all_zero` 旗标。
-- **下游影响**:`build_features` 报的连接性统计(共角/共边/共面)含这批 O–O 对,需按此重算;
-  本脚本的 `george_pair.parquet` 已是干净版。
+- Extent: `n_cation_sites==0` in `struct.parquet` covers **3,658 / 38,307 = 9.55%**, of which 3,637
+  have `ox_source='cif'`.
+- Fix (`reproduce_george.assign_oxi_fixed`): trust `cif` only when the anion has ox<0 **and** at
+  least one site has ox>0; otherwise fall back to `guess` → `none`, leaving a `cif_all_zero` flag.
+- **Downstream impact**: the connectivity statistics `build_features` reports (corner/edge/face)
+  include these O–O pairs and must be recomputed accordingly; this script's `george_pair.parquet` is
+  already the clean version.
 
-### 连接性枚举:三算法共用一个枚举器(G6 的必要条件)
+### Connectivity enumeration: one enumerator shared by all three algorithms (a necessary condition for G6)
 
-`enumerate_connections()` 直接在配体集合上做:两个多面体 (i@0) 与 (j@T) 的共享配体数
-= `|L_i ∩ (L_j + T)|`,候选平移 T 由同编号配体的像差给出。去重约定 `i<j` 取全部 T、
-`i==j` 时 T≠0 且 T 与 −T 只取字典序较大者 —— 与 ChemEnv `environment_subgraph()` 的
-"每原胞一条边"完全一致。**核验**:在冒烟集上与 `pair.parquet` 的 ChemEnv 结果逐结构比,
-26 个可比结构里 **24 个三模式计数完全相同**,2 个不同的正是上面那个全 0 氧化态 bug 的受害者。
+`enumerate_connections()` works directly on ligand sets: the number of shared ligands between
+polyhedra (i@0) and (j@T) is `|L_i ∩ (L_j + T)|`, with the candidate translations T given by the
+image differences of identically numbered ligands. The de-duplication convention is: for `i<j` take
+all T; for `i==j` require T≠0 and keep only the lexicographically larger of T and −T — exactly
+matching ChemEnv `environment_subgraph()`'s "one edge per primitive cell".
+**Cross-check**: compared structure by structure against `pair.parquet`'s ChemEnv results on the
+smoke set, **24 of the 26 comparable structures give identical counts in all three modes**, and the
+2 that differ are precisely victims of the all-zero oxidation-state bug above.
 
-不用 ChemEnv 自带的 `ConnectivityFinder` 的理由:那样 G6 比较的就不只是"近邻定义"这一个
-自由度,而是把连接性算法也一起换了,三算法的差异无法归因。
+Why not use ChemEnv's own `ConnectivityFinder`: that would make G6 compare more than the single
+degree of freedom "neighbour definition" — it would swap the connectivity algorithm at the same
+time, and the differences between the three algorithms could not be attributed.
 
-### 粒度(PREREG §4.3 要求显式声明,George 混了粒度)
+### Granularity (PREREG §4.3 requires it stated explicitly; George mixes granularities)
 
-| 规则 | granularity | symprec 是否起作用 |
+| rule | granularity | does symprec matter |
 |---|---|---|
-| 1 半径比 | `orbit`(阳离子位点按晶体学轨道去重),备 `site` | 是 |
-| 2 静电价 | `orbit`(**阴离子**位点),备 `site` | 是 |
-| 3 连接类型 | `pair`(George 原口径);60 格表里改用 `orbit-pair` 去重 | 仅 orbit-pair 口径下 |
-| 4 相邻多面体 | `structure` | **否**,两列按构造相同 |
-| 5 简约 | `structure` | **否**,同上 |
-| 2–5 合取 | `structure` | 否 |
+| 1 radius ratio | `orbit` (cation sites de-duplicated by crystallographic orbit), with `site` as an alternative | yes |
+| 2 electrostatic valence | `orbit` (**anion** sites), with `site` as an alternative | yes |
+| 3 connection type | `pair` (George's original convention); the 60-cell table de-duplicates to `orbit-pair` | only under the orbit-pair convention |
+| 4 adjacent polyhedra | `structure` | **no**, the two columns are identical by construction |
+| 5 parsimony | `structure` | **no**, as above |
+| 2–5 conjunction | `structure` | no |
 
-所以 60 格里有 **24 格是按构造相同的**,这不是复制粘贴,是口径的真实结论。
+So **24 of the 60 cells are identical by construction**. That is not copy-paste, it is a genuine
+consequence of the definitions.
 
-### 规则 1 的两个口径(差 8 pt,必须成对报)
+### The two definitions of rule 1 (8 pt apart; they must be reported as a pair)
 
-`pauling_radii.py` 只收**泡林本人发表过的单价半径**(闭壳层离子,`tier='published'`),
-外推到开壳层 d 区离子的那一档标 `tier='extended'`,**是我们的外推不是泡林的表**,只作敏感性层。
+`pauling_radii.py` admits only the **univalent radii Pauling himself published** (closed-shell ions,
+`tier='published'`); the level extrapolated to open-shell d-block ions is marked `tier='extended'`
+and is **our extrapolation, not Pauling's table**, used only as a sensitivity layer.
 
-判据也有两个口径。George 原文:"A coordination environment is stable only if the radius ratio
-falls within the geometrically derived stability window **of this environment**"。硬球稳定窗
-只对 CN ∈ {2,3,4,6,8,12} 有定义,观测 CN = 5/7/9/10/11 的位点**没有可检验的窗**;
-按原文 "tested local environments" 的措辞应当排除。两个口径都在对比表里报,60 格表用前者
-(`R1_radius_ratio`),严格全 CN 版另存 `R1_radius_ratio_allCN`。
+The criterion also has two definitions. George's text: "A coordination environment is stable only if
+the radius ratio falls within the geometrically derived stability window **of this environment**".
+The hard-sphere stability window is defined only for CN ∈ {2,3,4,6,8,12}, so sites observed at
+CN = 5/7/9/10/11 have **no testable window**; on the wording "tested local environments" they should
+be excluded. Both definitions are reported in the comparison table; the 60-cell table uses the
+former (`R1_radius_ratio`), and the strict all-CN version is kept separately as
+`R1_radius_ratio_allCN`.
 
-### 论域对齐层
+### The domain-alignment layer
 
-`icsd_mp_link.parquet` 的 `mp_id` 非空 = "该 ICSD 条目在 Materials Project 里",
-正是 George 的论域筛选条件。这一层用来判断差距是 bug 还是论域,是 go/no-go 的关键判别器。
+A non-null `mp_id` in `icsd_mp_link.parquet` means "this ICSD entry is in Materials Project", which
+is exactly George's domain filter. This layer is what decides whether a discrepancy is a bug or a
+domain difference, and it is the key discriminator for go/no-go.
 
-### 全量实测(2026-07-28,20 进程,机器非独占)
+### Full run measured (2026-07-28, 20 processes, shared machine)
 
-**58.8 min 墙钟**,23,728 条跑完 23,673(失败 55 = 0.23%,全是 blob 里 CIF 本身坏了)。
-`site` 376,247 / `anion` 637,679 / `pair` **5,478,931**(三算法合计)/ `struct` 23,728 行。
-`ox_source`:cif 15,497 / guess 6,685 / none 1,491;`cif_all_zero` 降级 887 条(3.75%)。
+**58.8 min wall clock**, 23,673 of 23,728 entries completed (55 failures = 0.23%, all corrupt CIFs
+in the blob).
+`site` 376,247 / `anion` 637,679 / `pair` **5,478,931** (three algorithms combined) / `struct` 23,728
+rows.
+`ox_source`: cif 15,497 / guess 6,685 / none 1,491; 887 entries (3.75%) downgraded by `cif_all_zero`.
 
-**与 George 2020 逐条**(ChemEnv,symprec 0.01,ox ∈ {cif,guess}):
+**Rule by rule against George 2020** (ChemEnv, symprec 0.01, ox ∈ {cif, guess}):
 
-| 规则 | George | 本复现 | Δ pt |
+| rule | George | this reproduction | Δ pt |
 |---|---|---|---|
-| 1 半径比(严格全 CN,published 半径) | 66.0 | 52.5 | −13.5 |
-| 1 半径比(**硬球窗有定义的 CN**) | 66.0 | 61.7 | −4.3 |
-| 1 半径比(硬球窗 + 外推半径) | 66.0 | **64.8** | −1.2 |
-| 2 \|Σs−2\|≤0.01(orbit / site) | 20.0 | 17.9 / **20.2** | −2.1 / +0.2 |
-| 3 corner/edge/face(全 CN) | 62.5/27.2/10.3 | 66.5/25.8/7.7 | +4.0/−1.4/−2.6 |
-| 3 corner/edge/face(**CN≤8**) | 73.3/25.0/1.6 | **73.4/24.9/1.8** | +0.1/−0.1/+0.2 |
-| 4 违例率(ChemEnv / CrystalNN / Brunner) | 40.0 | 34.7 / **40.3** / 38.4 | −5.3/+0.3/−1.6 |
-| 5 简约(CN 判据) | 70.3 | 67.8 | −2.5 |
-| 2–5 同时 | 13.0 | 11.6 | −1.4 |
-| 2–5 同时(CN≤8) | 20.0 | 15.7 | −4.3 |
+| 1 radius ratio (strict all CN, published radii) | 66.0 | 52.5 | −13.5 |
+| 1 radius ratio (**CN with a defined hard-sphere window**) | 66.0 | 61.7 | −4.3 |
+| 1 radius ratio (hard-sphere window + extrapolated radii) | 66.0 | **64.8** | −1.2 |
+| 2 \|Σs−2\|≤0.01 (orbit / site) | 20.0 | 17.9 / **20.2** | −2.1 / +0.2 |
+| 3 corner/edge/face (all CN) | 62.5/27.2/10.3 | 66.5/25.8/7.7 | +4.0/−1.4/−2.6 |
+| 3 corner/edge/face (**CN≤8**) | 73.3/25.0/1.6 | **73.4/24.9/1.8** | +0.1/−0.1/+0.2 |
+| 4 violation rate (ChemEnv / CrystalNN / Brunner) | 40.0 | 34.7 / **40.3** / 38.4 | −5.3/+0.3/−1.6 |
+| 5 parsimony (CN criterion) | 70.3 | 67.8 | −2.5 |
+| 2–5 jointly | 13.0 | 11.6 | −1.4 |
+| 2–5 jointly (CN≤8) | 20.0 | 15.7 | −4.3 |
 
-论域对齐层(ICSD ∩ MP,13,149 条)几乎不动这些数:规则 2 = 17.8、规则 4 = 35.1、
-规则 5 = **70.9**、2–5 = 11.9,规则 3 CN≤8 = 72.8/25.3/2.0。**说明差距不是论域造成的。**
+The domain-alignment layer (ICSD ∩ MP, 13,149 entries) barely moves these: rule 2 = 17.8,
+rule 4 = 35.1, rule 5 = **70.9**, 2–5 = 11.9, rule 3 at CN≤8 = 72.8/25.3/2.0. **So the gap is not
+caused by the domain.**
 
-**G6(三算法波动,max over 12 格)**:R2 **0.83 pt** ✓ / R5 **1.81 pt** ✓ / R1_allCN 2.89 ✓;
-R1 4.05 ✗ / R3 3.93 ✗ / **R4 5.74 ✗**。位点级三算法 CN 全同只有 **82.0%**(n=357,082)。
+**G6 (three-algorithm spread, max over 12 cells)**: R2 **0.83 pt** ✓ / R5 **1.81 pt** ✓ /
+R1_allCN 2.89 ✓; R1 4.05 ✗ / R3 3.93 ✗ / **R4 5.74 ✗**. All three algorithms give the same CN at
+only **82.0%** of sites (n=357,082).
 
-**规则 4 的两个分解**(ChemEnv):氧化态版违例 56.3%、CN 版违例 52.6%。
-更直接的检验(George Fig.4b 的核心断言)是连接倾向:
-`P(相连 | min CN)` = 7.9%(CN1)→ 30.4%(6)→ **62.3%(12)** 单调上升;
-`P(相连 | min ox)` = 28.5%(+1)→ 33.4%(+2)→ 10.8%(+5)→ **2.8%(+7)**。
-**两者都有边际效应,但 ox 那一支被 CN 强烈混杂**(高价阳离子基本都是低配位),
-分不开之前不能照抄 George "氧化态不影响连接性"的结论。二维条件版留给 MPU-2。
+**Two decompositions of rule 4** (ChemEnv): the oxidation-state version violates at 56.3%, the CN
+version at 52.6%.
+The more direct test (the core assertion of George's Fig. 4b) is the connection propensity:
+`P(connected | min CN)` = 7.9% (CN1) → 30.4% (6) → **62.3% (12)**, monotonically rising;
+`P(connected | min ox)` = 28.5% (+1) → 33.4% (+2) → 10.8% (+5) → **2.8% (+7)**.
+**Both show a marginal effect, but the ox branch is heavily confounded by CN** (high-charge cations
+are nearly all low-coordinate), and until they can be separated, George's conclusion that
+"oxidation state does not affect connectivity" may not simply be copied over. The two-dimensional
+conditional version is left to MPU-2.
 
-**规则 2 的畸变依赖**(George Fig.2b 右):max CSM ≤ 5/1/0.1/0.01 → 22.0/32.7/47.6/**57.8**%。
-方向与 Baur 假说一致,但**远达不到 George 说的 "nearly perfect"**;
-我们的 CSM 阈值是自定的,George 的"221 个材料"口径未公开,这一条不可比,只报趋势。
+**The distortion dependence of rule 2** (right panel of George's Fig. 2b): max CSM ≤ 5/1/0.1/0.01 →
+22.0/32.7/47.6/**57.8**%.
+The direction agrees with Baur's hypothesis, but it is **nowhere near the "nearly perfect" George
+reports**; our CSM threshold is our own and George's "221 materials" scope was never published, so
+this one is not comparable and only the trend is reported.
 
-**规则 1 逐元素**(n≥1500):P 98.2 / Si 95.6 / Ti 84.0 / B 64.2 / Al 58.8 / Li 52.0 /
-Mo 32.8 / Na 30.9 / Sr 23.7 / Ca 21.8 / Ge 16.0 / V 13.5 / K 10.9 / Ba 10.3 / Cs 7.3。
-与 George Fig.1b 的定性图案一致(四面体形成体高、碱/碱土低)。
-泡林已发表半径覆盖 65.7% 的阳离子位点,加外推 87.0%;未覆盖 Top:W/Fe/Mn/U/Cu/Bi/Mo/Pb/V/Co/Nd。
+**Rule 1 element by element** (n≥1500): P 98.2 / Si 95.6 / Ti 84.0 / B 64.2 / Al 58.8 / Li 52.0 /
+Mo 32.8 / Na 30.9 / Sr 23.7 / Ca 21.8 / Ge 16.0 / V 13.5 / K 10.9 / Ba 10.3 / Cs 7.3.
+Qualitatively the same pattern as George's Fig. 1b (tetrahedron formers high, alkalis and alkaline
+earths low).
+Pauling's published radii cover 65.7% of cation sites, 87.0% with the extrapolation; the top
+uncovered are W/Fe/Mn/U/Cu/Bi/Mo/Pb/V/Co/Nd.
 
 ---
 
-## `build_bonds.py` —— MPU-2 缺口补齐(bond / anion_sum / pair 三算法 / proto_id / split)
+## `build_bonds.py` — closing the MPU-2 gaps (bond / anion_sum / three-algorithm pair / proto_id / split)
 
 ```bash
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 PY=python
-$PY src/build_bonds.py --stage compute --limit 60 --workers 12 --chunk 5 --force  # 冒烟 0.7 min
-nohup $PY src/build_bonds.py --stage compute --workers 20 --chunk 20 &            # 全量 121.6 min
+$PY src/build_bonds.py --stage compute --limit 60 --workers 12 --chunk 5 --force  # smoke test, 0.7 min
+nohup $PY src/build_bonds.py --stage compute --workers 20 --chunk 20 &            # full run, 121.6 min
 $PY src/build_bonds.py --stage assemble   # 2 min
-$PY src/build_bonds.py --stage report     # ε 曲线 + 规则 3 三算法表(只看 discovery)
+$PY src/build_bonds.py --stage report     # ε curves + rule 3 three-algorithm table (discovery only)
 ```
 
-论域 = `in_analysis_set ∪ oxide_strict` = **42,202**(38,307 + 磷酸盐 3,895)。
-后者不在 `splits.parquet` 里,`split = "unsplit"`,**下游禁止混进 discovery 之外的用途**。
+Domain = `in_analysis_set ∪ oxide_strict` = **42,202** (38,307 + 3,895 phosphates).
+The latter are not in `splits.parquet` and get `split = "unsplit"`; **downstream they may not be
+used for anything beyond discovery**.
 
-### 产物
+### Outputs
 
-| 文件 | 行数 | 大小 | 粒度 |
+| file | rows | size | granularity |
 |---|---|---|---|
-| `bond.parquet` | **8,948,970** | 52.5 MB | 一条阳-阴键一行(chemenv 2,785,858 / crystalnn 3,028,229 / brunner 3,134,883) |
-| `anion_sum.parquet` | **2,690,532** | 29.7 MB | 896,844 个阴离子位点 × 3 算法 |
-| `pair.parquet` | **12,012,499** | 43.7 MB | 多面体连接对 × 4 条路线(旧版备份为 `pair_v1_chemenv_only.parquet`) |
-| `bond_struct.parquet` | 42,202 | 0.8 MB | 结构级审计(ok 42,134 / fail 68) |
+| `bond.parquet` | **8,948,970** | 52.5 MB | one cation–anion bond per row (chemenv 2,785,858 / crystalnn 3,028,229 / brunner 3,134,883) |
+| `anion_sum.parquet` | **2,690,532** | 29.7 MB | 896,844 anion sites × 3 algorithms |
+| `pair.parquet` | **12,012,499** | 43.7 MB | polyhedron connection pairs × 4 routes (the old version is backed up as `pair_v1_chemenv_only.parquet`) |
+| `bond_struct.parquet` | 42,202 | 0.8 MB | structure-level audit (ok 42,134 / fail 68) |
 
-`bond` 列:`source_id / nn_algo / cation_site / anion_site / el_* / ox_* / img_a,b,c / d /
-cn_cation(阴离子过滤后) / cnall_cation(未过滤) / s_pauling / s_bv / ce_cation / csm_cation /
-proto_id / split`。`s_pauling = z/CN` 是 **T1 量**;`s_bv` 是 **T2 量,按铁律 2 不得进 T4 的 Guard/Body**。
+`bond` columns: `source_id / nn_algo / cation_site / anion_site / el_* / ox_* / img_a,b,c / d /
+cn_cation (after anion filtering) / cnall_cation (unfiltered) / s_pauling / s_bv / ce_cation /
+csm_cation / proto_id / split`. `s_pauling = z/CN` is a **T1 quantity**; `s_bv` is a **T2 quantity
+and by iron rule 2 may not enter a T4 Guard or Body**.
 
-`anion_sum` 列:`sigma_pauling / sigma_bv / z_abs / dev_* / n_cat / d_min / d_max /
-ok_{pauling,bv}_e{01,05,1,2,3,5}`(nullable boolean)。
-**零配位阴离子(1.99%)记 Σs = 0 而不是 NaN** —— `george_anion` 把它们判 NaN 丢掉了,
-那恰好是最严重的违例,不能丢。
+`anion_sum` columns: `sigma_pauling / sigma_bv / z_abs / dev_* / n_cat / d_min / d_max /
+ok_{pauling,bv}_e{01,05,1,2,3,5}` (nullable boolean).
+**Anions with zero coordination (1.99%) record Σs = 0 rather than NaN** — `george_anion` judged them
+NaN and dropped them, and those are exactly the most serious violations, which must not be dropped.
 
-### 坑 D:`ConnectivityFinder` 静默吃掉 78.6% 的结构(推翻旧 `pair.parquet`)
+### Pitfall D: `ConnectivityFinder` silently swallows 78.6% of structures (overturning the old `pair.parquet`)
 
-`pymatgen.analysis.chemenv.connectivity.ConnectivityFinder.get_structure_connectivity` 有两个
-**整结构抛异常**的分支:
+`pymatgen.analysis.chemenv.connectivity.ConnectivityFinder.get_structure_connectivity` has two
+branches that **raise on the whole structure**:
 
-1. `multiple_environments_choice=None`(默认)时,只要任一位点被 MultiWeights 判成 "mix"
-   (`len(neighbors_sets[i]) > 1`)就 `raise ValueError("... is a mix and nothing is asked about it")`。
-   实测 **29,164 / 42,202 = 69.1%** 的结构含至少一个 mix 位点。
-2. 循环只挡了 `neighbors_sets is None`,没挡**空 list** → `IndexError: list index out of range`。
-   实测 **8,423** 个结构中招。
+1. With `multiple_environments_choice=None` (the default), any site MultiWeights judges a "mix"
+   (`len(neighbors_sets[i]) > 1`) triggers
+   `raise ValueError("... is a mix and nothing is asked about it")`.
+   Measured: **29,164 / 42,202 = 69.1%** of structures contain at least one mix site.
+2. The loop only guards against `neighbors_sets is None`, not against an **empty list** →
+   `IndexError: list index out of range`. Measured: **8,423** structures hit this.
 
-`build_features.py` 把这两个异常 `except` 进 `ce_err` 列,没有行数报警,于是旧
-`pair.parquet` 的 338,135 行**只来自 8,212 / 38,307 = 21.4% 的结构**。
-能跑通的都是"环境判定干净"的高对称结构,共角占比系统性偏高 —— 典型的静默选择偏倚。
-**旧 `pair.parquet` 的任何规则 3/4 数字都不可用。**
-(MPU-1 报的 73.4/24.9/1.8 来自 `george_pair` 的统一枚举器,不受此坑影响,可用。)
+`build_features.py` catches both exceptions into the `ce_err` column with no row-count alarm, so the
+old `pair.parquet`'s 338,135 rows **come from only 8,212 / 38,307 = 21.4% of structures**.
+The ones that get through are the high-symmetry structures with clean environment assignments, so
+the corner-sharing share is systematically inflated — a textbook silent selection bias.
+**No rule 3 or rule 4 number from the old `pair.parquet` is usable.**
+(The 73.4/24.9/1.8 reported for MPU-1 comes from `george_pair`'s unified enumerator and is not
+affected by this pitfall; it is usable.)
 
-`robust_env_subgraph()` 是打过补丁的重写版:mix → 取 `ce_fraction` 最大者(pymatgen 自带但默认
-关闭的 `TAKE_HIGHEST_FRACTION`);空 list → 跳过该位点而非整结构放弃。修完命中 **40,625 / 42,202**。
-`n_mix_env / n_empty_env / n_ceconn_noncat` 三列逐结构记录,改口径时可复查。
+`robust_env_subgraph()` is the patched rewrite: for a mix, take the largest `ce_fraction`
+(pymatgen's own `TAKE_HIGHEST_FRACTION`, which is off by default); for an empty list, skip that site
+rather than abandoning the structure. After the fix it reaches **40,625 / 42,202**.
+The three columns `n_mix_env / n_empty_env / n_ceconn_noncat` record this per structure, so it can be
+rechecked if the convention changes.
 
-### 四条 pair 路线与"枚举器 vs 近邻定义"的归因
+### The four pair routes, and separating "enumerator" from "neighbour definition"
 
-`chemenv` 用 ChemEnv 自带的 `environment_subgraph()`(`len(d["ligands"])`);
-`crystalnn` / `brunner` 用共享配体集合的交集;`chemenv_uni` 是**审计线**——同 ChemEnv 近邻,
-但走统一枚举器。在 ChemEnv 配体集合纯阴离子的结构上,`chemenv` 与 `chemenv_uni` 的边**逐条完全相同**
-(冒烟 51/56 结构,1922/644/233 三档完全一致)。
-=> 统一枚举器是 `environment_subgraph()` 的精确重写,**G6 的 3.93 / 5.74 pt 全部来自近邻定义,
-枚举器贡献为零**,归因干净。`chemenv` 与 `chemenv_uni` 的行数差只来自阴离子过滤
-(ChemEnv 原生把阳-阳共享配体也算进来)。
+`chemenv` uses ChemEnv's own `environment_subgraph()` (`len(d["ligands"])`);
+`crystalnn` / `brunner` use the intersection of shared ligand sets; `chemenv_uni` is the **audit
+line** — the same ChemEnv neighbours, but through the unified enumerator. On structures where
+ChemEnv's ligand sets are purely anionic, the edges of `chemenv` and `chemenv_uni` are **identical
+one by one** (51/56 structures in the smoke set, with 1922/644/233 identical across the three
+categories).
+So the unified enumerator is an exact rewrite of `environment_subgraph()`, and **G6's 3.93 / 5.74 pt
+come entirely from the neighbour definition, with zero contribution from the enumerator** — a clean
+attribution. The row-count difference between `chemenv` and `chemenv_uni` comes only from the anion
+filter (ChemEnv natively counts cation–cation shared ligands too).
 
-### proto_id(hybrid 口径)
+### proto_id (the hybrid convention)
 
-ICSD `structure_type` 命中者记 `ST:<type>`(覆盖 **53.60%**,COD 为 0%);
-缺失者记 `PX:spg<spg_s01>|<anonymized_formula>`。全论域 **9,571 个唯一 proto_id**。
-已并进 `site / pair / struct / bond / anion_sum / bond_struct` 六张表,同时并了 `split`。
+Where the ICSD `structure_type` hits, record `ST:<type>` (covering **53.60%**, and 0% for COD);
+where it is missing, record `PX:spg<spg_s01>|<anonymized_formula>`. Over the whole domain there are
+**9,571 unique proto_ids**.
+It has been merged into all six tables (`site / pair / struct / bond / anion_sum / bond_struct`),
+along with `split`.
 
-### 与 `george_anion` 的一致性核验
+### Consistency check against `george_anion`
 
-同一子集(discovery+unsplit, oxide_strict∩O, chemenv)上,两表 Σs 在 **99.81%** 的位点逐条相同;
-差异位点的 |Δ| 中位恰为 **1.000**(整整一条键),是 ChemEnv 边界近邻的 tie-break 抖动,非系统偏差。
-ε=0.01 满足率:`anion_sum` 18.60% vs `george_anion` 18.57%。
+On the same subset (discovery+unsplit, oxide_strict∩O, chemenv) the Σs of the two tables are
+identical at **99.81%** of sites; the median |Δ| at the differing sites is exactly **1.000** (one
+whole bond), which is tie-break jitter at ChemEnv's neighbour boundary, not a systematic bias.
+Satisfaction at ε=0.01: `anion_sum` 18.60% vs `george_anion` 18.57%.
 
 ---
 
-# MPU-3 规则搜索(`search_rules.py` / `report_rules.py`)
+# MPU-3 rule search (`search_rules.py` / `report_rules.py`)
 
-**只读 discovery。** 全部取数在 `split == "discovery"` 上过滤并 assert;`calibration` /
-`lockbox` 在本轮从未被打开。产物:`t4_instances` 口径的 `_t4_orbits_raw.parquet`、
-`_tierA1/_tierA2.parquet`、`rule_candidates.parquet`、`rules_surviving.parquet`、
-`rules_top.csv`、`search_log.json`(含 `negctl_i` 与 `negctl_iii_rule3`)。
+**Reads discovery only.** Every retrieval filters on `split == "discovery"` and asserts it;
+`calibration` and `lockbox` were never opened this round. Outputs, on the `t4_instances`
+convention: `_t4_orbits_raw.parquet`, `_tierA1/_tierA2.parquet`, `rule_candidates.parquet`,
+`rules_surviving.parquet`, `rules_top.csv`, `search_log.json` (containing `negctl_i` and
+`negctl_iii_rule3`).
 
-## 论域与标签
+## Domain and labels
 
-主目标 T4 的基本单位是**晶体学轨道**(`orbit_id_s01`),预测量在
-`(source_id, element, ox)` **物种**内恒定 —— 这是 T0 输入能表达的最细粒度
-(要落到位点就得知道该物种占几个轨道,那是 T1)。
-discovery 阳离子位点 259,026 → 三算法(ChemEnv / CrystalNN / BrunnerNN)CN 齐全 239,548
-(92.48%,G6 同底要求)→ **72,087 轨道 / 19,430 结构 / 40,097 物种实例**。
-三份标签 `cn_chemenv / cn_crystalnn / cn_brunner` 同时保留,G6 直接考核三者的准确率极差。
+The basic unit of the primary target T4 is the **crystallographic orbit** (`orbit_id_s01`), and the
+predicted quantity is constant within a `(source_id, element, ox)` **species** — that is the finest
+granularity T0 inputs can express (getting down to the site would require knowing how many orbits
+that species occupies, which is T1).
+Discovery cation sites 259,026 → those with all three algorithms' CN present
+(ChemEnv / CrystalNN / BrunnerNN) 239,548 (92.48%, as G6's common-base requirement demands) →
+**72,087 orbits / 19,430 structures / 40,097 species instances**.
+All three labels `cn_chemenv / cn_crystalnn / cn_brunner` are retained, so G6 can assess the
+accuracy spread across the three directly.
 
-## 众数查表基线:80% 这个数是"物种未加权平均"的产物
+## The modal look-up baseline: the 80% figure is an artefact of averaging over species unweighted
 
-| 口径 | CN(CrystalNN) | ce_symbol |
+| convention | CN (CrystalNN) | ce_symbol |
 |---|---|---|
-| 实例加权(全阴离子) | **0.564** | 0.519 |
-| 实例加权(氧化物) | 0.603 | 0.553 |
-| 物种未加权,n≥30(147 个) | 0.648 | 0.603 |
-| **物种未加权,全部(954 个)** | **0.765** | 0.746 |
+| instance-weighted (all anions) | **0.564** | 0.519 |
+| instance-weighted (oxides) | 0.603 | 0.553 |
+| species-unweighted, n≥30 (147 species) | 0.648 | 0.603 |
+| **species-unweighted, all (954 species)** | **0.765** | 0.746 |
 
-PREREG §2 引的 "≈80%" 只在**最后一行**成立,而那一行被几百个只出现一两次、纯度平凡为 1.0 的
-稀有物种拉高。**可用于预测的硬下界是 0.563(ChemEnv)/ 0.580(CrystalNN)**,
-本轮全部匹配覆盖率比较都以它为准。泡林第一定律(泡林单价半径 + 五个冻结断点)
-在同一论域上 **0.324**(覆盖 89.6%),远低于 George 报的 66% —— 后者是氧化物 + 位点粒度。
+The "≈80%" cited in PREREG §2 holds only on the **last row**, and that row is inflated by hundreds of
+rare species that occur once or twice and have a trivially perfect purity of 1.0.
+**The hard lower bound usable for prediction is 0.563 (ChemEnv) / 0.580 (CrystalNN)**, and every
+matched-coverage comparison this round is made against it. Pauling's first rule (Pauling's univalent
+radii plus five frozen break points) scores **0.324** on the same domain (89.6% coverage), far below
+the 66% George reports — his is oxides at site granularity.
 
-## 两层搜索
+## Two layers of search
 
-* **Tier A1** `IF f relop θ THEN cn = c`:每个 (f, relop, θ) 上对 c 取穷举最优。
-  前缀和 + `searchsorted`,61 特征 × 2 relop × 20 分位阈值,**0.8 s**,1,713 条。
-* **Tier A2**(计划 7.4 节模板族 2)`cn == ARGMIN n IN CN_SET : |φ(n) − (f−a)/b|`。
-  φ ∈ {n, 1/n, √n, log n, 泡林理想半径比, ox/n},CN_SET ∈ {FULL(2..12), PAULING, COMMON}。
-  **关键实现**:φ 单调 ⇒ ARGMIN 等价于 f 的单调阶梯,切点由 (a,b) 两个自由参数决定,
-  于是用"排一次序 + 每类前缀计数"就能对整个 24×40 的 (a,b) 量化网格精确穷举,
-  而不必逐实例算 11 个 |·|。`s_pauling` 支(φ 依赖 ox)按 ox 分层后同法处理。**19.9 s**,1,037 条。
-* **Tier B** `pysubgroup.Apriori`(穷举 + 反单调剪枝),selector 池 **135 个**(硬上限 150,
-  含 20 个随机特征做负对照 ii;覆盖率 >97% 或 <0.5% 的退化 selector 已剔除),
-  depth=3,`StandardQF(a)` 扫 a ∈ {0.25, 0.5, 0.75}。**实测 depth3 单次 13.1 s / depth2 1.3 s**
-  (72,087 行 × 135 selector),51 个 Body × 3 次扫描共 **1,194 s**。
-  与计划 7.4 节引用的 240 s 相比快一个量级,原因是行数少 3 倍且 numba 快路径生效。
+* **Tier A1** `IF f relop θ THEN cn = c`: for each (f, relop, θ), take the exhaustively optimal c.
+  Prefix sums plus `searchsorted`, 61 features × 2 relops × 20 quantile thresholds, **0.8 s**,
+  1,713 rules.
+* **Tier A2** (template family 2 of plan §7.4)
+  `cn == ARGMIN n IN CN_SET : |φ(n) − (f−a)/b|`.
+  φ ∈ {n, 1/n, √n, log n, Pauling's ideal radius ratio, ox/n}, CN_SET ∈ {FULL(2..12), PAULING,
+  COMMON}.
+  **Key implementation**: φ is monotone, so ARGMIN is equivalent to a monotone staircase in f whose
+  cut points are set by the two free parameters (a,b); one sort plus a prefix count per class
+  therefore enumerates the whole 24×40 quantised (a,b) grid exactly, without evaluating 11 `|·|`
+  per instance. The `s_pauling` branch (where φ depends on ox) is handled the same way after
+  stratifying by ox. **19.9 s**, 1,037 rules.
+* **Tier B** `pysubgroup.Apriori` (exhaustive with anti-monotone pruning), a selector pool of **135**
+  (hard cap 150, including 20 random features as negative control ii; degenerate selectors with
+  coverage >97% or <0.5% have been removed), depth=3, `StandardQF(a)` swept over
+  a ∈ {0.25, 0.5, 0.75}. **Measured 13.1 s per depth-3 pass / 1.3 s at depth 2**
+  (72,087 rows × 135 selectors), and 51 Bodies × 3 sweeps comes to **1,194 s**.
+  An order of magnitude faster than the 240 s cited in plan §7.4, because there are 3× fewer rows
+  and the numba fast path engages.
 
-## G3 比特记账(计划 4.3 节词汇表口径)
+## G3 bit accounting (the vocabulary convention of plan §4.3)
 
-`L = 9.3(头字段) + log₂6(Body 产生式) + [log₂13 | log₂6 + log₂3 + log₂47 + log₂24 + log₂40]
-+ |guard|·log₂250`。常数 Body + 3 文字 guard = **39.5 bit**;ARGMIN Body + 3 文字 guard =
-**55.4 bit**,4 文字就 63.4 bit 越预算 —— 即 60 bit 在 ARGMIN 族上**恰好**把 guard 卡在 3 文字,
-与 §7.1 文法的 `<guard> ≤ 3 文字` 独立地给出同一上限。
+`L = 9.3 (header fields) + log₂6 (Body production)
++ [log₂13 | log₂6 + log₂3 + log₂47 + log₂24 + log₂40] + |guard|·log₂250`.
+A constant Body plus a 3-literal guard is **39.5 bit**; an ARGMIN Body plus a 3-literal guard is
+**55.4 bit**, and 4 literals reaches 63.4 bit and busts the budget — so on the ARGMIN family the
+60-bit budget pins the guard at **exactly** 3 literals, independently arriving at the same bound as
+the `<guard> ≤ 3 literals` in the §7.1 grammar.
 
-## 门与漏斗(2,044 → 164)
+## Gates and the funnel (2,044 → 164)
 
-见 `report_rules.py`。**G4(阴离子留一 worst-fold τ ≥ 0.90)是唯一真正在杀候选的门**
-(单门通过率 15.9%);G6 在 G4 之后完全不 binding(阈值从 3 pt 放宽到 100 pt,存活数 164 → 169)
-—— 这与 MPU-1 的直觉相反,原因是能过 G4 的规则本来就落在三算法一致的"干净"区域。
-`uses_rnd`:2,044 条里 697 条含随机特征;**过完 G1–G5 的 200 条里仍有 36 条(18%)含随机文字**,
-负对照 ii 的显式过滤是有实际作用的,G1–G5 单独拦不住它。
+See `report_rules.py`. **G4 (leave-one-anion-out worst-fold τ ≥ 0.90) is the only gate actually
+killing candidates** (15.9% pass it alone); after G4, G6 is not binding at all (relaxing its
+threshold from 3 pt to 100 pt takes survivors from 164 to 169) — the opposite of the MPU-1
+intuition, and the reason is that rules able to pass G4 already sit in the "clean" region where the
+three algorithms agree.
+`uses_rnd`: 697 of the 2,044 contain a random feature; **36 of the 200 that clear G1–G5 (18%) still
+contain a random literal**, so the explicit filter of negative control ii does real work and G1–G5
+alone do not stop it.
 
-## 负对照
+## Negative controls
 
-* **(i) 标签块置换**(在 `proto_id` 块内置换,保留混杂结构):Tier A2 最优精确率
-  0.4475 → **0.3481**,而众数查表是 0.5628 —— 置换后最优候选连查表都远打不过,零分布有区分力。
-  逐规则的 `perm_z` 用 B=200 份块置换标签矩阵一次性算出(2.4 s 生成,每条规则 O(200·n_trig))。
-* **(ii) 20 个随机特征**:见上,最终存活集合 0 条含随机文字。
-* **(iii) 重新发现泡林第三定律(G-D 门,PREREG §6)**:**通过**。
-  在 4 条 pair 路线 × 4 种分层(D≤2,取自 Guard 词汇)共 16 个组合上,
-  搜索从 6 个可能的频率序里**每一次都把 `corner > edge > face` 排到第一**。
-  D=1(阳离子元素)分层:ρ = 0.926 / 0.924 / 0.921 / 0.886(chemenv / chemenv_uni /
-  crystalnn / brunner),Wilson 95% 下界 0.848 / 0.844 / 0.838 / 0.797,远超 §4.4 要求的 0.5。
-  D=1(氧化态):ρ = 0.655–0.694,下界 0.596–0.636,仍过。
-  **D=2(氧化态 × CN 档)全部不过**(ρ = 0.461–0.493,下界 0.417–0.450)—— 这正是 §4.4
-  预言的过度分层失效模式(层数 487–645,中位层样本量掉下去),而不是化学。
-  管线的发现能力经此确认,可以继续。
+* **(i) Block permutation of labels** (permuted within `proto_id` blocks, preserving confounding
+  structure): Tier A2's best precision falls 0.4475 → **0.3481**, against 0.5628 for the modal
+  look-up — after permutation the best candidate cannot even come close to the look-up table, so the
+  null distribution discriminates.
+  The per-rule `perm_z` is computed in one shot from a B=200 block-permuted label matrix (2.4 s to
+  generate, O(200·n_trig) per rule).
+* **(ii) 20 random features**: see above; the final surviving set contains no random literal.
+* **(iii) Rediscovering Pauling's third rule (gate G-D, PREREG §6)**: **passed.**
+  Over 16 combinations (4 pair routes × 4 stratifications, D≤2, drawn from the Guard vocabulary),
+  the search puts `corner > edge > face` first among the 6 possible frequency orderings **every
+  single time**.
+  Stratified by D=1 (cation element): ρ = 0.926 / 0.924 / 0.921 / 0.886
+  (chemenv / chemenv_uni / crystalnn / brunner), with Wilson 95% lower bounds 0.848 / 0.844 /
+  0.838 / 0.797, far above the 0.5 §4.4 requires.
+  D=1 (oxidation state): ρ = 0.655–0.694, lower bounds 0.596–0.636, still passing.
+  **D=2 (oxidation state × CN band) fails throughout** (ρ = 0.461–0.493, lower bounds 0.417–0.450) —
+  which is exactly the over-stratification failure mode §4.4 predicts (487–645 strata, with the
+  median stratum's sample size collapsing), not chemistry.
+  The pipeline's ability to discover is confirmed by this, so it may continue.
 
-## 本轮的实质结论(负结果,必须如实写进论文)
+## The substantive conclusion of this round (a negative result that must go into the paper as it is)
 
-**没有一条 T0 候选在 MDL 上打得过众数查表。** 164 条存活规则的 `ΔL = N_eff·[H(查表) − H(规则)] − L(R)`
-(`N_eff = n_trig / deff`,`deff = 15.7` 取自 PREREG 修订 R1 的 T_CE 压缩靶)**全部为负**,
-最好的一条 −25 bit。对查表的匹配覆盖率增益只有 **+0.17 ~ +0.53 pt**。
-原因是可诊断的:Apriori 在 `StandardQF` 下找到的高覆盖 guard 恰好圈出**物种同质**的区域
-(高离子势 → Si/P/S/B → 本来就 95% 是 CN=4),那里查表已经饱和;
-而查表最弱的区域(Cu⁺/Ag⁺ 的 CN=2、大阳离子的 CN=8/12,查表只有 17–19%)确实能被组成级
-规则拉高 **+15 ~ +19 pt**,但**这类候选一条都没过完门**:增益 >2 pt 的 80 条里 0 条通过全部八门
-(过 G4 的仅 10 条、过 G6 的仅 21 条);增益 >10 pt 的 18 条里过 G4 的 1 条、过 G6 的 0 条。
-G4 的失败模式很具体:它们是氧化物专属的,换到硫化物/卤化物就不成立(阴离子留一 worst-fold τ < 0.90)。
-这两件事合起来是一条可发表的判断:**T0 组成级信息在"物种身份已知"之上几乎没有增量**,
-增量集中在少数几个 (物种 × 阴离子族) 单元里,而那正是 G8 与 G4 要挡的东西。
+**Not one T0 candidate beats the modal look-up table on MDL.** For all 164 surviving rules,
+`ΔL = N_eff·[H(look-up) − H(rule)] − L(R)` (`N_eff = n_trig / deff`, with `deff = 15.7` taken from
+the T_CE compression target of PREREG revision R1) is **negative**, the best at −25 bit. The gain in
+matched coverage over the look-up table is only **+0.17 to +0.53 pt**.
+The reason is diagnosable: the high-coverage guards Apriori finds under `StandardQF` happen to
+enclose **species-homogeneous** regions (high ionic potential → Si/P/S/B → already 95% CN=4), where
+the look-up table is already saturated; whereas the regions where the look-up table is weakest
+(CN=2 for Cu⁺/Ag⁺, CN=8/12 for large cations, where the table gets only 17–19%) can indeed be lifted
+**+15 to +19 pt** by composition-level rules, but **not one such candidate clears all the gates**
+(of the 80 with a gain >2 pt, none passes all eight — only 10 pass G4 and only 21 pass G6; of the 18
+with a gain >10 pt, 1 passes G4 and 0 pass G6).
+G4's failure mode is very specific: they are oxide-only and do not hold for sulfides or halides
+(leave-one-anion-out worst-fold τ < 0.90).
+Together these two things make one publishable judgement: **T0 composition-level information adds
+almost nothing on top of "the species identity is known"**, and what it does add concentrates in a
+few (species × anion family) cells, which is precisely what G8 and G4 exist to block.
 
 ---
 
-# MPU-3 / Tier D:集合组装与 `L_total(N)` 曲线
+# MPU-3 / Tier D: set assembly and the `L_total(N)` curve
 
-脚本 `src/assemble_set.py`(`python assemble_set.py` 主流程 68 s;`python assemble_set.py ungated`
-是无门诊断)。产物:`assemble_result.json`(全部曲线与基线)、`Ltotal_curve.csv`(扁平表,
-4 靶 × 4 λ × N=0..12)、`rule_decomposition.csv`(19 条去重规则的 ΔL 分解)、`assemble_ungated.json`。
-**全程只读 discovery**:取数走 `_t4_orbits_raw.parquet`(由 `search_rules.prep()` 生成,带 assert),
-`pair.parquet` / `site.parquet` 两处各再 assert 一次 `split == "discovery"`。
+Script `src/assemble_set.py` (`python assemble_set.py` for the main path, 68 s;
+`python assemble_set.py ungated` for the gate-free diagnostic). Outputs: `assemble_result.json`
+(every curve and baseline), `Ltotal_curve.csv` (flat table, 4 targets × 4 λ × N=0..12),
+`rule_decomposition.csv` (the ΔL decomposition of the 19 de-duplicated rules), and
+`assemble_ungated.json`.
+**Discovery-only throughout**: retrieval goes through `_t4_orbits_raw.parquet` (generated by
+`search_rules.prep()`, with asserts), and `split == "discovery"` is asserted once more at each of
+`pair.parquet` and `site.parquet`.
 
-## 候选池与还原
+## The candidate pool and its reconstruction
 
-164 条存活规则用 `body_id` + guard 字符串**逐字还原**成逐实例预测,与存档的
-`(cov, acc)` 逐条比对,**164/164 完全一致**(脚本内 assert)。
-按"有效预测向量"(触发处给预测、未触发给 −1)去重后 **164 → 19** 条 —— 其余 145 条是
-同一 guard 配等价 Body 的重复。选择成本 `log2 C(M,N)` 仍按 **M = 164** 计(搜索空间口径)。
+The 164 surviving rules are reconstructed **literally** into per-instance predictions from `body_id`
+plus the guard string and compared rule by rule against the archived `(cov, acc)`: **164/164 agree
+exactly** (asserted in the script).
+De-duplicating by "effective prediction vector" (a prediction where triggered, −1 where not) takes
+**164 → 19** — the other 145 are the same guard with an equivalent Body. The selection cost
+`log2 C(M,N)` is still computed with **M = 164** (the search-space convention).
 
-## 目标函数与四条曲线
+## The objective and the four curves
 
-    L_total(S) = λ·[log2 C(M,N) + Σ L(l_i)] + PAR(S) + N_eff·H(残差 | S)
+    L_total(S) = λ·[log2 C(M,N) + Σ L(l_i)] + PAR(S) + N_eff·H(residual | S)
 
-`PAR` 三口径全报:`reg` = PREREG §4.5.1 字面的全局 `(2^N−1)/2·log2 N_eff`;
-`full` = 条件于 guard 的逐模式 `(2^|G|−1)/2·log2 n_eff_G`;`obs` = 只对已实现的格计价(最宽松,
-作默认)。三档下 `N*` 至多差 1 条。
+All three `PAR` conventions are reported: `reg` = the global `(2^N−1)/2·log2 N_eff` written literally
+in PREREG §4.5.1; `full` = the per-pattern `(2^|G|−1)/2·log2 n_eff_G` conditioned on the guard;
+`obs` = charging only for realised cells (the most permissive, and the default). `N*` differs by at
+most 1 across the three.
 
-| 靶 | deff | 压缩对象 | 残差 / cell |
+| target | deff | what is compressed | residual / cell |
 |---|---|---|---|
-| `T_CE` | 15.7 | 轨道 CN 标签序列 | 二值误差指示,cell = guard 模式;未覆盖处由**众数查表兜底**(表代价 3,382 bit 是每点都付的常数,故 N=0 点即 `SET-MODE`) |
-| `T_CE_MC` | 15.7 | 同上 | **13 类条件熵**(修正口径,见下);未覆盖处退回单一全局众数格 |
-| `T_CONN` | 44.3 | 位点是否参与共边/共面 | cell = (触发模式, 各规则预测 CN),两者 T0 可解码;残差不可用作条件 |
-| `T_BV` | 16.7 | \|bvs_dev\| > 0.2 vu | 同上 |
+| `T_CE` | 15.7 | the sequence of orbit CN labels | binary error indicator, cell = guard pattern; uncovered instances **fall back to the modal look-up** (the table cost of 3,382 bit is a constant paid at every point, so the N=0 point is `SET-MODE`) |
+| `T_CE_MC` | 15.7 | as above | **13-class conditional entropy** (the corrected convention, see below); uncovered instances fall back to a single global modal cell |
+| `T_CONN` | 44.3 | whether a site participates in edge or face sharing | cell = (trigger pattern, each rule's predicted CN), both T0-decodable; the residual may not be used as a condition |
+| `T_BV` | 16.7 | \|bvs_dev\| > 0.2 vu | as above |
 
-论域 72,087 轨道 / 19,430 结构 / 914 个 (元素, 氧化态) 物种;查表 top-1 = 0.5628。
-`L(SET-MODE) = 914·log2 13 = 3,382 bit`(PREREG §4.5.5 的估计值是 240 物种 × log2 68 = 1,461,
-物种数与字母表都要按实际论域重算)。
+The domain is 72,087 orbits / 19,430 structures / 914 (element, oxidation state) species; look-up
+top-1 = 0.5628.
+`L(SET-MODE) = 914·log2 13 = 3,382 bit` (the estimate in PREREG §4.5.5 is 240 species × log2 68 =
+1,461; both the species count and the alphabet have to be recomputed for the actual domain).
 
-## 登记口径的残差码不可用(方法学发现,需要 PREREG 追加修订)
+## The registered residual code is unusable (a methodological finding requiring an added PREREG revision)
 
-PREREG 登记的残差码是 `N_eff·H_b(错误率)`。**`H_b` 在准确率跨过 50% 时非单调**
-(`H_b(0.60) = 0.971 < H_b(0.44) = 0.988`),于是在 `T_CE` 上出现两个必须承认的荒谬:
+The residual code registered in PREREG is `N_eff·H_b(error rate)`. **`H_b` is non-monotone as the
+accuracy crosses 50%** (`H_b(0.60) = 0.971 < H_b(0.44) = 0.988`), which produces two absurdities on
+`T_CE` that have to be acknowledged:
 
-* 泡林第一定律(top-1 只有 32.4%)的 `L_total` = **7,613 bit**,比众数查表(56.3%)的 **7,928** 还低;
-* "定律集能不能取代查表"这个问法在它下面无法评估 —— 换个更差的兜底反而更便宜。
+* Pauling's first rule (top-1 only 32.4%) has `L_total` = **7,613 bit**, *below* the modal look-up
+  table's **7,928** at 56.3%;
+* the question "can a law set replace the look-up table" cannot be assessed under it at all —
+  swapping in a worse fallback makes things cheaper.
 
-因此 `T_CE_MC` 用 13 类条件熵 `Σ_cell n_eff_c·Ĥ(y|cell)` 重算(对信息量单调),作并列主口径。
-**两条曲线都报,不挑。**
+So `T_CE_MC` recomputes with the 13-class conditional entropy `Σ_cell n_eff_c·Ĥ(y|cell)` (monotone
+in information content), reported as a co-equal main convention. **Both curves are reported; neither
+is cherry-picked.**
 
-## 曲线数值(λ = 1,单位 bit)
+## Curve values (λ = 1, in bits)
 
 | N | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -865,172 +1052,207 @@ PREREG 登记的残差码是 `N_eff·H_b(错误率)`。**`H_b` 在准确率跨�
 | `T_CONN` | **1276** | 1279 | 1324 | 1369 | 1423 | 1475 | 1528 | 1632 | 1736 | 1859 |
 | `T_BV` | **4198** | 4226 | 4270 | 4314 | 4359 | 4411 | 4463 | 4568 | 4672 | 4783 |
 
-四个基线在曲线上的位置:
+Where the four baselines sit on the curves:
 
 | | `T_CE` | `T_CE_MC` | `T_CONN` | `T_BV` |
 |---|---|---|---|---|
-| `SET-MODE` | 7928(= N=0) | 13457 | 4979 | 7711 |
-| 零模型(全局众数 / 单格) | — | 12831 | 1276 | 4198 |
-| `SET-P5` | 7696 | **11108** | 1356(含 P4 划分) | 4303 |
-| `SET-P25` | 8011 | 12914 | 1335(含 P4 划分) | 4282 |
+| `SET-MODE` | 7928 (= N=0) | 13457 | 4979 | 7711 |
+| null model (global mode / single cell) | — | 12831 | 1276 | 4198 |
+| `SET-P5` | 7696 | **11108** | 1356 (including the P4 partition) | 4303 |
+| `SET-P25` | 8011 | 12914 | 1335 (including the P4 partition) | 4282 |
 | `SET-H3` | 7994 | 12897 | — | 4264 |
-| 泡林第一定律单条 | 7613 | **11024** | — | — |
+| Pauling's first rule alone | 7613 | **11024** | — | — |
 | `SET-OURS(N*)` | 7760 | 12271 | 1276 | 4198 |
 
-`SET-P25` / `SET-H3` 在 `T_CE` 上**没有独立的 T0 成员**,只付模型代价、零压缩 —— 这正是
-计划 §1 那句"T0 曲线上目前只有两个已知点"的定量版本。
-`T_CONN` 上泡林第三定律是**无 guard 的全称断言,不划分论域,MDL 压缩恒为 0**;
-只有泡林第四定律的高价 guard 才真正划分,而它省下的数据比特(约 25)也补不回自己的 83 bit。
+On `T_CE`, `SET-P25` and `SET-H3` have **no independent T0 member**: they pay the model cost and
+compress nothing — the quantitative version of the plan's §1 remark that "the T0 curve currently has
+only two known points".
+On `T_CONN`, Pauling's third rule is an **unguarded universal assertion that partitions no domain,
+so its MDL compression is identically 0**; only Pauling's fourth rule's high-charge guard genuinely
+partitions, and the data bits it saves (about 25) do not repay its own 83 bit.
 
-## 判定
+## Determination
 
-* **拐点:没有。** 四条曲线都是"N=0 或 1 处取极小,此后单调上升",没有"先平后升"的膝。
-  `argmin N*`(obs / full / reg 三档):`T_CE` 1/1/1,`T_CE_MC` 2/1/2,`T_CONN` 0/0/1,`T_BV` 0/0/0。
-  **G-C 不通过**,按 §12.0.5 转向"晶体化学的规律性不是低秩的"。
-* **固定判据(λ=1,在数据项上算累计压缩)**:`T_CE` N80=1 / N90=2;`T_CE_MC` 1 / 2;
-  `T_CONN` 1 / 2;`T_BV` 2 / 4。两档判据不差 2 倍,但 N 区间落在 **[1, 2]**(T_BV 是 [2,4])。
-* **与 PREREG 修订 R1 登记区间的对照**:登记 `T_CE [5,11]` / `T_BV [5,11]` / `T_CONN [3,5]`,
-  实测 **全部落在区间外(低于下界)**。如实报告,不调整登记值。
-* **λ 敏感性**:`N*` 在 λ ∈ {1,3,10,30} 下 `T_CE` 1→1→0→0、`T_CE_MC` 2→1→1→0、
-  `T_CONN`/`T_BV` 恒 0。**移动 ≤ 2 条,满足 §7 的 L0 判据(≤ ±3)** —— 但这是退化性的满足:
-  `N*` 被钉在 0–2,λ 无处发挥杠杆。论文里必须这么写,不能只写"通过"。
+* **Knee: none.** All four curves take their minimum at N=0 or 1 and rise monotonically thereafter;
+  there is no "flat then rising" knee.
+  `argmin N*` across the obs / full / reg conventions: `T_CE` 1/1/1, `T_CE_MC` 2/1/2,
+  `T_CONN` 0/0/1, `T_BV` 0/0/0.
+  **G-C does not pass**, so per §12.0.5 we pivot to "the regularity of crystal chemistry is not
+  low-rank".
+* **Fixed criterion (λ=1, cumulative compression computed on the data term)**: `T_CE` N80=1 / N90=2;
+  `T_CE_MC` 1 / 2; `T_CONN` 1 / 2; `T_BV` 2 / 4. The two levels do not differ by 2×, and the N
+  interval lands at **[1, 2]** (T_BV at [2,4]).
+* **Against the intervals registered in PREREG revision R1**: registered `T_CE [5,11]` /
+  `T_BV [5,11]` / `T_CONN [3,5]`, and the measurements **all fall outside, below the lower bound**.
+  Reported as they are; the registered values are not adjusted.
+* **λ sensitivity**: over λ ∈ {1,3,10,30}, `N*` goes `T_CE` 1→1→0→0, `T_CE_MC` 2→1→1→0, and
+  `T_CONN`/`T_BV` stay at 0. **A movement of ≤ 2, which satisfies the L0 criterion of §7 (≤ ±3)** —
+  but it is a degenerate satisfaction: `N*` is pinned at 0–2 and λ has no leverage to exert. The
+  paper has to say it this way and cannot simply write "passed".
 
-## 匹配覆盖率下 vs 众数查表(PREREG §2 的第二条判据)
+## Matched coverage vs the modal look-up table (the second criterion of PREREG §2)
 
-| N | 覆盖 | 集合 acc | 查表 acc(同覆盖) | Δ | McNemar p | 簇 bootstrap 95% CI(结构 / 原型) |
+| N | coverage | set acc | look-up acc (same coverage) | Δ | McNemar p | clustered bootstrap 95% CI (structure / prototype) |
 |---|---|---|---|---|---|---|
 | 1 | 7.32% | 0.9568 | 0.9522 | +0.46 pt | 0.0022 | [+0.04,+0.86] / **[−0.05,+0.95]** |
 | 2 | 8.14% | 0.9598 | 0.9525 | +0.73 pt | 1.3e−6 | [+0.34,+1.13] / [+0.23,+1.22] |
 | 3 | 11.3% | 0.8825 | 0.8772 | +0.53 pt | 1.8e−6 | [+0.25,+0.81] / [+0.17,+0.88] |
 
-矛盾率(≥2 条同时触发的实例中 top-1 不一致的比例)全程 ≤ 0.4%。
-**N=1 时按结构原型聚类的 CI 含 0;N=2 / N=3 显著,但幅度只有 +0.5 ~ +0.7 pt,
-且规则是在同一 discovery 分区上选出来的,是样本内数字。**
+The contradiction rate (instances where ≥2 rules fire and their top-1 disagrees) stays ≤ 0.4%
+throughout.
+**At N=1 the CI clustered by structure prototype contains 0; N=2 and N=3 are significant, but the
+magnitude is only +0.5 to +0.7 pt, and the rules were selected on the same discovery partition, so
+these are in-sample numbers.**
 
-## ΔL 分解:增益 97% 来自分层,不是来自预测
+## The ΔL decomposition: 97% of the gain comes from stratification, not from prediction
 
-`rule_decomposition.csv` 把每条规则的数据项收益拆成
-`ΔL_predict = n_eff·[H_b(查表错误率) − H_b(规则错误率)]`(登记的单规则口径)与其余的 `ΔL_stratify`。
-最好的一条:`ΔL_data = 210.0 bit`,其中 **`ΔL_predict` 只有 6.7 bit,`ΔL_stratify` 203.3 bit**。
-19 条全部是这个形状(predict 1.2–7.9,stratify 171–211)。
-换句话说:这些 guard 挣到的比特几乎全部来自"圈出一块查表本来就特别可靠的区域,
-于是查表的错误率序列可以分两段编码",而不是来自"规则比查表预测得准"。
-**一条 31.5 bit 的规则挣不回自己的 31.5 bit(预测项 6.7 bit)。**
+`rule_decomposition.csv` splits each rule's data-term gain into
+`ΔL_predict = n_eff·[H_b(look-up error rate) − H_b(rule error rate)]` (the registered single-rule
+convention) and the remainder, `ΔL_stratify`.
+For the best rule: `ΔL_data = 210.0 bit`, of which **`ΔL_predict` is only 6.7 bit and `ΔL_stratify`
+is 203.3 bit**. All 19 have this shape (predict 1.2–7.9, stratify 171–211).
+In other words, the bits these guards earn come almost entirely from "enclosing a region where the
+look-up table happens to be especially reliable, so the table's error sequence can be coded in two
+segments", not from "the rule predicts better than the table".
+**A 31.5-bit rule cannot earn back its own 31.5 bit (its prediction term is 6.7 bit).**
 
-## 管线的门会毙掉泡林第一定律
+## The pipeline's gates would kill Pauling's first rule
 
-`rule_candidates.parquet` 里所有泡林形式的半径比规则(覆盖 89.6–99.7%)**全部不过门**:
-`G4` 阴离子留一 worst-fold τ = 0.40–0.62(阈值 0.90),`G5` 对查表的增益为负(−13.5 ~ −18.3 pt),
-`G6` 三算法极差 2.7–4.4 pt(阈值 3.0)有半数不过。
-而在修正后的 `T_CE_MC` 口径下,**泡林第一定律单条(11,024 bit)压缩得比我们搜出来的任何集合
-(最好 12,271)和众数查表(13,457)都好** —— 因为多类条件熵奖励的是"信息量"而不是 top-1 命中,
-泡林 1 把 89.6% 的论域切成 6 个 CN 预测格,即使 top-1 只有 32.4%,条件熵也降了 2.0 bit/有效实例。
-**top-1 门与 MDL 在此处系统性不一致,这是一条独立的方法学结论。**
+Every Pauling-form radius-ratio rule in `rule_candidates.parquet` (coverage 89.6–99.7%) **fails the
+gates**: `G4` leave-one-anion-out worst-fold τ = 0.40–0.62 (threshold 0.90), `G5` gain over the
+look-up table is negative (−13.5 to −18.3 pt), and half fail `G6` with a three-algorithm spread of
+2.7–4.4 pt (threshold 3.0).
+Yet under the corrected `T_CE_MC` convention, **Pauling's first rule alone (11,024 bit) compresses
+better than any set we searched out (best 12,271) and better than the modal look-up table
+(13,457)** — because multi-class conditional entropy rewards information content rather than top-1
+hits, and Pauling 1 cuts 89.6% of the domain into 6 CN prediction cells, lowering the conditional
+entropy by 2.0 bit per effective instance even at a top-1 of only 32.4%.
+**Top-1 gates and MDL are systematically inconsistent here, and that is an independent
+methodological conclusion.**
 
-## 无门诊断:是门太严,还是信息不够?(`assemble_set.py ungated`,770 s)
+## Gate-free diagnostic: are the gates too strict, or is the information not there? (`assemble_set.py ungated`, 770 s)
 
-把 G1–G8 全部关掉,从**全部 2,044 条候选**(去重后 859 个不同预测向量)重跑组装,
-`T_CE_MC`、λ=1:
+Turning G1–G8 all off and reassembling from **all 2,044 candidates** (859 distinct prediction
+vectors after de-duplication), on `T_CE_MC` at λ=1:
 
 | N | 0 | 1 | 2 | 3 | 4 | 5 | 6 | **7** | 8 | 10 | 12 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | `L_total` | 12831 | 10384 | 10076 | 9969 | 9930 | 9924 | 9923 | **9861** | 9871 | 9887 | 9925 |
-| 数据项 | 12754 | 10080 | 9353 | 9055 | 8923 | 8662 | 8545 | 8074 | 8048 | 7934 | 7862 |
+| data term | 12754 | 10080 | 9353 | 9055 | 8923 | 8662 | 8545 | 8074 | 8048 | 7934 | 7862 |
 
-**无门时曲线确实有内部极小,`N* = 7`,落在 PREREG 修订 R1 登记的 `T_CE [5,11]` 区间内**;
-固定判据同样落在里面(N80 = 5,N90 = 7)。压缩量 2,970 bit,是有门时(560 bit)的 5.3 倍。
+**Without gates the curve does have an interior minimum at `N* = 7`, inside the `T_CE [5,11]`
+registered in PREREG revision R1**; the fixed criterion lands inside as well (N80 = 5, N90 = 7). The
+compression is 2,970 bit, 5.3× the 560 bit obtained with gates.
 
-**但这条路走不通,三个理由都是硬的**:
+**But this road is closed, for three hard reasons**:
 
-1. `N* = 7` 那个集合的 12 条成员里 **9 条 G4 不过**(阴离子留一 worst-fold τ < 0.90)、
-   **6 条 G6 不过**(三算法极差 ≥ 3 pt)、**1 条含随机特征 `rnd_Zmod7`**(负对照 ii 直接触发)。
-2. 它的 top-1 准确率是 **0.389,比众数查表的 0.563 低 17.4 pt**,直接违反 PREREG §2 的
-   匹配覆盖率判据 —— 而 §2 与 R16 要求 MDL 与匹配覆盖率两条**同时**成立。
-3. 它的极小是**浅盆**:N=4..12 之间 `L_total` 只在 9,861–9,930 之间波动(0.7%),
-   膝不锐利,按任何合理容差都只能报区间。
+1. Of the 12 members of that `N* = 7` set, **9 fail G4** (leave-one-anion-out worst-fold τ < 0.90),
+   **6 fail G6** (three-algorithm spread ≥ 3 pt), and **1 contains the random feature `rnd_Zmod7`**
+   (which trips negative control ii outright).
+2. Its top-1 accuracy is **0.389, 17.4 pt below the modal look-up table's 0.563**, directly violating
+   the matched-coverage criterion of PREREG §2 — and §2 together with R16 require MDL and matched
+   coverage to hold **simultaneously**.
+3. Its minimum is a **shallow basin**: between N=4 and N=12 `L_total` moves only within 9,861–9,930
+   (0.7%). The knee is not sharp, and under any reasonable tolerance only an interval can be
+   reported.
 
-结论写死:**"T0 组成级信息里确实存在一个 N ≈ 5–7 的低秩结构,但它是关于 CN 分布形状的
-(条件熵低),不是关于 CN 众数的(top-1 差),并且它跨阴离子族不成立。"**
-这句话同时解释了 G-C 与 G-E 为什么一起失败,也是 §12.0"T0 集合拿不到"预案要引用的证据。
+The conclusion, stated firmly: **"there is indeed a low-rank structure of N ≈ 5–7 in T0
+composition-level information, but it is about the shape of the CN distribution (low conditional
+entropy), not about the CN mode (poor top-1), and it does not hold across anion families."**
+That single sentence explains why G-C and G-E fail together, and it is the evidence the §12.0
+contingency for "no T0 set is obtainable" needs to cite.
 
 ---
 
-# 第二阶段:合理性法则与判据公式(2026-07-29)
+# Phase two: plausibility laws and the score formula (2026-07-29)
 
-靶从"预测配位环境"换成**"判断结构合不合理"**后,新增以下脚本。
+Once the target changed from "predict the coordination environment" to **"judge whether a structure
+is plausible"**, the following scripts were added.
 
-## 特征层
+## The feature layer
 
-| 脚本 | 产物 | 内容 |
+| script | outputs | contents |
 |---|---|---|
-| `phys_law.py` | `phys_real` / `phys_bad` | Shannon 配位相关半径类:`bl_min`(最短阳-阴键 / 半径和)、`bl_mean`、`bl_cat_max`、`bl_rsd_max`、`sh_pack`,以及电荷拓扑量 `frac_like_bonds` / `min_opp_frac` |
-| `elec_feat.py` | `elec_real` / `elec_bad` | Ewald 分解、位点马德隆能(含尺度无关的 `madz_*`)、Hoppe 有效配位数 ECoN、键价失配(**用形式电荷,BVAnalyzer 禁用**) |
-| `geom_feat.py` | `geom_real` / `geom_bad` | 多智能体调研筛出的三个几何配位量:`aa_min`(配体-配体接触比,**泡林第一定律的几何内核**)、`phi`(多面体凸包填充率,专抓阳离子换位)、`mef`(Hoppe MEFIR 有效半径失配,有符号) |
-| `sym_feat.py` | `sym_real` / `sym_bad` / `sym_lemat` | 对称性:空间群号、对称不等价位点数、Wyckoff 熵 `I_G`。**结论是不予采纳**,见下 |
-| `t0_guard.py` | `t0_guard` | 纯组分的离子性度量(电负性差、泡林离子性分数 `fi`)。**只当前提用**,当法则用排除力恒为 0 |
-| `robust_blmin.py` | `robust_blmin` | 核心法则的稳健性自查:三套近邻算法极差、Shannon 表命中率、阈值敏感性 |
-| `false_positive.py` | `false_positive` | **假阳性检验**:把法则套到 LeMat 的 DFT 弛豫候选上。那些结构几何合理、只是没被合成,法则应当基本放行;若大批被毙,说明测的是数据库指纹不是合理性 |
+| `phys_law.py` | `phys_real` / `phys_bad` | Shannon coordination-dependent radius quantities: `bl_min` (shortest cation–anion bond / radius sum), `bl_mean`, `bl_cat_max`, `bl_rsd_max`, `sh_pack`, plus the charge-topology quantities `frac_like_bonds` / `min_opp_frac` |
+| `elec_feat.py` | `elec_real` / `elec_bad` | Ewald decomposition, site Madelung energies (including the scale-free `madz_*`), Hoppe's effective coordination number ECoN, bond-valence mismatch (**using formal charges; BVAnalyzer is disabled**) |
+| `geom_feat.py` | `geom_real` / `geom_bad` | three geometric coordination quantities selected by multi-agent survey: `aa_min` (ligand–ligand contact ratio, **the geometric kernel of Pauling's first rule**), `phi` (convex-hull packing fraction of the polyhedron, which specifically catches cation transposition), `mef` (Hoppe MEFIR effective-radius mismatch, signed) |
+| `sym_feat.py` | `sym_real` / `sym_bad` / `sym_lemat` | symmetry: space-group number, number of symmetry-inequivalent sites, Wyckoff entropy `I_G`. **The conclusion is not to adopt it**, see below |
+| `t0_guard.py` | `t0_guard` | purely compositional measures of ionicity (electronegativity difference, Pauling ionic-character fraction `fi`). **Used only as a premise**; as a law its exclusion power is identically 0 |
+| `robust_blmin.py` | `robust_blmin` | robustness self-check for the core law: spread across three neighbour algorithms, Shannon table hit rate, threshold sensitivity |
+| `false_positive.py` | `false_positive` | **the false-positive test**: apply the laws to LeMat's DFT-relaxed candidates. Those structures are geometrically reasonable and simply have not been synthesised, so the laws should largely pass them; if a large batch is rejected, what is being measured is a database fingerprint rather than plausibility |
 
-**两个脚本用同一个 `seed_of()`(crc32)播种扰动**,所以 `phys_bad` 与 `elec_bad`
-的同一 `sid` 指向**同一个**扰动结构,可按 sid 安全合并。
-此前用 `abs(hash(sid))`,而 Python 字符串 hash 受 PYTHONHASHSEED 随机化、
-**跨进程不同** —— 扰动无法重建,分两次算的特征合并会配错。已实测同种子重放 28/28 一致。
+**Two scripts seed their perturbations from the same `seed_of()` (crc32)**, so the same `sid` in
+`phys_bad` and `elec_bad` points at **the same** perturbed structure and they can safely be merged
+on sid.
+This previously used `abs(hash(sid))`, but Python's string hash is randomised by PYTHONHASHSEED and
+**differs across processes** — the perturbation could not be rebuilt, and features computed in two
+passes would merge onto the wrong rows. Replay with the same seed has been measured as 28/28
+identical.
 
-## 使用层
+## The application layer
 
-| 脚本 | 作用 |
+| script | purpose |
 |---|---|
-| `apply_rules.py` | **交付入口**:对任意结构文件判定合理性。`--set single/core4/five`,`--verbose` 逐条给出判定与实测值 |
+| `apply_rules.py` | **the delivery entry point**: judge the plausibility of any structure file. `--set single/core4/five`, and `--verbose` for the verdict and measured value law by law |
 
 ```
-python src/apply_rules.py foo.cif bar.cif           # 推荐五条
-python src/apply_rules.py --set core4 *.cif         # 只用可信核心四条
-python src/apply_rules.py --verbose foo.cif         # 看每条法则的实测值
+python src/apply_rules.py foo.cif bar.cif           # the recommended five
+python src/apply_rules.py --set core4 *.cif         # the trusted core of four only
+python src/apply_rules.py --verbose foo.cif         # see each law's measured value
 ```
 
-实测(CsTaO₃ 与它的阴阳离子互换版)完整印证了 S5 那条盲区:
+Measured on CsTaO₃ and its cation–anion swapped version, this confirms the S5 blind spot exactly:
 
-| 法则 | 真实结构 | 互换后 |
+| law | real structure | after the swap |
 |---|---|---|
-| `bl_min` | 0.8819 ✓ | 0.9647 ✓ **数值反而更好** |
+| `bl_min` | 0.8819 ✓ | 0.9647 ✓ **the value actually improves** |
 | `bl_mean` | 0.9400 ✓ | 1.0290 ✓ |
 | `madz_range` | 19.62 ✓ | 22.13 ✓ |
 | `mad_max` | −5.89 ✓ | 0.41 ✓ |
-| **同号成键占比** | **0.0000 ✓** | **0.2500 ✗** |
+| **fraction of like-charge bonds** | **0.0000 ✓** | **0.2500 ✗** |
 
-**四条键长/静电法则全部放行,只有第五条抓住它。** 去掉第五条,这个结构会被判为合理。
+**All four bond-length and electrostatic laws pass it; only the fifth catches it.** Drop the fifth
+and this structure is judged plausible.
 
-## 搜索层
+## The search layer
 
-| 脚本 | 作用 |
+| script | purpose |
 |---|---|
-| `rules_final.py` | 法则集束搜索。`assert_clean()` 硬断言无 lockbox;`--guards` 启用「若 G 则 T」;`--strat-floor` 要求每个化学层的满足率下限;`--min-cov` 控制特征可算比例门槛;`--ban` 禁用指定特征 |
-| `formula2.py` | 判据公式。同组成组内配对、反对称双写钉死截距、按组 GroupKFold、聚类自助 CI、弃权曲线。`--protocol holdout|cv` |
-| `verify_negatives.py` | **负样本的负对照** —— 用马德隆能确认每一类扰动真的该被排除 |
+| `rules_final.py` | beam search over law sets. `assert_clean()` hard-asserts that no lockbox data is present; `--guards` enables "if G then T"; `--strat-floor` imposes a satisfaction floor per chemical stratum; `--min-cov` controls the threshold on the computable fraction of a feature; `--ban` disables named features |
+| `formula2.py` | the score formula. Within-composition pairing, antisymmetric double-writing to pin the intercept, GroupKFold by group, clustered bootstrap CIs, abstention curves. `--protocol holdout\|cv` |
+| `verify_negatives.py` | **the negative control for the negatives** — use Madelung energies to confirm that each perturbation class really ought to be excluded |
 
-## 三个必须保留的检查
+## Three checks that must be kept
 
-1. **负样本要有负对照**(`verify_negatives.py`)。S2 曾因电荷未跟随元素交换而
-   ΔE 恒为 0,四轮特征工程都在追一个不存在的信号;S6 剪切应变因两个探针都判不出
-   不合理而被废弃。
-2. **切分断言要写进代码**(`assert_clean`)。"我知道有 lockbox"不等于代码知道。
-3. **负样本谱系要覆盖不同的失效轴**。留一类扰动检验显示法则**只能约束它见过的破坏方向**:
-   没见过整体膨胀,就不会去选键长上界。为此新增 S5 阴阳离子互换 ——
-   它几何上与真实结构几乎无法区分(`bl_min` 0.930 vs 0.937),静电上差 +5.8 eV/atom。
-   实测所有键长/配位类法则对 S5 排除力仅 0.03–0.21,而一条
-   `frac_like_bonds ≤ 0`(不存在同号离子成键)抓住 96%。
-4. **判定标准必须在看到数字之前写死。**
-   `sym_feat.py` 是一个实例:"结构必须有对称性"这条规则满足率 **99.17%**、
-   排除力 **39.5%**,两个数都比核心法则 `bl_min` 好看。但它对均匀膨胀的排除力是
-   **0.00**、对随机位移是 **0.98** —— 完全对应"这类扰动动不动分数坐标",
-   是负样本生成器的性质;假阳性落差 +8.3 pt;真实结构 P1 占 0.83% 而
-   LeMat 占 9.17%,十一倍差距就是数据库指纹本身。
-   判定标准写在 `sym_feat.py` 的文件头,在算之前。**若事后再解释,
-   那两个数字足以说服任何人把它写进正文。**
+1. **Negative samples need a negative control** (`verify_negatives.py`). S2 once had ΔE identically 0
+   because the charges did not follow the swapped elements, and four rounds of feature engineering
+   were chasing a signal that did not exist; S6, shear strain, was dropped because neither probe
+   could tell it was implausible.
+2. **The split assertions have to be in the code** (`assert_clean`). "I know there is a lockbox" is
+   not the same as the code knowing.
+3. **The negative-sample lineage has to cover different axes of failure.** The leave-one-perturbation-
+   class-out test shows the laws **only constrain the damage directions they have seen**: never
+   having seen uniform expansion, they will not select an upper bound on bond length. Hence the
+   addition of S5, the cation–anion swap — geometrically all but indistinguishable from the real
+   structure (`bl_min` 0.930 vs 0.937) but electrostatically +5.8 eV/atom away.
+   Measured, every bond-length and coordination law has an exclusion power of only 0.03–0.21 on S5,
+   while a single `frac_like_bonds ≤ 0` (no like-charge bonds exist) catches 96%.
+4. **The decision criterion must be fixed in writing before the numbers are seen.**
+   `sym_feat.py` is a case in point: the rule "a structure must have symmetry" has a satisfaction
+   rate of **99.17%** and an exclusion power of **39.5%**, both better-looking than the core law
+   `bl_min`. But its exclusion power against uniform expansion is **0.00** and against random
+   displacement is **0.98** — exactly matching "this class of perturbation moves the fractional
+   coordinates", which is a property of the negative-sample generator; the false-positive drop is
+   +8.3 pt; and P1 accounts for 0.83% of real structures against 9.17% of LeMat, an elevenfold gap
+   that is the database fingerprint itself.
+   The decision criterion is written at the head of `sym_feat.py`, before anything was computed.
+   **Explained after the fact, those two numbers would persuade anyone to put it in the main text.**
 
-5. **`--ban` 要按 `col2` 过滤。** 带前提规则的 `col` 是 `"G:前提列:目标列"`,
-   只匹配 `col` 会让禁用形同虚设 —— 几组"消融前后完全相同"的结论曾因此失效。
+5. **`--ban` has to filter on `col2`.** For a rule with a premise, `col` is
+   `"G:premise column:target column"`, so matching `col` alone makes the ban a no-op — several
+   "identical before and after ablation" conclusions were invalidated by this.
 
-6. **天花板测量必须配分布外检验**。无约束 GBDT 在 99% 满足率下排除 87%,
-   但留一类扰动检验显示塌陷 0.45–0.87 —— 那是在识别扰动签名,不是识别不合理。
-   同口径下法则集塌陷仅 0.243。
+6. **Ceiling measurements must come with an out-of-distribution test.** An unconstrained GBDT
+   excludes 87% at a satisfaction rate of 99%, but the leave-one-perturbation-class-out test shows
+   it collapsing to 0.45–0.87 — it is recognising the perturbation signature, not implausibility.
+   Under the same protocol the law set collapses only to 0.243.

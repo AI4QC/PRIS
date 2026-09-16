@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""PREREG-L4: 贪心谓词搜索(L3 + ≤4 新谓词)。
+"""PREREG-L4: greedy predicate search (L3 + at most 4 new predicates).
 
-  search  先复现 L3 已发表点位,后在 discovery 搜索并冻结 L4
-  calib   calibration 一次求值 + 各类分解
-  lopo    新谓词逐条 LOPO(删目标类重选,在删除类上求值)
+  search  reproduce the published L3 operating point first, then search on discovery and
+          freeze L4
+  calib   one-shot evaluation on calibration + a breakdown by class
+  lopo    leave-one-perturbation-class-out for each new predicate (re-select with the target
+          class removed, then evaluate on the removed class)
 
-冻结文档 docs/plans/2026-08-14-l4-plausibility-prereg.md(sha256 199788c4...)。
+Frozen document docs/plans/2026-08-14-l4-plausibility-prereg.md (sha256 199788c4...).
 """
 from __future__ import annotations
 import os
@@ -93,7 +95,7 @@ def cmd_search():
     lrc = lr[lr.split == "calibration"].reset_index(drop=True)
     lbc = lb[lb.psplit == "calibration"].reset_index(drop=True)
 
-    # 复现检查:L3 已发表点位
+    # reproduction check: the published L3 operating point
     sat_d = l3_mask(lrd).mean(); exc_d = 1 - l3_mask(lbd).mean()
     sat_c = l3_mask(lrc).mean(); exc_c = 1 - l3_mask(lbc).mean()
     print(f"L3 reproduction: discovery {sat_d:.4f}/{exc_d:.4f} (pub 0.9071/0.7052)  "

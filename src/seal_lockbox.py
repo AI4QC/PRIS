@@ -1,30 +1,41 @@
 #!/usr/bin/env python3
-"""三分数据并封存 lockbox。这是全项目可信度的锚点。
+"""Split the data three ways and seal the lockbox. This is the anchor of the whole project's
+credibility.
 
-为什么需要:在 38,307 个结构上搜规则,必然搜得出伪规律。唯一的防线是
-"搜索永远看不到一部分数据,最终规则在那部分上一次性评估"。
+Why it is needed: searching for rules over 38,307 structures will inevitably turn up spurious
+ones. The only defence is "the search never sees part of the data, and the final rules are
+evaluated on that part once".
 
-三分(按 sid 的 sha256 定,与顺序、与文件无关,可复现):
-  discovery   60%  —— 搜索、调参、看图,随便看
-  calibration 25%  —— 定阈值、选 N、做模型选择,可以看但不许用来搜规则
-  lockbox     15%  —— 封存,全程只许开 3 次
+The three-way split (fixed by the sha256 of the sid, independent of order and of any file,
+and reproducible):
+  discovery   60%  -- search, tune, plot; look at it however you like
+  calibration 25%  -- set thresholds, choose N, select models; may be inspected, but never
+                      used to search for rules
+  lockbox     15%  -- sealed, and may be opened at most 3 times in total
 
-**为什么不加密**(v1.1 的设计修正):初版用 gpg 对称加密 lockbox 的 sid 清单,
-这是做过头了,而且自相矛盾——`splits.parquet` 里明文写着完整三分表,加密等于没加。
-更根本的是 `split_of()` 是纯函数、seed 明文写在封条里,任何人一行代码就能重算出全部分配。
+**Why it is not encrypted** (a design correction in v1.1): the first version encrypted the
+lockbox sid list symmetrically with gpg, which was overkill and self-contradictory --
+`splits.parquet` carries the full three-way table in the clear, so the encryption added
+nothing. More fundamentally, `split_of()` is a pure function and the seed is written in the
+seal in plain text, so anyone can recompute the whole assignment in one line of code.
 
-这里要防的是**自己**在反复"看结果再调参"的过程中不知不觉泄信息,不是防外人。
-防自己靠的是流程可核查,不是密码学。所以保留三样真正起作用的:
+What has to be guarded against here is **oneself** leaking information unnoticed while
+repeatedly looking at results and retuning; it is not about outsiders. Guarding against
+oneself relies on an auditable process, not on cryptography. So three things that do actually
+work are kept:
 
-  1. 封条 LOCKBOX.sealed.json —— seed / 时间戳 / git commit / 各分区计数 / sid 清单 sha256。
-     证明"分法是在这个时间点、这份代码上定的",事后改不了
-  2. 审计日志 openings.log —— 每次动 lockbox 必须写理由,论文里报实际开封次数
-  3. PREREG.md 的 git tag —— 判据在看数据之前冻结,tag 的 commit hash 写进论文方法部分
+  1. The seal LOCKBOX.sealed.json -- seed / timestamp / git commit / per-partition counts /
+     sha256 of the sid list. It proves the split was fixed at this moment against this code,
+     and cannot be changed afterwards.
+  2. The audit log openings.log -- every touch of the lockbox must record a reason, and the
+     paper reports the actual number of openings.
+  3. The git tag on PREREG.md -- the criteria are frozen before the data are seen, and the
+     tag's commit hash goes into the paper's Methods section.
 
-用法(全程无需任何口令或交互输入):
-    python seal_lockbox.py --seal --seed 20260728        # 首次封存
-    python seal_lockbox.py --open --reason "MPU-6 主论文最终评估"   # 开封(计入配额)
-    python seal_lockbox.py --status                       # 查看封条与开封记录
+Usage (no passphrase or interactive input at any point):
+    python seal_lockbox.py --seal --seed 20260728        # seal for the first time
+    python seal_lockbox.py --open --reason "MPU-6 final evaluation for the main paper"   # open (counts against the quota)
+    python seal_lockbox.py --status                       # inspect the seal and the opening record
 """
 from __future__ import annotations
 import argparse
@@ -45,15 +56,16 @@ AUDIT = LOCKDIR / "openings.log"
 ENC = LOCKDIR / "lockbox_sids.txt"
 MAX_OPENINGS = 3
 
-# 分区比例。改这三个数等于换了一套实验,所以它们进封条、不进命令行。
+# Partition fractions. Changing these three numbers means a different experiment, so they go
+# into the seal rather than onto the command line.
 FRAC = {"discovery": 0.60, "calibration": 0.25, "lockbox": 0.15}
 
 
 def split_of(sid: str, seed: str) -> str:
-    """sid → 分区。纯函数:同样的 (sid, seed) 永远给同样的分区,
-    与数据文件的行序、与是否重跑都无关。"""
+    """sid -> partition. A pure function: the same (sid, seed) always gives the same
+    partition, whatever the row order of the data files and however many times it is rerun."""
     h = hashlib.sha256(f"{seed}:{sid}".encode()).digest()
-    # 取前 8 字节当无符号整数,映射到 [0,1)
+    # take the first 8 bytes as an unsigned integer and map it into [0,1)
     x = int.from_bytes(h[:8], "big") / 2**64
     if x < FRAC["discovery"]:
         return "discovery"
@@ -72,21 +84,23 @@ def git_commit() -> str:
 
 
 def load_sids() -> list[str]:
-    """分析集的 sid。用 provenance 的 source_id(icsd-N / cod-N),
-    它跨脚本一致,而且不依赖 sqlite 的 pk(pk 会随重建变)。"""
+    """The sids of the analysis set. Uses provenance's source_id (icsd-N / cod-N), which is
+    consistent across scripts and does not depend on sqlite's pk (which changes on a rebuild).
+    """
     p = FEATURES / "provenance.parquet"
     if not p.exists():
-        sys.exit(f"缺少 {p};先跑 make week1")
+        sys.exit(f"{p} is missing; run make week1 first")
     df = pd.read_parquet(p, columns=["source_id", "in_analysis_set"])
     sids = sorted(df.loc[df.in_analysis_set, "source_id"].astype(str).unique())
     if not sids:
-        sys.exit("分析集为空,不封")
+        sys.exit("the analysis set is empty; nothing sealed")
     return sids
 
 
 def do_seal(seed: str, force: bool) -> None:
     if SEAL.exists() and not force:
-        sys.exit(f"封条已存在:{SEAL}\n重新封存会使既有结论失效。确认要重来请加 --force")
+        sys.exit(f"a seal already exists: {SEAL}\n"
+                 "Resealing invalidates every existing conclusion. Add --force to confirm.")
     LOCKDIR.mkdir(parents=True, exist_ok=True)
     sids = load_sids()
     assign = {s: split_of(s, seed) for s in sids}
@@ -96,13 +110,14 @@ def do_seal(seed: str, force: bool) -> None:
     blob = "\n".join(lock_sids).encode()
     digest = hashlib.sha256(blob).hexdigest()
 
-    # sid 清单明文存。加密没有意义:seed 在封条里、split_of 是纯函数,一行代码就能重算。
-    # 真正起作用的是下面的封条与审计日志。
+    # the sid list is stored in the clear. Encryption is pointless: the seed is in the seal and
+    # split_of is a pure function, so it can be recomputed in one line. What actually works is
+    # the seal and the audit log below.
     ENC.write_bytes(blob)
 
-    # 完整三分表,下游按 split 列过滤。
-    # 注意:它包含 lockbox 行,这是有意的——遮住它并不能阻止重算,
-    # 只会让下游代码不得不绕路,反而更容易出错。
+    # the full three-way table; downstream code filters on the split column.
+    # Note that it includes the lockbox rows, deliberately -- hiding them would not prevent
+    # recomputation, it would only force downstream code into detours and make errors likelier.
     pd.DataFrame({"source_id": list(assign), "split": list(assign.values())}) \
         .to_parquet(FEATURES / "splits.parquet", index=False)
 
@@ -121,26 +136,29 @@ def do_seal(seed: str, force: bool) -> None:
     SEAL.write_text(json.dumps(seal, indent=2, ensure_ascii=False))
     AUDIT.touch()
     print(json.dumps(seal, indent=2, ensure_ascii=False))
-    print(f"\n封条已写入 {SEAL}")
-    print("下一步:把 PREREG.md 提交并打 git tag,tag 的 commit hash 要写进论文方法部分。")
+    print(f"\nseal written to {SEAL}")
+    print("Next: commit PREREG.md and apply a git tag; the tag's commit hash goes into the "
+          "paper's Methods section.")
 
 
 def do_open(reason: str) -> None:
     if not SEAL.exists():
-        sys.exit("还没封存,无从开启")
+        sys.exit("nothing has been sealed, so there is nothing to open")
     seal = json.loads(SEAL.read_text())
     used = [l for l in AUDIT.read_text().splitlines() if l.strip()] if AUDIT.exists() else []
     if len(used) >= seal["max_openings"]:
-        sys.exit(f"开封配额已用尽({len(used)}/{seal['max_openings']})。"
-                 f"论文必须报告实际开封次数,不要再开。")
+        sys.exit(f"the opening quota is exhausted ({len(used)}/{seal['max_openings']}). "
+                 f"The paper must report the actual number of openings; do not open again.")
     if not reason or len(reason) < 10:
-        sys.exit("必须给出实质性的开封理由(≥10 字),它会进审计日志和论文")
+        sys.exit("a substantive reason for opening is required (>=10 characters); "
+                 "it goes into the audit log and the paper")
 
     if not ENC.exists():
-        sys.exit(f"缺少 {ENC}")
+        sys.exit(f"{ENC} is missing")
     blob = ENC.read_bytes()
     if hashlib.sha256(blob).hexdigest() != seal["lockbox_sids_sha256"]:
-        sys.exit("★ 解出的 sid 清单与封条哈希不符,数据被动过,停止")
+        sys.exit("!! the recovered sid list does not match the seal hash; the data has been "
+                 "altered. Stopping.")
 
     rec = {"opened_at_utc": datetime.now(timezone.utc).isoformat(),
            "reason": reason, "git_commit": git_commit(),
@@ -149,22 +167,22 @@ def do_open(reason: str) -> None:
         f.write(json.dumps(rec, ensure_ascii=False) + "\n")
     out = LOCKDIR / f"lockbox_sids_opening{rec['opening_index']}.txt"
     out.write_bytes(blob)
-    print(f"第 {rec['opening_index']}/{seal['max_openings']} 次开封,已写 {out}")
-    print(f"剩余配额:{seal['max_openings'] - rec['opening_index']}")
+    print(f"opening {rec['opening_index']}/{seal['max_openings']}; wrote {out}")
+    print(f"remaining quota: {seal['max_openings'] - rec['opening_index']}")
 
 
 def do_status() -> None:
     if not SEAL.exists():
-        print("尚未封存")
+        print("not sealed yet")
         return
     print(json.dumps(json.loads(SEAL.read_text()), indent=2, ensure_ascii=False))
     if AUDIT.exists() and AUDIT.read_text().strip():
-        print("\n开封记录:")
+        print("\nopening record:")
         for l in AUDIT.read_text().splitlines():
             if l.strip():
                 print("  " + l)
     else:
-        print("\n开封记录:无(从未开启)")
+        print("\nopening record: none (never opened)")
 
 
 def main() -> int:

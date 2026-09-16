@@ -1,14 +1,17 @@
 import os
 #!/usr/bin/env python3
-"""合理性法则集:三分对照下的最终搜索。
+"""Plausibility law sets: the final search under a three-way comparison.
 
-三个数一起报,缺一不可:
-  真实离子晶体满足率  -> 越高越好(对照泡林 2-5 条的 13%,CN<=8 时 21%)
-  破坏结构排除率      -> 越高越好(法则有没有牙齿)
-  DFT 候选排除率      -> **应该低**(那些结构其实合理,排掉就是误杀)
+All three numbers are reported together; none may be omitted:
+  satisfaction on real ionic crystals -> the higher the better (against 13% for Pauling 2-5,
+                                         21% at CN<=8)
+  exclusion on damaged structures     -> the higher the better (does the law have teeth)
+  exclusion on DFT candidates         -> **should be low** (those structures are in fact
+                                         plausible, so excluding one is a false kill)
 
-第三个数是防自欺的关键:一条"体积<=36"的规则能排掉大量东西,
-但它把合理的疏松结构也一起排了 —— 只看前两个数发现不了。
+The third number is what guards against self-deception: a rule "volume<=36" can exclude a
+great deal, but it excludes plausible loose structures along with the rest -- which the
+first two numbers alone cannot reveal.
 """
 import sys, json, itertools, warnings
 import numpy as np, pandas as pd
@@ -26,13 +29,14 @@ def main():
     cols=[c for c in real.columns if real[c].dtype.kind=='f'
           and c in bad.columns and c in cand.columns
           and real[c].notna().mean()>0.9 and bad[c].notna().mean()>0.85]
-    print(f'真实 {len(real):,} | 破坏 {len(bad):,} | DFT候选 {len(cand):,} | 特征 {len(cols)}')
-    if 'kind' in bad: print(f'破坏类型: {bad.kind.value_counts().to_dict()}')
+    print(f'real {len(real):,} | damaged {len(bad):,} | DFT candidates {len(cand):,} | features {len(cols)}')
+    if 'kind' in bad: print(f'damage classes: {bad.kind.value_counts().to_dict()}')
     def G(df):
         z=df.z_cat_max.values if 'z_cat_max' in df else np.full(len(df),np.nan)
         c=df.cn_cat_max.values if 'cn_cat_max' in df else np.full(len(df),np.nan)
-        return {'全域':np.ones(len(df),bool),'低价':z<=2.5,'中价':(z>2.5)&(z<=4.5),'高价':z>4.5,
-                '低配位':c<=4.5,'中配位':(c>4.5)&(c<=6.5),'高配位':c>6.5}
+        return {'all':np.ones(len(df),bool),'low charge':z<=2.5,
+                'mid charge':(z>2.5)&(z<=4.5),'high charge':z>4.5,
+                'low CN':c<=4.5,'mid CN':(c>4.5)&(c<=6.5),'high CN':c>6.5}
     GR,GB,GC=G(real),G(bad),G(cand)
     rows=[]
     for g in GR:
@@ -51,17 +55,17 @@ def main():
                     rb,rc=rej(bad,GB),rej(cand,GC)
                     if sat<0.98 or rb<0.01: continue
                     rows.append(dict(g=g,col=c,side=side,th=float(th),sat=sat,rej_bad=rb,rej_cand=rc,
-                        desc=f'若[{g}] 则 {c} {"<=" if side=="hi" else ">="} {th:.4g}',
-                        score=rb-rc))          # 牙齿减误杀
+                        desc=f'if [{g}] then {c} {"<=" if side=="hi" else ">="} {th:.4g}',
+                        score=rb-rc))          # teeth minus false kills
     r=pd.DataFrame(rows).sort_values('score',ascending=False)
-    print(f'\n候选法则 {len(r)} 条。Top 12(按 破坏排除率 − 候选误杀率):')
+    print(f'\ncandidate laws: {len(r)}. Top 12 (by damage exclusion - candidate false-kill rate):')
     for t in r.head(12).itertuples():
-        print(f'  满足={t.sat:.4f} 破坏排除={t.rej_bad:.4f} 误杀={t.rej_cand:.4f}  {t.desc}')
+        print(f'  sat={t.sat:.4f} damage excl={t.rej_bad:.4f} false kill={t.rej_cand:.4f}  {t.desc}')
     def M(t,df,GG):
         v=df[t.col].values; ok=(v<=t.th) if t.side=='hi' else (v>=t.th)
         return (~GG[t.g])|(~np.isfinite(v))|ok
     sR=np.ones(len(real),bool); sB=np.ones(len(bad),bool); sC=np.ones(len(cand),bool); ch=[]
-    print('\n=== 组装(约束:真实满足率 >= 0.97)===')
+    print('\n=== assembling (constraint: satisfaction on real >= 0.97) ===')
     for _ in range(15):
         best=None
         for t in r.itertuples():
@@ -73,13 +77,13 @@ def main():
             if best is None or gain>best[0]: best=(gain,t,nR,nB,nC)
         if best is None or best[0]<0.003: break
         _,t,nR,nB,nC=best; ch.append(t); sR,sB,sC=nR,nB,nC
-        print(f'  {len(ch)}. {t.desc[:50]:50s} 满足={sR.mean():.4f} 排除破坏={1-sB.mean():.4f} 误杀={1-sC.mean():.4f}')
-    print(f'\n=== 合理性法则集 N={len(ch)} ===')
-    print(f'  真实离子晶体满足率 = {sR.mean():.4f}   ← 泡林2-5条: 0.13(CN<=8: 0.21)')
-    print(f'  破坏结构排除率     = {1-sB.mean():.4f}')
-    print(f'  DFT候选误杀率      = {1-sC.mean():.4f}')
+        print(f'  {len(ch)}. {t.desc[:50]:50s} sat={sR.mean():.4f} damage excl={1-sB.mean():.4f} false kill={1-sC.mean():.4f}')
+    print(f'\n=== plausibility law set N={len(ch)} ===')
+    print(f'  satisfaction on real ionic crystals = {sR.mean():.4f}   <- Pauling 2-5: 0.13 (CN<=8: 0.21)')
+    print(f'  exclusion on damaged structures     = {1-sB.mean():.4f}')
+    print(f'  false-kill rate on DFT candidates   = {1-sC.mean():.4f}')
     if 'kind' in bad:
-        print('\n  分破坏类型的排除率:')
+        print('\n  exclusion by damage class:')
         for k,gg in bad.groupby('kind'):
             print(f'    {k}: {1-sB[bad.kind.values==k].mean():.4f}')
     json.dump({'N':len(ch),'sat_real':float(sR.mean()),'rej_bad':float(1-sB.mean()),
@@ -87,6 +91,6 @@ def main():
       'rules':[{'desc':t.desc,'sat':float(t.sat),'rej_bad':float(t.rej_bad),
                 'rej_cand':float(t.rej_cand)} for t in ch]},
       open(F+'final_rules.json','w'),ensure_ascii=False,indent=2)
-    print(f'\n写出 {F}final_rules.json')
+    print(f'\nwrote {F}final_rules.json')
     return 0
 if __name__=='__main__': raise SystemExit(main())

@@ -1,35 +1,44 @@
 #!/usr/bin/env python3
-"""静电 + 键价特征 —— 补上实验结构域最大的缺口。
+"""Electrostatic and bond-valence features -- closing the largest gap in the experimental
+structure domain.
 
-# 为什么是最大的缺口
+# Why this is the largest gap
 
-计算域(LeMat 多形体)的判据公式里,权重最大的三项全是静电量:
+In the criterion formula for the computational domain (LeMat polymorphs), the three
+highest-weighted terms are all electrostatic:
   1.852*z(ewald_point) + 0.951*z(ewald_real) ... -0.718*z(mad_min) -0.687*z(mad_range)
-而实验结构域的特征表里**一个静电量都没有** —— real_rank.parquet 只有配位数统计
-和泡林 2-5 的量。实验域公式因此只能靠 cn_an_max / cn_cat_max / vol_per_atom,
-全覆盖准确率只有 0.54-0.61。
+whereas the experimental-domain feature table has **no electrostatic quantity at all** --
+real_rank.parquet holds only coordination-number statistics and the Pauling 2-5 quantities.
+The experimental-domain formula therefore has to rely on cn_an_max / cn_cat_max /
+vol_per_atom, and reaches only 0.54-0.61 accuracy at full coverage.
 
-# 算什么
+# What is computed
 
-静电(EwaldSummation,形式电荷):
-  ewald_per_atom / ewald_real / ewald_recip / ewald_point   每原子能量分解
-  mad_std / mad_max / mad_min / mad_range                   位点马德隆能的分布
-  madz_*                                                    位点能除以该位点电荷 —— **尺度无关**
-                                                            (原始 ewald 正比于 z^2,跨化学不可比,
-                                                             当"法则"用会退化成"高价化合物"探测器)
+Electrostatics (EwaldSummation, formal charges):
+  ewald_per_atom / ewald_real / ewald_recip / ewald_point   per-atom energy decomposition
+  mad_std / mad_max / mad_min / mad_range                   distribution of site Madelung energies
+  madz_*                                                    site energy divided by that site's
+                                                            charge -- **scale-free** (raw ewald
+                                                            goes as z^2, is not comparable
+                                                            across chemistries, and used as a
+                                                            "law" degenerates into a
+                                                            high-charge-compound detector)
 
-有效配位数(Hoppe ECoN):w_i = exp(1 - (d_i/d_min)^6),ECoN = sum w_i
-  连续版配位数,对键长分布敏感,不像整数 CN 那样在阈值附近跳变。
+Effective coordination number (Hoppe ECoN): w_i = exp(1 - (d_i/d_min)^6), ECoN = sum w_i
+  a continuous coordination number, sensitive to the bond-length distribution and free of the
+  jumps an integer CN makes near a threshold.
 
-键价(Brown-Altermatt,**形式电荷**):
+Bond valence (Brown-Altermatt, **formal charges**):
   gii / bv_max_abs / bv_frac_bad / bv_param_cov
-  **不用 BVAnalyzer** —— 它从键长反推价态再去检验键价定律,是循环论证。
-  这里价态一律来自组成的形式电荷(guess_oxi)。
+  **BVAnalyzer is not used** -- it back-solves valence from bond lengths and then tests laws
+  about bond valence, which is circular. Valences here always come from the composition's
+  formal charges (guess_oxi).
 
-# 复现性
+# Reproducibility
 
-扰动种子用 crc32(sid),与 phys_law.py 完全一致,所以 elec_bad 与 phys_bad 的
-每一行都对应**同一个**扰动结构,可按 sid 安全合并。
+The perturbation seed is crc32(sid), exactly as in phys_law.py, so every row of elec_bad and
+phys_bad corresponds to **the same** perturbed structure and the two can safely be merged on
+sid.
 """
 from __future__ import annotations
 import argparse
@@ -54,7 +63,8 @@ _BV = None
 
 
 def bv_table():
-    """IUCr bvparm2020。坑:loop 头行有前导空格,必须先 strip 再 split。"""
+    """IUCr bvparm2020. Pitfall: the loop header line has leading whitespace, so it must be
+    stripped before splitting."""
     global _BV
     if _BV is not None:
         return _BV
@@ -79,13 +89,13 @@ def bv_table():
 
 
 def elec_feats(st, val):
-    """静电 + ECoN + 键价。返回 dict,失败返回 None。"""
+    """Electrostatics + ECoN + bond valence. Returns a dict, or None on failure."""
     from pymatgen.analysis.ewald import EwaldSummation
     from pymatgen.analysis.local_env import CrystalNN
 
     n = len(st)
     out = {}
-    # ---- 静电
+    # ---- electrostatics
     try:
         sd = st.copy()
         sd.add_oxidation_state_by_site(val)
@@ -99,8 +109,9 @@ def elec_feats(st, val):
         out["mad_max"] = float(np.max(sm))
         out["mad_min"] = float(np.min(sm))
         out["mad_range"] = float(np.max(sm) - np.min(sm))
-        # 尺度无关版:位点能 / 电荷。原始位点能 ~ z^2,跨化学不可比,
-        # 当阈值型"法则"用会退化成"高价化合物"探测器。
+        # the scale-free version: site energy / charge. Raw site energy goes as z^2 and is
+        # not comparable across chemistries; used as a threshold "law" it degenerates into a
+        # high-charge-compound detector.
         z = np.array([v if abs(v) > 1e-9 else np.nan for v in val], float)
         mz = sm / np.abs(z)
         mz = mz[np.isfinite(mz)]
@@ -108,7 +119,8 @@ def elec_feats(st, val):
             out["madz_mean"] = float(np.mean(mz))
             out["madz_std"] = float(np.std(mz))
             out["madz_range"] = float(np.max(mz) - np.min(mz))
-        # 阴阳离子位点能是否分离(阳离子应为负、阴离子应为负,但深浅不同)
+        # whether the cation and anion site energies separate (both should be negative, but
+        # at different depths)
         cs = sm[np.asarray(val) > 0]
         as_ = sm[np.asarray(val) < 0]
         if len(cs) and len(as_):
@@ -117,7 +129,7 @@ def elec_feats(st, val):
     except Exception:
         return None
 
-    # ---- 近邻:ECoN 与键价共用一次 CrystalNN
+    # ---- neighbours: ECoN and bond valence share one CrystalNN pass
     try:
         cnn = CrystalNN(weighted_cn=False, x_diff_weight=0.0)
         nn = []
@@ -141,12 +153,13 @@ def elec_feats(st, val):
                        for nb in nbs])
         if len(ds) == 0 or ds.min() <= 0:
             continue
-        # Hoppe 有效配位数:近邻按 (d/dmin)^6 指数衰减加权
+        # Hoppe effective coordination number: neighbours weighted by an exponential decay in
+        # (d/dmin)^6
         w = np.exp(1 - (ds / ds.min()) ** 6)
         econ.append(float(w.sum()))
         if len(ds) > 1:
             rsd.append(float(np.std(ds) / np.mean(ds)))
-        # 键价:只累加阳-阴键,价态用形式电荷
+        # bond valence: sum cation-anion bonds only, with formal charges as the valences
         for nb, d in zip(nbs, ds):
             j = nb["site_index"]
             if val[i] * val[j] >= 0 or val[i] <= 0:
@@ -175,7 +188,7 @@ def elec_feats(st, val):
             out["bv_max_abs"] = float(np.max(np.abs(dev)))
             out["bv_mean_abs"] = float(np.mean(np.abs(dev)))
             out["bv_frac_bad"] = float(np.mean(np.abs(dev) > 0.20))
-            # 相对失配:除以形式电荷,跨价态可比
+            # relative mismatch: divided by the formal charge, comparable across valences
             rel = np.array([abs(bvs[i] - abs(val[i])) / abs(val[i])
                             for i in range(n) if abs(val[i]) > 1e-9])
             out["bv_rel_max"] = float(np.max(rel))
@@ -184,9 +197,9 @@ def elec_feats(st, val):
     return out
 
 
-# ---------------------------------------------------------------- 驱动
+# ---------------------------------------------------------------- driver
 
-MAXN = 80          # Ewald 是 O(N^2) 级,超过 80 原子代价陡增
+MAXN = 80          # Ewald is O(N^2); past 80 atoms the cost climbs steeply
 
 
 def _real(r):
@@ -218,7 +231,7 @@ def _bad(r):
         val, ok = guess_oxi(st)
         if not ok:
             return out
-        rng = np.random.default_rng(seed_of(r["sid"]))   # 与 phys_law.py 同种子
+        rng = np.random.default_rng(seed_of(r["sid"]))   # same seed as phys_law.py
         for kind in ("S1", "S2", "S3", "S4", "S5"):
             p = perturb(st, kind, rng, val)
             if p is None:
@@ -237,7 +250,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("mode", choices=["real", "bad"])
     ap.add_argument("--n", type=int, default=6000)
-    ap.add_argument("--limit", type=int, default=0, help="调试用,只跑前 N 条")
+    ap.add_argument("--limit", type=int, default=0,
+                    help="for debugging: run only the first N entries")
     ap.add_argument("--workers", type=int, default=18)
     a = ap.parse_args()
 
@@ -256,7 +270,7 @@ def main() -> int:
     if a.limit:
         recs = recs[:a.limit]
         outf = outf.replace(".parquet", "_smoke.parquet")
-    print(f"{a.mode}: {len(recs):,} 条", flush=True)
+    print(f"{a.mode}: {len(recs):,} entries", flush=True)
 
     from concurrent.futures import ProcessPoolExecutor
     rows = []
@@ -270,7 +284,7 @@ def main() -> int:
             if (i + 1) % 5000 == 0:
                 print(f"  {i+1:,}/{len(recs):,} -> {len(rows):,}", flush=True)
     pd.DataFrame(rows).to_parquet(outf, index=False)
-    print(f"写出 {outf} {len(rows):,} 行")
+    print(f"wrote {outf}, {len(rows):,} rows")
     return 0
 
 

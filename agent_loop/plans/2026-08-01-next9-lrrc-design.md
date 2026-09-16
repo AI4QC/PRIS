@@ -1,61 +1,73 @@
-# Next9 LRRC-v0 与组级配额设计
+# Next9: LRRC-v0 and group-level quota design
 
-## 1. 目标与证据边界
+## 1. Objective and evidence boundary
 
-本轮从 next8 的后验结果出发，但不回到已经看过的 development labels 调参。next8 的
-`AGREE995` 在 formula-selection 上相对 M5 有信号，在独立 development gate 上却只剩约
-`+0.18` 个百分点，置信区间跨零，并且 valuable-recall 安全门失败。其主要问题不是阈值写法，
-而是 M1/5M 同属 MatterSim 家族，分歧没有提供足够正交信息。
+This round starts from next8's post-hoc results, but does not go back to the already-inspected
+development labels to retune. next8's `AGREE995` carries signal over M5 at formula selection, yet
+on the independent development gate only about `+0.18` percentage points remain, the confidence
+interval crosses zero, and the valuable-recall safety gate fails. The main problem is not how the
+threshold is written but that M1 and 5M both belong to the MatterSim family, so their
+disagreement does not supply enough orthogonal information.
 
-next9 采用两个严格分开的组件：
+next9 uses two strictly separated components:
 
-1. `Quota-CRC` 是组级风险策略，只改变拒绝预算的分配，不称为新物理法则；
-2. `LRRC-v0`（local restoring-response criterion）加入局部势能面二阶响应，是唯一可能新增
-   物理信息的候选。
+1. `Quota-CRC` is a group-level risk policy: it only redistributes the rejection budget, and is
+   not called a new physical law;
+2. `LRRC-v0` (local restoring-response criterion) adds the second-order response of the local
+   potential-energy surface, and is the only candidate that could add new physical information.
 
-本轮只允许 synthetic 数学、数值和接口验证。没有新的完整 `x0 -> DFT endpoint` cohort 前，
-不得把任何结果写成科学性能提升、超过 Pauling rules 或接近/超过 DFT。
+This round permits synthetic mathematical, numerical and interface verification only. Until there
+is a new complete `x0 -> DFT endpoint` cohort, no result may be written as a scientific
+performance improvement, as surpassing Pauling's rules, or as approaching or exceeding DFT.
 
-## 2. 为什么不直接继续扩大同源委员会
+## 2. Why not simply keep enlarging the same-family committee
 
-next8 已证明 M1/5M gap 在开发各 stage 高度相关；极端 disagreement gate 的主要效果是增加
-ABSTAIN，而不是稳定增加高能候选识别。继续添加同家族 checkpoint、扫描 disagreement
-分位数或回调阈值，都会在同一开发证据上扩大研究者自由度，且不解决共同训练偏差。
+next8 already showed the M1/5M gap to be highly correlated across the development stages; the
+main effect of an extreme disagreement gate is to increase ABSTAIN rather than to raise
+high-energy candidate identification consistently. Adding further checkpoints from the same
+family, sweeping disagreement quantiles or adjusting thresholds would all enlarge researcher
+degrees of freedom over the same development evidence, without addressing the shared training
+bias.
 
-真正的异质委员会至少需要三个训练数据或架构显著不同的模型，并在全新 DFT calibration 组上
-构造 conformal lower bound。本轮只保留该方向的未来接口，不把 M1/5M 冒充异质模型。
+A genuinely heterogeneous committee needs at least three models differing substantially in
+training data or architecture, with a conformal lower bound constructed on a wholly new DFT
+calibration set. This round keeps only the future interface for that direction, and does not pass
+M1/5M off as heterogeneous models.
 
-## 3. Quota-CRC：安全策略，不是新法则
+## 3. Quota-CRC: a safety policy, not a new law
 
-对支持且分数有限的 composition group `G`，令：
+For a supported composition group `G` whose scores are finite, let:
 
 \[
 k_G=\lceil\sqrt{|G|}\rceil,\qquad q_G=s_{(k_G)}.
 \]
 
-其中 `s_i` 是预先冻结的 M5 或委员会风险分数，`s_(k_G)` 为第 `k_G` 小的分数。候选只有在：
+where `s_i` is the pre-frozen M5 or committee risk score and `s_(k_G)` is the `k_G`-th smallest
+score. A candidate may be REJECTed only when:
 
 \[
-s_i>\tau \quad\text{且}\quad s_i>q_G
+s_i>\tau \quad\text{and}\quad s_i>q_G
 \]
 
-时才可 REJECT。配额边界并列全部 KEEP；不支持或分数非有限的行保持 ABSTAIN。
+Ties at the quota boundary are all KEEP; unsupported rows and rows with non-finite scores stay
+ABSTAIN.
 
-同一阈值下有：
+At the same threshold,
 
 \[
 R_{quota}(\tau)\subseteq R_{base}(\tau),
 \]
 
-所以它不可能创造额外 savings。它的唯一合理用途，是在未来全新 calibration 上允许更激进的
-阈值，同时防止小组被过度拒绝。未来实证必须同时报告 fixed-threshold 与 refit-threshold
-ablation；若增益只来自后者，只能称为 policy gain。
+so it cannot create additional savings. Its only legitimate use is to permit a more aggressive
+threshold on a future new calibration while preventing a small group from being over-rejected.
+Future empirical work must report both the fixed-threshold and refit-threshold ablations; if the
+gain comes only from the latter, it may be called a policy gain and nothing more.
 
-## 4. LRRC-v0：局部恢复响应
+## 4. LRRC-v0: the local restoring response
 
-### 4.1 方向
+### 4.1 Direction
 
-对固定胞结构的 M5 原子力去除整体平移：
+Remove the overall translation from the M5 atomic forces of a fixed-cell structure:
 
 \[
 f'_i=f_i-\frac{1}{N}\sum_j f_j,
@@ -63,31 +75,34 @@ f'_i=f_i-\frac{1}{N}\sum_j f_j,
 u_i=\frac{f'_i}{\sqrt{N^{-1}\sum_j\|f'_j\|^2}}.
 \]
 
-这样 `mean(u)=0` 且 `mean(||u_i||^2)=1`。若投影后的 RMS 小于冻结的纯数值下限
-`1e-12 eV/angstrom`，LRRC 不构造方向，标记 `STATIONARY_FALLBACK` 并回退基础规则；这也明确
-暴露了精确驻点鞍的已知盲区。
+so that `mean(u)=0` and `mean(||u_i||^2)=1`. If the projected RMS falls below the frozen purely
+numerical floor of `1e-12 eV/angstrom`, LRRC constructs no direction, marks
+`STATIONARY_FALLBACK` and falls back to the base rule; this also makes the known blind spot at
+exact stationary saddles explicit.
 
-### 4.2 无标签步长
+### 4.2 A label-free step size
 
-令 `d_star` 为使用最小镜像距离计算的逐原子最近邻距离中位数，固定：
+Let `d_star` be the median per-atom nearest-neighbour distance computed with the minimum-image
+convention, and fix:
 
 \[
 h=2^{-8}d_\star.
 \]
 
-`2^-8` 是冻结的数值离散定义，不从任何旧标签或真实 checkpoint 扫描。`N<2`、无有限正最近邻
-距离或非法周期胞均不支持。
+`2^-8` is a frozen numerical discretisation choice and is not swept over any old label or real
+checkpoint. `N<2`, no finite positive nearest-neighbour distance, or an invalid periodic cell are
+all unsupported.
 
-### 4.3 两尺度方向曲率
+### 4.3 Two-scale directional curvature
 
-在 `h` 和 `h/2` 上各做中心差分：
+Take a central difference at both `h` and `h/2`:
 
 \[
 \kappa_h=-\frac1N\sum_i u_i\cdot
 \frac{F_i(x+h u)-F_i(x-h u)}{2h}.
 \]
 
-再定义：
+then define:
 
 \[
 \kappa_R=\frac{4\kappa_{h/2}-\kappa_h}{3},
@@ -97,60 +112,75 @@ e_{num}=\frac{|\kappa_{h/2}-\kappa_h|}{3},
 U_{num}=\kappa_R+e_{num}.
 \]
 
-`U_num` 只是确定性的两尺度保守代理，不宣称统计置信上界或严格余项上界。LRRC 信号要求
-`kappa_h < 0`、`kappa_h2 < 0` 且 `U_num < 0`，即两个尺度符号一致并且 Richardson 代理仍为负。
+`U_num` is only a deterministic two-scale conservative proxy; no statistical confidence bound or
+rigorous remainder bound is claimed. An LRRC signal requires `kappa_h < 0`, `kappa_h2 < 0` and
+`U_num < 0` -- the two scales agreeing in sign and the Richardson proxy still negative.
 
-### 4.4 决策组合
+### 4.4 Combining the decisions
 
-未来候选决策为：
+The future candidate decision is:
 
 \[
 REJECT \iff g_{5M}>\tau_E \quad\lor\quad LRRC\_negative.
 \]
 
-LRRC 成功且非负时沿用基础决策；LRRC force oracle 失败、产生非有限值或几何不支持时 ABSTAIN。
-`STATIONARY_FALLBACK` 是已知、可诊断的无新增信号状态，沿用基础决策。Quota-CRC 必须作为
-最后一层应用，并可把配额内的 REJECT 改回 KEEP；ABSTAIN 永不改写。
+When LRRC succeeds and is non-negative, the base decision stands; when the LRRC force oracle
+fails, produces a non-finite value, or the geometry is unsupported, the result is ABSTAIN.
+`STATIONARY_FALLBACK` is a known, diagnosable state with no added signal, and keeps the base
+decision. Quota-CRC must be applied as the last layer and may turn a REJECT within the quota back
+into a KEEP; ABSTAIN is never rewritten.
 
-## 5. Synthetic 验证矩阵
+## 5. The synthetic verification matrix
 
-必须验证：
+The following must be verified:
 
-- 正定二次势给出正曲率且不新增拒绝；
-- 倒置二次势在非零位置给出两个尺度一致的负曲率；
-- 平移、刚体旋转、原子置换与周期回卷不改变结果；
-- 二次势上 `kappa_h` 与 `kappa_h2` 收敛到解析值；
-- force oracle 抛错、形状错误或非有限时 fail open 为 ABSTAIN；
-- LRRC 的 OR 组合能新增 REJECT，而不是通过增加 ABSTAIN 制造名义 savings；
-- 精确 `F=0` 鞍点明确回退基础规则；
-- Quota-CRC 固定 `ceil(sqrt(n))`、边界并列 KEEP、ABSTAIN 不变；
-- manifest 保存公式、常数、执行源哈希和 synthetic case 结果，不包含真实标签或受保护标识符。
+- a positive-definite quadratic potential gives positive curvature and adds no rejection;
+- an inverted quadratic potential gives negative curvature consistently at both scales away from
+  the origin;
+- translation, rigid rotation, atom permutation and periodic wrapping leave the result unchanged;
+- on a quadratic potential, `kappa_h` and `kappa_h2` converge to the analytic value;
+- when the force oracle raises, returns a wrong shape, or is non-finite, it fails open to ABSTAIN;
+- the LRRC OR combination adds genuine REJECTs rather than manufacturing nominal savings by
+  increasing ABSTAIN;
+- an exact `F=0` saddle falls back explicitly to the base rule;
+- Quota-CRC keeps `ceil(sqrt(n))` fixed, keeps boundary ties as KEEP, and leaves ABSTAIN
+  unchanged;
+- the manifest stores the formula, the constants, the hash of the executed source and the
+  synthetic case results, and contains no real label or protected identifier.
 
-## 6. 数据路线
+## 6. The data route
 
-本地审计没有发现同时满足“标签未打开、物理隔离、完整候选组、x0/DFT endpoint 配对”的
-cohort。ELEMENTA Spin 的旧提取还把 `(material, structure, spin)` 错按 material 合并，只留下
-78,027/207,185 条轨迹，不能使用。
+A local audit found no cohort satisfying all of "labels unopened, physically isolated, complete
+candidate groups, x0/DFT endpoint paired". The old extraction of ELEMENTA Spin additionally
+merged `(material, structure, spin)` wrongly by material, leaving only 78,027/207,185
+trajectories, and cannot be used.
 
-外部首选是 2025 Alexandria 扩展中的 `m3gnet/rng` 控制 cohort。官方论文报告 29,671 个成功
-DFT 终点，来源时间晚于 MatterSim 2024，且是随机抽取而非经稳定性模型筛选。它仍有两个边界：
-输入是 M3GNet 预弛豫结构而非最原始生成态；MatterSim 训练明细不公开，训练重叠只能记为未知。
-在确认 source tag、候选组完整性和分片映射前，不下载或解析全量约百 GB relaxation paths。
+The preferred external option is the `m3gnet/rng` control cohort in the 2025 Alexandria
+expansion. The official paper reports 29,671 successful DFT endpoints, later in time than
+MatterSim 2024 and drawn at random rather than filtered by a stability model. It still has two
+boundaries: the inputs are M3GNet pre-relaxed structures rather than the rawest generated state;
+and MatterSim's training details are not public, so any training overlap can only be recorded as
+unknown. The roughly 100 GB of full relaxation paths is neither downloaded nor parsed until the
+source tags, candidate-group completeness and shard mapping are confirmed.
 
-参考：
+References:
 
 - [Alexandria 2025 expansion](https://arxiv.org/html/2512.09169v2)
 - [Alexandria geometry-optimization paths](https://alexandria.icams.rub.de/data/geo_opt_paths/2025.07.02/pbe/)
 - [Conformal Risk Control](https://research.google/pubs/conformal-risk-control/)
 
-## 7. 成功门
+## 7. Success gates
 
-Synthetic 通过只表示工程和代数契约成立。真正科学成功必须在预先物理拆分的新 cohort 上同时满足：
+Passing the synthetic tests means only that the engineering and algebraic contracts hold. Genuine
+scientific success requires a pre-split new cohort to satisfy all of:
 
-1. 相对冻结基础规则的 DFT savings 增量达到预注册门，并且 paired 95% CI 下界为正；
-2. valuable recall 非劣、exact/protected group retention 单侧 95% 下界不低于 0.95；
-3. 无全拒组，abstention 增量在预注册上限内；
-4. fixed-threshold、refit-threshold、LRRC-only 与 quota-only ablation 全部报告；
-5. 外层 gate 只开一次，失败后不追加调参。
+1. the increase in DFT savings over the frozen base rule meets the pre-registered gate, with a
+   positive paired 95% CI lower bound;
+2. valuable recall is non-inferior, and the one-sided 95% lower bound of exact/protected group
+   retention is at least 0.95;
+3. there is no all-reject group, and the increase in abstention is within the pre-registered
+   limit;
+4. the fixed-threshold, refit-threshold, LRRC-only and quota-only ablations are all reported;
+5. the outer gate is opened once only, with no retuning after a failure.
 
-在上述门通过前，不修改现有报告、论文、README 或预注册文件。
+Until those gates pass, no existing report, paper, README or pre-registration file is modified.

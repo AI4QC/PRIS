@@ -1,56 +1,71 @@
 # -*- coding: utf-8 -*-
-"""复现 George 2020 的五个数字(MPU-1 / PREREG §6 门 G-A)。
+"""Reproduce the five numbers of George 2020 (MPU-1 / PREREG section 6, gate G-A).
 
 George, Waroquiers, Di Stefano, Petretto, Rignanese, Hautier,
 *The Limited Predictive Power of the Pauling Rules*, Angew. Chem. Int. Ed. 2020, 59, 7569.
-本地 PDF:the published PDF (not redistributed here)(原文口径均逐句核对过)。
+Local PDF: the published PDF (not redistributed here). Every convention below was checked
+against the original sentence by sentence.
 
-================================================================ 口径差异(必须显式列出)
-| 维度 | George 2020 | 本复现 |
+============================================== differences in convention (stated explicitly)
+| dimension | George 2020 | this reproduction |
 |---|---|---|
-| 论域 | ICSD ∩ Materials Project 的约 5,000 个氧化物 | `provenance.oxide_strict` = **23,728** 条 |
-| 来源 | ICSD(经 MP 再弛豫/再对称化) | **ICSD + COD**,**不含 MP**,用的是**实验报道的原胞**未经 DFT 弛豫 |
-| 有序性 | MP 条目本身已是有序 | **有序结构 only**(无序条目在建库时已剔除,PREREG §8.1) |
-| 阴离子 | 氧化物 | **单一阴离子 O**(`oxide_strict` 判据) |
-| 氧化态 | MP 的 `oxi_state`(BVAnalyzer 派生) | **`cif`(ICSD 原生)/ `guess`(纯组成枚举)两级,BVAnalyzer 整批排除**(PREREG §5) |
-| 近邻 | ChemEnv 单算法 | ChemEnv / CrystalNN / BrunnerNN **三算法**(G6 硬门要求) |
+| domain | the roughly 5,000 oxides in ICSD n Materials Project | `provenance.oxide_strict` = **23,728** entries |
+| source | ICSD (re-relaxed and re-symmetrised through MP) | **ICSD + COD**, **no MP**, using the **experimentally reported cell** with no DFT relaxation |
+| order | MP entries are already ordered | **ordered structures only** (disordered entries were dropped when the store was built, PREREG section 8.1) |
+| anion | oxides | **single anion O** (the `oxide_strict` criterion) |
+| oxidation state | MP's `oxi_state` (BVAnalyzer-derived) | **two levels, `cif` (native ICSD) and `guess` (pure compositional enumeration); BVAnalyzer excluded wholesale** (PREREG section 5) |
+| neighbours | ChemEnv alone | ChemEnv / CrystalNN / BrunnerNN, **three algorithms** (required by the G6 hard gate) |
 
-**注意 `oxide_strict` 不是 `in_analysis_set` 的子集**:差集 3,895 条全部含 P
-(`in_analysis_set` 把 P 记作阴离子候选,于是磷酸盐的 `n_anion_kinds==2` 被排除)。
-George 的论域**包含**磷酸盐(原文用 InPO4 做第二定律的主例),所以本脚本按 `oxide_strict`
-取全部 23,728 条重算,**不复用 `site/pair/struct.parquet`**(那三张表只覆盖 `in_analysis_set`,
-且 `pair` 只有 ChemEnv 一条路线、没有阳离子–阴离子键级表,第二定律的 Σs 算不了)。
+**Note that `oxide_strict` is not a subset of `in_analysis_set`**: the 3,895 entries in the
+difference all contain P (`in_analysis_set` counts P as an anion candidate, so phosphates are
+excluded with `n_anion_kinds==2`).
+George's domain **includes** phosphates (the original uses InPO4 as its main example for the
+second rule), so this script recomputes all 23,728 entries under `oxide_strict` and **does
+not reuse `site/pair/struct.parquet`** (those three tables cover only `in_analysis_set`, and
+`pair` has only the ChemEnv route and no cation-anion bond-strength table, so the second
+rule's Sum s cannot be computed).
 
-================================================================ 五条规则的操作化(逐条对齐原文)
-* **规则 1(半径比)** granularity=`site`/`orbit`。r_cation/r_anion 用**泡林单价半径**
-  (`pauling_radii.py`;Shannon 依赖 CN,是循环论证,G7 明令禁止)。
-  预测 CN 由硬球临界比给出,命中 = 预测 CN == 观测 CN(严格相等)。
-  George:66% of the tested local environments。
-* **规则 2(静电价)** granularity=`site(anion)`/`orbit`。对每个 O 位点求
-  Σ s = Σ_cations (z_c / CN_c),判据 |Σs − 2| ≤ 0.01。George:~20% of all oxygen atoms。
-* **规则 3(连接类型)** granularity=`pair`。所有相连多面体对里共角/共棱/共面的比例。
-  George:62.5 / 27.2 / 10.3;**CN ≤ 8 时 73.3 / 25.0 / 1.6**。
-* **规则 4(相邻多面体)** granularity=`structure`。原文对"违例"的定义是
+============================== operationalising the five rules (aligned to the original, rule by rule)
+* **Rule 1 (radius ratio)** granularity=`site`/`orbit`. r_cation/r_anion use the **Pauling
+  univalent radii** (`pauling_radii.py`; Shannon radii depend on CN and are circular, which
+  G7 explicitly forbids).
+  The predicted CN comes from the hard-sphere critical ratios, and a hit is predicted CN ==
+  observed CN (strict equality).
+  George: 66% of the tested local environments.
+* **Rule 2 (electrostatic valence)** granularity=`site(anion)`/`orbit`. For each O site
+  compute Sum s = Sum_cations (z_c / CN_c); the criterion is |Sum s - 2| <= 0.01.
+  George: about 20% of all oxygen atoms.
+* **Rule 3 (connection type)** granularity=`pair`. The corner/edge/face fractions over all
+  connected polyhedron pairs.
+  George: 62.5 / 27.2 / 10.3; **73.3 / 25.0 / 1.6 at CN <= 8**.
+* **Rule 4 (adjacent polyhedra)** granularity=`structure`. The original defines a violation as
   "structures in which the polyhedra of cations with the highest valence and smallest
-  coordination number are connected"。即:V = 全结构阳离子位点的最大氧化态,
-  C = 最小 CN,取集合 A = {位点 | ox==V 且 cn==C};若 A 内部存在相连对 → 违例。
-  只在**含 ≥2 个不同阳离子物种**的结构上适用(原文 "In a crystal containing different cations"),
-  单阳离子结构记为满足——这是复现原文给的正例(金红石 SnO2 被列为"满足四条")所必需的。
-  **同时给"氧化态版"(只用 ox==V)与"CN 版"(只用 cn==C)两条**:George 证明只有后者成立。
-  George:违例 ~40%。
-* **规则 5(简约)** granularity=`structure`。每个阳离子物种 (元素, 氧化态) 在同一结构里
-  只占据一种局域环境。原文 Fig.5b 图注写明 "only coordination numbers are considered",
-  故主判据用 **CN**;ChemEnv 另给 `ce_symbol` 版本作敏感性。George:~70.3%。
-* **2–5 同时** granularity=`structure`,合取。规则 2 的结构级布尔取"该结构全部 O 位点都满足",
-  规则 3 的结构级布尔取"无共面对"(泡林原文 "particularly of shared faces")。
-  George:13%(CN ≤ 8 时 20%)。
+  coordination number are connected". That is: V = the highest oxidation state among the
+  structure's cation sites, C = the smallest CN, A = {sites | ox==V and cn==C}; a connected
+  pair within A is a violation.
+  It applies only to structures **containing at least 2 distinct cation species** (the
+  original: "In a crystal containing different cations"), and single-cation structures count
+  as satisfied -- which is necessary to reproduce the positive example the original gives
+  (rutile SnO2 is listed as satisfying all four).
+  **Both an "oxidation-state version" (ox==V only) and a "CN version" (cn==C only) are
+  given**: George shows only the latter holds.
+  George: about 40% violate.
+* **Rule 5 (parsimony)** granularity=`structure`. Each cation species (element, oxidation
+  state) occupies only one local environment within a structure. The caption of the original
+  Fig. 5b states "only coordination numbers are considered", so the main criterion uses
+  **CN**; ChemEnv additionally provides a `ce_symbol` version as a sensitivity check.
+  George: about 70.3%.
+* **2-5 jointly** granularity=`structure`, conjunction. The structure-level boolean for rule 2
+  is "every O site in the structure satisfies it", and for rule 3 it is "no face-sharing pair"
+  (Pauling's own "particularly of shared faces").
+  George: 13% (20% at CN <= 8).
 
-================================================================ 用法
+============================================================================== usage
     export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
-    python src/reproduce_george.py --stage compute --limit 300 --workers 20 --force   # 冒烟
+    python src/reproduce_george.py --stage compute --limit 300 --workers 20 --force   # smoke test
     nohup python src/reproduce_george.py --stage compute --workers 20 --force \
-          > $FEAT/reproduce_george.log 2>&1 &                                          # 全量
-    python src/reproduce_george.py --stage table                                       # 出 Table S1
+          > $FEAT/reproduce_george.log 2>&1 &                                          # full run
+    python src/reproduce_george.py --stage table                                       # emit Table S1
 """
 from __future__ import annotations
 
@@ -67,7 +82,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import build_features as BF          # noqa: E402  复用 read_cif / assign_oxi / symmetry_info
+import build_features as BF          # noqa: E402  reuses read_cif / assign_oxi / symmetry_info
 from pauling_radii import univalent_radius, predict_cn   # noqa: E402
 
 FEAT = BF.FEAT
@@ -80,19 +95,23 @@ OUT = {
 SHARD_DIR = f"{FEAT}/_gshards"
 ALGOS = ("chemenv", "crystalnn", "brunner")
 
-PER_STRUCT_TIMEOUT = 300   # 秒。与 build_features 同(§6.5-3 实测 ChemEnv 在 >200 原子胞常超 60 s)
-EPS_RULE2 = 0.01           # George 原文:an absolute deviation of 0.01 is allowed
+PER_STRUCT_TIMEOUT = 300   # seconds, as in build_features (section 6.5-3 measured ChemEnv
+                           # routinely exceeding 60 s on cells above 200 atoms)
+EPS_RULE2 = 0.01           # from George: an absolute deviation of 0.01 is allowed
 
 
-# ================================================================ 氧化态(在 build_features 之上打一个补丁)
+# =================================== oxidation states (a patch on top of build_features)
 def assign_oxi_fixed(struct, source):
-    """`build_features.assign_oxi` 的修正版。
+    """A corrected version of `build_features.assign_oxi`.
 
-    **实测坑**:ICSD 有 3,658/38,307(9.6%)条目的 `_atom_type_oxidation_number` 全是 0
-    (例:exp001 ZnO 记成 Zn0/O0)。原实现 `blob_ox_present = all(x is not None)`
-    判为 True 并返回 `ox_source='cif'`,而 `is_cat = [v>0]` 于是**一个阳离子位点都没有**,
-    结构被静默掏空。这里加一条体检:`cif` 只在"阴离子 ox<0 且至少一个位点 ox>0"时才采信,
-    否则降级到 `guess`。这条修正会改变 `ox_source` 的覆盖分布,报告里单列。
+    **A measured pitfall**: 3,658 of 38,307 ICSD entries (9.6%) have
+    `_atom_type_oxidation_number` set to 0 everywhere (exp001 ZnO, for instance, is recorded
+    as Zn0/O0). The original implementation judged `blob_ox_present = all(x is not None)`
+    True and returned `ox_source='cif'`, whereupon `is_cat = [v>0]` left **no cation site at
+    all** and the structure was silently emptied. A sanity check is added here: `cif` is
+    trusted only when the anion has ox<0 and at least one site has ox>0, and otherwise it is
+    downgraded to `guess`. This correction changes the coverage distribution of `ox_source`,
+    and is reported separately.
     """
     v = [getattr(s.specie, "oxi_state", None) for s in struct]
     blob_ox = all(x is not None for x in v)
@@ -102,7 +121,7 @@ def assign_oxi_fixed(struct, source):
         vv = [float(x) for x in v]
         if any(x > 0 for x in vv) and any(x < 0 for x in vv):
             return vv, "cif", meta
-        meta["cif_all_zero"] = True          # 全 0 / 全同号 → 不可用,降级
+        meta["cif_all_zero"] = True          # all zero / all one sign -> unusable, downgrade
     bare = struct.copy()
     bare.remove_oxidation_states()
     try:
@@ -117,21 +136,27 @@ def assign_oxi_fixed(struct, source):
     return None, "none", meta
 
 
-# ================================================================ 多面体连接枚举(三算法共用)
+# ============================ polyhedron connection enumeration (shared by all three algorithms)
 def enumerate_connections(cat_idx, ligands):
-    """给定每个阳离子位点的配体集合,枚举**每个原胞**里的多面体连接对。
+    """Given the ligand set of each cation site, enumerate the polyhedron connection pairs
+    within **each primitive cell**.
 
-    `ligands[i]` = set of (阴离子位点号 j, 周期像 (a,b,c)),像是相对于 i 位于 (0,0,0) 时的。
-    两个多面体 (i @ 0) 与 (j @ T) 共享的配体数 = |L_i ∩ (L_j + T)|。
-    去重约定(与 ChemEnv `environment_subgraph` 的"每个原胞一条边"一致):
-      - i < j:枚举全部 T;
-      - i == j:T ≠ 0,且 T 与 −T 只取字典序较大的一个(同一条连接的两种看法)。
-    返回 [(i, j, n_shared)],不返回 T(下游只用 n_shared)。
-    **三算法用同一个枚举器**,这样 G6 比较的是"近邻定义"这一个自由度,而不是连带把
-    连接性算法也换掉了(ChemEnv 自带的 ConnectivityFinder 与本函数的一致性在 --check-conn 里核过)。
+    `ligands[i]` = set of (anion site index j, periodic image (a,b,c)), the image being
+    relative to i sitting at (0,0,0).
+    The number of ligands shared by polyhedra (i @ 0) and (j @ T) is |L_i n (L_j + T)|.
+    The de-duplication convention (matching ChemEnv `environment_subgraph`'s "one edge per
+    primitive cell"):
+      - i < j: enumerate all T;
+      - i == j: T /= 0, and of T and -T keep only the lexicographically larger (they are two
+        views of the same connection).
+    Returns [(i, j, n_shared)] and not T (downstream only uses n_shared).
+    **All three algorithms share this enumerator**, so G6 compares the single degree of
+    freedom "neighbour definition" rather than also swapping the connectivity algorithm
+    (agreement between ChemEnv's own ConnectivityFinder and this function is checked under
+    --check-conn).
     """
     out = []
-    # 反向索引:阴离子位点 → [(阳离子, 像)],用于快速找候选平移
+    # reverse index: anion site -> [(cation, image)], for finding candidate translations quickly
     for a_pos, i in enumerate(cat_idx):
         Li = ligands[i]
         if not Li:
@@ -161,13 +186,14 @@ def enumerate_connections(cat_idx, ligands):
 
 
 def mode_of(ns):
-    """{1: 共角, 2: 共棱, ≥3: 共面}(George 2020 与 ChemEnv 同口径)"""
+    """{1: corner, 2: edge, >=3: face} (the same convention as George 2020 and ChemEnv)"""
     return "corner" if ns == 1 else ("edge" if ns == 2 else "face")
 
 
-# ================================================================ 单结构主流程
+# ================================================================ per-structure main flow
 def process_one(rec):
-    """rec = (source_id, source, blob_offset, blob_length)。阴离子恒为 O(论域是 oxide_strict)。"""
+    """rec = (source_id, source, blob_offset, blob_length). The anion is always O (the domain
+    is oxide_strict)."""
     import signal
     sid, source, off, ln = rec
     t0 = time.time()
@@ -187,7 +213,8 @@ def process_one(rec):
         els = [s.specie.symbol for s in st]
         val, ox_src, meta = assign_oxi_fixed(st, source)
 
-        # 阳离子判定:有价态用 ox>0,否则退化为"元素 != O"(论域已保证单一阴离子 O)
+        # deciding what is a cation: ox>0 where valences exist, otherwise fall back to
+        # "element != O" (the domain already guarantees O is the only anion)
         if val is None:
             ox_arr = [np.nan] * n
             is_cat = [e != "O" for e in els]
@@ -211,15 +238,15 @@ def process_one(rec):
         bare = st.copy()
         bare.remove_oxidation_states()
 
-        # ---------------- 三算法各自的配体集合(只留阳离子–阴离子键)
+        # ---------------- each algorithm's ligand sets (cation-anion bonds only)
         ligands = {a: {i: set() for i in cat_idx} for a in ALGOS}
-        cn_all = {a: {i: np.nan for i in cat_idx} for a in ALGOS}   # 未按阴离子过滤的 CN(审计用)
+        cn_all = {a: {i: np.nan for i in cat_idx} for a in ALGOS}   # CN before the anion filter (for audit)
         ok = {a: False for a in ALGOS}
         ce_sym = [None] * n
         csm = [np.nan] * n
         err = {}
 
-        # --- CrystalNN(§6.3 坑 B:x_diff_weight 默认 3.0)
+        # --- CrystalNN (section 6.3 pitfall B: x_diff_weight defaults to 3.0)
         try:
             from pymatgen.analysis.local_env import CrystalNN
             cnn = CrystalNN(weighted_cn=False, x_diff_weight=BF.X_DIFF_WEIGHT)
@@ -237,7 +264,7 @@ def process_one(rec):
         except Exception as e:
             err["crystalnn"] = f"{type(e).__name__}:{e}"[:150]
 
-        # --- BrunnerNN_relative(默认参数)
+        # --- BrunnerNN_relative (default parameters)
         try:
             from pymatgen.analysis.local_env import BrunnerNN_relative
             bnn = BrunnerNN_relative()
@@ -255,7 +282,8 @@ def process_one(rec):
         except Exception as e:
             err["brunner"] = f"{type(e).__name__}:{e}"[:150]
 
-        # --- ChemEnv(§6.3 坑 A:必须显式传 valences,否则 only_cations=True 返回垃圾)
+        # --- ChemEnv (section 6.3 pitfall A: valences must be passed explicitly, or
+        #     only_cations=True returns garbage)
         try:
             from pymatgen.analysis.chemenv.coordination_environments.coordination_geometry_finder \
                 import LocalGeometryFinder
@@ -297,7 +325,7 @@ def process_one(rec):
         except Exception as e:
             err["chemenv"] = f"{type(e).__name__}:{e}"[:150]
 
-        # ---------------- 三算法各自的 CN / 阴离子 Σs / 多面体对
+        # ---------------- each algorithm's CN / anion Sum s / polyhedron pairs
         cn = {a: {i: (float(len(ligands[a][i])) if ligands[a][i] else np.nan) for i in cat_idx}
               for a in ALGOS}
         sigma = {a: {j: 0.0 for j in an_idx} for a in ALGOS}
@@ -360,7 +388,7 @@ def process_one(rec):
             pass
 
 
-# ================================================================ 表结构
+# ================================================================ table schemas
 SITE_COLS = ["source_id", "source", "site_index", "element", "ox_state", "ox_source",
              "cn_chemenv", "cn_crystalnn", "cn_brunner",
              "cnall_chemenv", "cnall_crystalnn", "cnall_brunner",
@@ -410,7 +438,7 @@ def merge_shards(name, shard_dir, out_path, cols):
     files = sorted(glob.glob(f"{shard_dir}/{name}_*.parquet"),
                    key=lambda p: int(p.rsplit("_", 1)[1].split(".")[0]))
     if not files:
-        raise RuntimeError(f"没有 {name} 分片,拒绝产出空表")
+        raise RuntimeError(f"no {name} shards; refusing to emit an empty table")
     w, ntot = None, 0
     for f in files:
         t = pq.read_table(f)
@@ -434,10 +462,13 @@ def stage_compute(limit, workers, chunk, force):
                                              "blob_offset", "blob_length", "n_atoms"])
     sub = prov[prov.oxide_strict].copy()
     if len(sub) != 23728:
-        print(f"[warn] oxide_strict = {len(sub)},与简报的 23,728 不符,请核对 provenance")
+        print(f"[warn] oxide_strict = {len(sub)}, which does not match the reported 23,728; "
+              f"check provenance")
     if limit:
-        # 冒烟用**随机抽样**(seed 固定)而不是取小胞:取小胞会把单结构耗时低估一个数量级,
-        # 外推全量时间就废了(§6.6 要求"先小子集冒烟,量准单结构耗时,再全量")
+        # smoke tests use a **random sample** (fixed seed) rather than the smallest cells:
+        # picking small cells underestimates the per-structure cost by an order of magnitude
+        # and ruins the extrapolation to a full run (section 6.6 requires "smoke test on a
+        # small subset, measure the per-structure cost properly, then run in full")
         sub = sub.sample(n=min(limit, len(sub)), random_state=0)
     recs = list(zip(sub.source_id, sub.source, sub.blob_offset, sub.blob_length))
     shard_dir = SHARD_DIR + ("_smoke" if limit else "")
@@ -446,7 +477,7 @@ def stage_compute(limit, workers, chunk, force):
         shutil.rmtree(shard_dir)
     os.makedirs(shard_dir, exist_ok=True)
     tasks = [(k, recs[i:i + chunk], shard_dir) for k, i in enumerate(range(0, len(recs), chunk))]
-    print(f"[compute] {len(recs)} 结构 / {len(tasks)} 分片 / {workers} 进程", flush=True)
+    print(f"[compute] {len(recs)} structures / {len(tasks)} shards / {workers} processes", flush=True)
     t0 = time.time()
     ndone = nok = 0
     with ProcessPoolExecutor(max_workers=workers) as ex:
@@ -458,20 +489,21 @@ def stage_compute(limit, workers, chunk, force):
                 nok += no
             if c % 50 == 0 or c == len(tasks):
                 el = time.time() - t0
-                print(f"  {c}/{len(tasks)} 片 | {ndone} 结构 | ok {nok} | "
+                print(f"  {c}/{len(tasks)} shards | {ndone} structures | ok {nok} | "
                       f"{el/60:.1f} min | eta {el/c*(len(tasks)-c)/60:.1f} min", flush=True)
     suf = "_smoke" if limit else ""
     for name, cols in (("site", SITE_COLS), ("anion", ANION_COLS),
                        ("pair", PAIR_COLS), ("struct", STRUCT_COLS), ("fail", FAIL_COLS)):
         p = OUT.get(name, f"{FEAT}/george_{name}.parquet").replace(".parquet", f"{suf}.parquet")
         nrow = merge_shards(name, shard_dir, p, cols)
-        print(f"[merge] {name}: {nrow} 行 → {p}")
-    print(f"[compute] 完成,墙钟 {(time.time()-t0)/60:.1f} min")
+        print(f"[merge] {name}: {nrow} rows -> {p}")
+    print(f"[compute] done, {(time.time()-t0)/60:.1f} min wall clock")
 
 
-# ================================================================ 统计工具
+# ================================================================ statistics helpers
 def wilson(k, n, z=1.959963985):
-    """Wilson 95% 置信区间(比 Wald 在极端比例下可靠;PREREG 要求每条规则给 CI)"""
+    """Wilson 95% confidence interval (more reliable than Wald at extreme proportions; PREREG
+    requires a CI for every rule)."""
     if n == 0:
         return (np.nan, np.nan, np.nan)
     p = k / n
@@ -493,7 +525,8 @@ if __name__ == "__main__":
     ap.add_argument("--workers", type=int, default=20)
     ap.add_argument("--chunk", type=int, default=20)
     ap.add_argument("--force", action="store_true")
-    ap.add_argument("--smoke", action="store_true", help="table 阶段读 _smoke 产物")
+    ap.add_argument("--smoke", action="store_true",
+                    help="in the table stage, read the _smoke outputs")
     a = ap.parse_args()
     if a.stage == "compute":
         stage_compute(a.limit, a.workers, a.chunk, a.force)

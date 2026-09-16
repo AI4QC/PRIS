@@ -1,133 +1,162 @@
-# PREREG-F3: 无 DFT 结构分数在可合成性排序任务上正面挑战 DFT E_hull
+# PREREG-F3: a DFT-free structural score challenging DFT E_hull head-on at synthesizability ranking
 
-日期冻结:2026-08-14(在任何 dev 拟合、任何 holdout 接触之前写下)
-状态:**冻结**。本文档写下后,除追加"修订记录"小节外不得修改。
+Date frozen: 2026-08-14 (written before any fit on dev and before any contact with the holdout)
+Status: **frozen**. Once written, this document may not be modified except by appending a
+"revision log" section.
 
-## 0. 动机与先验证据(全部来自已发表/已归档数字,非新计算)
+> **Translation note.** This file was translated into English on 2026-09-09. Nothing
+> below has been changed apart from the language; the Chinese original remains in the
+> git history.
 
-论文的同组成可合成性排序任务(S13 协议)上,已发表基线为:
+## 0. Motivation and prior evidence (all from published or archived numbers; no new computation)
 
-| 判据 | commit | group-equal acc | acc \| e_hull 错误对 |
+On the paper's same-composition synthesizability ranking task (the S13 protocol), the published
+baselines are:
+
+| criterion | commit | group-equal acc | acc \| pairs e_hull gets wrong |
 |---|---:|---:|---:|
-| DFT E_hull | 0.9930 | **0.7501** | 0.0(定义) |
+| DFT E_hull | 0.9930 | **0.7501** | 0.0 (by definition) |
 | vol_per_atom | 0.9863 | 0.6435 | 0.5463 |
 | Shannon packing | 0.9879 | 0.6281 | 0.5630 |
-| bl_min (ρc) | 1.0000 | 0.5688 | 0.5959 |
+| bl_min (rho_c) | 1.0000 | 0.5688 | 0.5959 |
 | Pauling 5 | 0.2230 | 0.6553 | 0.5675 |
 
-关键事实:(a) F2 是按 e_hull 标签拟合后迁移到本任务的,**从未有分数直接按
-synth 标签拟合**;(b) 结构判据在 e_hull 排错的对上准确率 0.55–0.60,存在
-真实互补信号;(c) R10 发现已合成条目更对称(中位空间群 87 vs 62),而对称性
-特征不在现有特征表中。
+The key facts: (a) F2 was fitted against the e_hull label and then transferred to this task, so
+**no score has ever been fitted directly against the synth label**; (b) on the pairs e_hull gets
+wrong, the structural criteria reach 0.55-0.60, so there is genuine complementary signal; and
+(c) R10 found that synthesised entries are more symmetric (median space group 87 vs 62), while
+no symmetry feature is in the existing feature tables.
 
-## 1. 数据(已冻结,先于本预注册存在)
+## 1. Data (frozen, and in existence before this pre-registration)
 
-`features/synth_rank.parquet`(6,878 行,85 特征)。任务群体:synth 两类
-都有的组成,复现论文口径:**1,508 组 / 6,758 结构 / 18,920 对**(已核对)。
-任何新行发表前必须先通过 `rank_rulesets.py` 的四行 4 位小数复现检查。
+`features/synth_rank.parquet` (6,878 rows, 85 features). The task population is the compositions
+that have both synth classes, reproducing the paper's convention: **1,508 groups / 6,758
+structures / 18,920 pairs** (checked). Any new row must first pass the four-row, four-decimal
+reproduction check in `rank_rulesets.py` before publication.
 
-## 2. 分割(冻结)
+## 2. Splits (frozen)
 
 ```python
 dev = zlib.crc32(f"{rk}|synthsplit20260814".encode()) % 10 < 6
 ```
 
-- dev:919 组 / 4,187 结构 / 14,563 对(SiO2 落在 dev)
-- holdout:589 组 / 2,571 结构 / 4,357 对
+- dev: 919 groups / 4,187 structures / 14,563 pairs (SiO2 falls in dev)
+- holdout: 589 groups / 2,571 structures / 4,357 pairs
 
-holdout 组成在拟合、选特征、调参、看单特征准确率的任何一步都不得读取。
-holdout 允许接触次数:**1**(第 6 节的一次性求值)。
+The holdout compositions may not be read at any step of fitting, feature selection, tuning or
+inspecting single-feature accuracies.
+Permitted contacts with the holdout: **1** (the one-shot evaluation of section 6).
 
-## 3. 特征许可(冻结)
+## 3. Permitted features (frozen)
 
-可用:synth_rank.parquet 的浮点特征 + 新增对称性/经典能特征(第 4 节),
-排除以下各项:
+Allowed: the float features of synth_rank.parquet plus the new symmetry and classical-energy
+features (section 4), excluding each of the following:
 
-- 标签与身份:`synth`, `e_hull`, `mp_id`, `rk`
-- 尺寸混杂(广延量):`nsites`, `n_sites`, `p2_n_bad_020`, `p2_sum_dev`,
+- labels and identity: `synth`, `e_hull`, `mp_id`, `rk`
+- size confounders (extensive quantities): `nsites`, `n_sites`, `p2_n_bad_020`, `p2_sum_dev`,
   `p3_n_pairs`, `p3_n_face`, `p3_n_edge`, `p4_n_viol`
-- 总量形式的 Ewald 分解:`ewald_real`, `ewald_recip`, `ewald_point`
-  (保留 `ewald_per_atom`)
-- 表覆盖伪量:`bv_param_cov`
+- the Ewald decomposition in total-quantity form: `ewald_real`, `ewald_recip`, `ewald_point`
+  (`ewald_per_atom` is kept)
+- the table-coverage pseudo-quantity: `bv_param_cov`
 
-任何 DFT 量、机器学习势、松弛轨迹一律禁止(执行边界与论文一致)。
-组成层特征在同组成任务上恒为平局,无害但不入选。
+Any DFT quantity, machine-learning potential or relaxation trajectory is forbidden outright (the
+execution boundary matches the paper's).
+Composition-level features are always ties on a same-composition task: harmless, but not
+selected.
 
-## 4. 新增特征(冻结定义;计算不看标签)
+## 4. New features (definitions frozen; computed without looking at the labels)
 
-对 6,878 个结构从 MP 快照重建,写入**新文件** `synth_rank_aug.parquet`:
+Rebuilt for all 6,878 structures from the MP snapshot and written to a **new file**,
+`synth_rank_aug.parquet`:
 
-对称性(SpacegroupAnalyzer/spglib,symprec ∈ {0.01, 0.1}):
-- `sg_num_001`, `sg_num_01`:国际空间群号
-- `csys_rank_001`:晶系序(三斜1…立方7)
-- `wyckoff_econ_001`, `wyckoff_econ_01`:不等价位点数 / 位点数(Pauling 第五规则的结构化连续量)
+Symmetry (SpacegroupAnalyzer/spglib, symprec in {0.01, 0.1}):
+- `sg_num_001`, `sg_num_01`: international space-group number
+- `csys_rank_001`: crystal-system rank (triclinic 1 ... cubic 7)
+- `wyckoff_econ_001`, `wyckoff_econ_01`: inequivalent sites / sites (the continuous structural
+  form of Pauling's fifth rule)
 
-经典 Born 项(电荷=composition-only 整数平衡价态,半径=`phys_law.shannon`
-按 (元素,氧化态,CrystalNN CN);对所有 d < 1.25×r_sum 的近邻对):
-- `rep9_ca_pa`, `rep9_aa_pa`, `rep9_cc_pa`:Σ(r_sum/d)^9 / N,按电荷符号对分类
-- `repexp_ca_pa`, `repexp_aa_pa`, `repexp_cc_pa`:Σ exp((r_sum−d)/0.345 Å) / N
-- `strain2_ca_pa`:Σ((d−r_sum)/r_sum)² / N(异号接触弹性应变)
-- `density`:质量密度 g/cm³
+Classical Born terms (charges = composition-only integer balanced valences, radii =
+`phys_law.shannon` by (element, oxidation state, CrystalNN CN); over all neighbour pairs with
+d < 1.25 x r_sum):
+- `rep9_ca_pa`, `rep9_aa_pa`, `rep9_cc_pa`: Sum (r_sum/d)^9 / N, classified by the pair's charge
+  signs
+- `repexp_ca_pa`, `repexp_aa_pa`, `repexp_cc_pa`: Sum exp((r_sum - d)/0.345 A) / N
+- `strain2_ca_pa`: Sum ((d - r_sum)/r_sum)^2 / N (elastic strain of opposite-charge contacts)
+- `density`: mass density in g/cm^3
 
-## 5. 模型类与选择程序(冻结)
+## 5. Model class and selection procedure (frozen)
 
-- 缺失值:dev 中位数插补;标准化:dev 均值/方差。两者冻结后用于 holdout。
-- 配对样本:组内 (synth=1, synth=0) 全配对,X = f₁ − f₀;反对称 logistic
-  (无截距),每对权重 1/组内对数(组等权,与评估度量一致)。
-- **F3(交付物)**:贪心前向选择,评分 = dev 上 5 折 GroupKFold(按组成)
-  验证折的 group-equal accuracy(用 `rank_rulesets.evaluate` 同一实现);
-  停止条件:最优增益 < 0.002 或达 8 项。选定后在全 dev 重拟合,系数冻结,
-  记录 SHA-256。
-- **F3-full(仅作上限参考)**:全部许可特征,L2 强度由同一 CV 选取。
-  主张只挂在稀疏 F3 上。
-- 允许在 dev 内做任意诊断;dev 上的一切数字均标 development。
+- Missing values: imputed with the dev median; standardisation: dev mean and variance. Both are
+  frozen and then applied to the holdout.
+- Paired samples: all within-group (synth=1, synth=0) pairs, X = f1 - f0; an antisymmetric
+  logistic (no intercept), each pair weighted 1/(pairs in group) so that groups count equally,
+  matching the evaluation metric.
+- **F3 (the deliverable)**: greedy forward selection, scored by the group-equal accuracy on the
+  validation folds of a 5-fold GroupKFold within dev (grouped by composition, using the same
+  `rank_rulesets.evaluate` implementation); stopping when the best gain falls below 0.002 or at 8
+  terms. Refit on all of dev, freeze the coefficients, record the SHA-256.
+- **F3-full (an upper reference only)**: every permitted feature, with the L2 strength chosen by
+  the same CV. The claim rests only on the sparse F3.
+- Any diagnostic is allowed within dev; every number from dev is labelled as development.
 
-## 6. 一次性 holdout 求值与成功门(冻结)
+## 6. The one-shot holdout evaluation and the success gates (frozen)
 
-冻结的 F3 对 holdout 各组求值一次。配对比较均在两判据皆 commit 的组上。
-聚类自助:重采样 holdout 组成组,B = 2000,seed 20260728,对**差值**取
-95% 百分位区间。
+The frozen F3 is evaluated once over the holdout groups. Every paired comparison is made on the
+groups where both criteria commit.
+Clustered bootstrap: resample the holdout composition groups, B = 2000, seed 20260728, taking the
+95% percentile interval of the **difference**.
 
-- **G1(主门)**:Δ = acc(F3) − acc(E_hull),95% 下界 > 0
-- **G2**:F3 的 commit ≥ 0.99
-- **G3**:top-1 lift(F3)≥ top-1 lift(E_hull)(点估计)
-- **G4**:acc(F3) 同时高于 vol_per_atom、sh_pack、bl_min 三个单量在
-  holdout 的准确率(点估计;否则组合无意义)
-- **G5**:汇报最大组占比与组数;不以任何单组主导的口径另立主张
+- **G1 (the primary gate)**: the 95% lower bound of D = acc(F3) - acc(E_hull) is above 0
+- **G2**: F3's commit rate is at least 0.99
+- **G3**: top-1 lift(F3) is at least top-1 lift(E_hull) (point estimate)
+- **G4**: acc(F3) exceeds the holdout accuracy of all three single quantities vol_per_atom,
+  sh_pack and bl_min (point estimates; otherwise the combination is meaningless)
+- **G5**: report the largest group's share and the number of groups; no claim is made under any
+  convention dominated by a single group
 
-结果分级(冻结措辞):
-- G1–G4 全过:"frozen DFT-free score surpasses DFT E_hull on held-out
-  compositions of this task"(仍须写明标签混杂:合成史偏好)
-- G1 未过但 Δ 点估计 ≥ 0 且 G2–G4 过:"parity with DFT within CI"——
-  以负/中性结果如实并入论文,不得再调参重试
-- 其余:负结果,写入反驳账本
+Graded outcomes (wording frozen):
+- G1-G4 all pass: "frozen DFT-free score surpasses DFT E_hull on held-out compositions of this
+  task" (the label confounder, a preference in synthesis history, must still be stated)
+- G1 fails but the point estimate of D is at least 0 and G2-G4 pass: "parity with DFT within CI"
+  -- folded into the paper as a negative or neutral result, with no retuning and no retry
+- Otherwise: a negative result, entered in the refutation ledger
 
-holdout 求值后,任何进一步修改都只能作为**新的预注册链条**在新的数据上确认。
+After the holdout evaluation, any further change may only be confirmed as a **new pre-registered
+chain** on new data.
 
-## 7. 边界声明(冻结)
+## 7. Boundary statements (frozen)
 
-- 标签是"MP 条目带 ICSD 编号",受合成史选择偏好污染;正类污染压低上限。
-- 结构为 MP 的 DFT 松弛几何;判据执行本身不调用 DFT,与论文 T3 框架一致。
-- 本任务是同组成相对排序,不是绝对合理性判断;与 D1–D6 语义不同,不得混排。
+- The label is "the MP entry carries an ICSD number", which is contaminated by a selection
+  preference in synthesis history; positive-class contamination lowers the ceiling.
+- The structures are MP's DFT-relaxed geometries; executing the criterion itself calls no DFT,
+  consistent with the paper's T3 framework.
+- This task is relative ranking within a composition, not an absolute plausibility judgement; its
+  semantics differ from D1-D6 and the two may not be tabulated together.
 
 (SHA-256 of this file at freeze time is recorded in
 `outputs/20260814_f3_synth/PREREG_SHA256`.)
 
-## 修订记录
+## Revision log
 
-**修订1(2026-08-14,holdout 接触前;dev 侧发现)**:F2R 链条的贪心在
-committed-only accuracy 下选出低覆盖高准确率的退化解(cn_cat_max,cov 0.458)
-——正是论文 §sec:pauling 诊断的"弃权换准确率"模式。修订:前向选择的 CV
-评分对 fold 平均 coverage < 0.99 的候选集判 −1(硬拒绝)。G2 门本已要求
-最终 coverage ≥ 0.99;此修订把同一约束前移到选择程序,防止把唯一一次
-holdout 接触浪费在必然失败的退化解上。同一修订同时应用于 PREREG-F2R。
-holdout 与 calibration 在本修订时刻均未被接触(HOLDOUT_CONTACT.log 与
-CALIB_CONTACT.log 均不存在)。
+**Revision 1 (2026-08-14, before any contact with the holdout; found on the dev side)**: the
+greedy search of the F2R chain, scored on committed-only accuracy, selected a degenerate solution
+with low coverage and high accuracy (cn_cat_max, cov 0.458) -- exactly the "trade abstention for
+accuracy" pattern diagnosed in the paper's section sec:pauling. The revision: the CV score of the
+forward selection assigns -1 (a hard rejection) to any candidate set whose fold-averaged coverage
+falls below 0.99. Gate G2 already required a final coverage of at least 0.99; this revision moves
+the same constraint forward into the selection procedure, so that the single permitted holdout
+contact is not wasted on a degenerate solution bound to fail. The same revision applies to
+PREREG-F2R.
+Neither the holdout nor calibration had been contacted at the time of this revision
+(neither HOLDOUT_CONTACT.log nor CALIB_CONTACT.log exists).
 
-**修订2(2026-08-14,holdout 接触前)**:增加次级冻结模型 **F3H(混合)**:
-在 dev 上以反对称 logistic 拟合两特征 [s_F3, e_hull](s_F3 为冻结 F3 分数;
-标准化统计取自 dev),系数冻结后与 F3 在**同一次** holdout 接触中一并求值。
-次级门 **G6**:acc(F3H) − acc(E_hull) 的聚类自助 95% 下界 > 0。G6 检验的
-主张与 G1 不同且独立:"结构化学携带 DFT 稳定性之外的可合成性信息"。F3H
-含 DFT 量,不得表述为无 DFT 判据;G1 的表述不因 G6 改变。holdout 在本修订
-时刻未被接触(HOLDOUT_CONTACT.log 不存在)。
+**Revision 2 (2026-08-14, before any contact with the holdout)**: a secondary frozen model,
+**F3H (hybrid)**, is added: an antisymmetric logistic fitted on dev over the two features
+[s_F3, e_hull] (s_F3 being the frozen F3 score; the standardisation statistics come from dev),
+with the coefficients frozen and evaluated alongside F3 within the **same single** holdout
+contact. Secondary gate **G6**: the clustered-bootstrap 95% lower bound of
+acc(F3H) - acc(E_hull) is above 0. G6 tests a claim different from and independent of G1:
+"structural chemistry carries synthesizability information beyond DFT stability". F3H contains a
+DFT quantity and may not be described as a DFT-free criterion; the wording of G1 is unchanged by
+G6. The holdout had not been contacted at the time of this revision (HOLDOUT_CONTACT.log does not
+exist).

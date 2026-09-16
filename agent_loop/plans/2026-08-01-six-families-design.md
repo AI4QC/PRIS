@@ -15,7 +15,7 @@ np-next-20260801 / np-next-20260802 additions. New code in `next3_*` files.
 
 The six families were selected against the project's own negative evidence:
 symmetry features are rejected (perturbation-generator fingerprint, +8.3–21.8 pt
-false-positive gap on DFT-relaxed candidates, documented in `notes/结果总结.md`);
+false-positive gap on DFT-relaxed candidates, documented in `notes/results-summary.md`);
 composition-only features have identically zero exclusion (guard-only); deep
 trees/symbolic search overfit perturbation kinds. Every family below is local,
 literature-anchored, and must survive the 295 DFT-relaxed gate and true LOKO.

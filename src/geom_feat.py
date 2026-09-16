@@ -1,29 +1,39 @@
 #!/usr/bin/env python3
-"""几何配位特征 —— 多智能体调研筛出、并已给出实测排除力的三个量。
+"""Geometric coordination features -- the three quantities a multi-agent survey selected
+and for which exclusion power has actually been measured.
 
-调研(5 个特征族并行 + 对抗性核查)在 40 余个候选里,这三个是"有化学含义 +
-可算 + 实测有效"三条同时满足的:
+Out of more than 40 candidates, the survey (five feature families in parallel plus an
+adversarial check) found these three to satisfy all of "chemically meaningful + computable +
+measurably effective":
 
-  aa_min  配体-配体接触比 = min over 配体对 of d(L_i,L_j)/(r_Li+r_Lj)
-          **这是泡林第一定律的几何内核** —— 半径比判据的原始论证就是
-          "阳离子太小则配体互相接触,多面体不稳"。泡林把它写成了 r_c/r_a 的
-          区间表(据 George 2020 只有 66% 满足),这里直接算配体到底碰没碰上。
-          调研实测:抓 S1(压缩轴上配体被挤到一起)与 S3(位移撞入)。
+  aa_min  ligand-ligand contact ratio = min over ligand pairs of d(L_i,L_j)/(r_Li+r_Lj)
+          **This is the geometric kernel of Pauling's first rule** -- the original argument
+          behind the radius-ratio criterion is exactly "if the cation is too small the
+          ligands touch each other and the polyhedron is unstable". Pauling wrote it as a
+          table of r_c/r_a intervals (satisfied by only 66% according to George 2020); this
+          computes directly whether the ligands actually touch.
+          Measured in the survey: catches S1 (ligands squeezed together along the
+          compression axis) and S3 (displacement driving them into each other).
 
-  phi     多面体凸包填充率 = Vol(配体凸包) / ((4/3)pi R^3),R = 平均阳-配体距离
-          度量配位多面体有多"塌"。调研实测:真实 0.293 -> S2 0.123 / S3 0.096。
-          **S2 阳离子换位是四类里最难排的一类**,phi 是少数对它有效的几何量。
+  phi     convex-hull packing fraction of the polyhedron
+          = Vol(ligand convex hull) / ((4/3)pi R^3), R = mean cation-ligand distance.
+          A measure of how far the coordination polyhedron has collapsed. Measured in the
+          survey: real 0.293 -> S2 0.123 / S3 0.096.
+          **S2, cation transposition, is the hardest of the four classes to exclude**, and
+          phi is one of the few geometric quantities effective against it.
 
-  mef     Hoppe MEFIR 有效离子半径失配(有符号)
-          MEFIR = sum_i w_i (d_i - r_anion_i) / sum_i w_i,w 用 ECoN 权重;
-          失配 = (MEFIR - r_shannon(阳离子)) / r_shannon(阳离子)。
-          调研实测四类全抓,S2 最显著(-0.47 对真实的 -0.06)——
-          因为换位后大阳离子被塞进小位点,MEFIR 会明显偏离表列半径。
+  mef     Hoppe MEFIR effective-ionic-radius mismatch (signed)
+          MEFIR = sum_i w_i (d_i - r_anion_i) / sum_i w_i, with ECoN weights for w;
+          mismatch = (MEFIR - r_shannon(cation)) / r_shannon(cation).
+          The survey measured it catching all four classes, S2 most strongly (-0.47 against
+          -0.06 for real) -- because after transposition a large cation is forced into a
+          small site and MEFIR departs noticeably from the tabulated radius.
 
-调研同时给出三条**负结果**,已据此不做:
-  - rho_aniso(键长压缩方向各向异性):均值排除力仅 0.080
-  - Ward Voronoi 堆积分数:**尺度不变量**,对 S4 整体膨胀排除力恒为 0
-  - Lewis 酸碱强度匹配:在其实现下没抓到任何东西
+The survey also produced three **negative results**, which are accordingly not implemented:
+  - rho_aniso (directional anisotropy of bond-length compression): mean exclusion power only 0.080
+  - Ward Voronoi packing fraction: **scale-invariant**, so its exclusion power against S4
+    uniform expansion is identically 0
+  - Lewis acid-base strength matching: caught nothing under its implementation
 """
 from __future__ import annotations
 import argparse
@@ -59,7 +69,8 @@ def geom_feats(st, val, nn=None):
     for i in range(len(st)):
         if val[i] <= 0 or not nn[i]:
             continue
-        # 只取阴离子配体;配体的笛卡尔坐标要用**镜像**位置,否则跨周期边界会算错
+        # anion ligands only; the ligand Cartesian coordinates must use the **image**
+        # positions, otherwise anything crossing a periodic boundary comes out wrong
         pos, rad, dist = [], [], []
         for nb in nn[i]:
             j = nb["site_index"]
@@ -79,7 +90,8 @@ def geom_feats(st, val, nn=None):
         if not np.all(np.isfinite(dist)) or dist.min() <= 0:
             continue
 
-        # --- aa_min:最近的一对配体,距离 / 半径和。< 1 表示配体壳层互相穿透
+        # --- aa_min: the closest pair of ligands, distance / radius sum. Below 1 means the
+        # ligand shells interpenetrate
         best = np.inf
         for a in range(len(pos)):
             for b in range(a + 1, len(pos)):
@@ -89,7 +101,8 @@ def geom_feats(st, val, nn=None):
         if np.isfinite(best):
             aa.append(best)
 
-        # --- phi:配体凸包体积 / 等效球体积。多面体塌陷时显著变小
+        # --- phi: ligand convex-hull volume / equivalent sphere volume. Drops sharply when
+        # the polyhedron collapses
         if len(pos) >= 4:
             try:
                 from scipy.spatial import ConvexHull
@@ -100,14 +113,18 @@ def geom_feats(st, val, nn=None):
             except Exception:
                 pass
 
-        # --- ecc / angvar:**角度**畸变。现有全部特征都是长度类
-        # (bl_rsd_max 是键长相对标准差),没有一条约束键角。
-        # ecc  = |sum û_i| / n,û 为阳离子指向各配体的单位矢量。
-        #        中心对称多面体应接近 0;阳离子偏离多面体中心时变大。
-        # angvar = 配体-阳离子-配体张角的方差(度^2),Robinson 键角方差的简化。
-        # 这两个量是 ChemEnv 连续对称性度量(CSM)的廉价替代 ——
-        # 调研实测 CSM 真实中位 1.75 → S3 位移 6.56 / S1 压缩 2.99 / S2 换位 2.83,
-        # 但 CSM 需要对 54 种理想多面体做配准,代价太高。
+        # --- ecc / angvar: **angular** distortion. Every existing feature is a length
+        # (bl_rsd_max is the relative standard deviation of bond length); none constrains a
+        # bond angle.
+        # ecc  = |sum u_i| / n, with u the unit vector from the cation to each ligand.
+        #        Near 0 for a centrosymmetric polyhedron; grows as the cation moves off the
+        #        polyhedron centre.
+        # angvar = variance of the ligand-cation-ligand angles (deg^2), a simplification of
+        #        the Robinson bond-angle variance.
+        # The two are a cheap substitute for the ChemEnv continuous symmetry measure (CSM) --
+        # the survey measured CSM at a real median of 1.75 -> S3 displacement 6.56 / S1
+        # compression 2.99 / S2 transposition 2.83, but CSM has to register against 54 ideal
+        # polyhedra, which is too expensive.
         u = (pos - st[i].coords) / dist[:, None]
         eccs.append(float(np.linalg.norm(u.sum(axis=0)) / len(u)))
         if len(u) >= 3:
@@ -116,7 +133,7 @@ def geom_feats(st, val, nn=None):
             angs = np.degrees(np.arccos(cosang[iu]))
             angvars.append(float(np.var(angs)))
 
-        # --- mef:Hoppe MEFIR 相对失配(有符号)
+        # --- mef: Hoppe MEFIR relative mismatch (signed)
         w = np.exp(1 - (dist / dist.min()) ** 6)
         if w.sum() > 0:
             mefir = float((w * (dist - rad)).sum() / w.sum())
@@ -177,7 +194,7 @@ def _bad(r):
         val, ok = guess_oxi(st)
         if not ok:
             return out
-        rng = np.random.default_rng(seed_of(r["sid"]))   # 与 phys_law/elec_feat 同种子
+        rng = np.random.default_rng(seed_of(r["sid"]))   # same seed as phys_law/elec_feat
         for kind in ("S1", "S2", "S3", "S4", "S5"):
             p = perturb(st, kind, rng, val)
             if p is None:
@@ -215,7 +232,7 @@ def main() -> int:
     if a.limit:
         recs = recs[:a.limit]
         outf = outf.replace(".parquet", "_smoke.parquet")
-    print(f"{a.mode}: {len(recs):,} 条", flush=True)
+    print(f"{a.mode}: {len(recs):,} entries", flush=True)
 
     from concurrent.futures import ProcessPoolExecutor
     rows = []
@@ -229,7 +246,7 @@ def main() -> int:
             if (i + 1) % 5000 == 0:
                 print(f"  {i+1:,}/{len(recs):,} -> {len(rows):,}", flush=True)
     pd.DataFrame(rows).to_parquet(outf, index=False)
-    print(f"写出 {outf} {len(rows):,} 行")
+    print(f"wrote {outf}, {len(rows):,} rows")
     return 0
 
 

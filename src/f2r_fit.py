@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""PREREG-F2R: 实验域 e_hull 排序公式重建。
+"""PREREG-F2R: rebuilding the e_hull ranking formula over the experimental domain.
 
-  audit  discovery 单特征稳定性排序准确率
-  fit    discovery 贪心前向 + 冻结(含 F2 重述基线的冻结 z 统计)
-  calib  calibration 一次性求值(F2R vs F2重述 vs 单量;配对聚类自助)
+  audit  single-feature stability ranking accuracy on discovery
+  fit    greedy forward selection on discovery + freeze (including the frozen z statistics
+         for the restated-F2 baseline)
+  calib  one-shot evaluation on calibration (F2R vs restated F2 vs single quantities;
+         paired clustered bootstrap)
 
-冻结文档 docs/plans/2026-08-14-f2r-stability-prereg.md
-(sha256 e292af8d...,见 outputs/20260814_f3_synth/PREREG_SHA256)。
+Frozen document docs/plans/2026-08-14-f2r-stability-prereg.md
+(sha256 e292af8d..., see outputs/20260814_f3_synth/PREREG_SHA256).
 """
 from __future__ import annotations
 import os
@@ -24,7 +26,8 @@ OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
 
 DROP = {"source_id", "rk", "e_hull", "split", "anion", "sid", "parent", "kind"}
 
-# 论文 F2 的七项(系数为已发表值;列名映射按 S3 特征字典)
+# the seven terms of the paper's F2 (published coefficients; column names mapped through
+# the S3 feature dictionary)
 F2_TERMS = [("min_opp_frac", -0.322), ("econ_mean", 0.149), ("mef_mean", 0.137),
             ("angvar_mean", 0.060), ("econ_max", 0.039), ("dist_rsd", -0.030),
             ("p5_n_distinct", 0.002)]
@@ -39,7 +42,7 @@ def load_all() -> pd.DataFrame:
     d = d[~bad]
     aug = pd.read_parquet(F + "real_rank_aug.parquet")
     d = d.merge(aug, on="source_id", how="left")
-    # 去重列名冲突(merge 后缀)
+    # resolve duplicated column names (merge suffixes)
     d = d.loc[:, ~d.columns.duplicated()]
     return d.reset_index(drop=True)
 
@@ -53,7 +56,8 @@ def admissible(d):
 
 
 def eval_stability(d: pd.DataFrame, vals, higher_more_stable=True):
-    """组等权:配对 = 组内 e_hull 严格不同的对;commit = 分数不同。"""
+    """Groups weighted equally: a pair is two members of a group with strictly different
+    e_hull; a commitment is a pair whose scores differ."""
     accs, covs = [], []
     v = np.asarray(vals, float)
     for _, sub in d.groupby("rk"):
@@ -68,7 +72,7 @@ def eval_stability(d: pd.DataFrame, vals, higher_more_stable=True):
         commit = pair & fin & (dv != 0)
         covs.append(commit.sum() / max(1, (pair & fin).sum()))
         if commit.sum():
-            more_stable = de < 0  # a 的 hull 更低
+            more_stable = de < 0  # a has the lower hull
             win = (dv > 0) == more_stable if higher_more_stable else (dv < 0) == more_stable
             accs.append(win[commit].mean())
     return dict(coverage=float(np.mean(covs)), accuracy=float(np.mean(accs)),
@@ -148,7 +152,8 @@ def cmd_fit(d, cols):
             beta = fit_logistic(Xp[:, ci], wp)
             r = eval_stability(dte, Zte[:, ci] @ beta)
             accs.append(r["accuracy"]); covs.append(r["coverage"])
-        # PREREG-F2R 修订1:coverage < 0.99 直接拒绝(同 PREREG-F3 修订1)。
+        # PREREG-F2R revision 1: reject outright when coverage < 0.99 (as in PREREG-F3
+        # revision 1).
         if np.mean(covs) < 0.99:
             return -1.0
         return float(np.mean(accs))
@@ -178,7 +183,8 @@ def cmd_fit(d, cols):
     Xq, wq = make_pairs(dv, Z)
     beta_full = fit_logistic(Xq, wq, C=bestC)
 
-    # F2 重述:已发表系数 + discovery 冻结 z 统计;orientation 在 discovery 上确定
+    # restated F2: published coefficients + z statistics frozen on discovery; the
+    # orientation is fixed on discovery
     f2cols = [c for c, _ in F2_TERMS]
     s_f2 = np.zeros(len(dv))
     for c, coef in F2_TERMS:
@@ -232,7 +238,7 @@ def cmd_calib(d, cols):
            "bl_min": eval_stability(ca, ca.bl_min.values, True),
            "vol_per_atom": eval_stability(ca, ca.vol_per_atom.values, False)}
 
-    # 配对聚类自助 acc(F2R) − acc(F2_restated)
+    # paired clustered bootstrap of acc(F2R) - acc(F2_restated)
     rng = np.random.default_rng(20260728)
     pg = []
     for _, sub in ca.groupby("rk"):

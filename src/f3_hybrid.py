@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""PREREG-F3 修订2: 次级冻结模型 F3H = 反对称 logistic([s_F3, e_hull])。
+"""PREREG-F3 revision 2: the secondary frozen model F3H = antisymmetric logistic([s_F3, e_hull]).
 
-dev 上拟合,冻结到 F3H_frozen.json;holdout 求值由 f3_fit.py holdout 一并执行。
-拒绝在 HOLDOUT_CONTACT.log 存在时运行。
+Fitted on dev and frozen into F3H_frozen.json; holdout evaluation is carried out by
+f3_fit.py holdout in the same pass.
+Refuses to run when HOLDOUT_CONTACT.log exists.
 """
 from __future__ import annotations
 import hashlib, json, os, sys
@@ -25,7 +26,7 @@ def main() -> int:
     Z = zmat(dev, cols, med, mu, sd)
     ji = [cols.index(f) for f in fz["features"]]
     s3 = Z[:, ji] @ np.array(fz["beta"])
-    # e_hull 的 dev 标准化(冻结)
+    # dev standardisation of e_hull (frozen)
     eh = dev.e_hull.values
     eh_mu, eh_sd = float(np.mean(eh)), float(np.std(eh) or 1.0)
     s3_mu, s3_sd = float(np.mean(s3)), float(np.std(s3) or 1.0)

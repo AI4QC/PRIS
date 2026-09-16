@@ -313,9 +313,11 @@ def panel_b(ax: plt.Axes) -> dict:
     matrix = v.loc[order, full_cols].to_numpy(float)
     im = ax.imshow(matrix, cmap="palmatrix", vmin=0, vmax=1, aspect="auto",
                    interpolation="nearest")
-    # 归档列名仍是 S1--S5;图内显示 D1--D5,避免与正文的 Set 1--Set 5 混读
+    # the archived columns are still S1--S5; the figure shows D1--D5 so they are not
+    # misread as the main text's Set 1--Set 5
     class_labels = ["D1", "D2", "D3", "D4", "D5"]
-    # 集合成分见 Fig. 1d;这里只留集合名,避免行标签伸进左边的面板 a。
+    # the set membership is in Fig. 1d; only the set names are kept here so the row labels
+    # do not reach into panel a on the left.
     row_labels = ["min d > 0.5 Å", "min d > 0.7 Å", "min d > 1.0 Å",
                   "SMACT (composition)", "Set 1",
                   "Law 1 only, τ=0.804", "Set 1′", "Set 2",

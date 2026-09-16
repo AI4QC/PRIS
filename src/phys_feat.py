@@ -1,14 +1,19 @@
 import os
 #!/usr/bin/env python3
-"""物理描述符:马德隆能 + 有效配位数 + 堆积分数 + 次近邻。
+"""Physical descriptors: Madelung energy + effective coordination number + packing
+fraction + second-nearest neighbours.
 
-为什么加这些:现有 32 个描述符全是拓扑/计数量,GBDT 天花板 0.7143、线性 0.6673。
-差距不在模型形式(PySR 非线性也只有 0.6619),在**信息量本身**。
+Why add these: the existing 32 descriptors are all topological or counting quantities, and
+they cap out at 0.7143 for GBDT and 0.6673 for a linear model. The gap is not in the model
+form (nonlinear PySR reaches only 0.6619) but in the **information content itself**.
 
-马德隆能(Ewald 求和)是关键:泡林五条本质是静电论证的近似 ——
-第二条(键强和=电荷)是局部电中性,第三、四条(共边共面不稳)是阳离子间库仑排斥。
-Ewald 是这些论证的**精确版**,只用结构+形式电荷,不碰 DFT,完全在经验判据范畴内,
-而且正是泡林自己用的那套物理。
+The Madelung energy (Ewald summation) is the key one: Pauling's five rules are essentially
+approximations to electrostatic arguments -- the second (bond strengths sum to the charge)
+is local electroneutrality, and the third and fourth (edge and face sharing are unstable)
+are Coulomb repulsion between cations.
+Ewald is the **exact version** of those arguments, using only structure and formal charges,
+never touching DFT, entirely within the scope of empirical criteria -- and it is exactly
+the physics Pauling himself used.
 """
 import sys, argparse, warnings, collections
 import numpy as np, pandas as pd
@@ -16,7 +21,7 @@ warnings.filterwarnings('ignore')
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from polymorph_rank2 import scan, balance
 F=os.environ.get("PRIS_FEATURES", "features/")
-# Shannon 半径粗表(配位无关的代表值),用于堆积分数
+# coarse Shannon radius table (coordination-independent representative values), for the packing fraction
 R={'Li':0.76,'Na':1.02,'K':1.38,'Rb':1.52,'Cs':1.67,'Be':0.45,'Mg':0.72,'Ca':1.00,'Sr':1.18,
  'Ba':1.35,'Al':0.535,'Ga':0.62,'In':0.80,'Sc':0.745,'Y':0.90,'La':1.032,'Ti':0.605,'Zr':0.72,
  'Hf':0.71,'V':0.54,'Nb':0.64,'Ta':0.64,'Cr':0.615,'Mo':0.59,'W':0.60,'Mn':0.83,'Fe':0.645,
@@ -39,17 +44,18 @@ def one(rec):
              'ewald_real':float(ew.real_space_energy)/n,
              'ewald_recip':float(ew.reciprocal_space_energy)/n,
              'ewald_point':float(ew.point_energy)/n}
-        # 位点级马德隆势的分布。这个版本的 EwaldSummation 没有 site_energies 属性,
-        # 用 get_site_energy(i) 逐位点取;取不到就跳过这三列。
+        # distribution of the site-level Madelung potential. This version of EwaldSummation
+        # has no site_energies attribute, so take them one site at a time with
+        # get_site_energy(i); if that fails, skip these three columns.
         try:
             sm=np.array([ew.get_site_energy(i) for i in range(n)])
             out['mad_std']=float(np.std(sm)); out['mad_max']=float(np.max(sm)); out['mad_min']=float(np.min(sm))
         except Exception:
             pass
-        # 堆积分数(离子球体积/晶胞体积)
+        # packing fraction (volume of the ionic spheres / cell volume)
         vol=sum(4/3*np.pi*R.get(s.specie.symbol,1.0)**3 for s in st)
         out['pack_frac']=float(vol/st.volume)
-        # 有效配位数(连续版):ECoN,基于键长的加权
+        # effective coordination number (continuous form): ECoN, weighted by bond length
         cnn=CrystalNN(weighted_cn=False,x_diff_weight=0.0)
         econ=[]; d2=[]
         for i in range(n):
@@ -70,7 +76,7 @@ def main():
     ap=argparse.ArgumentParser(); ap.add_argument('--groups',type=int,default=12000)
     ap.add_argument('--workers',type=int,default=18); a=ap.parse_args()
     g=scan(a.groups); recs=[r for v in g.values() for r in v]
-    print(f'{len(g):,} 组 / {len(recs):,} 端点',flush=True)
+    print(f'{len(g):,} groups / {len(recs):,} endpoints',flush=True)
     from concurrent.futures import ProcessPoolExecutor
     rows=[]
     with ProcessPoolExecutor(max_workers=a.workers) as ex:
@@ -78,6 +84,6 @@ def main():
             if r: rows.append(r)
             if (i+1)%4000==0: print(f'  {i+1:,}/{len(recs):,} -> {len(rows):,}',flush=True)
     d=pd.DataFrame(rows); d.to_parquet(F+'phys_feat.parquet',index=False)
-    print(f'写出 {len(d):,} 行 / {d.rk.nunique():,} 组')
+    print(f'wrote {len(d):,} rows / {d.rk.nunique():,} groups')
     return 0
 if __name__=='__main__': raise SystemExit(main())

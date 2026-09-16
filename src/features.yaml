@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
-# LeakGuard C 级(构造溯源)的声明表。每个特征声明四件事:
-#   atoms : 计算它用到的**溯源原子**(传递闭包由 atoms 表的 from 字段展开)
-#   op    : 聚合算子(包络算子 span/range/nunique/std/max/min 会触发 R2)
-#   scope : 聚合域(见 scope_rank,数字越小域越粗)
-#   base  : 被聚合的底量
-# 靶声明 forbidden_atoms = 该靶的定义式**自身的输入**。
-# 规则:
-#   R1  特征原子闭包 ∩ 靶的 forbidden_atoms ≠ ∅            -> BLOCK(构造级泄漏)
-#   R2  同 base + 包络算子 + 聚合域 ⊇ 靶域                  -> BLOCK(恒真蕴含入口)
-#   R3  同 base + 同域(靶的充分统计量族)                  -> REVIEW
-# 未声明的特征一律 BLOCK(默认拒绝)。
+# The declaration table for LeakGuard level C (construction provenance). Each feature
+# declares four things:
+#   atoms : the **provenance atoms** its computation uses (the transitive closure is
+#           expanded through the `from` field of the atoms table)
+#   op    : the aggregation operator (the envelope operators span/range/nunique/std/max/min trigger R2)
+#   scope : the aggregation domain (see scope_rank; a smaller number is a coarser domain)
+#   base  : the underlying quantity being aggregated
+# A target declares forbidden_atoms = the inputs of **its own defining expression**.
+# Rules:
+#   R1  feature atom closure intersect the target's forbidden_atoms /= empty  -> BLOCK (construction-level leak)
+#   R2  same base + envelope operator + aggregation domain contains the target domain -> BLOCK (tautological implication channel)
+#   R3  same base + same domain (the target's sufficient-statistic family)  -> REVIEW
+# Any feature not declared here is BLOCKed (deny by default).
 
 scope_rank:
   global: 0
@@ -20,49 +22,49 @@ scope_rank:
   site: 4
   bond: 5
 
-# ------------------------------------------------------------------ 溯源原子
+# ------------------------------------------------------------- provenance atoms
 atoms:
-  comp:          {desc: "化学式:元素与化学计量"}
-  ox_formal:     {desc: "形式电荷(ox_source ∈ cif/guess,禁 BVAnalyzer)"}
-  elem_const:    {desc: "元素常数表 X/r/ie1/group/period/block/Z/nd"}
-  proto:         {desc: "结构原型标签"}
-  mult:          {desc: "位点重数"}
-  bond_inc_cat:  {desc: "阳离子位点 -> (阴离子位点, 像) 关联表", from: []}
-  bond_inc_an:   {desc: "阴离子位点 -> (阳离子位点, 像) 关联表 = 谁与谁共享该阴离子", from: []}
-  cn_orbit:      {desc: "阳离子轨道的配位数", from: [bond_inc_cat]}
-  an_cn_site:    {desc: "阴离子位点的阳离子配位数 = |bond_inc_an|", from: [bond_inc_an]}
-  ox_bonded_cat: {desc: "与某阴离子成键的那批阳离子的形式电荷", from: [bond_inc_an, ox_formal]}
-  z_abs:         {desc: "阴离子形式电荷绝对值", from: [ox_formal]}
-  pair_graph:    {desc: "多面体对的共享模式 corner/edge/face", from: [bond_inc_an]}
-  s_prior:       {desc: "Hawthorne 先验键强,解 A s = v(A 同时含阳/阴节点行)",
+  comp:          {desc: "chemical formula: elements and stoichiometry"}
+  ox_formal:     {desc: "formal charge (ox_source in cif/guess; BVAnalyzer forbidden)"}
+  elem_const:    {desc: "element constant table X/r/ie1/group/period/block/Z/nd"}
+  proto:         {desc: "structure prototype label"}
+  mult:          {desc: "site multiplicity"}
+  bond_inc_cat:  {desc: "cation site -> (anion site, image) incidence table", from: []}
+  bond_inc_an:   {desc: "anion site -> (cation site, image) incidence table = who shares that anion with whom", from: []}
+  cn_orbit:      {desc: "coordination number of a cation orbit", from: [bond_inc_cat]}
+  an_cn_site:    {desc: "cation coordination number of an anion site = |bond_inc_an|", from: [bond_inc_an]}
+  ox_bonded_cat: {desc: "formal charges of the cations bonded to a given anion", from: [bond_inc_an, ox_formal]}
+  z_abs:         {desc: "magnitude of the anion formal charge", from: [ox_formal]}
+  pair_graph:    {desc: "sharing mode of a polyhedron pair, corner/edge/face", from: [bond_inc_an]}
+  s_prior:       {desc: "Hawthorne a-priori bond strength, solving A s = v (A holds both cation and anion node rows)",
                   from: [bond_inc_cat, bond_inc_an, ox_formal]}
 
-# ------------------------------------------------------------------ 压缩靶
+# ----------------------------------------------------------- compression targets
 targets:
   T_CONN:
-    desc: "阳离子轨道是否参与共边/共面(泡林 3/4 的审计量)"
+    desc: "whether a cation orbit participates in edge or face sharing (the audit quantity for Pauling 3/4)"
     scope: cation_orbit
     base: shared_anion_count
-    # tgt = 1 <=> ∃ 邻居多面体与之共享 >= 2 个阴离子。这是 bond_inc_an 的直接函数。
+    # tgt = 1 <=> some neighbouring polyhedron shares >= 2 anions with it. A direct function of bond_inc_an.
     forbidden_atoms: [bond_inc_an, an_cn_site, pair_graph, s_prior, ox_bonded_cat]
     inherit: [t0]
   T_P2:
-    desc: "阴离子轨道的 |Σ s_pauling − |z|| > 0.2(泡林 2)"
+    desc: "|Sum s_pauling - |z|| > 0.2 for an anion orbit (Pauling 2)"
     scope: anion_orbit
     base: pauling_sum_dev
-    # dev = Σ_j ox_j/CN_j − z_abs。定义式的输入就是这四个原子。
+    # dev = Sum_j ox_j/CN_j - z_abs. The inputs of the defining expression are exactly these four atoms.
     forbidden_atoms: [bond_inc_an, an_cn_site, ox_bonded_cat, z_abs, cn_orbit, s_prior]
     inherit: []
   T_P5:
-    desc: "结构内某 (元素, 氧化态) 是否占多于一种配位环境(泡林 5),论域限 n_orb>=2"
+    desc: "whether some (element, oxidation state) occupies more than one coordination environment within a structure (Pauling 5); domain restricted to n_orb>=2"
     scope: sp_group
     base: cn
-    # tgt = 1[nunique(cn | sid,el,ox) > 1]。cn 本身是必需的搜索原料,
-    # 不整体禁用;靠 R2 拦"同底量 + 包络算子 + 域包含靶域"这条恒真通道。
+    # tgt = 1[nunique(cn | sid,el,ox) > 1]. cn itself is indispensable raw material for the search,
+    # so it is not banned outright; R2 blocks the tautological channel "same base + envelope operator + domain containing the target domain".
     forbidden_atoms: []
     inherit: [t0]
 
-# ------------------------------------------------------ T0 组成级底座(41 个)
+# ------------------------------------------- the T0 composition-level base (41)
 common:
   t0:
     ox:            {atoms: [ox_formal], op: identity, scope: sp_group, base: ox}
@@ -107,19 +109,19 @@ common:
     n_cat_species: {atoms: [comp, ox_formal], op: nunique, scope: structure, base: species}
     n_elements:    {atoms: [comp], op: nunique, scope: structure, base: species}
 
-# ------------------------------------------------------------------ 各靶新增
+# ----------------------------------------------------------- added per target
 features:
   T_CONN:
     cn:            {atoms: [cn_orbit], op: count, scope: cation_orbit, base: cn}
     s_pau:         {atoms: [cn_orbit, ox_formal], op: ratio, scope: cation_orbit, base: cn,
-                    note: "z/CN,泡林静电价"}
+                    note: "z/CN, the Pauling electrostatic valence"}
     an_cn_mean:    {atoms: [an_cn_site], op: mean, scope: cation_orbit, base: an_cn,
-                    note: "本轨道所有键的阴离子配位数均值 —— 直接读 bond_inc_an"}
+                    note: "mean anion coordination number over all bonds of this orbit -- read straight from bond_inc_an"}
     an_cn_max:     {atoms: [an_cn_site], op: max, scope: cation_orbit, base: an_cn}
     an_cn_min:     {atoms: [an_cn_site], op: min, scope: cation_orbit, base: an_cn}
     an_link:       {atoms: [an_cn_site, cn_orbit], op: sum, scope: cation_orbit, base: an_cn,
-                    note: "cn*(an_cn_mean-1) = Σ_bonds(an_cn-1) = 该多面体与邻居的关联数;
-                           tgt = 1[an_link > deg] 是恒等式(2500 结构/30266 位点一致率 1.000000)"}
+                    note: "cn*(an_cn_mean-1) = Sum_bonds(an_cn-1) = the number of links between this polyhedron and its neighbours;
+                           tgt = 1[an_link > deg] is an identity (agreement 1.000000 over 2500 structures / 30266 sites)"}
     sp_mean:       {atoms: [s_prior], op: mean, scope: cation_orbit, base: s_prior}
     sp_std:        {atoms: [s_prior], op: std, scope: cation_orbit, base: s_prior}
     sp_min:        {atoms: [s_prior], op: min, scope: cation_orbit, base: s_prior}
@@ -143,19 +145,19 @@ features:
 
   T_P2:
     b_ox_mean:     {atoms: [ox_bonded_cat], op: mean, scope: anion_orbit, base: ox_bonded,
-                    note: "Σ_j z_j = an_cn * b_ox_mean,正是 dev 的分子"}
+                    note: "Sum_j z_j = an_cn * b_ox_mean, which is exactly the numerator of dev"}
     b_ox_max:      {atoms: [ox_bonded_cat], op: max, scope: anion_orbit, base: ox_bonded}
     b_ox_min:      {atoms: [ox_bonded_cat], op: min, scope: anion_orbit, base: ox_bonded}
     an_cn:         {atoms: [an_cn_site], op: count, scope: anion_orbit, base: an_cn,
-                    note: "dev 求和式的项数"}
+                    note: "the number of terms in the dev summation"}
     z_abs:         {atoms: [z_abs], op: identity, scope: anion_orbit, base: z_abs,
-                    note: "dev = Σ − z_abs 的被减项,literally 定义式的一半"}
+                    note: "the subtrahend of dev = Sum - z_abs; literally half the defining expression"}
     ox_spread:     {atoms: [ox_bonded_cat], op: range, scope: anion_orbit, base: ox_bonded}
     charge_per_bond: {atoms: [ox_bonded_cat, an_cn_site], op: ratio, scope: anion_orbit, base: ox_bonded}
     an_cn_x_ox:    {atoms: [ox_bonded_cat, an_cn_site], op: prod, scope: anion_orbit, base: ox_bonded,
-                    note: "= Σ_j z_j 精确重建"}
+                    note: "= Sum_j z_j reconstructed exactly"}
     excess:        {atoms: [ox_bonded_cat, an_cn_site, z_abs], op: ratio, scope: anion_orbit, base: pauling_sum_dev,
-                    note: "= Σ_j z_j / z_abs;与 dev 只差 CN_j 除数"}
+                    note: "= Sum_j z_j / z_abs; differs from dev only by the CN_j divisor"}
     f_edge:        {atoms: [pair_graph], op: mean, scope: structure, base: pair_mode}
     f_face:        {atoms: [pair_graph], op: mean, scope: structure, base: pair_mode}
     n_pair:        {atoms: [pair_graph], op: count, scope: structure, base: pair_mode}
@@ -173,13 +175,13 @@ features:
   T_P5:
     n_orb:         {atoms: [comp, ox_formal, proto], op: count, scope: sp_group, base: orbit_count}
     cn_mode:       {atoms: [cn_orbit], op: mode, scope: sp_group, base: cn,
-                    note: "与靶同域同底量 -> R3"}
+                    note: "same domain and same base as the target -> R3"}
     s_pau:         {atoms: [cn_orbit, ox_formal], op: ratio, scope: sp_group, base: cn}
     mult_sum:      {atoms: [mult], op: sum, scope: sp_group, base: mult}
     n_orb_st:      {atoms: [proto], op: count, scope: structure, base: orbit_count}
     cn_mean_st:    {atoms: [cn_orbit], op: mean, scope: structure, base: cn}
     cn_span_st:    {atoms: [cn_orbit], op: span, scope: structure, base: cn,
-                    note: "span=0 => 全结构 CN 同值 => 任何子群 nunique=1 => tgt=0,逻辑恒真"}
+                    note: "span=0 => CN is the same throughout the structure => nunique=1 in any subgroup => tgt=0, a logical tautology"}
     f_edge:        {atoms: [pair_graph], op: mean, scope: structure, base: pair_mode}
     f_face:        {atoms: [pair_graph], op: mean, scope: structure, base: pair_mode}
     n_pair:        {atoms: [pair_graph], op: count, scope: structure, base: pair_mode}

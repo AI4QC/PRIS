@@ -1,8 +1,8 @@
 import os
 #!/usr/bin/env python
-"""newpauling 数据层 pilot: CIF -> 位点/键/连接对 特征库 (parquet)
-用法: python pilot_featurize.py --n 2000 --subset exp_oxide --workers 24 --out $PRIS_FEATURES
-环境: 见 requirements.txt
+"""newpauling data-layer pilot: CIF -> a site / bond / connection-pair feature store (parquet)
+Usage: python pilot_featurize.py --n 2000 --subset exp_oxide --workers 24 --out $PRIS_FEATURES
+Environment: see requirements.txt
 """
 import argparse, itertools, os, sqlite3, sys, time, warnings, zlib, math
 from collections import Counter, defaultdict
@@ -13,7 +13,7 @@ import logging; logging.getLogger().setLevel(logging.CRITICAL)
 DB   = os.environ.get("PRIS_MATDATA_SQLITE", "materials.sqlite")
 BLOB = os.environ.get("PRIS_MATDATA_BLOB", "structures.blob")
 
-# ---------------------------------------------------------------- 取数
+# ---------------------------------------------------------------- data retrieval
 SUBSETS = {
  "exp_oxide":  "SELECT m.pk,m.material_id,m.formula,m.chemical_system,m.dataset,m.n_atoms,m.blob_offset,m.blob_length "
                "FROM materials m JOIN material_elements e ON e.material_pk=m.pk AND e.element='O' "
@@ -41,9 +41,9 @@ def read_cif(off, ln):
     _BLOBF.seek(off)
     return zlib.decompress(_BLOBF.read(ln)).decode("utf-8")
 
-# ---------------------------------------------------------------- 氧化态
+# ---------------------------------------------------------------- oxidation states
 def assign_oxi(struct):
-    """返回 (valences, source, ok)。source ∈ {cif, bva, guess, eneg, none}"""
+    """Returns (valences, source, ok). source is one of {cif, bva, guess, eneg, none}."""
     from pymatgen.analysis.bond_valence import BVAnalyzer
     v = [getattr(s.specie, "oxi_state", None) for s in struct]
     if all(x is not None for x in v):
@@ -62,15 +62,16 @@ def assign_oxi(struct):
         pass
     return [np.nan]*len(struct), "none", False
 
-# ---------------------------------------------------------------- 键价
+# ---------------------------------------------------------------- bond valence
 from functools import lru_cache
 BVPARM = os.environ.get("BVPARM_CIF",
     os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "bvparm2020.cif"))
 _BVTAB = None
 _REF_PREF = {"a": 0, "b": 1, "c": 2, "e": 3}   # Brown&Altermatt > Brese&O'Keeffe > Adams > Brown priv.
 def bv_table():
-    """解析 IUCr bvparm2020.cif -> {(el1,v1,el2,v2): (R0,B)}。
-    注意: loop 头行有前导空格,必须 strip 后再判断,否则整表解析为空(踩过坑)。"""
+    """Parse IUCr bvparm2020.cif -> {(el1,v1,el2,v2): (R0,B)}.
+    Note: the loop header line has leading whitespace and must be stripped before testing,
+    otherwise the whole table parses as empty (this has bitten us)."""
     global _BVTAB
     if _BVTAB is not None: return _BVTAB
     tab = {}
@@ -95,10 +96,10 @@ def bv_param(el1, v1, el2, v2):
     t = bv_table()
     key = (el1, v1, el2, v2)
     if key in t: return t[key]
-    # 回退1: 同元素对、价态最接近
+    # fallback 1: same element pair, nearest valences
     cands = [(abs(k[1]-v1)+abs(k[3]-v2), v) for k, v in t.items() if k[0]==el1 and k[2]==el2]
     if cands: return min(cands, key=lambda x: x[0])[1]
-    # 回退2: pymatgen Brown 通用式 (b=0.37)
+    # fallback 2: pymatgen's generic Brown formula (b=0.37)
     try:
         from pymatgen.analysis.bond_valence import BV_PARAMS
         from pymatgen.core import Element
@@ -116,12 +117,13 @@ def bond_valence(el1, o1, el2, o2, d):
     R0, b = p
     return math.exp((R0 - d)/b)
 
-# ------------------------------------------------- Hawthorne 先验键强
+# ----------------------------------------- Hawthorne a-priori bond strengths
 def a_priori_bond_strengths(nodes_charge, edges):
-    """nodes_charge: dict site_idx -> 形式电荷(阳正阴负)
-       edges: list of (i, j, image_tuple) —— 标记商图(labelled quotient graph)
-       返回 dict edge_idx -> 先验键强 s (vu), 以及诊断信息
-       方程: (1) 每个位点 Σ s = |z|   (2) 每个独立回路 Σ (-1)^k s = 0 (等价键强规则)
+    """nodes_charge: dict site_idx -> formal charge (positive for cations, negative for anions)
+       edges: list of (i, j, image_tuple) -- the labelled quotient graph
+       Returns dict edge_idx -> a-priori bond strength s (vu), plus diagnostics.
+       Equations: (1) Sum s = |z| at every site   (2) Sum (-1)^k s = 0 around every independent
+       cycle (the equal-bond-strength rule)
     """
     import networkx as nx
     E = len(edges)
@@ -129,14 +131,14 @@ def a_priori_bond_strengths(nodes_charge, edges):
     idx = {v: k for k, v in enumerate(sorted(nodes_charge))}
     V = len(idx)
     rows, rhs = [], []
-    # (1) 电荷守恒
+    # (1) charge conservation
     for site, z in nodes_charge.items():
         r = np.zeros(E)
         for e, (i, j, im) in enumerate(edges):
             if i == site: r[e] += 1
             if j == site: r[e] += 1
         rows.append(r); rhs.append(abs(z))
-    # (2) 回路方程 —— 在标记商图上取 cycle basis
+    # (2) the cycle equations -- taking a cycle basis on the labelled quotient graph
     G = nx.MultiGraph()
     for e, (i, j, im) in enumerate(edges):
         G.add_edge(i, j, key=e)
@@ -166,7 +168,7 @@ def a_priori_bond_strengths(nodes_charge, edges):
             "resid": float(np.linalg.norm(A@s - y))}
     return s, diag
 
-# ---------------------------------------------------------------- 主流程
+# ---------------------------------------------------------------- main flow
 def featurize(row, use_chemenv=True):
     pk, mid, formula, chemsys, dataset, natoms, off, ln = row
     from pymatgen.core import Structure
@@ -181,7 +183,7 @@ def featurize(row, use_chemenv=True):
     if not vok:
         out["status"] = "no_oxi"; return out, [], [], []
     bare = st.copy(); bare.remove_oxidation_states()
-    # --- 快通道: CrystalNN 邻接
+    # --- fast path: CrystalNN adjacency
     try:
         cnn = CrystalNN(weighted_cn=False, cation_anion=False)
         nninfo = [cnn.get_nn_info(bare, i) for i in range(len(bare))]
@@ -190,7 +192,7 @@ def featurize(row, use_chemenv=True):
     sym = [s.specie.symbol for s in bare]
     cations = [i for i in range(len(bare)) if val[i] > 0]
     anions  = [i for i in range(len(bare)) if val[i] < 0]
-    # --- 键表(只保留阳-阴键)
+    # --- the bond table (cation-anion bonds only)
     bonds = []          # (i, j, image, d)
     for i in cations:
         for nb in nninfo[i]:
@@ -202,7 +204,8 @@ def featurize(row, use_chemenv=True):
             bonds.append((i, j, im, d))
     if not bonds:
         out["status"] = "no_cation_anion_bond"; return out, [], [], []
-    # --- BVS: 用固定截断(3.5 Å)独立于 CN 算法求和;与 CN 解耦是关键(见设计文档 §5)
+    # --- BVS: summed with a fixed 3.5 A cutoff, independently of the CN algorithm; decoupling
+    #     it from CN is the key point (see section 5 of the design document)
     bvs_cut = defaultdict(float); bv_missing = 0; bv_tot = 0
     cs_, ns_, _off, ds_ = bare.get_neighbor_list(3.5)
     for a_, b_, d_ in zip(cs_, ns_, ds_):
@@ -212,7 +215,7 @@ def featurize(row, use_chemenv=True):
         if np.isnan(sv): bv_missing += 1; continue
         bvs_cut[a_] += sv
     out["bv_param_missing_frac"] = bv_missing/max(bv_tot, 1)
-    # --- 键级 BV(沿 CN 邻接)
+    # --- bond-level BV (along the CN adjacency)
     bvs = defaultdict(float); cn = Counter()
     bond_rows = []
     for bi, (i, j, im, d) in enumerate(bonds):
@@ -223,13 +226,13 @@ def featurize(row, use_chemenv=True):
         bond_rows.append(dict(pk=pk, bond_idx=bi, i=i, j=j, el_i=sym[i], el_j=sym[j],
                               oxi_i=val[i], oxi_j=val[j], dist=d, bv=s,
                               img_a=im[0], img_b=im[1], img_c=im[2]))
-    # --- Hawthorne 先验键强
+    # --- Hawthorne a-priori bond strengths
     charges = {i: val[i] for i in set([b[0] for b in bonds]) | set([b[1] for b in bonds])}
     apri, diag = a_priori_bond_strengths(charges, [(b[0], b[1], b[2]) for b in bonds])
     if apri is not None:
         for bi, s in enumerate(apri): bond_rows[bi]["bv_apriori"] = float(s)
         out.update({"apri_"+k: v for k, v in diag.items()})
-    # --- 位点表
+    # --- the site table
     site_rows = []
     for i in range(len(bare)):
         z = val[i]; c = cn.get(i, 0)
@@ -237,10 +240,10 @@ def featurize(row, use_chemenv=True):
             is_cation=bool(z > 0), bvs=float(bvs.get(i, np.nan)),
             bvs_cut=float(bvs_cut.get(i, np.nan)),
             bvs_dev=float(bvs_cut[i] - abs(z)) if bvs_cut.get(i) else np.nan,
-            lewis=float(abs(z)/c) if c else np.nan,          # Lewis 酸/碱强度 = |z|/CN
+            lewis=float(abs(z)/c) if c else np.nan,          # Lewis acid/base strength = |z|/CN
             fx=float(bare[i].frac_coords[0]), fy=float(bare[i].frac_coords[1]),
             fz=float(bare[i].frac_coords[2])))
-    # --- 多面体连接(共角/共边/共面)
+    # --- polyhedron connections (corner / edge / face sharing)
     lig = defaultdict(set)
     for i, j, im, d in bonds: lig[i].add((j, im))
     conn_rows = []
@@ -255,7 +258,7 @@ def featurize(row, use_chemenv=True):
                     oxi_i=val[a], oxi_j=val[b], cn_i=cn[a], cn_j=cn[b],
                     n_shared=k, mode={1: "corner", 2: "edge"}.get(k, "face"),
                     sx=shift[0], sy=shift[1], sz=shift[2]))
-    # --- 结构级汇总
+    # --- structure-level aggregates
     nb = len(bond_rows)
     devs = [r["bvs_dev"] for r in site_rows if not np.isnan(r["bvs_dev"])]
     gii = float(np.sqrt(np.mean(np.square(devs)))) if devs else float("nan")
@@ -283,7 +286,7 @@ def main():
     ap.add_argument("--out", default="/tmp/newpauling_feat")
     a = ap.parse_args()
     rows = fetch_rows(a.subset, a.n)
-    print(f"{a.subset}: {len(rows)} 条", flush=True)
+    print(f"{a.subset}: {len(rows)} entries", flush=True)
     t0 = time.time()
     import multiprocessing as mp
     chunks = [rows[i::a.workers] for i in range(a.workers)]
@@ -298,11 +301,11 @@ def main():
         if data:
             df = pd.DataFrame(data)
             pq.write_table(pa.Table.from_pandas(df), f"{a.out}/{name}.parquet", compression="zstd")
-            print(f"  {name}: {len(df)} 行 -> {os.path.getsize(a.out+'/'+name+'.parquet')/1e6:.1f} MB")
+            print(f"  {name}: {len(df)} rows -> {os.path.getsize(a.out+'/'+name+'.parquet')/1e6:.1f} MB")
     st = Counter(x.get("status") for x in S); ox = Counter(x.get("oxi_source") for x in S)
     print("status:", dict(st)); print("oxi_source:", dict(ox))
-    print(f"耗时 {dt:.1f}s, {dt/len(rows)*1e3:.1f} ms/struct(墙钟), "
-          f"{dt*a.workers/len(rows)*1e3:.1f} ms/struct(核)")
+    print(f"elapsed {dt:.1f}s, {dt/len(rows)*1e3:.1f} ms/struct (wall clock), "
+          f"{dt*a.workers/len(rows)*1e3:.1f} ms/struct (core)")
 
 if __name__ == "__main__":
     main()

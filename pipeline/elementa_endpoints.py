@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-"""从 ELEMENTA 的弛豫轨迹里只取每条轨迹的最后一帧(收敛结构)。
+"""Take only the last frame of each ELEMENTA relaxation trajectory (the converged structure).
 
-ELEMENTA 是 MLIP 训练数据:每个 `material` 有一条 VASP 离子弛豫轨迹,
-帧的注释行形如
+ELEMENTA is MLIP training data: each `material` has one VASP ionic relaxation trajectory, and
+a frame's comment line looks like
     material=Ac_01 formula=Ac structure=structure_01 ionic_step=0 nelm=11 \
     energy=-8.17267212 stress="..." magmom=... pbc="T T T"
-同一 material 的帧在文件里是连续的、ionic_step 递增。
-所以"取末帧"可以流式做:material 变了就把上一帧吐出来,内存 O(1)。
+The frames of one material are contiguous in the file with ionic_step increasing, so "take the
+last frame" can be done in a stream: emit the previous frame whenever the material changes,
+in O(1) memory.
 
-用法:
+Usage:
     zstd -dc ELEMENTA_open.extxyz.tar.zst | tar -xO | python3 elementa_endpoints.py \
         --out endpoints.extxyz --stats stats.json
 
-    # 只要二元及以上(泡林定律在单质上没有定义):
+    # binaries and above only (Pauling's rules are undefined on elemental structures):
     ... | python3 elementa_endpoints.py --out endpoints.extxyz --min-elements 2
 """
 from __future__ import annotations
@@ -23,9 +24,10 @@ import sys
 from collections import Counter
 
 KV = re.compile(r'(\w+)=("[^"]*"|\S+)')
-# 流式阶段只需要 material 和 ionic_step 两个字段。对 3900 万帧逐帧做完整 findall
-# 实测是主要瓶颈(每次约 20-40 us,合计 15-25 分钟),所以这里用窄正则单独抓,
-# 完整解析只在真正写出末帧时做(约 290 万次)。
+# the streaming stage needs only the material and ionic_step fields. A full findall on each of
+# 39 million frames measured as the main bottleneck (about 20-40 us each, 15-25 minutes in
+# total), so a narrow regex picks those two out here and the full parse happens only when a
+# last frame is actually written (about 2.9 million times).
 RE_MATERIAL = re.compile(r'\bmaterial=(\S+)')
 RE_STEP = re.compile(r'\bionic_step=(\d+)')
 
@@ -40,23 +42,25 @@ def n_elements(symbols) -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument('--out', required=True, help='输出 extxyz 路径')
-    ap.add_argument('--stats', default=None, help='统计信息 JSON 输出路径')
+    ap.add_argument('--out', required=True, help='output extxyz path')
+    ap.add_argument('--stats', default=None, help='path for the statistics JSON output')
     ap.add_argument('--min-elements', type=int, default=1,
-                    help='最少元素种类数。泡林定律在单质上无定义,做泡林分析时设 2')
+                    help='minimum number of distinct elements. Pauling\'s rules are undefined '
+                         'on elemental structures, so set 2 for a Pauling analysis')
     ap.add_argument('--max-sites', type=int, default=0,
-                    help='最大原子数,0 表示不限。ChemEnv 在大晶胞上会很慢')
+                    help='maximum atom count; 0 means no limit. ChemEnv is very slow on large '
+                         'cells')
     ap.add_argument('--progress-every', type=int, default=2_000_000)
     args = ap.parse_args()
 
     st = Counter()
     per_nelem = Counter()
-    prev_key = None       # 上一帧的 material
+    prev_key = None       # the previous frame's material
     prev_frame = None     # (natoms, comment, [atom_lines])
     step_of_prev = -1
 
     def flush(frame, key):
-        """把 frame 作为一条轨迹的末帧写出。"""
+        """Write out frame as the last frame of a trajectory."""
         if frame is None:
             return
         natoms, comment, atoms = frame
@@ -70,7 +74,7 @@ def main() -> int:
         if args.max_sites and natoms > args.max_sites:
             st['dropped_max_sites'] += 1
             return
-        # 补一个标记,便于下游区分来源
+        # add a marker so downstream code can tell where it came from
         extra = f' source=elementa traj_id={key} n_ionic_steps={step_of_prev + 1}'
         out.write(f'{natoms}\n{comment.rstrip()}{extra}\n')
         out.writelines(atoms)
@@ -108,7 +112,7 @@ def main() -> int:
             prev_key, prev_frame, step_of_prev = key, (natoms, comment, atoms), step
 
             if args.progress_every and st['frames'] % args.progress_every == 0:
-                print(f"  {st['frames']:,} 帧 → {st['written']:,} 末帧",
+                print(f"  {st['frames']:,} frames -> {st['written']:,} last frames",
                       file=sys.stderr, flush=True)
         flush(prev_frame, prev_key)
     finally:
